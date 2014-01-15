@@ -81,14 +81,14 @@
     font-weight: normal
   a
     display: inline-block
-    line-height: 18px
+    line-height: $base-line-height
     padding: $gutter / 4 $gutter
     display: block
     position: relative
     font-size: 90%
     color: $text-light
     &:hover
-      background-color: lighten($menu-background-color, 10%)
+      background-color: darken($menu-background-color, 5%)
       cursor: pointer
     &:active
       background-color: $menu-logo-color
