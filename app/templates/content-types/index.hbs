@@ -47,6 +47,104 @@
 
     <!-- PAGE CONTENT -->
     <div class="wy-nav-content">
+
+      <form class="wy-form-stacked">
+        <fieldset>
+          <legend>Stacked form</legend>
+
+          <div class="wy-control-group">
+            <label for="title">Title</label>
+            <div class="wy-control">
+              <input type="text" id="title" placeholder="title" />
+              <!-- optional help message -->
+              <span class="wy-form-message">Help goes here</span>
+            </div>
+          </div>
+
+          <div class="wy-control-group">
+            <label for="description">Description</label>
+            <div class="wy-control">
+              <textarea id="description" placeholder="something"></textarea>
+              <!-- optional help message -->
+              <span class="wy-form-message">Help goes here</span>
+            </div>
+          </div>
+
+          <div class="wy-control-group">
+            <label for="option-radio-example1">Choose one</label>
+            <div class="wy-control">
+              <label for="option-radiox" class="wy-radio">
+                <input id="option-radiox" name="option-radio-example1" type="radio" value="">
+                Option 1
+              </label>
+              <label for="option-radioy" class="wy-radio">
+                <input id="option-radioy" name="option-radio-example1" type="radio" value="">
+                Option 2
+              </label>
+              <!-- optional help message -->
+              <span class="wy-form-message">Help goes here</span>
+            </div>
+          </div>
+
+          <!--Initial, default, empty state-->
+          <div class="wy-control-group">
+            <label for="right-label" >Empty state</label>
+            <div class="wy-control">
+              <div class="wy-tag-input-group">
+                <div class="wy-autocomplete-group">
+                  <label class="icon icon-search" for="search-example-1"></label> <input type="text" id="search-example-1" placeholder="Search users">
+                </div>
+              </div>
+              <span class="wy-form-message">Example help text</span>
+            </div>
+          </div>
+
+          <!--When only one item is allowed-->
+          <div class="wy-control-group">
+            <label for="right-label" >One item allowed</label>
+            <div class="wy-control">
+              <div class="wy-tag-input-group">
+                <span class="wy-tag">Dave Snider<a href="" class="wy-tag-remove"></a></span>
+              </div>
+              <span class="wy-form-message">User needs to close the above item before choosing a replacement.</span>
+            </div>
+          </div>
+
+          <!--When multiple items are allowed-->
+          <div class="wy-control-group">
+            <label for="right-label" >Multiple items allowed</label>
+            <div class="wy-control">
+              <div class="wy-tag-input-group">
+                <span class="wy-tag">Dave Snider<a href="" class="wy-tag-remove"></a></span>
+                <span class="wy-tag">Andy McCurdy<a href="" class="wy-tag-remove"></a></span>
+                <span class="wy-tag">Mike Horn<a href="" class="wy-tag-remove"></a></span>
+                <div class="wy-autocomplete-group">
+                  <label class="icon icon-search" for="search-example-2"></label> <input type="text" id="search-example-2" placeholder="Search users">
+                  <div class="wy-autocomplete-dropdown">
+                    <ul>
+                      <li class="on">
+                        <img src="/_static/user1.jpg" />
+                        Dave snider
+                      </li>
+                      <li>
+                        <img src="/_static/user2.jpg" />
+                        Andy McCurdy
+                      </li>
+                      <li>
+                        <img src="/_static/user3.jpg" />
+                        Mike Horn
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <span class="wy-form-message">Autocomplete for authors. Adds yourself by default on new form.</span>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
+
     </div>
 
   </section>
