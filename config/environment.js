@@ -7,4 +7,6 @@
 //
 // window.ENV = {FEATURES: {'with-controller': true}};
 
-window.ENV = {};
+window.ENV = {
+  firebase: "https://mikewebhook.firebaseio.com/"
+};

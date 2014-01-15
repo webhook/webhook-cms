@@ -1,0 +1,20 @@
+<ul>
+{{#each fieldTypes}}
+<li>
+  {{name}}
+  <button type="button" {{action addField this}}>add</button>
+</li>
+{{/each}}
+</ul>
+
+<form {{action createModel on="submit"}}>
+  {{input value=name}}
+
+  <ul>
+    {{#each fields}}
+      <li>{{name}}</li>
+    {{/each}}
+  </ul>
+
+  <button type="submit">Save</button>
+</form>

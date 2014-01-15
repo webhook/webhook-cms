@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 
   config.env = process.env;
 
-  
+
 
 
   // App Kit's Main Tasks
@@ -166,12 +166,14 @@ module.exports = function(grunt) {
         "buildTemplates:dist",
         "buildScripts",
         "buildStyles",
+        "buildFonts",
         "buildIndexHTML:dist"
       ],
       buildDebug: [
         "buildTemplates:debug",
         "buildScripts",
         "buildStyles",
+        "buildFonts",
         "buildIndexHTML:debug"
       ]
     }
@@ -209,6 +211,11 @@ module.exports = function(grunt) {
                      'autoprefixer:app'
                      ]));
 
+  // Fonts
+  grunt.registerTask('buildFonts', [
+                     'copy:fontsToResult'
+                     ]);
+
   // Index HTML
   grunt.registerTask('buildIndexHTML:dist', [
                      'preprocess:indexHTMLDistApp',
@@ -219,7 +226,7 @@ module.exports = function(grunt) {
                      'preprocess:indexHTMLDebugApp',
                      'preprocess:indexHTMLDebugTests'
                      ]);
-  
+
   grunt.registerTask('createResultDirectory', function() {
     grunt.file.mkdir('tmp/result');
   });

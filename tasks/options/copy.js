@@ -21,7 +21,14 @@ module.exports = {
     expand: true,
     cwd: 'app/styles',
     src: ['**/*.css'],
-    dest: 'tmp/result/assets'
+    dest: 'tmp/result/assets/'
+  },
+
+  fontsToResult: {
+    expand: true,
+    cwd: 'vendor/font-awesome/font',
+    src: ['*.{woff,eot,svg,ttf}'],
+    dest: 'tmp/result/assets/'
   },
 
   // Assembles everything in `tmp/result`.

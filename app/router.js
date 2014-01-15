@@ -10,6 +10,12 @@ Router.map(function() {
     this.route('edit');
     this.route('list');
   });
+
+  this.resource('content-type-test', function () {
+    this.route('create');
+    this.route('type', { path: '/:id' });
+  });
+
   this.route('component-test');
   this.route('helper-test');
   // this.resource('posts', function() {

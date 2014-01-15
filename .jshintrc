@@ -7,7 +7,9 @@
     "Ember",
     "Em",
     "DS",
-    "$"
+    "$",
+    "EmberFire",
+    "Firebase"
   ],
   "node" : false,
   "browser" : false,
