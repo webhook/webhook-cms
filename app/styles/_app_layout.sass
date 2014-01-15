@@ -37,7 +37,7 @@
     white-space: nowrap
 
   ul
-    margin-bottom: 0
+    margin-bottom: $base-line-height
   li
     &.divide-top
       border-top: solid 1px hsl(0, 0%, 25%)
@@ -58,10 +58,8 @@
     font-weight: bold
     position: relative
     background: $section-background-color
-    border: none
-    border-bottom: solid 1px darken($section-background-color, 20%)
-    border-top: solid 1px darken($section-background-color, 20%)
-    padding-left: $gutter -4px
+    border-left: solid 5px $gray
+    padding-left: $gutter - em(7px)
     +font-smooth
     &:hover
       background: $section-background-color
