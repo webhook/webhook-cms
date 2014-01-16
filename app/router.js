@@ -13,7 +13,7 @@ Router.map(function() {
 
   this.resource('content-type-test', function () {
     this.route('create');
-    this.route('type', { path: '/:id' });
+    this.route('type', { path: '/:type' });
   });
 
   this.route('component-test');

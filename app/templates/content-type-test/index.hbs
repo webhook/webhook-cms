@@ -2,7 +2,7 @@
 {{#each}}
   <li>
     {{#link-to "content-type-test.type" this.name}}{{name}}{{/link-to}}
-    <button type="button" {{action deleteModel this}}>Remove</button>
+    <button type="button" class="btn" {{action deleteModel this}}>Remove</button>
   </li>
 {{/each}}
 </ul>

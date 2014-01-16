@@ -7,10 +7,21 @@ export default DS.JSONSerializer.reopen({ // or DS.RESTSerializer
     if (hasManyRecords && relationship.options.embedded === 'always') {
       json[key] = [];
       hasManyRecords.forEach(function(item, index){
-          json[key].push(item.serialize());
+        json[key].push(item.serialize());
       });
     }
     // Fallback to default serialization behavior
+    else {
+      return this._super(record, json, relationship);
+    }
+  },
+  serializeBelongsTo: function(record, json, relationship) {
+    var key = relationship.key,
+        belongsToRecord = Ember.get(record, key);
+
+    if (relationship.options.embedded === 'always') {
+      json[key] = belongsToRecord.serialize();
+    }
     else {
       return this._super(record, json, relationship);
     }
