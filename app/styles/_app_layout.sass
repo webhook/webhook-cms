@@ -53,16 +53,16 @@
           background: darken($section-background-color, 15%)
   // On state for the first level
   li.on a, li.current > a
-    color: $link-color
+    color: $section-background-color
     padding: $gutter / 4 $gutter
     font-weight: bold
     position: relative
-    background: $section-background-color
-    border-left: solid 5px $link-color
+    background: $gray-dark
+    border-left: solid 5px $gray-darker
     padding-left: $gutter - em(7px)
     +font-smooth
     &:hover
-      background: $section-background-color
+      background: $gray-dark
   // This is the on state for pages beyond second level
   li.toctree-l2.current > a
     background: darken($section-background-color, 20%)
