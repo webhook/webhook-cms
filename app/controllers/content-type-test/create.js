@@ -6,10 +6,6 @@ export default Ember.ObjectController.extend({
       var self = this,
           contentType = this.get('model');
 
-      if (!contentType.get('name')) {
-        return;
-      }
-
       contentType.set('name', contentType.get('name').toLowerCase());
 
       this.get('ref').child(contentType.get('name')).set(contentType.serialize(), function (error) {

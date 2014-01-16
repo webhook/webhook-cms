@@ -10,4 +10,10 @@ var App = Ember.Application.extend({
   Resolver: Resolver['default']
 });
 
+// This helps ember-validations not blow up
+// https://github.com/dockyard/ember-validations/issues/26#issuecomment-31877071
+DS.Model.reopen({
+  isValid: false
+});
+
 export default App;

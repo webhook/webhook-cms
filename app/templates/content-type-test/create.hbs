@@ -2,28 +2,52 @@
   {{#each fieldTypes}}
     <li>
       {{name}}
-      <button type="button" {{action addField this}}>add</button>
+      <button type="button" class="btn" {{action addField this}}>add</button>
     </li>
   {{/each}}
 </ul>
 
 <form class="wy-form-stacked" {{action createModel on="submit"}}>
-  {{input value=name}}
+
+  <fieldset>
+    <legend>New Content Type</legend>
+    <div {{bind-attr class="errors.name:wy-control-group-error"}}>
+      <label>Name</label>
+      <div class="wy-control">
+        {{view Ember.TextField
+          onEvent="keyUp"
+          action="lowerName"
+          value=name
+        }}
+        {{#each errors.name}}
+          <span class="wy-form-message">{{this}}</span>
+        {{/each}}
+      </div>
+    </div>
+  </fieldset>
+
   <fieldset>
     <legend>Fields</legend>
+    {{#each errors.fields}}
+      <span class="wy-form-message">{{this}}</span>
+    {{/each}}
     {{#each fields}}
       <div class="wy-control-group">
-        <label>
-          {{input value=label placeholder="label"}}
-          ({{type.name}})
-          {{input value=name placeholder="name"}}
-        </label>
+        <label>{{type.name}}</label>
         <div class="wy-control">
-          {{input value=placeholder placeholder="placeholder"}}
-          <span class="wy-form-message">{{input value=help placeholder="help text"}}</span>
+          {{input value=name placeholder="name"}}<br>
+          {{#each errors.name}}
+            <span class="wy-form-message">{{this}}</span>
+          {{/each}}
+          {{input value=label placeholder="label"}}<br>
+          {{input value=placeholder placeholder="placeholder"}}<br>
+          {{input value=help placeholder="help text"}}
         </div>
       </div>
     {{/each}}
   </fieldset>
-  <button type="submit" class="btn">Save</button>
+
+  {{#if isValid}}
+    <button type="submit" class="btn">Save</button>
+  {{/if}}
 </form>
