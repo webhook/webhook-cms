@@ -4,13 +4,18 @@ export default Ember.ObjectController.extend({
   actions: {
     createModel: function () {
       var self = this,
-          contentType = this.get('model'),
-          name = contentType.get('name');
+          contentType = this.get('model');
 
-      this.get('ref').child(name).set(contentType.serialize(), function (error) {
+      if (!contentType.get('name')) {
+        return;
+      }
+
+      contentType.set('name', contentType.get('name').toLowerCase());
+
+      this.get('ref').child(contentType.get('name')).set(contentType.serialize(), function (error) {
         if (error) {
         } else {
-          self.transitionTo('content-type-test.type', name);
+          self.transitionTo('content-type-test.type', contentType.get('name'));
         }
       });
 
