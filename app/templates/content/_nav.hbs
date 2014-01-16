@@ -11,12 +11,13 @@
         <header>Your content</header>
         <ul>
           <li data-menu-item="content-all"><a href="">All content</a></li>
-          <li data-menu-item="content-articles" class="on"><a href="">Articles</a></li>
+          <li data-menu-item="content-articles" class="on">{{#link-to 'content'}}Articles{{/link-to}}</li>
           <li data-menu-item="content-videos"><a href="">Videos</a></li>
           <li data-menu-item="content-podcats"><a href="">Podcasts</a></li>
         </ul>
         <header>Configuration</header>
         <ul>
+          <li data-menu-item="customize-forms">{{#link-to 'form-builder'}}Add / edit forms{{/link-to}}</li>
           <li><a data-menu="settings">Site settings</a></li>
         </ul>
       </div>

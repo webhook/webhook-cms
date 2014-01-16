@@ -5,7 +5,9 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
 
-  this.route('formbuilder');
+  this.resource('form-builder',function() {
+    this.route('text');
+  });
   this.resource('content',function() {
     this.route('edit');
     this.route('list');
