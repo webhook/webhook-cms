@@ -15,7 +15,10 @@ export default Ember.ObjectController.extend({
       });
 
     },
-    addField: function (field) {
+    addField: function (fieldType) {
+      var field = this.get('store').createRecord('field', {
+        type: fieldType
+      });
       this.get('model.fields').pushObject(field);
     }
   }

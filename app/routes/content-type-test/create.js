@@ -1,6 +1,5 @@
 export default Ember.Route.extend({
   init: function () {
-    window.console.log(window.ENV.firebase + "content_types");
     this.set('ref', new Firebase(window.ENV.firebase + "content_types"));
   },
   model: function () {

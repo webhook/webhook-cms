@@ -1,20 +1,29 @@
 <ul>
-{{#each fieldTypes}}
-<li>
-  {{name}}
-  <button type="button" {{action addField this}}>add</button>
-</li>
-{{/each}}
+  {{#each fieldTypes}}
+    <li>
+      {{name}}
+      <button type="button" {{action addField this}}>add</button>
+    </li>
+  {{/each}}
 </ul>
 
-<form {{action createModel on="submit"}}>
+<form class="wy-form-stacked" {{action createModel on="submit"}}>
   {{input value=name}}
-
-  <ul>
+  <fieldset>
+    <legend>Fields</legend>
     {{#each fields}}
-      <li>{{name}}</li>
+      <div class="wy-control-group">
+        <label>
+          {{input value=label placeholder="label"}}
+          ({{type.name}})
+          {{input value=name placeholder="name"}}
+        </label>
+        <div class="wy-control">
+          {{input value=placeholder placeholder="placeholder"}}
+          <span class="wy-form-message">{{input value=help placeholder="help text"}}</span>
+        </div>
+      </div>
     {{/each}}
-  </ul>
-
-  <button type="submit">Save</button>
+  </fieldset>
+  <button type="submit" class="btn">Save</button>
 </form>
