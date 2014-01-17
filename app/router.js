@@ -15,7 +15,9 @@ Router.map(function() {
 
   this.resource('content-type-test', function () {
     this.route('create');
-    this.route('type', { path: '/:type' });
+    this.resource('content-type-test.type', { path: '/:type' }, function () {
+      this.route('item');
+    });
   });
 
   this.route('component-test');

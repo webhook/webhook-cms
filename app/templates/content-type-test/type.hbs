@@ -1,16 +1,3 @@
-<form class="wy-form-stacked" {{action createItem on="submit"}}>
-  <fieldset>
-    <legend>New {{name}}</legend>
-    {{#each fields}}
-      <div class="wy-control-group">
-        <label>{{label}} ({{type.name}})</label>
-        <div class="wy-control">
-          {{input placeholder=placeholder value=value}}
-          <span class="wy-form-message">{{help}}</span>
-        </div>
-      </div>
-    {{/each}}
-    <button type="submit" class="btn">Save</button>
-    {{#if saved}}{{saved}}{{/if}}
-  </fieldset>
-</form>
+<h1>{{name}} {{#link-to 'content-type-test.type.item' this.name}}create new item{{/link-to}}</h1>
+
+{{outlet}}
