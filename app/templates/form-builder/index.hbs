@@ -2,13 +2,31 @@
 
 <hr/>
 
-<ul class="wh-form-list">
+<ul class="wh-form-builder-list">
+  <li class="wh-form-builder-new">
+    <h4 class="icon icon-plus-sign"> Create a new form</h4>
+    <form class="wy-form-stacked">
+      <div class="wy-control-group">
+        <label for="title">Form name</label>
+        <div class="wy-control">
+          <input type="text" id="title" placeholder="ex: articles" />
+          <!-- optional help message -->
+          <span class="wy-form-message">Pages built from this will live at /articles/</span>
+        </div>
+      </div>
+      <hr/>
+      <div class="wy-button-group">
+        <button class="btn icon icon-ok-sign"> Create</button>
+      </div>
+    </form>
+  </li>
   <li>
     <h4>Articles</h4>
     <ul class="wy-plain-list-disc">
       <li>141 articles</li>
       <li>7 editable fields</li>
       <li>RSS enabled</li>
+      <li>HP river enabled</li>
     </ul>
     <hr/>
     <div class="wy-button-group">
@@ -16,4 +34,33 @@
       <button class="btn btn-neutral icon icon-remove-sign"> Delete</button>
     </div>
   </li>
+  <li>
+    <h4>Videos</h4>
+    <ul class="wy-plain-list-disc">
+      <li>141 videos</li>
+      <li>7 editable fields</li>
+      <li>RSS enabled</li>
+      <li>HP river enabled</li>
+    </ul>
+    <hr/>
+    <div class="wy-button-group">
+      <button class="btn btn-neutral icon icon-edit"> Edit</button>
+      <button class="btn btn-neutral icon icon-remove-sign"> Delete</button>
+    </div>
+  </li>
+  <li>
+    <h4>Podcasts</h4>
+    <ul class="wy-plain-list-disc">
+      <li>141 videos</li>
+      <li>7 editable fields</li>
+      <li>RSS enabled</li>
+      <li>HP river enabled</li>
+    </ul>
+    <hr/>
+    <div class="wy-button-group">
+      <button class="btn btn-neutral icon icon-edit"> Edit</button>
+      <button class="btn btn-neutral icon icon-remove-sign"> Delete</button>
+    </div>
+  </li>
+</ul>
 </ul>

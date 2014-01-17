@@ -1,9 +1,22 @@
-.wh-form-list
-  +span-columns(12)
+.wh-form-builder-list
+  +outer-container
   > li
     background: $white
     padding: $base-line-height
     border: solid 1px $gray
     border-top: solid 5px $gray
+    margin-bottom: $base-line-height
+    height: 280px
+    +transition(all 0.1s linear)
     +span-columns(4)
+    @include omega(3n)
+  > li.wh-form-builder-new
+    opacity: .3
+    background: transparent
+    &:hover
+      opacity: 1
+      background: $white
+      border: solid 1px $gray
+      border-top: solid 5px $gray
+
 
