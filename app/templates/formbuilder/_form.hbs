@@ -23,9 +23,9 @@
 
 
 <div class="wh-form-builder-save wy-btn-group">
-  <a href="" class="btn icon icon-ok-sign float-right"> Save form</a>
-  <a href="" class="btn btn-neutral icon icon-remove-sign float-right"> Quit</a>
+  <button type="button" class="btn icon icon-ok-sign float-right"> Save form</button>
+  <button type="button" class="btn btn-neutral icon icon-remove-sign float-right"> Quit</button>
 
-  <a href="/" class="wh-logo"></a>
-  <a href="/" class="icon icon-arrow-left"> Back to the CMS</a>
+  {{#link-to "index" class="wh-logo"}}{{/link-to}}
+  {{#link-to "index" class="icon icon-arrow-left"}} Back to the CMS{{/link-to}}
 </div>
