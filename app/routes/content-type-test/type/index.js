@@ -5,5 +5,9 @@ export default Ember.Route.extend({
     return EmberFire.Array.create({
       ref: new Firebase(window.ENV.firebase + "data/" + type)
     });
+  },
+  setupController: function (controller, model) {
+    controller.set('type', this.modelFor('content-type-test.type'));
+    this._super.apply(this, arguments);
   }
 });

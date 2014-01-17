@@ -3,7 +3,7 @@
     <legend>New {{name}}</legend>
     {{#each fields}}
       <div class="wy-control-group">
-        <label>{{label}} ({{type.name}})</label>
+        <label>{{#if label}}{{label}}{{else}}{{name}}{{/if}} ({{type.name}})</label>
         <div class="wy-control">
           {{input placeholder=placeholder value=value}}
           <span class="wy-form-message">{{help}}</span>
