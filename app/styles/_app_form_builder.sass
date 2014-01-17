@@ -10,7 +10,7 @@
     position: relative
     +transition(all 0.1s linear)
     +span-columns(4)
-    @include omega(3n)
+    +omega(3n)
   > li.wh-form-builder-new
     opacity: .3
     background: transparent
@@ -28,3 +28,7 @@
     padding: $base-line-height
     width: 100%
 
++media($tablet)
+  .wh-form-builder-list > li
+    +span-columns(4)
+    +omega(2n)
