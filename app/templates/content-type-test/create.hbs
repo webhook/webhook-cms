@@ -11,17 +11,27 @@
 
   <fieldset>
     <legend>New Content Type</legend>
-    <div {{bind-attr class="errors.name:wy-control-group-error"}}>
-      <label>Name</label>
+    <div {{bind-attr class="wy-control-group errors.name:wy-control-group-error"}}>
+      <label>Form Name</label>
       <div class="wy-control">
         {{view Ember.TextField
           onEvent="keyUp"
           action="lowerName"
           value=name
+          placeholder="ex: articles"
         }}
+        <span class="wy-form-message">Pages built from this will live at /{{#if name}}{{name}}{{else}}articles{{/if}}/.</span>
         {{#each errors.name}}
           <span class="wy-form-message">{{this}}</span>
         {{/each}}
+      </div>
+    </div>
+    <div class="wy-control-group">
+      <label>What kind of data will go in this form?</label>
+      <div class="wy-control">
+        <label><input type="radio" name="preset"> Editorial content.</label>
+        <label><input type="radio" name="preset"> Related objects in a set.</label>
+        <label><input type="radio" name="preset"> A single object that I change often.</label>
       </div>
     </div>
   </fieldset>
@@ -39,6 +49,7 @@
           {{#each errors.name}}
             <span class="wy-form-message">{{this}}</span>
           {{/each}}
+          <label>{{input type="checkbox" checked=showInCms}} Show in CMS</label><br>
           {{input value=label placeholder="label"}}<br>
           {{input value=placeholder placeholder="placeholder"}}<br>
           {{input value=help placeholder="help text"}}
@@ -48,6 +59,6 @@
   </fieldset>
 
   {{#if isValid}}
-    <button type="submit" class="btn">Save</button>
+    <button type="submit" class="btn">Create</button>
   {{/if}}
 </form>
