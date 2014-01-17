@@ -33,12 +33,49 @@
   width: 100%
   max-width: 100%
 
+
 .wh-form-builder
   .wy-nav-side
-    background: $gray-dark
+    background: $menu-background-color
     width: 40%
+    padding: $base-line-height / 2 $base-line-height / 4
+    dl
+      +clearfix
+      margin-bottom: $base-line-height / 2
+    dt
+      font-weight: bold
+      font-size: 80%
+      padding: $base-line-height / 4
+      width: 100%
+      +clearfix
+    dd
+      width: 50%
+      float: left
+      padding: $base-line-height / 4
+    dd a
+      display: block
+      background: $section-background-color
+      width: 100%
+      padding: $base-line-height / 4
+      border: solid 1px $gray-lighter
+      color: $text-medium
+      font-size: 90%
+      &:before
+        color: $text-color
   .wy-nav-content-wrap
     margin-left: 40%
+  .wh-logo
+    +wy-logo(40px,$gray-dark)
+  .wh-form-builder-save
+    position: fixed
+    bottom: 0
+    right: 0
+    width: 60%
+    background: $menu-background-color
+    border-top: solid 1px rgba(0,0,0,.1)
+    padding: $base-line-height
+    margin-bottom: 0
+  .wh-form-choice
 
 +media($tablet)
   .wh-form-builder-list > li
