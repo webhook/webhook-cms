@@ -6,6 +6,11 @@
 <form class="wy-form-stacked">
   <fieldset>
 
+    <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
+    <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
+    <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
+    <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
+
     <!-- SHOW THIS IF FORM IS EMPTY -->
     <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">Title of this object</h2>
 
@@ -110,7 +115,7 @@
 
     <!-- IMAGE UPLOAD -->
     <!-- SEE DOCS FOR MARKUP FOR EACH STATE -->
-    <div class="wy-control-group">
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
       <label>Image upload</label>
       <div class="wy-form-control">
         <a class="wy-form-upload">
@@ -146,7 +151,49 @@
         <button class="btn btn-neutral icon icon-file"> Drag or select file to upload</button>
       </div>
     </div>
+
+
+    <!-- NAME -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="name">Name</label>
+      <div class="wy-control">
+        <input type="text" id="firstname" placeholder="First" />
+        <input type="text" id="lastname" placeholder="Last" />
+        <!-- optional help message -->
+        <span class="wy-form-message">Help goes here</span>
+      </div>
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="wy-control-group wy-control-group-address" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="name">Address</label>
+      <div class="wy-control">
+        <span class="wy-form-full">
+          <input type="text" id="street1" placeholder="Street address 1" class="street1"/>
+        </span>
+        <span class="wy-form-full">
+          <input type="text" id="street2" placeholder="address 2" class="street2"/>
+        </span>
+        <span class="wy-form-halves">
+          <input type="text" id="city" placeholder="City" class="city"/>
+        </span>
+        <span class="wy-form-halves">
+          <input type="text" id="state" placeholder="State / province / region" class="state"/>
+        </span>
+        <span class="wy-form-halves">
+          <input type="text" id="postal" placeholder="Postal / zip code" class="postal"/>
+        </span>
+        <span class="wy-form-halves">
+          <select class="country">
+            <option>Country list</option>
+          </select>
+        </span>
+        <!-- optional help message -->
+        <span class="wy-form-message">Help goes here</span>
+      </div>
+    </div>
   </fieldset>
+
 </form>
 
 
