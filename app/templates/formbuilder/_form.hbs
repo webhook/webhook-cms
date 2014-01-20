@@ -5,7 +5,7 @@
 
 <form class="wy-form-stacked">
   <fieldset>
-    <h2 class="wh-form-builder-title">Comic books</h2>
+    <h2 class="wh-form-builder-title">Title of this object</h2>
 
     <!-- TEXT -->
     <div class="wy-control-group wy-control-group-required" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
@@ -19,9 +19,9 @@
 
     <!-- PARAGRAPH TEXT -->
     <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
-      <label for="title">Paragraph text</label>
+      <label for="textarea">Paragraph text</label>
       <div class="wy-control">
-        <textarea></textarea>
+        <textarea id="textarea" placeholder="For regular ass text."></textarea>
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
@@ -29,9 +29,9 @@
 
     <!-- WYSIWGYG TEXT -->
     <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
-      <label for="title">WYSIWYG text</label>
+      <label for="wysiwyg">WYSIWYG text</label>
       <div class="wy-control">
-        <textarea></textarea>
+        <textarea id="wysiwyg"></textarea>
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
@@ -40,9 +40,9 @@
 
     <!-- MARKDOWN TEXT -->
     <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
-      <label for="title">Markdown text</label>
+      <label for="markdown">Markdown text</label>
       <div class="wy-control">
-        <textarea></textarea>
+        <textarea id="markdown"></textarea>
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
@@ -51,16 +51,33 @@
 
     <!-- NUMBER -->
     <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
-      <label for="title">Number</label>
+      <label for="number">Number</label>
       <div class="wy-control">
-        <input type="text" id="title" placeholder="title" />
+        <input type="number" id="number" placeholder="number" />
+        <!-- optional help message -->
+        <span class="wy-form-message">Help goes here</span>
+      </div>
+    </div>
+
+    <!-- CHECKBOXES -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="check-example">Choose another</label>
+      <div class="wy-control">
+        <label for="check-x" class="wy-checkbox">
+          <input id="check-x" name="check-example" type="checkbox" value="">
+          Option 1
+        </label>
+        <label for="check-y" class="wy-checkbox">
+          <input id="check-y" name="check-example" type="checkbox" value="">
+          Option 2
+        </label>
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
     </div>
 
     <!-- MULTIPLE CHOICE -->
-    <div class="wy-control-group wy-control-group-required">
+    <div class="wy-control-group wy-control-group-required" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
       <label for="option-radio-example1">Multiple choice</label>
       <div class="wy-control">
         <label for="option-radiox" class="wy-radio">
@@ -71,6 +88,19 @@
           <input id="option-radioy" name="option-radio-example1" type="radio" value="">
           Option 2
         </label>
+        <!-- optional help message -->
+        <span class="wy-form-message">Help goes here</span>
+      </div>
+    </div>
+
+    <!-- DROPDOWN -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="title">Dropdown</label>
+      <div class="wy-control">
+        <select>
+          <option>Option 1</option>
+          <option>Option 2</option>
+        </select>
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
