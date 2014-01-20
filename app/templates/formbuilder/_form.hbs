@@ -38,7 +38,7 @@
     <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
       <label for="wysiwyg">WYSIWYG text</label>
       <div class="wy-control">
-        <textarea id="wysiwyg"></textarea>
+        {{redactor-rte id="description" placeholder="something"}}
         <!-- optional help message -->
         <span class="wy-form-message">Help goes here</span>
       </div>
@@ -51,7 +51,7 @@
       <div class="wy-control">
         <textarea id="markdown"></textarea>
         <!-- optional help message -->
-        <span class="wy-form-message">Help goes here</span>
+        <span class="wy-form-message">Learn about Markdown syntax <a href="http://guides.github.com/overviews/mastering-markdown/" target="_blank">here</a></span>
       </div>
     </div>
 
@@ -188,11 +188,78 @@
             <option>Country list</option>
           </select>
         </span>
-        <!-- optional help message -->
-        <span class="wy-form-message">Help goes here</span>
+      </div>
+    </div>
+
+    <!-- PHONE NUMBER -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="tel">Phone number</label>
+      <div class="wy-control">
+        <input type="tel" name="usrtel" placeholder="x-(xxx)-xxx-xxxx">
+      </div>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="email">Email</label>
+      <div class="wy-control">
+        <input type="email" name="email" placeholder="Email">
+      </div>
+    </div>
+
+    <!-- DATETIME -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="datetime">Datetime</label>
+      <div class="wy-control">
+        <input type="datetime-local" name="datetime">
       </div>
     </div>
   </fieldset>
+
+    <!-- WEBSITE -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="url">Website</label>
+      <div class="wy-control">
+        <input type="url" name="url" placeholder="http://www.sitename.com">
+      </div>
+    </div>
+
+    <!-- RATING -->
+    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+      <label for="url">Rating</label>
+      <div class="wy-control">
+        <span class="wy-star wy-star-4dot5">
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="wy-control-group">
+      <label for="right-label" >Tags or related objects</label>
+      <div class="wy-control">
+        <div class="wy-tag-input-group">
+          <span class="wy-tag">Dave Snider<a href="" class="wy-tag-remove"></a></span>
+          <span class="wy-tag">Ian Kelly<a href="" class="wy-tag-remove"></a></span>
+          <span class="wy-tag">Mike Horn<a href="" class="wy-tag-remove"></a></span>
+          <div class="wy-autocomplete-group">
+            <label class="icon icon-search" for="search-example-2"></label> <input type="text" id="search-example-2" placeholder="Search tags">
+            <div class="wy-autocomplete-dropdown">
+              <ul>
+                <li class="on">
+                  Dave snider
+                </li>
+                <li>
+                  Ian Kelly
+                </li>
+                <li>
+                  Mike Horn
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <span class="wy-form-message">Hit enter after each tag.</span>
+      </div>
+    </div>
 
 </form>
 
