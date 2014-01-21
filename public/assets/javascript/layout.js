@@ -10,15 +10,21 @@ $( document ).ready(function() {
 
   // Fake form builder stuffs
   $(document).on("click", "[fake-toggle*='fake-widget']", function(event) {
+    var attr = $(this).attr('fake-toggle');
+    var widget = attr.substring(12,attr.length);
     $("[fake-toggle='fake-widget-edit']").show();
     $("[fake-toggle='fake-widget-list']").hide();
-    var target = $(this).data('item');
-    alert(target);
+
+    $("[fake-toggle*='fake-widget-form']").hide();
+    $("[fake-toggle='fake-widget-form-" + widget + "']").show();
+    $(this).addClass("wy-control-group-edit");
+
   });
 
   $(document).on("click", "[fake-toggle='fake-widget-done']", function(event) {
     $("[fake-toggle='fake-widget-edit']").hide();
     $("[fake-toggle='fake-widget-list']").show();
+    $("[fake-toggle*='fake-widget']".removeClass("wy-control-group-edit");
   });
 
   // I think this can be removed and we can use the tab plugin
