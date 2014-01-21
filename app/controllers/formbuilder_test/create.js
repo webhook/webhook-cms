@@ -33,6 +33,7 @@ export default Ember.ObjectController.extend({
       this.send('stopEditing');
     },
     editField: function (field) {
+      window.console.log(arguments);
       this.set('field', field);
       this.set('isEditing', true);
     },

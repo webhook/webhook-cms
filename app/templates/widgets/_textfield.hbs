@@ -1,8 +1,8 @@
-<div {{bind-attr class=":wy-control-group required:wy-control-group-required"}} data-toggle="tooltip" data-placement="left" title="Click to edit field details." {{action editField this on="click"}}>
-  <label>{{label}}</label>
+{{!-- <div {{bind-attr class=":wy-control-group required:wy-control-group-required"}} data-toggle="tooltip" data-placement="left" title="Click to edit field details." {{action editField this on="click"}}> --}}
+  <label>{{field.label}}</label>
   <div class="wy-control">
-    {{input placeholder=placeholder disabled="true"}}
+    {{input placeholder=field.placeholder disabled="true"}}
     <!-- optional help message -->
-    <span class="wy-form-message">{{help}}</span>
+    <span class="wy-form-message">{{field.help}}</span>
   </div>
-</div>
+{{!-- </div> --}}

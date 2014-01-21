@@ -39,7 +39,8 @@
             {{/each}}
 
             {{#each fields}}
-              {{partial type.partialPath}}
+              {{formbuilder-widget field=this doEdit="editField"}}
+              {{!-- {{partial type.partialPath}} --}}
               {{!-- <div class="wy-control-group">
                 <label>{{type.name}}</label>
                 <div class="wy-control">
