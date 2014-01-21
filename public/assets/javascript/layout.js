@@ -24,7 +24,7 @@ $( document ).ready(function() {
   $(document).on("click", "[fake-toggle='fake-widget-done']", function(event) {
     $("[fake-toggle='fake-widget-edit']").hide();
     $("[fake-toggle='fake-widget-list']").show();
-    $("[fake-toggle*='fake-widget']".removeClass("wy-control-group-edit");
+    $("[fake-toggle*='fake-widget']").removeClass("wy-control-group-edit");
   });
 
   // I think this can be removed and we can use the tab plugin
