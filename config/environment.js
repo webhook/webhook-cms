@@ -8,5 +8,44 @@
 // window.ENV = {FEATURES: {'with-controller': true}};
 
 window.ENV = {
-  firebase: "https://hooktest.firebaseio.com/site/dev/"
+  firebase: "https://hooktest.firebaseio.com/site/dev/",
+  fieldTypeGroups: [
+    {
+      name: 'Text',
+      fields: [
+        { name: 'Single line text', iconClass: 'icon-font', label: 'Text', placeholder: 'title', help: 'help goes here' },
+        { name: 'Paragraph text', iconClass: 'icon-align-left', widget: 'textarea' },
+        { name: 'WYSIWYG text', iconClass: 'icon-magic', widget: 'wysiwyg' },
+        { name: 'Markdown text', iconClass: 'icon-tag', widget: 'markdown' }
+      ]
+    }, {
+      name: 'Basics',
+      fields: [
+        { name: 'Number', widget: 'number' },
+        { name: 'Checkbox', widget: 'checkbox' },
+        { name: 'Multiple choice', widget: 'radio' },
+        { name: 'Dropdown', widget: 'select' }
+      ]
+    }, {
+      name: 'Files',
+      fields: [
+        { name: 'Image', widget: 'image' },
+        { name: 'Gallery' },
+        { name: 'Audio file', widget: 'audio' },
+        { name: 'Other file', widget: 'file' }
+      ]
+    }, {
+      name: 'Specifics',
+      fields: [
+        { name: 'Name', widget: 'name' },
+        { name: 'Address', widget: 'address' },
+        { name: 'Phone number', widget: 'phone' },
+        { name: 'Email', widget: 'email' },
+        { name: 'Date time', widget: 'datetime' },
+        { name: 'Website', widget: 'url' },
+        { name: 'Rating', widget: 'rating' },
+        { name: 'Tags', widget: 'tag' }
+      ]
+    }
+  ]
 };

@@ -1,12 +1,33 @@
 var FieldType = DS.Model.extend({
-  name: DS.attr('string')
+  name     : DS.attr('string'),
+  group    : DS.belongsTo('field-type-group'),
+  iconClass: DS.attr('string'),
+  widget   : DS.attr('string', { defaultValue: 'textfield' }),
+
+  // The following are used as defaults for new fields of this type
+  label      : DS.attr('string'),
+  placeholder: DS.attr('string'),
+  help       : DS.attr('string'),
+
+  partialPath: function () {
+    return 'widgets/' + this.get('widget');
+  }.property('widget')
 });
 
-FieldType.FIXTURES = [
-  { id: 1, name: 'text field' },
-  { id: 2, name: 'textarea' },
-  { id: 3, name: 'wysiwyg' },
-  { id: 4, name: 'date' }
-];
+FieldType.FIXTURES = [];
+
+var fieldTypeGroupId = 0,
+    fieldTypeId = 0;
+
+$.each(window.ENV.fieldTypeGroups, function (index, group) {
+  fieldTypeGroupId++;
+  $.each(group.fields, function (index, field) {
+    fieldTypeId++;
+    FieldType.FIXTURES.push($.extend({
+      id: fieldTypeId,
+      group: fieldTypeGroupId
+    }, field));
+  });
+});
 
 export default FieldType;

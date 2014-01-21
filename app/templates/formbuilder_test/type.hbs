@@ -15,11 +15,19 @@
       <!-- PAGE CONTENT -->
       <div class="wy-nav-content">
 
-        {{#link-to "content-type-test"}}all content types{{/link-to}}
-        |
-        {{#link-to "content-type-test.create"}}create content type{{/link-to}}
+        <nav>
+          {{#link-to "formbuilder_test"}}all content types{{/link-to}}
+          |
+          {{#link-to "formbuilder_test.create"}}create content type{{/link-to}}
+          |
+          {{#link-to 'formbuilder_test.type' this.name}}{{name}}{{/link-to}}
+          |
+          {{#link-to 'formbuilder_test.type.item' this.name}}create new item{{/link-to}}
+        </nav>
 
-        {{ outlet }}
+        <hr>
+
+        {{outlet}}
 
       </div>
 

@@ -7,7 +7,7 @@ export default Ember.Route.extend({
   },
   setupController: function (controller, model) {
     controller.set('ref', this.get('ref'));
-    controller.set('fieldTypes', this.get('store').find('field-type'));
+    controller.set('fieldTypeGroups', this.get('store').find('field-type-group'));
     this._super.apply(this, arguments);
   }
 });

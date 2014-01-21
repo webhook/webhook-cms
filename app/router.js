@@ -13,9 +13,9 @@ Router.map(function() {
     this.route('list');
   });
 
-  this.resource('content-type-test', function () {
+  this.resource('formbuilder_test', function () {
     this.route('create');
-    this.resource('content-type-test.type', { path: '/:type' }, function () {
+    this.resource('formbuilder_test.type', { path: '/:type' }, function () {
       this.route('item');
     });
   });

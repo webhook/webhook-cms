@@ -1,0 +1,49 @@
+{{#if isEditing}}
+
+<nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix">
+  <form class="wy-form-stacked">
+    <legend>Edit field details</legend>
+    <div class="wy-control-group">
+      <div class="wy-form-halves">
+        <label for="label">Field label <i class="icon icon-question-sign"></i></label>
+        {{input value=field.label}}
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Placeholder value <i class="icon icon-question-sign"></i></label>
+        {{input value=field.placeholder}}
+      </div>
+      <div class="wy-form-full">
+        <label for="help">Instructions for user <i class="icon icon-question-sign"></i></label>
+        {{textarea value=field.help}}
+      </div>
+      <div class="wy-form-full">
+        <label for="check-example">Required <i class="icon icon-question-sign"></i></label>
+        <div class="wy-control">
+          <label for="check-x" class="wy-checkbox">
+            {{view Ember.Checkbox checked=field.required}}
+            Make this field required.
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="wy-btn-group">
+      <button class="btn btn-neutral icon icon-remove-sign" {{action deleteField field}}> Delete</button>
+      <button class="btn icon icon-ok-sign" {{action stopEditing}}> OK</button>
+    </div>
+  </form>
+</nav>
+
+{{else}}
+
+<nav data-toggle="wy-nav-shift" class="wy-nav-side" data-spy="affix">
+  {{#each fieldTypeGroups}}
+    <dl>
+      <dt>{{name}}</dt>
+      {{#each fields}}
+        <dd><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action addField this}}> {{name}}</a></dd>
+      {{/each}}
+    </dl>
+  {{/each}}
+</nav>
+
+{{/if}}

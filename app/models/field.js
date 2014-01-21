@@ -2,7 +2,9 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   name       : DS.attr('string'),
   label      : DS.attr('string'),
   placeholder: DS.attr('string'),
-  type       : DS.belongsTo('field-type', { embedded: 'always' }),
+  help       : DS.attr('string'),
+  required   : DS.attr('boolean'),
+  type       : DS.belongsTo('field-type'),
   showInCms  : DS.attr('boolean'),
 
   // force a valid name
