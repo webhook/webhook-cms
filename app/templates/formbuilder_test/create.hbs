@@ -16,7 +16,7 @@
 
         <form class="wy-form-stacked" {{action createModel on="submit"}}>
           <fieldset>
-            <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">Title of this object</h2>
+            <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">{{#if name}}{{name}}{{else}}Title of this object{{/if}}</h2>
 
             <div {{bind-attr class=":wy-control-group errors.name.length:wy-control-group-error"}}>
               <label>Form Name</label>
@@ -57,11 +57,15 @@
             {{/each}}
 
           </fieldset>
-
-          {{#if isValid}}
-            <button type="submit" class="btn">Create</button>
-          {{/if}}
         </form>
+
+        <div class="wh-form-builder-save wy-btn-group">
+          <button type="submit" class="btn icon icon-ok-sign float-right"> Save form</button>
+          <button type="button" class="btn btn-neutral icon icon-remove-sign float-right"> Quit</button>
+
+          {{#link-to "index" class="wh-logo"}}{{/link-to}}
+          {{#link-to "index" class="icon icon-arrow-left"}} Back to the CMS{{/link-to}}
+        </div>
 
       </div>
 

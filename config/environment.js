@@ -13,18 +13,46 @@ window.ENV = {
     {
       name: 'Text',
       fields: [
-        { name: 'Single line text', iconClass: 'icon-font', label: 'Text', placeholder: 'title', help: 'help goes here' },
-        { name: 'Paragraph text', iconClass: 'icon-align-left', widget: 'textarea' },
-        { name: 'WYSIWYG text', iconClass: 'icon-magic', widget: 'wysiwyg' },
-        { name: 'Markdown text', iconClass: 'icon-tag', widget: 'markdown' }
+        {
+          name       : 'Single line text',
+          iconClass  : 'icon-font'
+        },
+        {
+          name     : 'Paragraph text',
+          iconClass: 'icon-align-left',
+          widget   : 'textarea'
+        },
+        {
+          name     : 'WYSIWYG text',
+          iconClass: 'icon-magic',
+          widget   : 'wysiwyg',
+        },
+        {
+          name     : 'Markdown text',
+          iconClass: 'icon-tag',
+          widget   : 'markdown',
+          help     : 'Learn about Markdown syntax <a href="http://guides.github.com/overviews/mastering-markdown/" target="_blank">here</a>'
+        }
       ]
     }, {
       name: 'Basics',
       fields: [
-        { name: 'Number', widget: 'number' },
-        { name: 'Checkbox', widget: 'checkbox' },
-        { name: 'Multiple choice', widget: 'radio' },
-        { name: 'Dropdown', widget: 'select' }
+        {
+          name: 'Number',
+          widget: 'number'
+        },
+        {
+          name: 'Checkbox',
+          widget: 'checkbox'
+        },
+        {
+          name: 'Multiple choice',
+          widget: 'radio'
+        },
+        {
+          name: 'Dropdown',
+          widget: 'select'
+        }
       ]
     }, {
       name: 'Files',
@@ -42,7 +70,7 @@ window.ENV = {
         { name: 'Phone number', widget: 'phone' },
         { name: 'Email', widget: 'email' },
         { name: 'Date time', widget: 'datetime' },
-        { name: 'Website', widget: 'url' },
+        { name: 'Website', widget: 'url', label: 'Website', placeholder: 'http://www.sitename.com' },
         { name: 'Rating', widget: 'rating' },
         { name: 'Tags', widget: 'tag' }
       ]

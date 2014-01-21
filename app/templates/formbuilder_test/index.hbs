@@ -1,8 +1,81 @@
-<ul>
-{{#each}}
-  <li>
-    {{#link-to "formbuilder_test.type" this.name}}{{name}}{{/link-to}}
-    <button type="button" class="btn" {{action deleteModel this}}>Remove</button>
-  </li>
-{{/each}}
-</ul>
+<div class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+
+    {{partial "content/nav"}}
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <!-- MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE -->
+      <nav class="wy-nav-top">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="">Webhook</a>
+      </nav>
+
+
+      <!-- PAGE CONTENT -->
+      <div class="wy-nav-content">
+
+        <h2>Add or edit new forms for your CMS</h2>
+
+        <hr>
+
+        <ul class="wh-form-builder-list">
+          <li class="wh-form-builder-new">
+            <h4 class="icon icon-plus-sign"> Create a new form</h4>
+            <form class="wy-form-stacked">
+              <div class="wy-control-group">
+                <label for="title">Form name</label>
+                <div class="wy-control">
+                  <input type="text" id="title" placeholder="ex: articles" />
+                  <!-- optional help message -->
+                  <span class="wy-form-message">Pages built from this will live at /articles/</span>
+                </div>
+              </div>
+              <div class="wy-control-group">
+                <label for="option-radio-example1">What will you use this form for?</label>
+                <div class="wy-control">
+                  <label for="option-radiox" class="wy-radio">
+                    <input id="option-radiox" name="option-radio-example1" type="radio" value="">
+                    Editorial content.
+                  </label>
+                  <label for="option-radioy" class="wy-radio">
+                    <input id="option-radioy" name="option-radio-example1" type="radio" value="">
+                    Multiple objects of the same kind.
+                  </label>
+                  <label for="option-radioy" class="wy-radio">
+                    <input id="option-radioy" name="option-radio-example1" type="radio" value="">
+                    A single object that I change often.
+                  </label>
+                  <!-- optional help message -->
+                </div>
+              </div>
+              <div class="wy-button-group">
+                <hr>
+                {{#link-to 'formbuilder.create' classNames="btn icon icon-plus-sign"}} Create{{/link-to}}
+              </div>
+            </form>
+          </li>
+          {{#each}}
+          <li>
+            <h4>{{name}}</h4>
+            <ul class="wy-plain-list-disc">
+              <li>141 articles</li>
+              <li>7 editable fields</li>
+              <li>RSS enabled</li>
+              <li>HP river enabled</li>
+            </ul>
+            <div class="wy-button-group">
+              <hr>
+              <button class="btn btn-neutral icon icon-edit"> Edit</button>
+              <button class="btn btn-neutral icon icon-remove-sign"> Delete</button>
+            </div>
+          </li>
+          {{/each}}
+        </ul>
+
+      </div>
+
+    </section>
+
+  </div>
+</div>

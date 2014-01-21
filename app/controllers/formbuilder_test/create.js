@@ -21,10 +21,7 @@ export default Ember.ObjectController.extend({
     },
     addField: function (fieldType) {
       var field = this.get('store').createRecord('field', {
-        type       : fieldType,
-        label      : fieldType.get('label'),
-        placeholder: fieldType.get('placeholder'),
-        help       : fieldType.get('help')
+        type: fieldType
       });
       this.get('model.fields').pushObject(field);
     },
@@ -33,7 +30,6 @@ export default Ember.ObjectController.extend({
       this.send('stopEditing');
     },
     editField: function (field) {
-      window.console.log(arguments);
       this.set('field', field);
       this.set('isEditing', true);
     },
