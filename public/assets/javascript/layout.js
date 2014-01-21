@@ -17,6 +17,7 @@ $( document ).ready(function() {
 
     $("[fake-toggle*='fake-widget-form']").hide();
     $("[fake-toggle='fake-widget-form-" + widget + "']").show();
+    $("[fake-toggle*='fake-widget']").removeClass("wy-control-group-edit");
     $(this).addClass("wy-control-group-edit");
 
   });
