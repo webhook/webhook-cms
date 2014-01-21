@@ -8,6 +8,19 @@ $( document ).ready(function() {
     $("[data-toggle='wy-nav-shift']").removeClass("shift");
   });
 
+  // Fake form builder stuffs
+  $(document).on("click", "[fake-toggle*='fake-widget']", function(event) {
+    $("[fake-toggle='fake-widget-edit']").show();
+    $("[fake-toggle='fake-widget-list']").hide();
+    var target = $(this).data('item');
+    alert(target);
+  });
+
+  $(document).on("click", "[fake-toggle='fake-widget-done']", function(event) {
+    $("[fake-toggle='fake-widget-edit']").hide();
+    $("[fake-toggle='fake-widget-list']").show();
+  });
+
   // I think this can be removed and we can use the tab plugin
   // this is a quick fix to get the fingers limber
   // The opacity stuff should be in the class css
