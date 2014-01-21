@@ -1,7 +1,8 @@
-<div class="wy-alert wy-alert-info">
-  <span class="wy-alert-title">Let's get started.</span>
-  <i class="icon icon-arrow-left"></i> Start by dragging a form field from the left into this area.
-</div>
+<!-- SHOW THIS IF FORM IS EMPTY -->
+<!-- <div class="wy&#45;alert wy&#45;alert&#45;info"> -->
+<!--   <span class="wy&#45;alert&#45;title">Let's get started.</span> -->
+<!--   <i class="icon icon&#45;arrow&#45;left"></i> Start by dragging a form field from the left into this area. -->
+<!-- </div> -->
 
 <form class="wy-form-stacked">
   <fieldset>
@@ -11,7 +12,6 @@
     <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
     <!-- DOCS FOR FORM STATES CAN BE FOUND ON WYRMTEST.READTHEDOCS.COM -->
 
-    <!-- SHOW THIS IF FORM IS EMPTY -->
     <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">Title of this object</h2>
 
     <!-- TEXT -->
@@ -35,7 +35,7 @@
     </div>
 
     <!-- WYSIWGYG TEXT -->
-    <div class="wy-control-group" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
+    <div class="wy-control-group wy-control-group-edit" data-toggle="tooltip" data-placement="left" title="Click to edit field details.">
       <label for="wysiwyg">WYSIWYG text</label>
       <div class="wy-control">
         {{redactor-rte id="description" placeholder="something"}}

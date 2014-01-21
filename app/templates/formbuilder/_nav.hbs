@@ -1,38 +1,70 @@
-  <!-- SIDE NAV, TOGGLES ON MOBILE -->
-  <nav data-toggle="wy-nav-shift" class="wy-nav-side" data-spy="affix">
+<!-- SIDE NAV, TOGGLES ON MOBILE -->
+<!--
+<nav data-toggle="wy-nav-shift" class="wy-nav-side" data-spy="affix">
+  <dl>
+    <dt>Text</dt>
+    <dd><a href="" class="wh-form-choice icon icon-font"> Single line text</a>
+    <dd><a href="" class="wh-form-choice icon icon-align-left"> Paragraph text</a>
+    <dd><a href="" class="wh-form-choice icon icon-magic"> WYSIWYG text</a>
+    <dd><a href="" class="wh-form-choice icon icon-tag"> Markdown text</a>
+  </dl>
+  <dl>
+    <dt>Basics</dt>
+    <dd><a href="" class="wh-form-choice icon icon-font"> Number</a>
+    <dd><a href="" class="wh-form-choice icon icon-align-left"> Checkbox</a>
+    <dd><a href="" class="wh-form-choice icon icon-magic"> Multiple choice</a>
+    <dd><a href="" class="wh-form-choice icon icon-tag"> Dropdown</a>
+  </dl>
+  <dl>
+    <dt>Files</dt>
+    <dd><a href="" class="wh-form-choice icon icon-font"> Image</a>
+    <dd><a href="" class="wh-form-choice icon icon-align-left"> Gallery</a>
+    <dd><a href="" class="wh-form-choice icon icon-tag"> Audio file</a>
+    <dd><a href="" class="wh-form-choice icon icon-magic"> Other files</a>
+  </dl>
+  <dl>
+    <dt>Specifics</dt>
+    <dd><a href="" class="wh-form-choice icon icon-font"> Name</a>
+    <dd><a href="" class="wh-form-choice icon icon-align-left"> Address</a>
+    <dd><a href="" class="wh-form-choice icon icon-tag"> Phone number</a>
+    <dd><a href="" class="wh-form-choice icon icon-magic"> Email</a>
+    <dd><a href="" class="wh-form-choice icon icon-font"> Date time</a>
+    <dd><a href="" class="wh-form-choice icon icon-align-left"> Website</a>
+    <dd><a href="" class="wh-form-choice icon icon-tag"> Rating</a>
+    <dd><a href="" class="wh-form-choice icon icon-magic"> Tags</a>
+  </dl>
+</nav>
+-->
 
-    <dl>
-      <dt>Text</dt>
-      <dd><a href="" class="wh-form-choice icon icon-font"> Single line text</a>
-      <dd><a href="" class="wh-form-choice icon icon-align-left"> Paragraph text</a>
-      <dd><a href="" class="wh-form-choice icon icon-magic"> WYSIWYG text</a>
-      <dd><a href="" class="wh-form-choice icon icon-tag"> Markdown text</a>
-    </dl>
-    <dl>
-      <dt>Basics</dt>
-      <dd><a href="" class="wh-form-choice icon icon-font"> Number</a>
-      <dd><a href="" class="wh-form-choice icon icon-align-left"> Checkbox</a>
-      <dd><a href="" class="wh-form-choice icon icon-magic"> Multiple choice</a>
-      <dd><a href="" class="wh-form-choice icon icon-tag"> Dropdown</a>
-    </dl>
-    <dl>
-      <dt>Files</dt>
-      <dd><a href="" class="wh-form-choice icon icon-font"> Image</a>
-      <dd><a href="" class="wh-form-choice icon icon-align-left"> Gallery</a>
-      <dd><a href="" class="wh-form-choice icon icon-tag"> Audio file</a>
-      <dd><a href="" class="wh-form-choice icon icon-magic"> Other files</a>
-    </dl>
-    <dl>
-      <dt>Specifics</dt>
-      <dd><a href="" class="wh-form-choice icon icon-font"> Name</a>
-      <dd><a href="" class="wh-form-choice icon icon-align-left"> Address</a>
-      <dd><a href="" class="wh-form-choice icon icon-tag"> Phone number</a>
-      <dd><a href="" class="wh-form-choice icon icon-magic"> Email</a>
-      <dd><a href="" class="wh-form-choice icon icon-font"> Date time</a>
-      <dd><a href="" class="wh-form-choice icon icon-align-left"> Website</a>
-      <dd><a href="" class="wh-form-choice icon icon-tag"> Rating</a>
-      <dd><a href="" class="wh-form-choice icon icon-magic"> Tags</a>
-    </dl>
-  </nav>
-
-
+<nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix">
+  <form class="wy-form-stacked">
+    <legend>Edit field details</legend>
+    <div class="wy-control-group">
+      <div class="wy-form-halves">
+        <label for="label">Field label <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="Text field">
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Placeholder value <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="Something">
+      </div>
+      <div class="wy-form-full">
+        <label for="help">Instructions for user <i class="icon icon-question-sign"></i></label>
+        <textarea id="help">Help goes here.</textarea>
+      </div>
+      <div class="wy-form-full">
+        <label for="check-example">Required <i class="icon icon-question-sign"></i></label>
+        <div class="wy-control">
+          <label for="check-x" class="wy-checkbox">
+            <input id="check-x" name="check-example" type="checkbox" value="">
+            Make this field required.
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="wy-btn-group">
+      <button class="btn btn-neutral icon icon-remove-sign"> Delete</button>
+      <button class="btn icon icon-ok-sign"> OK</button>
+    </div>
+  </form>
+</nav>

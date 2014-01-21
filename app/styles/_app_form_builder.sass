@@ -34,36 +34,35 @@
   max-width: 100%
 
 
-.wh-form-builder
-  .wy-nav-side
-    background: $menu-background-color
-    width: 40%
-    padding: $base-line-height / 2 $base-line-height / 4
-    dl
-      +clearfix
-      margin-bottom: $base-line-height / 2
-    dt
-      font-weight: bold
-      font-size: 80%
-      padding: $base-line-height / 4
-      width: 100%
-      +clearfix
-    dd
-      width: 50%
-      float: left
-      padding: $base-line-height / 4
-    dd a
-      display: block
-      background: $section-background-color
-      width: 100%
-      padding: $base-line-height / 4
-      border: solid 1px $gray-lighter
-      color: $text-medium
-      font-size: 90%
-      &:before
-        color: $text-color
-  .wy-nav-content-wrap
-    margin-left: 40%
+.wh-form-builder .wy-nav-side
+  background: $menu-background-color
+  width: 40%
+  padding: $base-line-height / 2 $base-line-height / 4
+  dl
+    +clearfix
+    margin-bottom: $base-line-height / 2
+  dt
+    font-weight: bold
+    font-size: 80%
+    padding: $base-line-height / 4
+    width: 100%
+    +clearfix
+  dd
+    width: 50%
+    float: left
+    padding: $base-line-height / 4
+  dd a
+    display: block
+    background: $section-background-color
+    width: 100%
+    padding: $base-line-height / 4
+    border: solid 1px $gray-lighter
+    color: $text-medium
+    font-size: 90%
+    &:before
+      color: $text-color
+.wh-form-builder .wy-nav-content-wrap
+  margin-left: 40%
   .wy-nav-content
     padding-bottom: 100px
   .wh-logo
@@ -95,10 +94,25 @@
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
-  .wy-control-group:active
-    background: lighten($offgreen, 50%)
+  .wy-control-group.wy-control-group-edit, .wy-control-group:active
+    background: lighten($blue, 20%)
+    label, .wy-form-message
+      color: $white
+  .wy-control-group.wy-control-group-edit
+    margin-left: -$gutter * 2
+    margin-right: - $gutter * 2
+    padding-left: $gutter * 2
+    padding-right: $gutter * 2
+
   .wy-star
     font-size: 200%
+
+.wy-nav-side.wy-nav-side-widget-edit
+  background: lighten($blue, 50%)
+  padding: $gutter
+  padding-top: 200px
+
+
 +media($tablet)
   .wh-form-builder-list > li
     +span-columns(4)
