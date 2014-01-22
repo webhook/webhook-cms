@@ -99,31 +99,107 @@
         <label for="label">What can users add into the WYSIWYG? <i class="icon icon-question-sign"></i></label>
         <label for="check-y" class="wy-checkbox">
           <input id="check-y" name="check-example" type="checkbox" value="">
-          tables
+          Tables
         </label>
         <label for="check-y" class="wy-checkbox">
           <input id="check-y" name="check-example" type="checkbox" value="">
-          videos
+          Videos
         </label>
         <label for="check-y" class="wy-checkbox">
           <input id="check-y" name="check-example" type="checkbox" value="">
-          images
+          Images
         </label>
         <label for="check-y" class="wy-checkbox">
           <input id="check-y" name="check-example" type="checkbox" value="">
-          quotes
+          Block quotes
         </label>
         <label for="check-y" class="wy-checkbox">
           <input id="check-y" name="check-example" type="checkbox" value="">
-          links
+          Links
         </label>
         <!-- optional help message -->
       </div>
     </div>
 
-    <div fake-toggle="fake-widget-form-markdown"></div>
-    <div fake-toggle="fake-widget-form-number"></div>
-    <div fake-toggle="fake-widget-form-checkbox"></div>
+    <hr/>
+
+    <!-- MARKDOWN -->
+    <div class="wy-control-group" fake-toggle="fake-widget-form-markdown">
+      <div class="wy-form-halves">
+        <label for="label">Min characters <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="1">
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Max characters <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="">
+      </div>
+    </div>
+
+    <!-- NUMBER -->
+    <div class="wy-control-group" fake-toggle="fake-widget-form-number">
+      <div class="wy-form-halves">
+        <label for="label">Min value <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="1">
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Max number <i class="icon icon-question-sign"></i></label>
+        <input type="text" name="label" value="">
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Is this a currency? <i class="icon icon-question-sign"></i></label>
+        <label for="check-y" class="wy-checkbox">
+          <select>
+            <option>No</option>
+            <option>US dollars</option>
+            <option>UK pounds</option>
+          </select>
+        </label>
+      </div>
+      <div class="wy-form-halves">
+        <label for="label">Decimals allowed? <i class="icon icon-question-sign"></i></label>
+        <label for="check-y" class="wy-checkbox">
+          <input id="check-y" name="check-example" type="checkbox" value="">
+          Yes, allow decimals.
+        </label>
+      </div>
+    </div>
+
+    <div class="wy-control-group" fake-toggle="fake-widget-form-checkbox">
+      <label for="Options">Checkbox options <i class="icon icon-question-sign"></i></label>
+      <div class="wy-control">
+        <label for="check-x" class="wy-checkbox">
+          <input id="check-x" name="check-example" type="checkbox" value="">
+          <input type="text" value="Option 1">
+          <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
+          <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
+        </label>
+        <label for="check-y" class="wy-checkbox">
+          <input id="check-y" name="check-example" type="checkbox" value="">
+          <input type="text" value="Option 2">
+          <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
+          <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
+        </label>
+      </div>
+    </div>
+
+    <div class="wy-control-group" fake-toggle="fake-widget-form-multiple">
+      <label for="Options">Multiple choice options <i class="icon icon-question-sign"></i></label>
+      <div class="wy-control">
+        <label for="check-x" class="wy-checkbox">
+          <input id="check-x" name="check-example" type="radio" value="">
+          <input type="text" value="Option 1">
+          <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
+          <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
+        </label>
+        <label for="check-y" class="wy-checkbox">
+          <input id="check-y" name="check-example" type="radio" value="">
+          <input type="text" value="Option 2">
+          <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
+          <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
+        </label>
+      </div>
+    </div>
+
     <div fake-toggle="fake-widget-form-multiple"></div>
     <div fake-toggle="fake-widget-form-dropdown"></div>
     <div fake-toggle="fake-widget-form-image"></div>
