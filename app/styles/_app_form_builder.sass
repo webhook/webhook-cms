@@ -47,7 +47,7 @@
     font-size: 80%
     padding: $base-line-height / 4
     width: 100%
-    color: $white
+    color: $text-medium
     +clearfix
   dd
     width: 50%
@@ -59,10 +59,13 @@
     width: 100%
     padding: $base-line-height / 4
     border: solid 1px $gray
-    color: $text-lighter
+    color: $text-light
     font-size: 90%
     &:before
       color: $text-invert
+    &:hover
+      color: $text-lighter
+      border-color: $gray-lighter
 .wh-form-builder .wy-nav-content-wrap
   margin-left: 30%
   .wy-nav-content
