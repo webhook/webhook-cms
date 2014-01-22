@@ -35,7 +35,8 @@
 
 
 .wh-form-builder .wy-nav-side
-  background: $menu-background-color
+  background: $gray-dark
+  color: $text-light
   width: 30%
   padding: $base-line-height / 2 $base-line-height / 4
   dl
@@ -46,6 +47,7 @@
     font-size: 80%
     padding: $base-line-height / 4
     width: 100%
+    color: $white
     +clearfix
   dd
     width: 50%
@@ -53,14 +55,14 @@
     padding: $base-line-height / 4
   dd a
     display: block
-    background: $section-background-color
+    background: $gray-dark
     width: 100%
     padding: $base-line-height / 4
-    border: solid 1px $gray-lighter
-    color: $text-medium
+    border: solid 1px $gray
+    color: $text-lighter
     font-size: 90%
     &:before
-      color: $text-color
+      color: $text-invert
 .wh-form-builder .wy-nav-content-wrap
   margin-left: 30%
   .wy-nav-content
@@ -95,22 +97,37 @@
     border: dashed 1px $gray-light
     cursor: pointer
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
-    background: lighten($blue, 20%)
+    background: $gray-light
+    position: relative
     label, .wy-form-message
       color: $white
+    &:after
+      content: " "
+      position: absolute
+      left: -30px
+      top: 50%
+      margin-top: -15px
+      +triangle(30px, $gray-light, left)
+      z-index: $z-index-popover + 1
   .wy-control-group.wy-control-group-edit
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
-    padding-left: $gutter * 2
-    padding-right: $gutter * 2
+    padding-left: $gutter * 2 + em($base-line-height / 4)
+    padding-right: $gutter * 2 + em($base-line-height / 4)
 
   .wy-star
     font-size: 200%
 
 .wy-nav-side.wy-nav-side-widget-edit
-  background: lighten($blue, 50%)
+  background: $gray-dark
   padding: $gutter
   display: none
+  label
+    color: $text-lighter
+  label.wy-checkbox, label.wy-radio
+    color: $text-medium
+  hr
+    border-color: $gray
 
 [fake-toggle*=fake-widget-form]
   display: none
