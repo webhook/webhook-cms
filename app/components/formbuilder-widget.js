@@ -1,6 +1,12 @@
 export default Ember.Component.extend({
   classNames: ['wy-control-group'],
-  classNameBindings: ['field.required:wy-control-group-required'],
+  classNameBindings: ['field.required:wy-control-group-required', 'isEditing:wy-control-group-edit'],
+  isEditing: false,
+
+  fieldChanged: function () {
+    this.set('isEditing', this.get('field') === this.get('editingField'));
+  }.observes('field', 'editingField'),
+
   didInsertElement: function () {
     var self = this;
     this.$(this.get('element')).tooltip({
@@ -8,6 +14,7 @@ export default Ember.Component.extend({
       title: 'Click to edit field details.'
     });
   },
+
   click: function () {
     this.sendAction('doEdit', this.get('field'));
   }

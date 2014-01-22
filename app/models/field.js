@@ -6,21 +6,13 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   required   : DS.attr('boolean'),
   type       : DS.belongsTo('field-type'),
   showInCms  : DS.attr('boolean'),
+  meta       : DS.attr('json', { defaultValue: {} }),
 
-  // force a valid name
-  forceValid: function () {
-    var name = this.get('name'),
-        regex = /(\W|[A-Z])/g;
-    if (name && regex.test(name)) {
-      this.set('name', name.replace(regex, ''));
-    }
-  }.observes('name'),
+  setName: function () {
+    this.set('name', this.get('label').toLowerCase().replace(/\s+/, '_').replace(/(\W|[A-Z])/g, ''));
+  }.observes('label'),
 
   validations: {
-    name: {
-      presence: true,
-      format: { with: /^([a-z]|\d)+$/, message: 'must be lowercase letters and numbers only' }
-    },
     type: {
       presence: true
     }

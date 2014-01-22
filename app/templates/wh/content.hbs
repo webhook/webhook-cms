@@ -1,0 +1,53 @@
+<ul class="wh-form-builder-list">
+  <li class="wh-form-builder-new">
+    <h4 class="icon icon-plus-sign"> Create a new form</h4>
+    <form class="wy-form-stacked" {{action createType on="submit"}}>
+      <div class="wy-control-group">
+        <label for="title">Form name</label>
+        <div class="wy-control">
+          {{input value=newType.name placeholder="ex: articles"}}
+          <!-- optional help message -->
+          <span class="wy-form-message">Pages built from this will live at /{{#if newType.name}}{{newType.name}}{{else}}articles{{/if}}/</span>
+        </div>
+      </div>
+      <div class="wy-control-group">
+        <label for="option-radio-example1">What will you use this form for?</label>
+        <div class="wy-control">
+          <label for="option-radiox" class="wy-radio">
+            <input id="option-radiox" name="option-radio-example1" type="radio" value="">
+            Editorial content.
+          </label>
+          <label for="option-radioy" class="wy-radio">
+            <input id="option-radioy" name="option-radio-example1" type="radio" value="">
+            Multiple objects of the same kind.
+          </label>
+          <label for="option-radioy" class="wy-radio">
+            <input id="option-radioy" name="option-radio-example1" type="radio" value="">
+            A single object that I change often.
+          </label>
+          <!-- optional help message -->
+        </div>
+      </div>
+      <div class="wy-button-group">
+        <hr>
+        <button type="submit" class="btn icon icon-plus-sign"> Create</button>
+      </div>
+    </form>
+  </li>
+  {{#each}}
+  <li>
+    <h4>{{name}}</h4>
+    <ul class="wy-plain-list-disc">
+      <li>141 articles</li>
+      <li>7 editable fields</li>
+      <li>RSS enabled</li>
+      <li>HP river enabled</li>
+    </ul>
+    <div class="wy-button-group">
+      <hr>
+      <button class="btn btn-neutral icon icon-edit" {{action gotoEdit name}}> Edit</button>
+      <button class="btn btn-neutral icon icon-remove-sign" {{action deleteType this}}> Delete</button>
+    </div>
+  </li>
+  {{/each}}
+</ul>

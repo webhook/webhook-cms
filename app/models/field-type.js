@@ -9,9 +9,12 @@ var FieldType = DS.Model.extend({
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
 
-  partialPath: function () {
+  fieldPartialPath: function () {
     return 'widgets/' + this.get('widget');
-  }.property('widget')
+  }.property('widget'),
+  infoPartialPath: function () {
+    return 'widgets/info/' + this.get('widget');
+  }.property('widget'),
 });
 
 FieldType.FIXTURES = [];

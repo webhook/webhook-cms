@@ -13,14 +13,14 @@ Router.map(function() {
     this.route('list');
   });
 
-  this.resource('formbuilder_test', function () {
-    this.route('create');
-    this.resource('formbuilder_test.type', { path: '/:type' }, function () {
-      this.route('item');
+  this.route('login');
+  this.route('form', { path: '/form/:type' });
+  this.resource('wh', function () {
+    this.resource('wh.content', { path: '/content' }, function () {
+      this.route('type', { path: '/:type' });
     });
   });
 
-  this.route('login');
   this.route('component-test');
   this.route('helper-test');
   // this.resource('posts', function() {
