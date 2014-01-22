@@ -100,17 +100,19 @@
     border: dashed 1px $gray-light
     cursor: pointer
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
-    background: $gray-light
+    background: darken($gray-dark, 5%)
     position: relative
     label, .wy-form-message
       color: $white
+    &:hover
+      border-color: transparent
     &:after
       content: " "
       position: absolute
       left: -30px
       top: 50%
       margin-top: -15px
-      +triangle(30px, $gray-light, left)
+      +triangle(30px, darken($gray-dark, 5%), left)
       z-index: $z-index-popover + 1
   .wy-control-group.wy-control-group-edit
     margin-left: -$gutter * 2
@@ -125,12 +127,16 @@
   background: $gray-dark
   padding: $gutter
   display: none
+  .wy-control-group
+    margin-bottom: 0
   label
     color: $text-lighter
   label.wy-checkbox, label.wy-radio
     color: $text-medium
   hr
     border-color: $gray
+    margin: 0
+    margin-bottom: $base-line-height / 2
   .btn:before
     color: $green
   .btn-link
