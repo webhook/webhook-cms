@@ -20,6 +20,7 @@ Router.map(function() {
     });
   });
 
+  this.route('login');
   this.route('component-test');
   this.route('helper-test');
   // this.resource('posts', function() {
