@@ -102,6 +102,12 @@
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
     background: darken($gray-dark, 5%)
     position: relative
+    margin-left: -$gutter * 2
+    margin-right: - $gutter * 2
+    padding-left: $gutter * 2 + em($base-line-height / 4)
+    padding-right: $gutter * 2 + em($base-line-height / 4)
+    .wy-control
+      +clearfix
     label, .wy-form-message
       color: $white
     &:hover
@@ -114,12 +120,6 @@
       margin-top: -15px
       +triangle(30px, darken($gray-dark, 5%), left)
       z-index: $z-index-popover + 1
-  .wy-control-group.wy-control-group-edit
-    margin-left: -$gutter * 2
-    margin-right: - $gutter * 2
-    padding-left: $gutter * 2 + em($base-line-height / 4)
-    padding-right: $gutter * 2 + em($base-line-height / 4)
-
   .wy-star
     font-size: 200%
 
