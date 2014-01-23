@@ -14,6 +14,8 @@ Router.map(function() {
   });
 
   this.route('login');
+  this.route('start');
+
   this.route('form', { path: '/form/:type' });
   this.resource('wh', function () {
     this.resource('wh.content', { path: '/content' }, function () {

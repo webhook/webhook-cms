@@ -3,6 +3,7 @@
 <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix" style="display:block">
   <form class="wy-form-stacked">
     <legend>Edit field details</legend>
+    <hr/>
     <div class="wy-control-group">
       <div class="wy-form-halves">
         <label for="label">Field label <i class="icon icon-question-sign"></i></label>
@@ -32,7 +33,7 @@
     {{partial editingField.type.infoPartialPath}}
 
     <div class="wy-btn-group">
-      <button class="btn icon icon-ok-sign" {{action stopEditing}}> Done</button>
+      <button class="btn btn-neutral icon icon-ok-sign" {{action stopEditing}}> Done</button>
       <button class="btn btn-link icon icon-remove-sign" {{action deleteField editingField}}> Delete</button>
     </div>
   </form>
