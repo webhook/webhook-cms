@@ -18,8 +18,11 @@ Router.map(function() {
 
   this.route('form', { path: '/form/:type' });
   this.resource('wh', function () {
-    this.resource('wh.content', { path: '/content' }, function () {
-      this.route('type', { path: '/:type' });
+    this.route('content', { path: '/content' });
+    this.resource('wh.content.type', { path: '/content/:type' }, function () {
+      this.route('index', { path: '/' });
+      this.route('edit', { path: '/:id' });
+      this.route('new');
     });
   });
 
