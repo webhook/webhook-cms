@@ -6,32 +6,32 @@
     <hr/>
     <div class="wy-control-group">
       <div class="wy-form-halves">
-        <label for="label">Field label <i class="icon icon-question-sign"></i></label>
-        {{input value=editingField.label}}
+        <label for="label" {{bindAttr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign"></i></label>
+        {{input valueBinding="editingField.label" viewName="label"}}
       </div>
       <div class="wy-form-halves">
-        <label for="label">Placeholder value <i class="icon icon-question-sign"></i></label>
-        {{input value=editingField.placeholder}}
+        <label {{bindAttr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign"></i></label>
+        {{input valueBinding="editingField.placeholder" viewName="placeholder"}}
       </div>
       <div class="wy-form-full">
-        <label for="help">Instructions for user <i class="icon icon-question-sign"></i></label>
-        {{textarea value=editingField.help}}
+        <label {{bindAttr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign"></i></label>
+        {{textarea valueBinding="editingField.help" viewName="help"}}
       </div>
       <div class="wy-form-full">
         <label for="check-example">Required <i class="icon icon-question-sign"></i></label>
         <div class="wy-control">
-          <label for="check-x" class="wy-checkbox">
-            {{view Ember.Checkbox checked=editingField.required}}
+          <label class="wy-checkbox">
+            {{view Ember.Checkbox checked="editingField.required" viewName="required"}}
             Make this field required.
           </label>
         </div>
       </div>
       <div class="wy-form-full">
-        <label for="check-example">Show in CMS <i class="icon icon-question-sign"></i></label>
+        <label for="check-example">CMS lists <i class="icon icon-question-sign" data-toggle="tooltip" title="When we create a list of these in the CMS, should we output the value of this field in the list? This is usually done for important fields like the name, the category or something similar."></i></label>
         <div class="wy-control">
-          <label for="check-x" class="wy-checkbox">
+          <label class="wy-checkbox">
             {{view Ember.Checkbox checked=editingField.showInCms}}
-            Show field in CMS lists.
+            Add this as a column when viewing in the CMS list view.
           </label>
         </div>
       </div>
