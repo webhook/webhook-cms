@@ -1,0 +1,24 @@
+{{#link-to 'wh.content.type.new' type.name class="btn icon icon-plus-sign"}} create{{/link-to}}
+<table class="wy-table full-width">
+  <thead>
+    <tr>
+      {{#each type.fields}}
+        {{#if showInCms}}
+          <th>{{name}}</th>
+        {{/if}}
+      {{/each}}
+      <th>action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each item in model}}
+      <tr>
+        {{#each item.cmsFields}}<td>{{this}}</td>{{/each}}
+        <td>
+          <button type="button" class="btn" {{action deleteItem this}}>Delete</button>
+          {{#link-to 'wh.content.type.edit' type.name item class="btn"}}Edit{{/link-to}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
