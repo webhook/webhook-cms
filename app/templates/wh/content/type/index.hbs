@@ -6,7 +6,18 @@
 
   <hr/>
 
-  <input type="search" class="full-width" placeholder="Filter this list"/>
+  <input type="search"  placeholder="Filter this list"/>
+  <div class="wy-dropdown wy-dropdown-display-options float-right">
+    <span class="btn btn-neutral btn-small icon icon-table"> Display <span class="caret"></span></span>
+    <dl class="wy-dropdown-menu">
+      {{#each type.fields}}
+      <dd>
+      <input type="checkbox" />
+        {{name}}
+      </dd>
+      {{/each}}
+    </dl>
+  </div>
 
   <table class="wy-table wy-table-bordered-rows full-width">
     <thead>
