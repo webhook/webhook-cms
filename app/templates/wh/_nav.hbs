@@ -7,16 +7,16 @@
 
     <div class="wy-menu wy-menu-vertical" data-spy="affix">
 
-      <div data-menu-wrap="all-content" class="move-center">
+      <div data-menu-wrap="all-content" class="current move-center">
         <header>Your content</header>
         <ul>
         {{#each}}
-          <li data-menu-item="content-{{name}}">{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
+        <li data-menu-item="content-{{name}}">{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
         {{/each}}
         </ul>
         <header>Configuration</header>
         <ul>
-          <li data-menu-item="customize-forms">{{#link-to 'formbuilder'}}Add / edit forms{{/link-to}}</li>
+          <li data-menu-item="customize-forms">{{#link-to 'wh.content'}}Add / edit forms{{/link-to}}</li>
           <li><a data-menu="settings">Site settings</a></li>
         </ul>
       </div>

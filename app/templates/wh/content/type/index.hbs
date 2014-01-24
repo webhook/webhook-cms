@@ -1,6 +1,6 @@
 <section class="wh-content-list">
   <section class="wh-content-list-title">
-{{#link-to 'wh.content.type.new' type.name class="btn icon icon-plus-sign float-right"}} Create{{/link-to}}
+    {{#link-to 'wh.content.type.new' type.name class="btn icon icon-plus-sign float-right"}} Add new {{type.name}}{{/link-to}}
 <h1>
   {{type.name}}
 </h1>
@@ -8,7 +8,7 @@
 <hr/>
 
 </section>
-<table class="wy-table wy-table-striped full-width">
+<table class="wy-table wy-table-bordered-rows full-width">
   <thead>
     <tr>
       {{#each type.fields}}
