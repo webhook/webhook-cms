@@ -11,7 +11,7 @@
         <header>Your content</header>
         <ul>
         {{#each}}
-        <li data-menu-item="content-{{name}}">{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
+          {{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}
         {{/each}}
         </ul>
         <header>Configuration</header>

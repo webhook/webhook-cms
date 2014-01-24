@@ -8,6 +8,10 @@ $( document ).ready(function() {
     $("[data-toggle='wy-nav-shift']").removeClass("shift");
   });
 
+  $(document).on('click', "[data-toggle='click-row']", function(event) {
+    window.document.location = $(this).attr("href");
+  });
+
   // Fake form builder stuffs
   $(document).on("click", "[fake-toggle*='fake-widget']", function(event) {
     var attr = $(this).attr('fake-toggle');

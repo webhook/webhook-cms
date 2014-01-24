@@ -21,13 +21,12 @@
   </thead>
   <tbody>
     {{#each item in model}}
-      <tr>
+      {{#link-to 'wh.content.type.edit' type.name item tagName="tr"}}
         {{#each item.cmsFields}}<td>{{this}}</td>{{/each}}
         <td>
           <button type="button" class="btn" {{action deleteItem this}}>Delete</button>
-          {{#link-to 'wh.content.type.edit' type.name item class="btn"}}Edit{{/link-to}}
         </td>
-      </tr>
+      {{/link-to}}
     {{/each}}
   </tbody>
 </table>
