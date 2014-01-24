@@ -88,6 +88,7 @@
     display: block
     position: relative
     font-size: 90%
+    text-transform: capitalize
     color: $text-color
     &:hover
       background-color: darken($menu-background-color, 5%)
@@ -108,14 +109,6 @@
     width: 100%
     border-radius: 50px
     padding: 6px 12px
-  img
-    display: block
-    margin: auto auto $gutter / 2 auto
-    height: 45px
-    width: 45px
-    background-color: $menu-logo-color
-    padding: 5px
-    border-radius: 100%
   > a, .wy-dropdown > a
     color: $section-background-color
     font-size: 100%
@@ -124,8 +117,6 @@
     padding: $base-line-height / 6 $base-line-height / 4
     margin-bottom: $gutter / 2
     +font-smooth
-    &:hover
-      background: rgba(255,255,255,.1)
 
 .wy-nav .wy-menu-vertical
   header
@@ -182,8 +173,8 @@
 
 .wy-nav-top
   display: none
-  background: $link-color
-  color: $white
+  background: $gray-darker
+  color: $text-invert
   padding: $gutter / 4 $gutter / 2
   position: relative
   line-height: 50px

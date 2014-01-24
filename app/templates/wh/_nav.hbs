@@ -1,0 +1,38 @@
+  <!-- SIDE NAV, TOGGLES ON MOBILE -->
+  <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-nav-search">
+      <a class="wh-logo"></a>
+      <input type="text" placeholder="search"/>
+    </div>
+
+    <div class="wy-menu wy-menu-vertical" data-spy="affix">
+
+      <div data-menu-wrap="all-content" class="move-center">
+        <header>Your content</header>
+        <ul>
+        {{#each}}
+          <li data-menu-item="content-{{name}}">{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
+        {{/each}}
+        </ul>
+        <header>Configuration</header>
+        <ul>
+          <li data-menu-item="customize-forms">{{#link-to 'formbuilder'}}Add / edit forms{{/link-to}}</li>
+          <li><a data-menu="settings">Site settings</a></li>
+        </ul>
+      </div>
+
+      <div data-menu-wrap="settings" class="move-right">
+        <ul>
+          <li><a class="icon icon-arrow-left" data-menu="all-content"> Back to your content</a></li>
+        </ul>
+        <header>Site settings</header>
+        <ul>
+          <li data-menu-item="site-profile"><a href="">Site profile</a></li>
+        </ul>
+      </div>
+
+    </div>
+    &nbsp;
+  </nav>
+
+
