@@ -94,9 +94,8 @@
       background-color: darken($menu-background-color, 5%)
       cursor: pointer
     &:active
-      background-color: $menu-logo-color
+      background-color: darken($menu-background-color, 10%)
       cursor: pointer
-      color: $white
 
 .wy-side-nav-search
   z-index: $z-index-popover
@@ -231,6 +230,12 @@
   +outer-container
   section
     +span-columns(6)
+
+
+
+.wy-table tbody tr:hover
+  cursor: pointer
+  background: $table-bg-hover-color
 
 +media($tablet)
   .wy-body-for-nav

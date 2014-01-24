@@ -1,32 +1,34 @@
 <section class="wh-content-list">
   <section class="wh-content-list-title">
     {{#link-to 'wh.content.type.new' type.name class="btn icon icon-plus-sign float-right"}} Add new {{type.name}}{{/link-to}}
-<h1>
-  {{type.name}}
-</h1>
-</section>
-<hr/>
+    <h1>{{type.name}}</h1>
+  </section>
+
+  <hr/>
+
+  <input type="search" class="full-width" placeholder="Filter this list"/>
+
+  <table class="wy-table wy-table-bordered-rows full-width">
+    <thead>
+      <tr>
+        {{#each type.fields}}
+          {{#if showInCms}}
+            <th>{{name}}</th>
+          {{/if}}
+        {{/each}}
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each item in model}}
+        {{#link-to 'wh.content.type.edit' type.name item tagName="tr"}}
+          {{#each item.cmsFields}}<td>{{this}}</td>{{/each}}
+          <td>
+            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem this}}></button>
+          </td>
+        {{/link-to}}
+      {{/each}}
+    </tbody>
+  </table>
 
 </section>
-<table class="wy-table wy-table-bordered-rows full-width">
-  <thead>
-    <tr>
-      {{#each type.fields}}
-        {{#if showInCms}}
-          <th>{{name}}</th>
-        {{/if}}
-      {{/each}}
-      <th>action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each item in model}}
-      {{#link-to 'wh.content.type.edit' type.name item tagName="tr"}}
-        {{#each item.cmsFields}}<td>{{this}}</td>{{/each}}
-        <td>
-          <button type="button" class="btn" {{action deleteItem this}}>Delete</button>
-        </td>
-      {{/link-to}}
-    {{/each}}
-  </tbody>
-</table>

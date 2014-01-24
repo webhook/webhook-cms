@@ -4,12 +4,8 @@ $( document ).ready(function() {
     $("[data-toggle='wy-nav-shift']").toggleClass("shift");
   });
   // Close menu when you click a link.
-  $(document).on("click", ".wy-menu-vertical .current ul li a", function(event) {
+  $(document).on("click", ".wy-menu-vertical a", function(event) {
     $("[data-toggle='wy-nav-shift']").removeClass("shift");
-  });
-
-  $(document).on('click', "[data-toggle='click-row']", function(event) {
-    window.document.location = $(this).attr("href");
   });
 
   // Fake form builder stuffs
