@@ -232,10 +232,14 @@
     +span-columns(6)
 
 
-
+.wy-table .wy-table-actions
+  opacity: 0
+  width: 1px
 .wy-table tbody tr:hover
   cursor: pointer
   background: $table-bg-hover-color
+  .wy-table-actions
+    opacity: 1
 
 .wy-dropdown.wy-dropdown-display-options
   dd
@@ -245,6 +249,7 @@
   .wy-dropdown-menu
     right: 0
     left: auto
+
 +media($tablet)
   .wy-body-for-nav
     background: $section-background-color

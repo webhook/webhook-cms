@@ -1,6 +1,6 @@
 <section class="wh-content-list">
   <section class="wh-content-list-title">
-    {{#link-to 'wh.content.type.new' type.name class="btn icon icon-plus-sign float-right"}} Add new {{type.name}}{{/link-to}}
+    {{#link-to 'wh.content.type.new' type.name class="btn btn-neutral icon icon-plus-sign float-right"}} Add new {{type.name}}{{/link-to}}
     <h1>{{type.name}}</h1>
   </section>
 
@@ -34,7 +34,7 @@
       {{#each item in model}}
         {{#link-to 'wh.content.type.edit' type.name item tagName="tr"}}
           {{#each item.cmsFields}}<td>{{this}}</td>{{/each}}
-          <td>
+          <td class="wy-table-actions">
             <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem this}}></button>
           </td>
         {{/link-to}}
