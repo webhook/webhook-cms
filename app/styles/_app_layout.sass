@@ -210,6 +210,7 @@
 .wy-affix
   position: fixed
   top: 0
+
 .wh-login
   width: 400px
   height: 320px
@@ -228,9 +229,17 @@
 
 .wh-start
   +outer-container
-  section
-    +span-columns(6)
-
+  a
+    +span-columns(5)
+    background: $section-background-color
+    margin-top: $gutter
+    padding: $base-line-height
+    color: $text-color
+  a.custom
+    +shift(2)
+  h1
+    margin-top: $gutter
+    text-align: center
 
 .wy-table .wy-table-actions
   opacity: 0
