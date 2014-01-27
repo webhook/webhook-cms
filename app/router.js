@@ -19,6 +19,12 @@ Router.map(function() {
   this.route('form', { path: '/form/:type' });
   this.resource('wh', function () {
     this.route('content', { path: '/content' });
+    this.resource('settings',function() {
+      this.route('billing');
+      this.route('data');
+      this.route('domain');
+      this.route('team');
+    });
     this.resource('wh.content.type', { path: '/content/:type' }, function () {
       this.route('index', { path: '/' });
       this.route('edit', { path: '/:id' });

@@ -1,18 +1,22 @@
-<form class="wy-form-stacked" {{action saveItem on="submit"}}>
-  <fieldset>
-    <legend>Editing {{id}}</legend>
+<section class="wh-content-edit">
+  <h1>Editing {{id}}</h1>
+  <hr/>
 
-    {{#each type.fields}}
-      <div class="wy-control-group">
-        <label>{{label}}</label>
-        <div class="wy-control">
-          {{input placeholder=placeholder value=value}}
-          <span class="wy-form-message">{{help}}</span>
+  <form class="wy-form-stacked" {{action saveItem on="submit"}}>
+    <fieldset>
+      {{#each type.fields}}
+        <div class="wy-control-group">
+          <label>{{label}}</label>
+          <div class="wy-control">
+            {{input placeholder=placeholder value=value}}
+            <span class="wy-form-message">{{help}}</span>
+          </div>
         </div>
+      {{/each}}
+      <div class="wy-btn-group">
+        <button type="submit" class="btn btn-neutral icon icon-check-sign"> Save</button>
       </div>
-    {{/each}}
-
-    <button type="submit" class="btn btn-neutral icon icon-check-sign"> Save</button>
-    {{#if saved}}{{saved}}{{/if}}
-  </fieldset>
-</form>
+      {{#if saved}}{{saved}}{{/if}}
+    </fieldset>
+  </form>
+</section>
