@@ -3,9 +3,14 @@ $( document ).ready(function() {
   $(document).on('click', "[data-toggle='wy-nav-top']", function(event) {
     $("[data-toggle='wy-nav-shift']").toggleClass("shift");
   });
-  // Close menu when you click a link.
+  // Close menu when you click a link
   $(document).on("click", ".wy-menu-vertical a", function(event) {
     $("[data-toggle='wy-nav-shift']").removeClass("shift");
+  });
+
+  // Close menu when you click a link
+  $(document).on("click", ".wy-dropdown .btn", function(event) {
+    $(this).parent().find(".wy-dropdown-menu").toggle();
   });
 
   // Fake form builder stuffs
