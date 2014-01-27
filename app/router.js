@@ -19,6 +19,7 @@ Router.map(function() {
       this.route('billing');
       this.route('data');
       this.route('domain');
+      this.route('general');
       this.route('team');
     });
     this.resource('wh.content.type', { path: '/content/:type' }, function () {
