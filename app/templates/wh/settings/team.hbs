@@ -1,0 +1,74 @@
+<h1>Add a team member</h1>
+
+<form class="wy-aligned">
+  <div class="wy-control-group">
+    <label>Add a new collaborator by email</label>
+    <input type="text" placeholder="first name">
+    <input type="text" placeholder="last name">
+    <input type="text" placeholder="email address">
+    <div class="wy-form-message">The person will not be active until they verify their email address.</div>
+  </div>
+  <div class="wy-btn-group">
+    <button class="btn btn-neutral icon icon-user"> Send invite</button>
+  </div>
+</form>
+
+<hr/>
+
+<h1>Current team members</h1>
+
+<div class="wy-alert wy-alert-info">
+  <div class="wy-alert-title">Persmissions</div>
+  Owners have access to billing and other site settings. Contributors can only access the content creation tools in the CMS.
+</div>
+
+<table class="wy-table wy-table-bordered-rows full-width">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Permissions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Dave Snider</td>
+      <td>dave@webhook.com</td>
+      <td>
+        <div class="wy-dropdown">
+          <span class="btn btn-neutral icon icon-lock"> Owner<span class="caret"></span</span>
+          <dl class="wy-dropdown-menu">
+            <dd><a href="">Change to contributor</a></dd>
+            <dd><a href="">Remove access entirely</a></dd>
+          </dl>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Mike Horn</td>
+      <td>mike@webhook.com</td>
+      <td>
+        <div class="wy-dropdown">
+          <span class="btn btn-neutral icon icon-lock"> Contributor<span class="caret"></span</span>
+          <dl class="wy-dropdown-menu">
+            <dd><a href="">Change to owner</a></dd>
+            <dd><a href="">Remove access entirely</a></dd>
+          </dl>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>Ian Kelly</td>
+      <td>ian@webhook.com</td>
+      <td>
+        <div class="wy-dropdown">
+          <span class="btn btn-neutral icon icon-lock"> Contributor<span class="caret"></span</span>
+          <dl class="wy-dropdown-menu">
+            <dd><a href="">Change to owner</a></dd>
+            <dd><a href="">Remove access entirely</a></dd>
+          </dl>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
