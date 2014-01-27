@@ -10,12 +10,26 @@
   <div class="wy-dropdown wy-dropdown-display-options float-right">
     <span class="btn btn-neutral btn-small icon icon-table"> Display <span class="caret"></span></span>
     <dl class="wy-dropdown-menu">
+      <dt>Show columns</dt>
       {{#each type.fields}}
       <dd>
-      <input type="checkbox" />
+        <input type="checkbox" />
         {{name}}
       </dd>
       {{/each}}
+      <dt>Sort by</dt>
+      <dd>
+        <input type="radio" />
+        Last updated
+      </dd>
+      <dd>
+        <input type="radio" />
+        Last created
+      </dd>
+      <dd>
+        <input type="radio" />
+        Alphabetical
+      </dd>
     </dl>
   </div>
 

@@ -4,6 +4,7 @@
     display: inline-block
     margin: 0
     text-transform: capitalize
+    line-height: 1
 .wh-content-list
   input[type=search]
     margin-bottom: $base-line-height
@@ -11,3 +12,21 @@
     padding-left: $base-line-height / 2
   .icon-remove-sign
     color: $text-color
+
+.wy-dropdown.wy-dropdown-display-options
+  dd
+    padding: $base-line-height / 4
+    font-size: 60%
+    white-space: nowrap
+    text-transform: capitalize
+  dt
+    color: $gray-lighter
+    text-transform: uppercase
+    font-size: 70%
+    margin-top: $base-line-height / 4
+    white-space: nowrap
+  dt:first-child
+    margin-top: 0
+  .wy-dropdown-menu
+    right: 0
+    left: auto
