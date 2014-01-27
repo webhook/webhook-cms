@@ -9,8 +9,7 @@
 
 window.ENV = {
   dbName: 'hooktest',
-  dbBucket: 'firebaseadapter',
-  firebase: "https://hooktest.firebaseio.com/site/dev/",
+  dbBucket: 'site/dev',
   fieldTypeGroups: [
     {
       name: 'Text',
