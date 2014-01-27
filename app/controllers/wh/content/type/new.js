@@ -1,25 +1,38 @@
-export default Ember.ObjectController.extend({
-  type: null,
+import ApplicationAdapter from 'appkit/adapters/application';
 
+export default Ember.ObjectController.extend({
   actions: {
     createItem: function () {
 
-      this.set('saved', null);
+      var data = {};
 
-      var self = this,
-          data = {};
-
-      this.get('model.fields').filterBy('value').forEach(function (item) {
-        data[item.name] = item.value;
+      this.get('model.fields').filterBy('value').forEach(function (field) {
+        data[field.get('name')] = field.get('value');
       });
 
-      var newItemRef = new Firebase(window.ENV.firebase + "data/" + this.get('model.name')).push();
+      var contentTypeName = this.get('model.name').toLowerCase(),
+          modelName = contentTypeName.charAt(0).toUpperCase() + contentTypeName.slice(1);
 
-      var newItem = EmberFire.Object.create({ ref: newItemRef });
+      // Make a dynamic model/adapter so we can save data to `data/[modelName]`
+      if (!window.App[modelName]) {
 
-      newItem.setProperties($.extend(data, { id: newItemRef.name() }));
+        // dynamic model
+        window.App[modelName] = DS.Model.extend({
+          data: DS.attr('json')
+        });
 
-      this.transitionToRoute('wh.content.type', this.get('type.name'));
+        // dynamic adapter
+        window.App[modelName + 'Adapter'] = ApplicationAdapter.extend({
+          dbBucket: window.ENV.dbBucket + '/data/'
+        });
+
+      }
+
+      this.store.createRecord(contentTypeName, {
+        data: data
+      }).save().then(function () {
+        this.transitionToRoute('wh.content.type', this.get('model'));
+      }.bind(this));
 
     }
   }

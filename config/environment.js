@@ -8,6 +8,8 @@
 // window.ENV = {FEATURES: {'with-controller': true}};
 
 window.ENV = {
+  dbName: 'hooktest',
+  dbBucket: 'firebaseadapter',
   firebase: "https://hooktest.firebaseio.com/site/dev/",
   fieldTypeGroups: [
     {

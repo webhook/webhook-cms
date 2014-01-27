@@ -1,7 +1,5 @@
 export default Ember.Route.extend({
   model: function (params) {
-    return EmberFire.Object.create({
-      ref: new Firebase(window.ENV.firebase + "content_types/" + params.type)
-    });
+    return this.store.find('content-type', params.type_id);
   }
 });

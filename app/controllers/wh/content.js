@@ -1,19 +1,14 @@
 export default Ember.ArrayController.extend({
-  ref: null,
-  newType: null,
+  newTypeName: null,
 
   actions: {
     createType: function () {
-      var self = this,
-          contentType = this.get('newType');
-
-      this.get('ref').child(contentType.get('name')).set(contentType.serialize(), function (error) {
-        if (error) {
-        } else {
-          self.transitionTo('form', contentType.get('name'));
-        }
-      });
-
+      this.store.createRecord('content-type', {
+        id: this.get('newTypeName'),
+        name: this.get('newTypeName')
+      }).save().then(function (type) {
+        this.transitionTo('form', type);
+      }.bind(this));
     },
     deleteType: function (contentType) {
       this.removeObject(contentType);

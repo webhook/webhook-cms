@@ -1,32 +1,40 @@
 export default Ember.ObjectController.extend({
-  ref            : null,
   fieldTypeGroups: null,
   editingField   : null,
 
   actions: {
     updateType: function () {
-      var self = this,
-          data = this.get('model').serialize();
 
-      this.get('ref').set(data, function (error) {
-        if (error) {
-          // Todo: actual error handling.
-          window.alert('firebase error, see console.');
-          window.console.log(error);
-        } else {
-          self.transitionToRoute('wh.content');
-        }
-      });
+      var fields = this.get('model.fields'),
+          count = fields.get('length');
+
+      var saveType = function () {
+        // Save form and transition back
+        this.get('model').save().then(function () {
+          this.transitionToRoute('wh.content');
+        }.bind(this));
+      }.bind(this);
+
+      // Can't think of a better way to automatically do this at the moment.
+      fields.forEach(function (field) {
+        field.save().then(function () {
+          count--;
+          if (!count) {
+            saveType();
+          }
+        });
+      }.bind(this));
 
     },
     addField: function (fieldType) {
-      var field = this.get('store').createRecord('field', {
+      var field = this.store.createRecord('field', {
         type: fieldType
       });
       this.get('model.fields').pushObject(field);
     },
     deleteField: function (field) {
       this.get('model.fields').removeObject(field);
+      field.destroyRecord();
       this.send('stopEditing');
     },
     editField: function (field) {

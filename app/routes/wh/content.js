@@ -1,5 +1,6 @@
 export default Ember.Route.extend({
   model: function () {
-    return this.modelFor('wh.content.type');
+    return this.modelFor('wh');
   }
 });
+

@@ -1,35 +1,40 @@
+import ApplicationAdapter from 'appkit/adapters/application';
+
 export default Ember.Route.extend({
   model: function (params) {
 
-    var model = this.get('store').createRecord('item');
+    var contentTypeName = this.modelFor('wh.content.type').get('name').toLowerCase(),
+        modelName = contentTypeName.charAt(0).toUpperCase() + contentTypeName.slice(1);
 
-    // there has to be a better way to get the type. :(
-    var path_parts = this.modelFor('wh.content.type').get('ref.path.m'),
-        type = path_parts[path_parts.length - 1];
+    // Make a dynamic model/adapter so we can save data to `data/[modelName]`
+    if (!window.App[modelName]) {
 
-    var typeRef = this.modelFor('wh.content.type').get('ref');
+      // dynamic model
+      window.App[modelName] = DS.Model.extend({
+        data: DS.attr('json')
+      });
 
-    typeRef.once('value', function (snapshot) {
-      window.console.log('type', snapshot.val());
-    });
+      // dynamic adapter
+      window.App[modelName + 'Adapter'] = ApplicationAdapter.extend({
+        dbBucket: window.ENV.dbBucket + '/data/'
+      });
 
-    var itemRef = new Firebase(window.ENV.firebase + "data/" + type + "/" + params.id);
+    }
 
-    itemRef.once('value', function (snapshot) {
-      window.console.log('item', snapshot.val());
-    });
-
-    return model;
-
-    // // there has to be a better way to get the type. :(
-    // var path_parts = this.modelFor('wh.content.type').get('ref.path.m'),
-    //     type = path_parts[path_parts.length - 1];
-    // return EmberFire.Object.create({
-    //   ref: new Firebase(window.ENV.firebase + "data/" + type + "/" + params.id)
-    // });
+    return this.store.find(contentTypeName, params.item_id);
   },
   setupController: function (controller, model) {
-    controller.set('type', this.modelFor('wh.content.type'));
+
+    var data = model.get('data'),
+        type = this.modelFor('wh.content.type');
+
+    type.get('fields').then(function (fields) {
+      fields.forEach(function (field) {
+        field.set('value', data[field.get('name')]);
+      });
+    });
+
+    controller.set('type', type);
     this._super.apply(this, arguments);
   }
 });

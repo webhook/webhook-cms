@@ -9,7 +9,9 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   meta       : DS.attr('json', { defaultValue: {} }),
 
   setName: function () {
-    this.set('name', this.get('label').toLowerCase().replace(/\s+/, '_').replace(/(\W|[A-Z])/g, ''));
+    if (this.get('label')) {
+      this.set('name', this.get('label').toLowerCase().replace(/\s+/, '_').replace(/(\W|[A-Z])/g, ''));
+    }
   }.observes('label'),
 
   validations: {

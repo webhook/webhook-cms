@@ -12,7 +12,7 @@ Router.map(function() {
   this.route('login');
   this.route('start');
 
-  this.route('form', { path: '/form/:type' });
+  this.route('form', { path: '/form/:id' });
   this.resource('wh', function () {
     this.resource('wh.settings',{ path: '/settings/' },function() {
       this.route('billing');
@@ -22,9 +22,9 @@ Router.map(function() {
       this.route('team');
     });
     this.route('content', { path: '/content' });
-    this.resource('wh.content.type', { path: '/content/:type' }, function () {
+    this.resource('wh.content.type', { path: '/content/:type_id' }, function () {
       this.route('index', { path: '/' });
-      this.route('edit', { path: '/:id' });
+      this.route('edit', { path: '/:item_id' });
       this.route('new');
     });
   });

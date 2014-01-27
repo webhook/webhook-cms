@@ -18,42 +18,12 @@
           <fieldset>
             <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">{{name}}</h2>
 
-            {{!-- <div {{bind-attr class=":wy-control-group errors.name.length:wy-control-group-error"}}>
-              <label>Form Name</label>
-              <div class="wy-control">
-                {{view Ember.TextField
-                  onEvent="keyUp"
-                  action="lowerName"
-                  value=name
-                  placeholder="ex: articles"
-                }}
-                <span class="wy-form-message">Pages built from this will live at /{{#if name}}{{name}}{{else}}articles{{/if}}/.</span>
-                {{#each errors.name}}
-                  <span class="wy-form-message">{{this}}</span>
-                {{/each}}
-              </div>
-            </div> --}}
-
             {{#each errors.fields}}
               <span class="wy-form-message">{{this}}</span>
             {{/each}}
 
             {{#each field in fields}}
               {{formbuilder-widget field=field editingField=editingField doEdit="editField"}}
-              {{!-- {{partial type.partialPath}} --}}
-              {{!-- <div class="wy-control-group">
-                <label>{{type.name}}</label>
-                <div class="wy-control">
-                  {{input value=name placeholder="name"}}<br>
-                  {{#each errors.name}}
-                    <span class="wy-form-message">{{this}}</span>
-                  {{/each}}
-                  <label>{{input type="checkbox" checked=showInCms}} Show in CMS</label><br>
-                  {{input value=label placeholder="label"}}<br>
-                  {{input value=placeholder placeholder="placeholder"}}<br>
-                  {{input value=help placeholder="help text"}}
-                </div>
-              </div> --}}
             {{/each}}
 
           </fieldset>
