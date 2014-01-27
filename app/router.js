@@ -8,10 +8,6 @@ Router.map(function() {
   this.resource('formbuilder',function() {
     this.route('create');
   });
-  this.resource('content',function() {
-    this.route('edit');
-    this.route('list');
-  });
 
   this.route('login');
   this.route('start');
