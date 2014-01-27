@@ -13,22 +13,26 @@
       <dt>Show columns</dt>
       {{#each type.fields}}
       <dd>
-        <input type="checkbox" />
-        {{name}}
+        <span class="icon icon-check-sign">
+          {{name}}
+        </span>
       </dd>
       {{/each}}
       <dt>Sort by</dt>
       <dd>
-        <input type="radio" />
-        Last updated
+        <span class="icon icon-circle">
+          Last updated
+        </span>
       </dd>
       <dd>
-        <input type="radio" />
-        Last created
+        <span class="icon icon-circle-blank">
+          Last created
+        </span>
       </dd>
       <dd>
-        <input type="radio" />
-        Alphabetical
+        <span class="icon icon-circle-blank">
+          Alphabetical
+        </span>
       </dd>
     </dl>
   </div>
