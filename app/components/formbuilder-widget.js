@@ -8,11 +8,12 @@ export default Ember.Component.extend({
   }.observes('field', 'editingField'),
 
   didInsertElement: function () {
-    var self = this;
-    this.$(this.get('element')).tooltip({
-      placement: 'left',
-      title: 'Click to edit field details.'
-    });
+    if (this.get('doEdit')) {
+      this.$(this.get('element')).tooltip({
+        placement: 'left',
+        title: 'Click to edit field details.'
+      });
+    }
   },
 
   click: function () {
