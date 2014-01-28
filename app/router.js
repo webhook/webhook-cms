@@ -10,7 +10,8 @@ Router.map(function() {
   });
 
   this.route('login');
-  this.route('password');
+  this.route('password-reset');
+  this.route('password-change');
   this.route('start');
 
   this.route('form', { path: '/form/:id' });
