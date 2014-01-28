@@ -10,7 +10,20 @@ $( document ).ready(function() {
 
   // Close menu when you click a link
   $(document).on("click", ".wy-dropdown .btn", function(event) {
-    $(this).parent().find(".wy-dropdown-menu").toggle();
+    var ele = $(this).parent().find(".wy-dropdown-menu");
+    $(document).find('.wy-dropdown-menu:visible').hide();
+    if(ele.is(':hidden'))
+    {
+      ele.show();
+    }
+  });
+
+  $(document).on("click", function(event) {
+    var target = $(event.target);
+    if(target.parents('.wy-dropdown').length === 0) // No dropdown menus in the parent tree
+    {
+      $('.wy-dropdown-menu:visible').hide(); // Hide all visible drop downs
+    }
   });
 
   // Fake form builder stuffs
