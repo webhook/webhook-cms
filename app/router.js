@@ -10,6 +10,7 @@ Router.map(function() {
   });
 
   this.route('login');
+  this.route('password');
   this.route('start');
 
   this.route('form', { path: '/form/:id' });
