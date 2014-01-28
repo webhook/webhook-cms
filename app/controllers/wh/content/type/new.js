@@ -10,7 +10,7 @@ export default Ember.ObjectController.extend({
         data[field.get('name')] = field.get('value');
       });
 
-      var contentTypeName = this.get('model.name').toLowerCase(),
+      var contentTypeName = Ember.String.singularize(this.get('model.name').toLowerCase()),
           modelName = contentTypeName.charAt(0).toUpperCase() + contentTypeName.slice(1);
 
       // Make a dynamic model/adapter so we can save data to `data/[modelName]`

@@ -3,7 +3,7 @@ import ApplicationAdapter from 'appkit/adapters/application';
 export default Ember.Route.extend({
   model: function (params) {
 
-    var contentTypeName = this.modelFor('wh.content.type').get('name').toLowerCase(),
+    var contentTypeName = Ember.String.singularize(this.modelFor('wh.content.type').get('name').toLowerCase()),
         modelName = contentTypeName.charAt(0).toUpperCase() + contentTypeName.slice(1);
 
     // Make a dynamic model/adapter so we can save data to `data/[modelName]`
