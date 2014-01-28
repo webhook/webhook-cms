@@ -51,12 +51,12 @@
     <tbody>
       {{#with contentType as contentTypeNav}}
       {{#each item in model}}
-        <tr>
-          {{#each item.fields}}<td>{{#link-to 'wh.content.type.edit' contentTypeNav.id item.id}}{{this}}{{/link-to}}</td>{{/each}}
+        {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
+          {{#each item.fields}}<td>{{this}}</td>{{/each}}
           <td class="wy-table-actions">
             <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem this}}></button>
           </td>
-        </tr>
+          {{/link-to}}
       {{/each}}
       {{/with}}
     </tbody>
