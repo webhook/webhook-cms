@@ -42,6 +42,9 @@ export default Ember.ObjectController.extend({
     },
     stopEditing: function () {
       this.set('editingField', null);
+    },
+    quitForm: function () {
+      this.transitionToRoute('wh.content');
     }
   }
 });
