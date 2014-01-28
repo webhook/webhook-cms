@@ -5,14 +5,8 @@
 
   <form class="wy-form-stacked" {{action saveItem on="submit"}}>
     <fieldset>
-      {{#each type.fields}}
-        <div class="wy-control-group">
-          <label>{{label}}</label>
-          <div class="wy-control">
-            {{input placeholder=placeholder value=value}}
-            <span class="wy-form-message">{{help}}</span>
-          </div>
-        </div>
+      {{#each field in type.fields}}
+        {{formbuilder-widget field=field}}
       {{/each}}
       <div class="wy-btn-group">
         <button type="submit" class="btn btn-neutral icon icon-check-sign"> Save</button>

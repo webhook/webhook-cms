@@ -33,9 +33,11 @@ export default Ember.Route.extend({
         cmsFieldNames.pushObject(field.get('name'));
       });
       model.forEach(function (item) {
-        item.set('fields', Ember.$.map(cmsFieldNames, function (name) {
-          return item.get('data')[name];
-        }));
+        var fieldValues = [];
+        cmsFieldNames.forEach(function (name) {
+          fieldValues.push(item.get('data')[name]);
+        });
+        item.set('fields', fieldValues);
       });
     });
 
