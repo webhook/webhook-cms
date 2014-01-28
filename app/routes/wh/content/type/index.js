@@ -1,27 +1,9 @@
-import ApplicationAdapter from 'appkit/adapters/application';
+import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
   model: function () {
-
-    var contentTypeName = Ember.String.singularize(this.modelFor('wh.content.type').get('name').toLowerCase()),
-        modelName = contentTypeName.charAt(0).toUpperCase() + contentTypeName.slice(1);
-
-    // Make a dynamic model/adapter so we can save data to `data/[modelName]`
-    if (!window.App[modelName]) {
-
-      // dynamic model
-      window.App[modelName] = DS.Model.extend({
-        data: DS.attr('json')
-      });
-
-      // dynamic adapter
-      window.App[modelName + 'Adapter'] = ApplicationAdapter.extend({
-        dbBucket: window.ENV.dbBucket + '/data/'
-      });
-
-    }
-
-    return this.store.find(contentTypeName);
+    var modelName = getItemModelName(this.modelFor('wh.content.type').get('name'));
+    return this.store.find(modelName);
   },
   setupController: function (controller, model) {
 
