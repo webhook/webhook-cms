@@ -3,7 +3,7 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      this.removeObject(item);
+      item.destroyRecord();
     }
   }
 
