@@ -16,21 +16,21 @@ window.ENV = {
       fields: [
         {
           name     : 'Single line text',
-          iconClass: 'icon-font'
+          faClass  : 'fa-font'
         },
         {
           name     : 'Paragraph text',
-          iconClass: 'icon-align-left',
+          faClass  : 'fa-align-left',
           widget   : 'textarea'
         },
         {
           name     : 'WYSIWYG text',
-          iconClass: 'icon-magic',
+          faClass  : 'fa-magic',
           widget   : 'wysiwyg',
         },
         {
           name     : 'Markdown text',
-          iconClass: 'icon-tag',
+          faClass  : 'fa-tag',
           widget   : 'markdown',
           help     : 'Learn about Markdown syntax <a href="http://guides.github.com/overviews/mastering-markdown/" target="_blank">here</a>'
         }

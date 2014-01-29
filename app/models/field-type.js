@@ -1,7 +1,7 @@
 var FieldType = DS.Model.extend({
   name     : DS.attr('string'),
   group    : DS.belongsTo('field-type-group'),
-  iconClass: DS.attr('string'),
+  faClass: DS.attr('string'),
   widget   : DS.attr('string', { defaultValue: 'textfield' }),
 
   // The following are used as defaults for new fields of this type
