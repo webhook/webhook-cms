@@ -6,19 +6,19 @@
     <hr/>
     <div class="wy-control-group">
       <div class="wy-form-halves">
-        <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign"></i></label>
+        <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="fa fa-question-sign"></i></label>
         {{input valueBinding="editingField.label" viewName="label"}}
       </div>
       <div class="wy-form-halves">
-        <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign"></i></label>
+        <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="fa fa-question-sign"></i></label>
         {{input valueBinding="editingField.placeholder" viewName="placeholder"}}
       </div>
       <div class="wy-form-full">
-        <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign"></i></label>
+        <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="fa fa-question-sign"></i></label>
         {{textarea valueBinding="editingField.help" viewName="help"}}
       </div>
       <div class="wy-form-full">
-        <label for="check-example">Required <i class="icon icon-question-sign"></i></label>
+        <label for="check-example">Required <i class="fa fa-question-sign"></i></label>
         <div class="wy-control">
           <label class="wy-checkbox">
             {{view Ember.Checkbox checked=editingField.required}}
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="wy-form-full">
-        <label for="check-example">CMS lists <i class="icon icon-question-sign" data-toggle="tooltip" title="When we create a list of these in the CMS, should we output the value of this field in the list? This is usually done for important fields like the name, the category or something similar."></i></label>
+        <label for="check-example">CMS lists <i class="fa fa-question-sign" data-toggle="tooltip" title="When we create a list of these in the CMS, should we output the value of this field in the list? This is usually done for important fields like the name, the category or something similar."></i></label>
         <div class="wy-control">
           <label class="wy-checkbox">
             {{view Ember.Checkbox checked=editingField.showInCms}}
@@ -42,8 +42,8 @@
     {{partial editingField.fieldType.infoPartialPath}}
 
     <div class="wy-btn-group">
-      <button class="btn btn-neutral icon icon-ok-sign" {{action stopEditing}}> Done</button>
-      <button class="btn btn-link icon icon-remove-sign" {{action deleteField editingField}}> Delete</button>
+      <button class="btn btn-neutral fa fa-ok-sign" {{action stopEditing}}> Done</button>
+      <button class="btn btn-link fa fa-remove-sign" {{action deleteField editingField}}> Delete</button>
     </div>
   </form>
 </nav>
@@ -55,7 +55,7 @@
     <dl>
       <dt>{{name}}</dt>
       {{#each fields}}
-        <dd><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action addField this}}> {{name}}</a></dd>
+        <dd><a {{bind-attr class=":wh-form-choice :fa faClass"}} {{action addField this}}> {{name}}</a></dd>
       {{/each}}
     </dl>
   {{/each}}
