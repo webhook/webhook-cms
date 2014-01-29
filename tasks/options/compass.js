@@ -6,7 +6,7 @@ module.exports = {
     imagesDir: "public/assets/images",
     javascriptsDir: "app",
     fontsDir: "public/assets/fonts",
-    importPath: ['vendor/bourbon/app/assets/stylesheets','vendor/neat/app/assets/stylesheets', 'vendor/wyrm/sass'],
+    importPath: ['vendor/bourbon/app/assets/stylesheets','vendor/neat/app/assets/stylesheets', 'vendor/wyrm/sass', 'vendor/font-awesome/scss'],
     httpImagesPath: "/assets/images",
     httpGeneratedImagesPath: "/assets/images/generated",
     httpFontsPath: "/assets/fonts",
