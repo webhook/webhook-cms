@@ -15,8 +15,8 @@ window.ENV = {
       name: 'Text',
       fields: [
         {
-          name       : 'Single line text',
-          iconClass  : 'icon-font'
+          name     : 'Single line text',
+          iconClass: 'icon-font'
         },
         {
           name     : 'Paragraph text',
@@ -39,41 +39,78 @@ window.ENV = {
       name: 'Basics',
       fields: [
         {
-          name: 'Number',
+          name  : 'Number',
           widget: 'number'
         },
         {
-          name: 'Checkbox',
+          name  : 'Checkbox',
           widget: 'checkbox'
         },
         {
-          name: 'Multiple choice',
+          name  : 'Multiple choice',
           widget: 'radio'
         },
         {
-          name: 'Dropdown',
+          name  : 'Dropdown',
           widget: 'select'
         }
       ]
     }, {
       name: 'Files',
       fields: [
-        { name: 'Image', widget: 'image' },
-        { name: 'Gallery' },
-        { name: 'Audio file', widget: 'audio' },
-        { name: 'Other file', widget: 'file' }
+        {
+          name  : 'Image',
+          widget: 'image'
+        },
+        {
+          name: 'Gallery'
+        },
+        {
+          name  : 'Audio file',
+          widget: 'audio'
+        },
+        {
+          name  : 'Other file',
+          widget: 'file'
+        }
       ]
     }, {
       name: 'Specifics',
       fields: [
-        { name: 'Name', widget: 'name' },
-        { name: 'Address', widget: 'address' },
-        { name: 'Phone number', widget: 'phone' },
-        { name: 'Email', widget: 'email' },
-        { name: 'Date time', widget: 'datetime' },
-        { name: 'Website', widget: 'url', label: 'Website', placeholder: 'http://www.sitename.com' },
-        { name: 'Rating', widget: 'rating' },
-        { name: 'Tags', widget: 'tag' }
+        {
+          name  : 'Name',
+          widget: 'name'
+        },
+        {
+          name  : 'Address',
+          widget: 'address'
+        },
+        {
+          name  : 'Phone number',
+          widget: 'phone'
+        },
+        {
+          name  : 'Email',
+          widget: 'email'
+        },
+        {
+          name  : 'Date time',
+          widget: 'datetime'
+        },
+        {
+          name       : 'Website',
+          widget     : 'url',
+          label      : 'Website',
+          placeholder: 'http://www.sitename.com'
+        },
+        {
+          name  : 'Rating',
+          widget: 'rating'
+        },
+        {
+          name  : 'Tags',
+          widget: 'tag'
+        }
       ]
     }
   ]
