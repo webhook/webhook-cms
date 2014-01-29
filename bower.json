@@ -12,7 +12,7 @@
     "firebase": "~1.0.2",
     "webhook-js": "*",
     "webhook-redactor": "git@github.com:webhook/webhook-redactor.git",
-    "emberfire-adapter": "webhook/ember-data-firebase"
+    "emberFire": "gpbmike/emberFire#a37ef59ad538ade5645bbd53e26ea65adb95ba8a"
   },
   "resolutions": {
     "ember": "~1.3.0-beta.4",
