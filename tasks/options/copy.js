@@ -26,7 +26,7 @@ module.exports = {
 
   fontsToResult: {
     expand: true,
-    cwd: 'vendor/font-awesome/font',
+    cwd: 'vendor/font-awesome/fonts',
     src: ['*.{woff,eot,svg,ttf}'],
     dest: 'tmp/result/assets/'
   },

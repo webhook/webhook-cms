@@ -30,9 +30,9 @@
 // Wyrm mixins
 @import wyrm_core/mixin
 
-// Small hack for my custom font awesome stuff
-@import wyrm_core/font_awesome
-+font-face(fontawesome-webfont, '#{$font-awesome-dir}fontawesome-webfont')
+// Font awesome and overwrites. Use .icon instead of .fa
+@import font-awesome
+@import wyrm_core/font_awesome_extra
 
 // Wyrm core styles used in this theme
 @import wyrm_core/alert
