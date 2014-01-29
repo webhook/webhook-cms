@@ -9,7 +9,7 @@
 
 window.ENV = {
   dbName: 'hooktest',
-  dbBucket: 'FirebaseAdapter',
+  dbBucket: 'site/dev',
   fieldTypeGroups: [
     {
       name: 'Text',
