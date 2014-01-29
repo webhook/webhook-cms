@@ -1,53 +1,46 @@
-<ul class="wh-form-builder-list">
-  <li class="wh-form-builder-new">
-    <h4 class="fa fa-plus-circle"> Create a new form</h4>
-    <form class="wy-form-stacked" {{action createType on="submit"}}>
-      <div class="wy-control-group">
-        <label for="title">Form name</label>
-        <div class="wy-control">
-          {{input value=newTypeName placeholder="ex: articles"}}
-          <!-- optional help message -->
-          <span class="wy-form-message">Pages built from this will live at /{{#if newType.name}}{{newType.name}}{{else}}articles{{/if}}/</span>
-        </div>
+<h1>Create a new content type</h1>
+
+<form class="wy-form-stacked" {{action createType on="submit"}}>
+  <div class="wy-control-group">
+    <label for="title">Content type name</label>
+    <div class="wy-control">
+      <div class="wy-inline-validate wy-inline-validate-info">
+        {{input value=newTypeName placeholder="ex: articles"}}<span class="wy-input-context"> URLs will point to yoursite.com/{{#if newType.name}}{{newType.name}}{{else}}articles{{/if}}/$title/</span>
       </div>
-      <div class="wy-control-group">
-        <label for="option-radio-example1">What will you use this form for?</label>
-        <div class="wy-control">
-          <label for="option-radiox" class="wy-radio">
-            <input id="option-radiox" name="option-radio-example1" type="radio" value="">
-            Editorial content.
-          </label>
-          <label for="option-radioy" class="wy-radio">
-            <input id="option-radioy" name="option-radio-example1" type="radio" value="">
-            Multiple objects of the same kind.
-          </label>
-          <label for="option-radioy" class="wy-radio">
-            <input id="option-radioy" name="option-radio-example1" type="radio" value="">
-            A single object that I change often.
-          </label>
-          <!-- optional help message -->
-        </div>
-      </div>
-      <div class="wy-button-group">
-        <hr>
-        <button type="submit" class="btn fa fa-plus-circle"> Create</button>
-      </div>
-    </form>
-  </li>
-  {{#each}}
-  <li>
-    <h4>{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</h4>
-    <ul class="wy-plain-list-disc">
-      <li>141 articles</li>
-      <li>7 editable fields</li>
-      <li>RSS enabled</li>
-      <li>HP river enabled</li>
-    </ul>
-    <div class="wy-button-group">
-      <hr>
-      <button class="btn btn-neutral fa fa-edit" {{action gotoEdit name}}> Edit</button>
-      <button class="btn btn-neutral fa fa-times-circle" {{action deleteType this}}> Delete</button>
     </div>
-  </li>
-  {{/each}}
-</ul>
+  </div>
+  <div class="wy-button-group">
+    <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create this content type</button>
+  </div>
+</form>
+
+
+<hr/>
+
+<h1>Edit an existing content type</h1>
+
+<table class="wy-table wy-table-bordered-rows wh-content">
+  <thead>
+    <tr>
+      <th>Content type</th>
+      <th>Form style</th>
+      <th>Items</th>
+      <th>RSS</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each}}
+      {{#link-to 'form' name tagName='tr'}}
+        <td>{{name}}</td>
+        <td>Editorial</td>
+        <td>22</td>
+        <td><span class="fa fa-check-circle"></span></td>
+        <td class="wy-table-actions">
+          <button class="btn btn-link fa fa-times-circle" {{action deleteType this}}></button>
+        </td>
+      {{/link-to}}
+    {{/each}}
+  </tbody>
+</table>
+

@@ -245,6 +245,20 @@
   h1
     text-align: center
 
+.wy-table.wh-content
+  width: 100%
+  th
+    text-transform: capitalize
+  .wy-table-actions
+    opacity: 0
+    width: 1px
+  tbody tr:hover
+    cursor: pointer
+    background: $table-bg-hover-color
+    .wy-table-actions
+      opacity: 1
+
+
 +media($tablet)
   .wy-body-for-nav
     background: $section-background-color

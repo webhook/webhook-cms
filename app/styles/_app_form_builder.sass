@@ -6,7 +6,6 @@
     border: solid 1px $gray
     border-top: solid 5px $gray
     margin-bottom: $base-line-height
-    height: 380px
     position: relative
     +transition(all 0.1s linear)
     +span-columns(4)
@@ -21,12 +20,6 @@
       border-top: solid 5px $gray
       h4
         color: $green
-  .wy-button-group
-    position: absolute
-    bottom: 0
-    left: 0
-    padding: $base-line-height
-    width: 100%
 
 .wh-grid-form-builder
   +outer-container
@@ -61,6 +54,7 @@
     border: solid 1px $gray
     color: $text-light
     font-size: 90%
+    cursor: pointer
     &:before
       color: $text-invert
     &:hover
