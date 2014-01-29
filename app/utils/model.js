@@ -1,4 +1,6 @@
-import ApplicationAdapter from 'appkit/adapters/application';
+import ItemAdapter from 'appkit/adapters/item';
+import ItemModel from 'appkit/models/item';
+import ItemSerializer from 'appkit/serializers/item';
 
 export default function getItemModelName(typeName) {
 
@@ -9,45 +11,13 @@ export default function getItemModelName(typeName) {
   if (!window.App[modelName]) {
 
     // dynamic model
-    window.App[modelName] = DS.Model.extend({
-      data: DS.attr('json')
-    });
+    window.App[modelName] = ItemModel.extend();
 
     // dynamic adapter
-    window.App[modelName + 'Adapter'] = ApplicationAdapter.extend({
-      firebase: new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/" + window.ENV.dbBucket + "/data/"),
-    });
+    window.App[modelName + 'Adapter'] = ItemAdapter.extend();
 
     // dynamic serializer
-    window.App[modelName + 'Serializer'] = DS.JSONSerializer.extend({
-      normalize: function (type, hash) {
-        var newHash;
-
-        if (Ember.isArray(hash)) {
-          newHash = Ember.$.map(hash, this._normalizeSingle);
-        } else {
-          newHash = this._normalizeSingle(hash);
-        }
-
-        return this._super(type, newHash);
-      },
-      serialize: function (record, options) {
-        return record.get('data');
-      },
-      _normalizeSingle: function (hash) {
-        var newHash = { data: {} };
-
-        Ember.$.each(hash, function(key, value) {
-          if (key === 'id') {
-            newHash[key] = value;
-          } else {
-            newHash.data[key] = value;
-          }
-        });
-
-        return newHash;
-      }
-    });
+    window.App[modelName + 'Serializer'] = ItemSerializer.extend();
 
   }
 
