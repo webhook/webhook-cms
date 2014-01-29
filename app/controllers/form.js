@@ -4,9 +4,9 @@ export default Ember.ObjectController.extend({
 
   actions: {
     updateType: function () {
-      this.get('model.fields').forEach(function (field) {
-        field.save();
-      });
+      // this.get('model.fields').forEach(function (field) {
+      //   field.save();
+      // });
       this.get('model').save().then(function () {
         this.transitionToRoute('wh.content');
       }.bind(this));

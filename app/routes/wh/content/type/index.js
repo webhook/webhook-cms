@@ -9,18 +9,18 @@ export default Ember.Route.extend({
 
     var type = this.modelFor('wh.content.type');
 
-    type.get('fields').then(function (fields) {
-      var cmsFieldNames = Ember.A([]);
-      fields.filterBy('showInCms').forEach(function (field) {
-        cmsFieldNames.pushObject(field.get('name'));
+    var cmsFieldNames = Ember.A([]);
+
+    type.get('fields').filterBy('showInCms').forEach(function (field) {
+      cmsFieldNames.pushObject(field.get('name'));
+    });
+
+    model.forEach(function (item) {
+      var fieldValues = [];
+      cmsFieldNames.forEach(function (name) {
+        fieldValues.push(item.get('data')[name]);
       });
-      model.forEach(function (item) {
-        var fieldValues = [];
-        cmsFieldNames.forEach(function (name) {
-          fieldValues.push(item.get('data')[name]);
-        });
-        item.set('fields', fieldValues);
-      });
+      item.set('fields', fieldValues);
     });
 
     controller.set('contentType', type);
