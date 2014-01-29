@@ -11,8 +11,11 @@ $( document ).ready(function() {
   // Close menu when you click a link
   $(document).on("click", ".wy-dropdown .btn", function(event) {
     var ele = $(this).parent().find(".wy-dropdown-menu");
+    var wasHidden = ele.is(':hidden');
+
+
     $(document).find('.wy-dropdown-menu:visible').hide();
-    if(ele.is(':hidden'))
+    if(wasHidden)
     {
       ele.show();
     }
@@ -20,6 +23,7 @@ $( document ).ready(function() {
 
   $(document).on("click", function(event) {
     var target = $(event.target);
+
     if(target.parents('.wy-dropdown').length === 0) // No dropdown menus in the parent tree
     {
       $('.wy-dropdown-menu:visible').hide(); // Hide all visible drop downs

@@ -2,7 +2,7 @@
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix" style="display:block">
   <form class="wy-form-stacked">
-    <legend>Edit field details</legend>
+    <legend>Edit field</legend>
     <hr/>
     <div class="wy-control-group">
       <div class="wy-form-halves">
@@ -42,7 +42,6 @@
     {{partial editingField.fieldType.infoPartialPath}}
 
     <hr/>
-    <div class="wy-alert wy-alert-info">Hit OK when you're done</div>
     <div class="wy-btn-group">
       <button class="btn btn-neutral fa fa-check-circle" {{action stopEditing}}> OK</button>
       <button class="btn btn-link fa fa-times-circle" {{action deleteField editingField}}> Delete</button>
