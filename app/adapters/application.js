@@ -1,4 +1,3 @@
 export default DS.FirebaseAdapter.extend({
-  dbName: window.ENV.dbName,
-  dbBucket: window.ENV.dbBucket
+  firebase: new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/" + window.ENV.dbBucket)
 });
