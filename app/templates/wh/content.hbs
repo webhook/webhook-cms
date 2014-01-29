@@ -1,6 +1,6 @@
 <ul class="wh-form-builder-list">
   <li class="wh-form-builder-new">
-    <h4 class="icon icon-plus-sign"> Create a new form</h4>
+    <h4 class="fa fa-plus-circle"> Create a new form</h4>
     <form class="wy-form-stacked" {{action createType on="submit"}}>
       <div class="wy-control-group">
         <label for="title">Form name</label>
@@ -30,7 +30,7 @@
       </div>
       <div class="wy-button-group">
         <hr>
-        <button type="submit" class="btn icon icon-plus-sign"> Create</button>
+        <button type="submit" class="btn fa fa-plus-circle"> Create</button>
       </div>
     </form>
   </li>
@@ -45,8 +45,8 @@
     </ul>
     <div class="wy-button-group">
       <hr>
-      <button class="btn btn-neutral icon icon-edit" {{action gotoEdit name}}> Edit</button>
-      <button class="btn btn-neutral icon icon-remove-sign" {{action deleteType this}}> Delete</button>
+      <button class="btn btn-neutral fa fa-edit" {{action gotoEdit name}}> Edit</button>
+      <button class="btn btn-neutral fa fa-times-circle" {{action deleteType this}}> Delete</button>
     </div>
   </li>
   {{/each}}

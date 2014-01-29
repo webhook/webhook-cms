@@ -1,6 +1,6 @@
 <section class="wh-content-list">
   <section class="wh-content-list-title">
-    {{#link-to 'wh.content.type.new' contentType class="btn btn-neutral icon icon-plus-sign float-right"}} Add new {{contentType.name}}{{/link-to}}
+    {{#link-to 'wh.content.type.new' contentType class="btn btn-neutral fa fa-plus-circle float-right"}} Add new {{contentType.name}}{{/link-to}}
     <h1>{{contentType.name}}</h1>
   </section>
 
@@ -8,29 +8,29 @@
 
   <input type="search"  placeholder="Filter this list"/>
   <div class="wy-dropdown wy-dropdown-display-options float-right">
-    <span class="btn btn-neutral btn-small icon icon-table"> Display <span class="caret"></span></span>
+    <span class="btn btn-neutral btn-small fa fa-table"> Display <span class="caret"></span></span>
     <dl class="wy-dropdown-menu">
       <dt>Show columns</dt>
       {{#each contentType.fields}}
       <dd>
-        <span class="icon icon-check-sign">
+        <span class="fa fa-check-circle">
           {{name}}
         </span>
       </dd>
       {{/each}}
       <dt>Sort by</dt>
       <dd>
-        <span class="icon icon-circle">
+        <span class="fa fa-circle">
           Last updated
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-blank">
+        <span class="fa fa-circle-blank">
           Last created
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-blank">
+        <span class="fa fa-circle-blank">
           Alphabetical
         </span>
       </dd>
@@ -54,7 +54,7 @@
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
           {{#each item.fields}}<td>{{this}}</td>{{/each}}
           <td class="wy-table-actions">
-            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
+            <button type="button" class="btn btn-link fa fa-times-circle" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
           </td>
           {{/link-to}}
       {{/each}}
