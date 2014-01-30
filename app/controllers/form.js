@@ -4,18 +4,21 @@ export default Ember.ObjectController.extend({
 
   actions: {
     updateType: function () {
-      // this.get('model.fields').forEach(function (field) {
-      //   field.save();
-      // });
       this.get('model').save().then(function () {
         this.transitionToRoute('wh.content');
       }.bind(this));
     },
     addField: function (fieldType) {
-      var field = this.store.createRecord('field', {
-        fieldType: fieldType
+      var fields, field;
+
+      fields = this.get('model.fields');
+
+      field = this.store.createRecord('field', {
+        fieldType: fieldType,
+        showInCms: (fields.get('length') < 3)
       });
-      this.get('model.fields').pushObject(field);
+
+      fields.pushObject(field);
     },
     deleteField: function (field) {
       this.get('model.fields').removeObject(field);
