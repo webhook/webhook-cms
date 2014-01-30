@@ -1,12 +1,8 @@
-<h1>Create a new content type</h1>
-
 <form class="wy-form-stacked" {{action createType on="submit"}}>
   <div class="wy-control-group">
-    <label for="title">Content type name</label>
     <div class="wy-control">
       <div class="wy-inline-validate wy-inline-validate-warning">
         {{input value=newTypeName placeholder="ex: articles"}}
-        <span class="wy-input-context"> Lowercase, with no spaces.</span>
 
         {{#if isDuplicate}}
           <span class="wy-input-context"> There is already an content type with that name</span>
@@ -14,38 +10,40 @@
       </div>
     </div>
   </div>
-  <p>URLs will point to yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}articles{{/if}}/$title/</p>
-  <div class="wy-button-group">
-    <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}} content type</button>
-  </div>
+  {{#if newTypeName}}
+    <p>URLs will point to <code>http://www.yoursite.com/{{newTypeName}}/$name/</code></p>
+    <div class="wy-button-group">
+      <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}}</button>
+    </div>
+  {{/if}}
 </form>
 
 <hr/>
+{{#if model}}
+  <h1>Your content types</h1>
 
-<h1>Edit an existing content type</h1>
-
-<table class="wy-table wy-table-bordered-rows wh-content">
-  <thead>
-    <tr>
-      <th>Content type</th>
-      <th>Form style</th>
-      <th>Items</th>
-      <th>RSS</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each}}
-      {{#link-to 'form' name tagName='tr'}}
-        <td>{{name}}</td>
-        <td>Editorial</td>
-        <td>22</td>
-        <td><span class="fa fa-check-circle"></span></td>
-        <td class="wy-table-actions">
-          <button class="btn btn-link fa fa-times-circle" {{action deleteType this}}></button>
-        </td>
-      {{/link-to}}
-    {{/each}}
-  </tbody>
-</table>
-
+  <table class="wy-table wy-table-bordered-rows wh-content">
+    <thead>
+      <tr>
+        <th>Content type</th>
+        <th>Form style</th>
+        <th>Items</th>
+        <th>RSS</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each}}
+        {{#link-to 'form' name tagName='tr'}}
+          <td>{{name}}</td>
+          <td>Editorial</td>
+          <td>22</td>
+          <td><span class="fa fa-check-circle"></span></td>
+          <td class="wy-table-actions">
+            <button class="btn btn-link fa fa-times-circle" {{action deleteType this}}></button>
+          </td>
+        {{/link-to}}
+      {{/each}}
+    </tbody>
+  </table>
+{{/if}}

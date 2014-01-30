@@ -14,6 +14,9 @@ export default Ember.ObjectController.extend({
         data: data
       }).save().then(function () {
         this.get('type.fields').setEach('value', null);
+        
+        window.ENV.sendGruntCommand('build');
+
         this.transitionToRoute('wh.content.type', this.get('type'));
       }.bind(this));
 
