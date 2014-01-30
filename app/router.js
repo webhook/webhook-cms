@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('password-reset');
   this.route('password-change');
   this.route('start');
+  this.route('theme');
 
   this.route('form', { path: '/form/:id' });
   this.resource('wh', function () {
