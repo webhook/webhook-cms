@@ -20,32 +20,28 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      this.store.find('field-type', 1).then(function (textField) {
+      // fields that are locked
+      var fields = [
+        this.store.createRecord('field', {
+          fieldType: this.store.getById('field-type', 1),
+          name: 'name',
+          label: 'Name',
+          locked: true,
+          showInCms: true
+        })
+      ];
 
-        // fields that are locked
-        var fields = [
-          this.store.createRecord('field', {
-            fieldType: textField,
-            name: 'name',
-            label: 'Name',
-            locked: true,
-            showInCms: true
-          })
-        ];
+      // creating a new content-type
+      // a textfield (name) is required
+      var type = this.store.createRecord('content-type', {
+        id: this.get('newTypeName'),
+        name: this.get('newTypeName')
+      });
 
-        // creating a new content-type
-        // a textfield (name) is required
-        var type = this.store.createRecord('content-type', {
-          id: this.get('newTypeName'),
-          name: this.get('newTypeName')
-        });
+      type.get('fields').pushObjects(fields);
 
-        type.get('fields').pushObjects(fields);
-
-        type.save().then(function (type) {
-          this.transitionToRoute('form', type);
-        }.bind(this));
-
+      type.save().then(function (type) {
+        this.transitionToRoute('form', type);
       }.bind(this));
 
     },
