@@ -11,7 +11,7 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
 
   setName: function () {
     if (!this.get('locked') && this.get('label')) {
-      this.set('name', this.get('label').toLowerCase().replace(/\s+/, '_').replace(/(\W|[A-Z])/g, ''));
+      this.set('name', this.get('label').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
     }
   }.observes('label'),
 

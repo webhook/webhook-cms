@@ -1,5 +1,13 @@
 export default Ember.Component.extend({
   didInsertElement: function () {
-    this.$('textarea').webhookRedactor();
+    var self = this;
+    this.$('textarea').webhookRedactor({
+      initCallback: function() {
+        this.set(self.get('value'));
+      },
+      changeCallback: function(html) {
+        self.set('value', html);
+      }
+    });
   }
 });
