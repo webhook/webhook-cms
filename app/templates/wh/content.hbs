@@ -5,7 +5,12 @@
     <label for="title">Content type name</label>
     <div class="wy-control">
       <div class="wy-inline-validate wy-inline-validate-warning">
-        {{input value=newTypeName placeholder="ex: articles"}}<span class="wy-input-context"> Lowercase, with no spaces.</span>
+        {{input value=newTypeName placeholder="ex: articles"}}
+        <span class="wy-input-context"> Lowercase, with no spaces.</span>
+
+        {{#if isDuplicate}}
+          <span class="wy-input-context"> There is already an content type with that name</span>
+        {{/if}}
       </div>
     </div>
   </div>
@@ -14,7 +19,6 @@
     <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}} content type</button>
   </div>
 </form>
-
 
 <hr/>
 
