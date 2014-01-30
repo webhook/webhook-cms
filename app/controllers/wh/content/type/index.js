@@ -4,19 +4,24 @@ export default Ember.ArrayController.extend({
 
   fieldsChanged: function () {
 
-    window.console.log('fields');
+    this.set('cmsFieldNames', Ember.A([]));
 
-    // this.set('cmsFieldNames', Ember.A([]));
+    this.get('contentType.fields').filterBy('showInCms').forEach(function (field) {
+      this.get('cmsFieldNames').pushObject(field.get('name'));
+    }, this);
 
-    // this.get('type').get('fields').filterBy('showInCms').forEach(function (field) {
-    //   this.get('cmsFieldNames').pushObject(field.get('name'));
-    // });
+    // Need fieldTypes in store for save later.
+    this.get('contentType.fields').mapBy('fieldType');
 
-  }.observes('type.fields.@each'),
+    this._updateItemFields();
+
+  }.observes('contentType.fields.@each.showInCms'),
 
   contentChanged: function () {
+    this._updateItemFields();
+  }.observes('@each'),
 
-    window.console.log('content');
+  _updateItemFields: function () {
 
     this.get('content').forEach(function (item) {
       var fieldValues = [];
@@ -26,11 +31,17 @@ export default Ember.ArrayController.extend({
       item.set('fields', fieldValues);
     }, this);
 
-  }.observes('@each'),
+  },
 
   actions: {
     deleteItem: function (item) {
       item.destroyRecord();
+    },
+    toggleShowInCms: function (field) {
+      field.toggleProperty('showInCms');
+      // field.get('fieldType').then(function () {
+        this.get('contentType').save();
+      // }.bind(this));
     }
   }
 

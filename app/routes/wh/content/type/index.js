@@ -14,6 +14,9 @@ export default Ember.Route.extend({
       cmsFieldNames.pushObject(field.get('name'));
     });
 
+    // need to have these in the store to save later.
+    type.get('fields').mapBy('fieldType');
+
     controller.set('cmsFieldNames', cmsFieldNames);
     controller.set('contentType', type);
     this._super.apply(this, arguments);

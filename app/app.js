@@ -7,7 +7,11 @@ var App = Ember.Application.extend({
   LOG_TRANSITIONS_INTERNAL: true,
   LOG_VIEW_LOOKUPS: true,
   modulePrefix: 'appkit', // TODO: loaded via config
-  Resolver: Resolver['default']
+  Resolver: Resolver['default'],
+  init: function () {
+    window.console.log(window.ENV);
+    this._super.apply(this, arguments);
+  }
 });
 
 // This helps ember-validations not blow up

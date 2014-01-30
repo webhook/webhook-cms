@@ -12,11 +12,11 @@
     <dl class="wy-dropdown-menu">
       <dt>Show columns</dt>
       {{#each contentType.fields}}
-      <dd>
-        <span class="fa fa-check-circle">
-          {{name}}
-        </span>
-      </dd>
+        <dd>
+          <span {{bind-attr class=":fa showInCms:fa-check-circle:fa-circle-o"}} {{action toggleShowInCms this on="click"}}>
+            {{name}}
+          </span>
+        </dd>
       {{/each}}
       <dt>Sort by</dt>
       <dd>
