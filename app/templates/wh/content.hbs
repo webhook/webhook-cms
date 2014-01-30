@@ -4,13 +4,14 @@
   <div class="wy-control-group">
     <label for="title">Content type name</label>
     <div class="wy-control">
-      <div class="wy-inline-validate wy-inline-validate-info">
-        {{input value=newTypeName placeholder="ex: articles"}}<span class="wy-input-context"> URLs will point to yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}articles{{/if}}/$title/</span>
+      <div class="wy-inline-validate wy-inline-validate-warning">
+        {{input value=newTypeName placeholder="ex: articles"}}<span class="wy-input-context"> Lowercase, with no spaces.</span>
       </div>
     </div>
   </div>
+  <p>URLs will point to yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}articles{{/if}}/$title/</p>
   <div class="wy-button-group">
-    <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create this content type</button>
+    <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}} content type</button>
   </div>
 </form>
 
