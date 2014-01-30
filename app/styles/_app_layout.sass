@@ -279,6 +279,19 @@
     .wy-table-actions
       opacity: 1
 
+.wh-content-type-selector
+  +outer-container
+  li
+    padding: $base-line-height
+    border: solid 1px $gray-lighter
+    margin-bottom: $gutter
+    +span-columns(4)
+    +omega-type(3n)
+  p
+    color: $text-medium
+  strong
+    margin-bottom: $base-line-height / 2
+    display: block
 
 +media($tablet)
   .wy-body-for-nav
