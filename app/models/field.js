@@ -4,7 +4,7 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
   required   : DS.attr('boolean'),
-  fieldType  : DS.belongsTo('field-type'),
+  fieldType  : DS.belongsTo('field-type', { async: true }),
   showInCms  : DS.attr('boolean'),
   meta       : DS.attr('json', { defaultValue: {} }),
 

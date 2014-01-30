@@ -1,6 +1,6 @@
 var FieldType = DS.Model.extend({
   name     : DS.attr('string'),
-  group    : DS.belongsTo('field-type-group'),
+  group    : DS.belongsTo('field-type-group', { async: true }),
   faClass: DS.attr('string'),
   widget   : DS.attr('string', { defaultValue: 'textfield' }),
 

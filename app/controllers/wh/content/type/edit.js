@@ -13,6 +13,7 @@ export default Ember.ObjectController.extend({
       this.get('model').setProperties({
         data: data
       }).save().then(function () {
+        this.get('type.fields').setEach('value', null);
         this.transitionToRoute('wh.content.type', this.get('type'));
       }.bind(this));
 
