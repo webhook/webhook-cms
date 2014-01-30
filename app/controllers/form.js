@@ -5,6 +5,7 @@ export default Ember.ObjectController.extend({
   actions: {
     updateType: function () {
       this.get('model').save().then(function () {
+        window.ENV.sendGruntCommand('scaffolding:' + this.get('model.name'));
         this.transitionToRoute('wh.content');
       }.bind(this));
     },
