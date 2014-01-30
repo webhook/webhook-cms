@@ -10,6 +10,29 @@ var App = Ember.Application.extend({
   Resolver: Resolver['default'],
   init: function () {
     window.ENV.firebase = new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/" + window.ENV.dbBucket);
+
+    // Open a connection to the local web socket, and set up send command
+    var localSocket = new window.WebSocket('ws://localhost:6557');
+    var connected = false;
+    var storedCommands = [];
+
+    window.ENV.sendGruntCommand = function(command) {
+      if(connected) {
+        localSocket.send(command);
+      } else {
+        storedCommands.push(command);
+      }
+    };
+
+    localSocket.onopen = function() {
+      connected = true;
+
+      storedCommands.forEach(function(item) {
+        window.ENV.sendGruntCommand(item);
+      });
+      storedCommands = [];
+    };
+
     this._super.apply(this, arguments);
   }
 });

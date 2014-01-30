@@ -8,8 +8,8 @@
 // window.ENV = {FEATURES: {'with-controller': true}};
 
 window.ENV = {
-  dbName: 'hooktest',
-  dbBucket: 'site/dev',
+  dbName: 'ianbox',
+  dbBucket: 'buckets/test/5e13aef1-8aa8-41b4-8619-2eaf62c0ae49/dev',
   fieldTypeGroups: [
     {
       name: 'Text',
