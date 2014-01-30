@@ -14,7 +14,7 @@
       {{#each contentType.fields}}
         <dd>
           <span {{bind-attr class=":fa showInCms:fa-check-circle:fa-circle-o"}} {{action toggleShowInCms this on="click"}}>
-            {{name}}
+            {{label}}
           </span>
         </dd>
       {{/each}}
@@ -57,9 +57,15 @@
             <button type="button" class="btn btn-link fa fa-times-circle" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
           </td>
           {{/link-to}}
+        {{else}}
       {{/each}}
       {{/with}}
     </tbody>
   </table>
-
+  {{#if model}}
+  {{else}}
+    <div class="wy-alert wy-alert-info">
+      You haven't added any {{contentType.name}} yet.
+    </div>
+  {{/if}}
 </section>

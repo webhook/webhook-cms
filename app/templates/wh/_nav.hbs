@@ -8,12 +8,14 @@
     <div class="wy-menu wy-menu-vertical" data-spy="affix">
 
       <div data-menu-wrap="all-content" class="current move-center">
-        <header>Your content</header>
-        <ul>
-        {{#each}}
-          <li>{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
-        {{/each}}
-        </ul>
+        {{#if model}}
+          <header>Your content</header>
+          <ul>
+          {{#each}}
+            <li>{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
+          {{/each}}
+          </ul>
+        {{/if}}
         <header>Configuration</header>
         <ul>
           <li data-menu-item="customize-forms">{{#link-to 'wh.content'}}Add / edit content types{{/link-to}}</li>
