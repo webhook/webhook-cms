@@ -9,7 +9,7 @@ var App = Ember.Application.extend({
   modulePrefix: 'appkit', // TODO: loaded via config
   Resolver: Resolver['default'],
   init: function () {
-    window.console.log(window.ENV);
+    window.ENV.firebase = new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/" + window.ENV.dbBucket);
     this._super.apply(this, arguments);
   }
 });
