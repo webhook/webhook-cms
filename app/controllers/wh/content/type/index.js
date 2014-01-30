@@ -39,9 +39,7 @@ export default Ember.ArrayController.extend({
     },
     toggleShowInCms: function (field) {
       field.toggleProperty('showInCms');
-      // field.get('fieldType').then(function () {
-        this.get('contentType').save();
-      // }.bind(this));
+      this.get('contentType').save();
     }
   }
 

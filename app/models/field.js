@@ -4,12 +4,13 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
   required   : DS.attr('boolean'),
-  fieldType  : DS.belongsTo('field-type', { async: true }),
+  fieldType  : DS.belongsTo('field-type'),
   showInCms  : DS.attr('boolean'),
+  locked     : DS.attr('boolean'),
   meta       : DS.attr('json', { defaultValue: {} }),
 
   setName: function () {
-    if (this.get('label')) {
+    if (!this.get('locked') && this.get('label')) {
       this.set('name', this.get('label').toLowerCase().replace(/\s+/, '_').replace(/(\W|[A-Z])/g, ''));
     }
   }.observes('label'),

@@ -7,7 +7,7 @@
     <div class="wy-control-group">
       <div class="wy-form-halves">
         <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="fa fa-question-circle"></i></label>
-        {{input valueBinding="editingField.label" viewName="label"}}
+        {{input valueBinding="editingField.label" viewName="label" disabled=editingField.locked}}
       </div>
       <div class="wy-form-halves">
         <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="fa fa-question-circle"></i></label>
@@ -35,7 +35,9 @@
     <hr/>
     <div class="wy-btn-group">
       <button class="btn btn-neutral fa fa-check-circle" {{action stopEditing}}> OK</button>
-      <button class="btn btn-link fa fa-times-circle" {{action deleteField editingField}}> Delete</button>
+      {{#if editingField.locked}}{{else}}
+        <button class="btn btn-link fa fa-times-circle" {{action deleteField editingField}}> Delete</button>
+      {{/if}}
     </div>
   </form>
 </nav>

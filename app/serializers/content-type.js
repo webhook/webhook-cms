@@ -1,5 +1,4 @@
 import ApplicationSerializer from 'appkit/serializers/application';
-import uuid from 'appkit/utils/uuid';
 
 export default ApplicationSerializer.extend({ // or DS.RESTSerializer
   serializeHasMany: function(record, json, relationship) {
@@ -11,7 +10,6 @@ export default ApplicationSerializer.extend({ // or DS.RESTSerializer
       json[key] = [];
       hasManyRecords.forEach(function(item, index){
         var data = item.serialize();
-        // data.id = data.id || uuid();
         json[key].push(data);
       });
     }
@@ -24,9 +22,8 @@ export default ApplicationSerializer.extend({ // or DS.RESTSerializer
     var key = relationship.key,
         belongsToRecord = Ember.get(record, key);
 
-    if (relationship.options.embedded === 'always') {
+    if (belongsToRecord && relationship.options.embedded === 'always') {
       var data = belongsToRecord.serialize();
-      // data.id = data.id || uuid();
       json[key] = data;
     }
     else {
