@@ -20,28 +20,32 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      // controls that are locked
-      var controls = [
-        this.store.createRecord('control', {
-          controlType: this.store.getById('control-type', 1),
-          name       : 'name',
-          label      : 'Name',
-          locked     : true,
-          showInCms  : true
-        })
-      ];
+      this.store.find('control-type', 1).then(function (controlType) {
 
-      // creating a new content-type
-      // a textcontrol (name) is required
-      var type = this.store.createRecord('content-type', {
-        id: this.get('newTypeName'),
-        name: this.get('newTypeName')
-      });
+        // controls that are locked
+        var controls = [
+          this.store.createRecord('control', {
+            controlType: controlType,
+            name       : 'name',
+            label      : 'Name',
+            locked     : true,
+            showInCms  : true
+          })
+        ];
 
-      type.get('controls').pushObjects(controls);
+        // creating a new content-type
+        // a textcontrol (name) is required
+        var type = this.store.createRecord('content-type', {
+          id: this.get('newTypeName'),
+          name: this.get('newTypeName')
+        });
 
-      type.save().then(function (type) {
-        this.transitionToRoute('form', type);
+        type.get('controls').pushObjects(controls);
+
+        type.save().then(function (type) {
+          this.transitionToRoute('form', type);
+        }.bind(this));
+
       }.bind(this));
 
     },
