@@ -44,6 +44,7 @@ export default Ember.ArrayController.extend({
 
         type.save().then(function (type) {
           this.transitionToRoute('form', type);
+          this.set('newTypeName', null);
         }.bind(this));
 
       }.bind(this));
