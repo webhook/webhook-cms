@@ -15,6 +15,9 @@ var ControlType = DS.Model.extend({
   infoPartialPath: function () {
     return 'widgets/info/' + this.get('widget');
   }.property('widget'),
+  valuePartialPath: function () {
+    return 'widgets/value/' + this.get('widget');
+  }.property('widget')
 });
 
 ControlType.FIXTURES = [];

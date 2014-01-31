@@ -8,16 +8,12 @@ export default Ember.Route.extend({
   setupController: function (controller, model) {
 
     var type = this.modelFor('wh.content.type'),
-        cmsControlNames = Ember.A([]);
-
-    type.get('controls').filterBy('showInCms').forEach(function (control) {
-      cmsControlNames.pushObject(control.get('name'));
-    });
+        cmsControls = type.get('controls').filterBy('showInCms');
 
     // need to have these in the store to save later.
-    type.get('controls').mapBy('controlType');
+    // type.get('controls').mapBy('controlType');
 
-    controller.set('cmsControlNames', cmsControlNames);
+    controller.set('cmsControls', cmsControls);
     controller.set('contentType', type);
     this._super.apply(this, arguments);
   }

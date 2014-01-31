@@ -1,17 +1,10 @@
 export default Ember.ArrayController.extend({
   type: null,
-  cmsControlNames: Ember.A([]),
+  cmsControls: null,
 
   controlsChanged: function () {
 
-    this.set('cmsControlNames', Ember.A([]));
-
-    this.get('contentType.controls').filterBy('showInCms').forEach(function (control) {
-      this.get('cmsControlNames').pushObject(control.get('name'));
-    }, this);
-
-    // Need controlTypes in store for save later.
-    this.get('contentType.controls').mapBy('controlType');
+    this.set('cmsControls', this.get('contentType.controls').filterBy('showInCms'));
 
     this._updateItemControls();
 
@@ -24,11 +17,14 @@ export default Ember.ArrayController.extend({
   _updateItemControls: function () {
 
     this.get('content').forEach(function (item) {
-      var controlValues = [];
-      this.get('cmsControlNames').forEach(function (name) {
-        controlValues.push(item.get('data')[name]);
+      var cmsControls = Ember.A([]);
+      this.get('cmsControls').forEach(function (control) {
+        cmsControls.pushObject({
+          value: item.get('data')[control.get('name')],
+          controlType: control.get('controlType')
+        });
       });
-      item.set('controls', controlValues);
+      item.set('cmsControls', cmsControls);
     }, this);
 
   },

@@ -52,7 +52,9 @@
       {{#with contentType as contentTypeNav}}
       {{#each item in model}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
-          {{#each item.controls}}<td>{{this}}</td>{{/each}}
+          {{#each item.cmsControls}}
+            <td>{{partial this.controlType.valuePartialPath}}</td>
+          {{/each}}
           <td class="wy-table-actions">
             <button type="button" class="btn btn-link fa fa-times-circle" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
           </td>
