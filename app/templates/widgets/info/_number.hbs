@@ -1,12 +1,15 @@
 <div class="wy-control-group">
+
   <div class="wy-form-halves">
     <label for="label">Min value <i class="icon icon-question-sign"></i></label>
-    <input type="text" name="label" value="1">
+    {{input type="number" valueBinding="editingControl.meta.data.min"}}
   </div>
+
   <div class="wy-form-halves">
     <label for="label">Max number <i class="icon icon-question-sign"></i></label>
-    <input type="text" name="label" value="">
+    {{input type="number" valueBinding="editingControl.meta.data.max"}}
   </div>
+
   <div class="wy-form-halves">
     <label for="label">Is this a currency? <i class="icon icon-question-sign"></i></label>
     <label for="check-y" class="wy-checkbox">
