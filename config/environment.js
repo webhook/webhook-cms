@@ -9,11 +9,11 @@
 
 window.ENV = {
   dbName: 'hooktest',
-  dbBucket: 'site/dev',
-  fieldTypeGroups: [
+  dbBucket: 'site/test',
+  controlTypeGroups: [
     {
       name: 'Text',
-      fields: [
+      controlTypes: [
         {
           name     : 'Single line text',
           faClass  : 'fa-font'
@@ -37,7 +37,7 @@ window.ENV = {
       ]
     }, {
       name: 'Basics',
-      fields: [
+      controlTypes: [
         {
           name  : 'Number',
           widget: 'number'
@@ -57,7 +57,7 @@ window.ENV = {
       ]
     }, {
       name: 'Files',
-      fields: [
+      controlTypes: [
         {
           name  : 'Image',
           widget: 'image'
@@ -76,7 +76,7 @@ window.ENV = {
       ]
     }, {
       name: 'Specifics',
-      fields: [
+      controlTypes: [
         {
           name  : 'Name',
           widget: 'name'

@@ -6,8 +6,8 @@ export default Ember.ObjectController.extend({
 
       var data = {};
 
-      this.get('model.fields').filterBy('value').forEach(function (field) {
-        data[field.get('name')] = field.get('value');
+      this.get('model.controls').filterBy('value').forEach(function (control) {
+        data[control.get('name')] = control.get('value');
       });
 
       var modelName = getItemModelName(this.get('model.name'));

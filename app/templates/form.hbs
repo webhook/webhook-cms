@@ -22,8 +22,8 @@
               <span class="wy-form-message">{{this}}</span>
             {{/each}}
 
-            {{#each field in fields}}
-              {{formbuilder-widget field=field editingField=editingField doEdit="editField"}}
+            {{#each control in controls}}
+              {{formbuilder-widget control=control editingControl=editingControl doEdit="editControl"}}
             {{/each}}
 
           </fieldset>

@@ -3,7 +3,9 @@ export default Ember.Component.extend({
     var self = this;
     this.$('textarea').webhookRedactor({
       initCallback: function() {
-        this.set(self.get('value'));
+        if (self.get('value')) {
+          this.set(self.get('value'));
+        }
       },
       changeCallback: function(html) {
         self.set('value', html);

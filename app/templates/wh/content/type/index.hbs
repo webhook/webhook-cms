@@ -11,7 +11,7 @@
     <span class="btn btn-neutral btn-small fa fa-table"> Display <span class="caret"></span></span>
     <dl class="wy-dropdown-menu">
       <dt>Show columns</dt>
-      {{#each contentType.fields}}
+      {{#each contentType.controls}}
         <dd>
           <span {{bind-attr class=":fa showInCms:fa-check-circle:fa-circle-o"}} {{action toggleShowInCms this on="click"}}>
             {{label}}
@@ -40,7 +40,7 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
-        {{#each contentType.fields}}
+        {{#each contentType.controls}}
           {{#if showInCms}}
             <th>{{label}}</th>
           {{/if}}
@@ -52,7 +52,7 @@
       {{#with contentType as contentTypeNav}}
       {{#each item in model}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
-          {{#each item.fields}}<td>{{this}}</td>{{/each}}
+          {{#each item.controls}}<td>{{this}}</td>{{/each}}
           <td class="wy-table-actions">
             <button type="button" class="btn btn-link fa fa-times-circle" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
           </td>

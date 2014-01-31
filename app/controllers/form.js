@@ -1,6 +1,6 @@
 export default Ember.ObjectController.extend({
-  fieldTypeGroups: null,
-  editingField   : null,
+  controlTypeGroups: null,
+  editingControl   : null,
 
   actions: {
     updateType: function () {
@@ -9,28 +9,31 @@ export default Ember.ObjectController.extend({
         this.transitionToRoute('wh.content');
       }.bind(this));
     },
-    addField: function (fieldType) {
-      var fields, field;
+    addControl: function (controlType) {
+      var controls, control;
 
-      fields = this.get('model.fields');
+      controls = this.get('model.controls');
 
-      field = this.store.createRecord('field', {
-        fieldType: fieldType,
-        showInCms: (fields.get('length') < 3)
+      control = this.store.createRecord('control', {
+        controlType: controlType,
+        showInCms: (controls.get('length') < 3)
       });
 
-      fields.pushObject(field);
+      controls.pushObject(control);
     },
-    deleteField: function (field) {
-      this.get('model.fields').removeObject(field);
-      field.destroyRecord();
+    deleteControl: function (control) {
+      this.get('model.controls').removeObject(control);
+      control.destroyRecord();
       this.send('stopEditing');
     },
-    editField: function (field) {
-      this.set('editingField', field);
+    editControl: function (control) {
+      if (!control.get('meta')) {
+        control.set('meta', this.store.createRecord('meta-data'));
+      }
+      this.set('editingControl', control);
     },
     stopEditing: function () {
-      this.set('editingField', null);
+      this.set('editingControl', null);
     },
     quitForm: function () {
       this.transitionToRoute('wh.content');

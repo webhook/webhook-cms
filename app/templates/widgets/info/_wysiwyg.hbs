@@ -1,33 +1,36 @@
 <div class="wy-control-group">
+
   <div class="wy-form-halves">
     <label for="label">Min characters <i class="icon icon-question-sign"></i></label>
-    <input type="text" name="label" value="1">
+    {{input type="number" valueBinding="editingControl.meta.data.min"}}
   </div>
   <div class="wy-form-halves">
     <label for="label">Max characters <i class="icon icon-question-sign"></i></label>
-    <input type="text" name="label" value="">
+    {{input type="number" valueBinding="editingControl.meta.data.max"}}
   </div>
+
   <div class="wy-form-full">
     <label for="label">What can users add into the WYSIWYG? <i class="icon icon-question-sign"></i></label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="checkbox" value="">
+    <label class="wy-checkbox">
+      {{view Ember.Checkbox checked=editingControl.meta.data.tables}}
       Tables
     </label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="checkbox" value="">
+    <label class="wy-checkbox">
+      {{view Ember.Checkbox checked=editingControl.meta.data.videos}}
       Videos
     </label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="checkbox" value="">
+    <label class="wy-checkbox">
+      {{view Ember.Checkbox checked=editingControl.meta.data.images}}
       Images
     </label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="checkbox" value="">
+    <label class="wy-checkbox">
+      {{view Ember.Checkbox checked=editingControl.meta.data.quotes}}
       Block quotes
     </label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="checkbox" value="">
+    <label class="wy-checkbox">
+      {{view Ember.Checkbox checked=editingControl.meta.data.links}}
       Links
     </label>
   </div>
+
 </div>

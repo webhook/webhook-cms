@@ -10,8 +10,8 @@ export default Ember.Route.extend({
     var data = model.get('data'),
         type = this.modelFor('wh.content.type');
 
-    type.get('fields').forEach(function (field) {
-      field.set('value', data[field.get('name')]);
+    type.get('controls').forEach(function (control) {
+      control.set('value', data[control.get('name')]);
     });
 
     controller.set('type', type);

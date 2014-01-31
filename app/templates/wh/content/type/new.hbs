@@ -1,8 +1,8 @@
 <form class="wy-form-stacked" {{action createItem on="submit"}}>
   <fieldset>
     <legend>New {{name}}</legend>
-    {{#each field in fields}}
-      {{formbuilder-widget field=field}}
+    {{#each control in controls}}
+      {{formbuilder-widget control=control}}
     {{/each}}
     <button type="submit" class="btn">Save</button>
     {{#if saved}}{{saved}}{{/if}}

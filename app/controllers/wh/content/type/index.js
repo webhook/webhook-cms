@@ -1,34 +1,34 @@
 export default Ember.ArrayController.extend({
   type: null,
-  cmsFieldNames: Ember.A([]),
+  cmsControlNames: Ember.A([]),
 
-  fieldsChanged: function () {
+  controlsChanged: function () {
 
-    this.set('cmsFieldNames', Ember.A([]));
+    this.set('cmsControlNames', Ember.A([]));
 
-    this.get('contentType.fields').filterBy('showInCms').forEach(function (field) {
-      this.get('cmsFieldNames').pushObject(field.get('name'));
+    this.get('contentType.controls').filterBy('showInCms').forEach(function (control) {
+      this.get('cmsControlNames').pushObject(control.get('name'));
     }, this);
 
-    // Need fieldTypes in store for save later.
-    this.get('contentType.fields').mapBy('fieldType');
+    // Need controlTypes in store for save later.
+    this.get('contentType.controls').mapBy('controlType');
 
-    this._updateItemFields();
+    this._updateItemControls();
 
-  }.observes('contentType.fields.@each.showInCms'),
+  }.observes('contentType.controls.@each.showInCms'),
 
   contentChanged: function () {
-    this._updateItemFields();
+    this._updateItemControls();
   }.observes('@each'),
 
-  _updateItemFields: function () {
+  _updateItemControls: function () {
 
     this.get('content').forEach(function (item) {
-      var fieldValues = [];
-      this.get('cmsFieldNames').forEach(function (name) {
-        fieldValues.push(item.get('data')[name]);
+      var controlValues = [];
+      this.get('cmsControlNames').forEach(function (name) {
+        controlValues.push(item.get('data')[name]);
       });
-      item.set('fields', fieldValues);
+      item.set('controls', controlValues);
     }, this);
 
   },
@@ -37,8 +37,8 @@ export default Ember.ArrayController.extend({
     deleteItem: function (item) {
       item.destroyRecord();
     },
-    toggleShowInCms: function (field) {
-      field.toggleProperty('showInCms');
+    toggleShowInCms: function (control) {
+      control.toggleProperty('showInCms');
       this.get('contentType').save();
     }
   }

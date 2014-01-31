@@ -1,6 +1,6 @@
 export default DS.Model.extend(Ember.Validations.Mixin, {
   name: DS.attr('string'),
-  fields: DS.hasMany('field', { embedded: 'always' }),
+  controls: DS.hasMany('control', { embedded: 'always' }),
 
   // force a valid name
   forceValid: function () {

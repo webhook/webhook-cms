@@ -4,10 +4,10 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
   required   : DS.attr('boolean'),
-  fieldType  : DS.belongsTo('field-type'),
+  controlType: DS.belongsTo('control-type'),
   showInCms  : DS.attr('boolean'),
   locked     : DS.attr('boolean'),
-  meta       : DS.attr('json', { defaultValue: {} }),
+  meta       : DS.belongsTo('meta-data', { embedded: 'always' }),
 
   setName: function () {
     if (!this.get('locked') && this.get('label')) {

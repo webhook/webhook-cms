@@ -1,17 +1,47 @@
 import uuid from 'appkit/utils/uuid';
 
-export default DS.JSONSerializer.extend({ // or DS.RESTSerializer
+export default DS.JSONSerializer.extend({
+  serializeHasMany: function(record, json, relationship) {
+    var key = relationship.key,
+        hasManyRecords = Ember.get(record, key);
+
+    // Embed hasMany relationship if records exist
+    if (hasManyRecords && relationship.options.embedded === 'always') {
+      json[key] = [];
+      hasManyRecords.forEach(function(item, index){
+        var data = item.serialize();
+        json[key].push(data);
+      });
+    }
+    // Fallback to default serialization behavior
+    else {
+      return this._super(record, json, relationship);
+    }
+  },
+
+  serializeBelongsTo: function(record, json, relationship) {
+    var key = relationship.key,
+        belongsToRecord = Ember.get(record, key);
+
+    if (belongsToRecord && relationship.options.embedded === 'always') {
+      var data = belongsToRecord.serialize();
+      json[key] = data;
+    }
+    else {
+      return this._super(record, json, relationship);
+    }
+  },
+
   sideloadItem: function(type, item){
 
     var primaryKey = Ember.get(this, 'primaryKey'); // the key to this record's ID
 
     if (!item[primaryKey]) {
+      // my brain hurts, this is a hack to normalize embedded objects
+      item = this.store.serializerFor(type.typeKey).normalize(type, item);
       item[primaryKey] = uuid();
+      this.store.push(type.typeKey, item);
     }
-
-    this.store.push(type.typeKey, item);
-
-    item = item[primaryKey];
 
     return item;
 
@@ -27,14 +57,17 @@ export default DS.JSONSerializer.extend({ // or DS.RESTSerializer
 
         // One-to-one
         if (relationship.kind === "belongsTo") {
-          // Sideload the object to the payload
-          this.sideloadItem(type, related);
 
-          // Replace object with ID
-          recordJSON[key] = related[Ember.get(this, 'primaryKey')];
+          if (!related.id) {
+            related = this.sideloadItem(type, related);
+
+            // Replace object with ID of sideloaded item
+            recordJSON[key] = related.id;
+          }
 
           // Find relationships in this record
           this.extractRelationships(related, type);
+
         }
 
         // Many
@@ -43,11 +76,12 @@ export default DS.JSONSerializer.extend({ // or DS.RESTSerializer
           // Loop through each object
           related.forEach(function (item, index) {
 
-            // Sideload the object to the payload
-            this.sideloadItem(type, item);
+            if (!related.id) {
+              this.sideloadItem(type, item);
 
-            // Replace object with ID
-            related[index] = item[Ember.get(this, 'primaryKey')];
+              // Replace object with ID of sideloaded item
+              related[index] = item.id;
+            }
 
             // Find relationships in this record
             this.extractRelationships(item, type);
@@ -70,8 +104,6 @@ export default DS.JSONSerializer.extend({ // or DS.RESTSerializer
     var typeKey = type.typeKey,
         typeKeyPlural = typeKey.pluralize();
 
-    payload = this._super(type, payload);
-
     // Many items (findMany, findAll)
     if (Ember.isArray(payload)) {
       payload.forEach(function (item) {
@@ -84,6 +116,6 @@ export default DS.JSONSerializer.extend({ // or DS.RESTSerializer
       this.extractRelationships(payload, type);
     }
 
-    return payload;
+    return this._super(type, payload);
   }
 });

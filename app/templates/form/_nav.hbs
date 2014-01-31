@@ -1,27 +1,29 @@
-{{#if editingField}}
+{{#if editingControl}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix" style="display:block">
   <form class="wy-form-stacked">
     <legend>Edit field</legend>
-    <hr/>
+
+    <hr>
+
     <div class="wy-control-group">
       <div class="wy-form-halves">
         <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="fa fa-question-circle"></i></label>
-        {{input valueBinding="editingField.label" viewName="label" disabled=editingField.locked}}
+        {{input valueBinding="editingControl.label" viewName="label" disabled=editingControl.locked}}
       </div>
       <div class="wy-form-halves">
         <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="fa fa-question-circle"></i></label>
-        {{input valueBinding="editingField.placeholder" viewName="placeholder"}}
+        {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
       </div>
       <div class="wy-form-full">
         <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="fa fa-question-circle"></i></label>
-        {{textarea valueBinding="editingField.help" viewName="help"}}
+        {{textarea valueBinding="editingControl.help" viewName="help"}}
       </div>
       <div class="wy-form-full">
         <label for="check-example">Required <i class="fa fa-question-circle"></i></label>
         <div class="wy-control">
           <label class="wy-checkbox">
-            {{view Ember.Checkbox checked=editingField.required}}
+            {{view Ember.Checkbox checkedBinding="editingControl.required"}}
             Make this field required.
           </label>
         </div>
@@ -30,13 +32,14 @@
 
     <hr>
 
-    {{partial editingField.fieldType.infoPartialPath}}
+    {{partial editingControl.controlType.infoPartialPath}}
 
-    <hr/>
+    <hr>
+
     <div class="wy-btn-group">
       <button class="btn btn-neutral fa fa-check-circle" {{action stopEditing}}> OK</button>
-      {{#if editingField.locked}}{{else}}
-        <button class="btn btn-link fa fa-times-circle" {{action deleteField editingField}}> Delete</button>
+      {{#if editingControl.locked}}{{else}}
+        <button class="btn btn-link fa fa-times-circle" {{action deleteControl editingControl}}> Delete</button>
       {{/if}}
     </div>
   </form>
@@ -45,11 +48,11 @@
 {{else}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side" data-spy="affix">
-  {{#each fieldTypeGroups}}
+  {{#each controlTypeGroups}}
     <dl>
       <dt>{{name}}</dt>
-      {{#each fields}}
-        <dd><a {{bind-attr class=":wh-form-choice :fa faClass"}} {{action addField this}}> {{name}}</a></dd>
+      {{#each controlTypes}}
+        <dd><a {{bind-attr class=":wh-form-choice :fa faClass"}} {{action addControl this}}> {{name}}</a></dd>
       {{/each}}
     </dl>
   {{/each}}
