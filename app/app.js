@@ -15,12 +15,22 @@ var App = Ember.Application.extend({
     var localSocket = new window.WebSocket('ws://localhost:6557');
     var connected = false;
     var storedCommands = [];
+    var emptyCallback = function() { };
+    var doneCallback = emptyCallback;
 
-    window.ENV.sendGruntCommand = function(command) {
+    window.ENV.sendGruntCommand = function(command, callback) {
       if(connected) {
         localSocket.send(command);
+        if(callback) doneCallback = callback;
       } else {
         storedCommands.push(command);
+      }
+    };
+
+    localSocket.onmessage = function(event) {
+      if(event.data === 'done') {
+        doneCallback();
+        doneCallback = emptyCallback; //Reset so done doesn't get called twice
       }
     };
 
