@@ -1,20 +1,42 @@
+<h1>Create a new set of objects</h1>
 
 <form class="wy-form-stacked" {{action createType on="submit"}}>
-  <div class="wy-control-group">
-    <div class="wy-control">
-      <div class="wy-inline-validate wy-inline-validate-warning">
-        {{input value=newTypeName placeholder="ex: articles"}}
+  <div class="wh-content-type-create-form">
+    <div class="wy-alert wy-alert-info">
+      <div class="wy-alert-title">Just some advice on naming your set</div>
+      Lowercase with no spaces only. <strong>Example:</strong> Comics, portfolio, people, trees, dragons, robots. It's usually common to use the plural form of a word, but not required.
+    </div>
+    <div class="wy-control-group fluid-input">
+      <div class="wy-control">
+        <div class="wy-inline-validate wy-inline-validate-warning">
+          {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
 
-        {{#if isDuplicate}}
-          <span class="wy-input-context"> There is already an content type with that name</span>
-        {{/if}}
+          {{#if isDuplicate}}
+            <span class="wy-input-context"> There is already an content type with that name</span>
+          {{/if}}
+        </div>
       </div>
     </div>
+    {{#if newTypeName}}
+      <div class="wy-button-group">
+        <button type="submit" class="btn btn-neutral fa fa-check-circle"> Let's create a {{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}} form</button>
+      </div>
+    {{/if}}
+    <p></p>
   </div>
-  {{#if newTypeName}}
-    <p>URLs will point to <code>http://www.yoursite.com/{{newTypeName}}/$name/</code></p>
-    <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}}</button>
-    </div>
-  {{/if}}
+
+  <hr/>
+
+  <h5>How the URLs will look for this set</h5>
+  <ul class="wy-plain-list-disc">
+    <li>A list of all <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist at <code>http://www.yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code></li>
+    <li>Individual <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist at <code>http://www.yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/$name/</code></li>
+  </ul>
+
+  <h5>Editable HTML templates will be generated in</h5>
+
+  <ul class="wy-plain-list-disc">
+    <li>The list template will exist in <code>/templates/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/list.swig</code></li>
+    <li>The template for a single <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist in <code>/templates/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/indivudal.swig</code></li>
+  </ul>
 </form>
