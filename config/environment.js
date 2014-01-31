@@ -9,7 +9,7 @@
 
 window.ENV = {
   dbName: 'hooktest',
-  dbBucket: 'site/test',
+  dbBucket: 'site/dev',
   controlTypeGroups: [
     {
       name: 'Text',
