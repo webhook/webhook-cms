@@ -1,3 +1,36 @@
+<h1>What kind of content do you need a form for?</h1>
+<ul class="wh-content-type-selector">
+  <li>
+    <h5><span class="fa fa-clock-o"></span> Time-based publishing</h5>
+    <p>
+      Publishable content starts as a draft, then goes
+      live at a specific time you define. Articles, galleries, and podcasts
+      are all examples of time-based publishing.
+    </p>
+    {{#link-to 'wh.content' class="btn btn-neutral fa fa-plus-circle"}} Create publishable{{/link-to}}
+  </li>
+  <li>
+    <h5><span class="fa fa-files-o"></span> Objects in a set</h5>
+    <p>
+      You need to create a bunch of pages based upon content you
+      add into a repeatable form. A collection of comic books
+      are an example of objects in a set.
+    </p>
+    {{#link-to 'wh.content' class="btn btn-neutral fa fa-plus-circle"}} Create new set{{/link-to}}
+  </li>
+  <li>
+    <h5><span class="fa fa-file-o"></span> One-off</h5>
+    <p>
+      One-offs are for single pages or content. You simply
+      need a form to edit the content of just one thing.
+      An about us page or a changable widget is an example of a one-off.
+    </p>
+    {{#link-to 'wh.content' class="btn btn-neutral fa fa-plus-circle"}} Create a one-off{{/link-to}}
+  </li>
+</ul>
+
+
+
 <form class="wy-form-stacked" {{action createType on="submit"}}>
   <div class="wy-control-group">
     <div class="wy-control">
@@ -20,7 +53,7 @@
 
 <hr/>
 {{#if model}}
-  <h1>Your content types</h1>
+  <h1>Your existing content types</h1>
 
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
@@ -36,7 +69,7 @@
       {{#each}}
         {{#link-to 'form' name tagName='tr'}}
           <td>{{name}}</td>
-          <td>Editorial</td>
+          <td>Time-based publishable</td>
           <td>22</td>
           <td><span class="fa fa-check-circle"></span></td>
           <td class="wy-table-actions">
