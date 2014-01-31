@@ -3,4 +3,3 @@ export default Ember.Route.extend({
     return this.modelFor('wh');
   }
 });
-

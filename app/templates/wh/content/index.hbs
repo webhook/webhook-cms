@@ -29,30 +29,10 @@
   </li>
 </ul>
 
-
-
-<form class="wy-form-stacked" {{action createType on="submit"}}>
-  <div class="wy-control-group">
-    <div class="wy-control">
-      <div class="wy-inline-validate wy-inline-validate-warning">
-        {{input value=newTypeName placeholder="ex: articles"}}
-
-        {{#if isDuplicate}}
-          <span class="wy-input-context"> There is already an content type with that name</span>
-        {{/if}}
-      </div>
-    </div>
-  </div>
-  {{#if newTypeName}}
-    <p>URLs will point to <code>http://www.yoursite.com/{{newTypeName}}/$name/</code></p>
-    <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral fa fa-plus-circle"> Create {{#if newTypeName}}{{newTypeName}}{{else}}new{{/if}}</button>
-    </div>
-  {{/if}}
-</form>
-
-<hr/>
 {{#if model}}
+
+  <hr>
+
   <h1>Your existing content types</h1>
 
   <table class="wy-table wy-table-bordered-rows wh-content">

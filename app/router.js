@@ -16,19 +16,25 @@ Router.map(function() {
   this.route('theme');
 
   this.route('form', { path: '/form/:id' });
+
   this.resource('wh', function () {
-    this.resource('wh.settings',{ path: '/settings/' },function() {
+    this.resource('wh.settings', { path: '/settings/' }, function () {
       this.route('billing');
       this.route('data');
       this.route('domain');
       this.route('general');
       this.route('team');
     });
-    this.route('content', { path: '/content' });
-    this.resource('wh.content.type', { path: '/content/:type_id' }, function () {
-      this.route('index', { path: '/' });
-      this.route('edit', { path: '/:item_id' });
-      this.route('new');
+
+    this.resource('wh.content', { path: '/content/' }, function () {
+      this.route('start');
+
+      this.resource('wh.content.type', { path: '/:type_id' }, function () {
+        this.route('index', { path: '/' });
+        this.route('edit', { path: '/:item_id' });
+        this.route('new');
+      });
+
     });
   });
 
