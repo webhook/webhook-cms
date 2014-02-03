@@ -86,8 +86,24 @@ Ember.Application.initializer({
         session.set('user', null);
         application.advanceReadiness();
       }
-
     }));
+
+    var buildLive = Ember.$('meta[name="buildLive"]').attr('content');
+    var siteName = Ember.$('meta[name="siteName"]').attr('content');
+    var self = this;
+    window.ENV.sendBuildSignal = function() {
+      var user = session.get('user.email');
+
+      if(buildLive === 'true')
+      {
+        var data = {
+          'userid': user,
+          'sitename': siteName
+        };
+
+        window.ENV.firebase.root().child('management/commands/build/' + siteName).set(data, function() {});
+      }
+    };
   }
 });
 

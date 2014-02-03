@@ -16,6 +16,7 @@ export default Ember.ObjectController.extend({
         data: data
       }).save().then(function () {
         window.ENV.sendGruntCommand('build');
+        window.ENV.sendBuildSignal();
 
         this.transitionToRoute('wh.content.type', this.get('model'));
       }.bind(this));
