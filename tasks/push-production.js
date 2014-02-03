@@ -15,30 +15,27 @@ module.exports = function(grunt) {
 
     var uploadFunctions = [];
 
-    uploadFunctions.push(function(step) {
-      cloudStorage.buckets.updateAcls(productionBucket, function() {
-        step();
-      });
-    });
-
     files.forEach(function(file) {
       var source = distDir + file;
       if(!fs.lstatSync(source).isDirectory())
       {
         if(file.indexOf('.vendor.min.js') !== -1) {
           uploadFunctions.push(function(step) {
+            grunt.log.success('uploading ' + source);
             cloudStorage.objects.upload(productionBucket, source, productionVersion + '/assets/vendor.min.js', function() {
               step();
             })
           });
         } else if (file.indexOf('.app.min.css') !== -1) {
           uploadFunctions.push(function(step) {
+            grunt.log.success('uploading ' + source);
             cloudStorage.objects.upload(productionBucket, source, productionVersion + '/assets/app.min.css', function() {
               step();
             })
           });
         } else {
           uploadFunctions.push(function(step) {
+            grunt.log.success('uploading ' + source);
             cloudStorage.objects.upload(productionBucket, source, productionVersion + '/assets/' + file, function() {
               step();
             })
