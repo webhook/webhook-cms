@@ -29,7 +29,8 @@ export default Ember.ArrayController.extend({
             name       : 'name',
             label      : 'Name',
             locked     : true,
-            showInCms  : true
+            showInCms  : true,
+            required   : true
           })
         ];
 

@@ -7,10 +7,12 @@
     <hr>
 
     <div class="wy-control-group">
-      <div class="wy-form-halves">
-        <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="fa fa-question-circle"></i></label>
-        {{input valueBinding="editingControl.label" viewName="label" disabled=editingControl.locked}}
-      </div>
+      {{#unless editingControl.locked}}
+        <div class="wy-form-halves">
+          <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="fa fa-question-circle"></i></label>
+          {{input valueBinding="editingControl.label" viewName="label"}}
+        </div>
+      {{/unless}}
       <div class="wy-form-halves">
         <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="fa fa-question-circle"></i></label>
         {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
@@ -19,15 +21,17 @@
         <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="fa fa-question-circle"></i></label>
         {{textarea valueBinding="editingControl.help" viewName="help"}}
       </div>
-      <div class="wy-form-full">
-        <label for="check-example">Required <i class="fa fa-question-circle"></i></label>
-        <div class="wy-control">
-          <label class="wy-checkbox">
-            {{view Ember.Checkbox checkedBinding="editingControl.required"}}
-            Make this field required.
-          </label>
+      {{#unless editingControl.locked}}
+        <div class="wy-form-full">
+          <label for="check-example">Required <i class="fa fa-question-circle"></i></label>
+          <div class="wy-control">
+            <label class="wy-checkbox">
+              {{view Ember.Checkbox checkedBinding="editingControl.required"}}
+              Make this field required.
+            </label>
+          </div>
         </div>
-      </div>
+      {{/unless}}
     </div>
 
     <hr>
