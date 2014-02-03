@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
   var wrench = require('wrench');
-  var cloudStorage = require('../vendor/cloudStorage.js');
+  var cloudStorage = require('../libs/cloudStorage.js');
   var fs = require('fs');
   var async = require('async');
 
