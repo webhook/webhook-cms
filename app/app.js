@@ -9,7 +9,7 @@ var App = Ember.Application.extend({
   modulePrefix: 'appkit', // TODO: loaded via config
   Resolver: Resolver['default'],
   init: function () {
-    window.ENV.firebase = new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/" + window.ENV.dbBucket);
+    window.ENV.firebaseRoot = new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/");
 
     // Open a connection to the local web socket, and set up send command
     var localSocket = new window.WebSocket('ws://localhost:6557');
@@ -60,19 +60,33 @@ Ember.Application.initializer({
       application.inject(component, 'session', 'firebase-simple-login:session:current');
     });
 
-    session.set('auth', new FirebaseSimpleLogin(window.ENV.firebase, function(error, user) {
+    session.set('auth', new FirebaseSimpleLogin(window.ENV.firebaseRoot, function(error, user) {
+
+      var siteName = Ember.$('meta[name="siteName"]').attr('content');
+
       if (error) {
         // an error occurred while attempting login
         session.set('error', error);
+        application.advanceReadiness();
       } else if (user) {
         // user authenticated with Firebase
         session.set('user', user);
         session.set('error', null);
+
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', function(snapshot) {
+
+          var bucket = snapshot.val();
+
+          window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
+          
+          application.advanceReadiness();
+        });
       } else {
         // user is logged out
         session.set('user', null);
+        application.advanceReadiness();
       }
-      application.advanceReadiness();
+
     }));
   }
 });
