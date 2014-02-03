@@ -1,6 +1,6 @@
 // ensure we don't share routes between all Router instances
 var Router = Ember.Router.extend({
-  location: window.location.protocol === 'file:' ? 'hash' : 'history'
+  location: 'hash'
 });
 
 Router.map(function() {

@@ -50,5 +50,12 @@
     "loom": "~3.1.2",
     "connect-livereload": "~0.3.1",
     "grunt-contrib-compass": "~0.7.0"
+  },
+  "dependencies": {
+    "gapitoken": "~0.1.0",
+    "request": "~2.33.0",
+    "mime": "~1.2.11",
+    "wrench": "~1.5.6",
+    "async": "~0.2.10"
   }
 }
