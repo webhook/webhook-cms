@@ -77,6 +77,16 @@ Ember.Application.initializer({
   }
 });
 
+
+Ember.Route.reopen({
+  beforeModel: function (transition) {
+    if (transition.targetName !== 'index' && !this.get('session.user')) {
+      transition.abort();
+      this.transitionTo('index');
+    }
+  }
+});
+
 // This helps ember-validations not blow up
 // https://github.com/dockyard/ember-validations/issues/26#issuecomment-31877071
 DS.Model.reopen({
