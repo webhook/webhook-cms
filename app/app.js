@@ -47,6 +47,36 @@ var App = Ember.Application.extend({
   }
 });
 
+Ember.Application.initializer({
+  name: "FirebaseSimpleLogin",
+  initialize: function (container, application) {
+    application.deferReadiness();
+
+    var session = Ember.Object.create();
+
+    // Add `session` to all the things
+    application.register('firebase-simple-login:session:current', session, { instantiate: false, singleton: true });
+    Ember.A(['model', 'controller', 'view', 'route']).forEach(function(component) {
+      application.inject(component, 'session', 'firebase-simple-login:session:current');
+    });
+
+    session.set('auth', new FirebaseSimpleLogin(window.ENV.firebase, function(error, user) {
+      if (error) {
+        // an error occurred while attempting login
+        session.set('error', error);
+      } else if (user) {
+        // user authenticated with Firebase
+        session.set('user', user);
+        session.set('error', null);
+      } else {
+        // user is logged out
+        session.set('user', null);
+      }
+      application.advanceReadiness();
+    }));
+  }
+});
+
 // This helps ember-validations not blow up
 // https://github.com/dockyard/ember-validations/issues/26#issuecomment-31877071
 DS.Model.reopen({

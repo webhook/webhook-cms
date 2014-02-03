@@ -1,6 +1,41 @@
 <div class="wh-login">
   <div class="wh-logo"></div>
 
+
+
+  {{#if session.error}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">{{session.error.code}}</div>
+      {{session.error.message}}
+    </div>
+  {{/if}}
+
+  {{#if session.user}}
+    {{session.user.email}}
+    <button type="button" class="btn fa fa-check-circle" {{action logoutUser on="click"}}> Logout</button>
+  {{else}}
+    <form class="wy-form-stacked" {{action loginUser on="submit"}}>
+      <fieldset>
+        <div class="wy-control-group">
+          <label>Email</label>
+          <div class="wy-control">
+            {{input type="email" value=email}}
+          </div>
+        </div>
+        <div class="wy-control-group">
+          <label>Password</label>
+          <div class="wy-control">
+            {{input type="password" value=password}}
+          </div>
+        </div>
+      </fieldset>
+      <div class="wy-btn-group">
+        <button type="submit" class="btn fa fa-check-circle"> Login</button>
+        <button type="button" class="btn fa fa-check-circle pull-right" {{action createUser on="click"}}> Create</button>
+      </div>
+    </form>
+  {{/if}}
+
   <p>This page should load one of two things.</p>
   <ul class="wy-plain-list-disc">
     <li>If no content-types exist: {{#link-to 'start'}}The start page{{/link-to}}</li>

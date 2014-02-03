@@ -8,6 +8,10 @@
     <div class="wy-menu wy-menu-vertical" data-spy="affix">
 
       <div data-menu-wrap="all-content" class="current move-center">
+        {{#if session.user}}
+          {{session.user.email}}
+          <button type="button" class="btn fa fa-check-circle" {{action logoutUser on="click"}}> Logout</button>
+        {{/if}}
         {{#if model}}
           <header>Your content</header>
           <ul>
@@ -26,6 +30,7 @@
           <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
         </ul>
       </div>
+
     </div>
     &nbsp;
   </nav>

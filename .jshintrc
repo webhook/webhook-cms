@@ -9,7 +9,8 @@
     "DS",
     "$",
     "EmberFire",
-    "Firebase"
+    "Firebase",
+    "FirebaseSimpleLogin"
   ],
   "node" : false,
   "browser" : false,
