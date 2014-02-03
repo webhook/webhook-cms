@@ -12,5 +12,5 @@ You'll need a `.cloudstorage.key` in the root of webhook-cms.
 
 Run the following commands.
 
-* 'grunt dist' - build the newest dist.
-* 'grunt push-prod' - deploy to google.
+* `grunt dist` - build the newest dist.
+* `grunt push-prod` - deploy to google.
