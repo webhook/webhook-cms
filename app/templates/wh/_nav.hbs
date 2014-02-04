@@ -2,7 +2,7 @@
   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
     <div class="wh-user-dropdown">
       {{#if session.user}}
-        {{session.user.email}}
+        <span class="fa fa-user"> {{session.user.email}}</a>
         (<a {{action logoutUser on="click"}}>Logout</a>)
       {{/if}}
     </div>

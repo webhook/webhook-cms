@@ -1,5 +1,5 @@
 .wh-logo
-  +wy-logo(40px,$gray-dark)
+  +wh-logo(40px,$gray-dark)
 
 .wy-affix
   position: fixed
@@ -109,8 +109,7 @@
     border-radius: 50px
     padding: 6px 12px
   > a, .wy-dropdown > a
-    color: $section-background-color
-    font-size: 100%
+    font-size: 80%
     font-weight: bold
     display: inline-block
     padding: $base-line-height / 6 $base-line-height / 4
@@ -227,7 +226,7 @@
 .wh-start
   +outer-container
   .wh-logo
-    +wy-logo(80px, $gray-dark)
+    +wh-logo(80px, $gray-dark)
     margin: $gutter auto $gutter / 2 auto
     display: block
   section
@@ -321,13 +320,16 @@ code
   font-size: 90%
 
 .wh-user-dropdown
-  background: darken($menu-background-color, 5%)
+  background: rgba(0,0,0,.05)
   padding: $base-line-height / 4
+  color: $text-color
   text-align: center
   position: absolute
   bottom: 0
   width: 100%
   font-size: 80%
+  a
+    cursor: pointer
 
 +media($tablet)
   .wy-body-for-nav
