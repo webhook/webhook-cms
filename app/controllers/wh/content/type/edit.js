@@ -6,8 +6,19 @@ export default Ember.ObjectController.extend({
 
       var data = {};
 
+      // gather and clean data for storage
       this.get('type.controls').filterBy('value').forEach(function (control) {
-        data[control.get('name')] = control.get('value');
+        var value = control.get('value');
+
+        if (control.get('controlType.valueType') === 'object') {
+          Ember.$.each(value, function (key, childValue) {
+            if (!childValue) {
+              delete value[key];
+            }
+          });
+        }
+
+        data[control.get('name')] = value;
       });
 
       this.get('model').setProperties({
@@ -17,7 +28,7 @@ export default Ember.ObjectController.extend({
 
         window.ENV.sendGruntCommand('build');
         window.ENV.sendBuildSignal();
-        
+
         this.transitionToRoute('wh.content.type', this.get('type'));
       }.bind(this));
 

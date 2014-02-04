@@ -9,6 +9,8 @@ var ControlType = DS.Model.extend({
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
 
+  valueType: DS.attr('string', { defaultValue: 'string' }),
+
   controlPartialPath: function () {
     return 'widgets/' + this.get('widget');
   }.property('widget'),
