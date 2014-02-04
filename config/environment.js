@@ -77,12 +77,14 @@ window.ENV = {
       name: 'Specifics',
       controlTypes: [
         {
-          name  : 'Name',
-          widget: 'name'
+          name     : 'Name',
+          widget   : 'name',
+          valueType: 'object'
         },
         {
-          name  : 'Address',
-          widget: 'address'
+          name     : 'Address',
+          widget   : 'address',
+          valueType: 'object'
         },
         {
           name  : 'Phone number',
