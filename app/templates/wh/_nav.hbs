@@ -1,5 +1,11 @@
   <!-- SIDE NAV, TOGGLES ON MOBILE -->
   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wh-user-dropdown">
+      {{#if session.user}}
+        {{session.user.email}}
+        (<a {{action logoutUser on="click"}}>Logout</a>)
+      {{/if}}
+    </div>
     <div class="wy-side-nav-search">
       {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
       <input type="text" placeholder="search">
@@ -8,10 +14,6 @@
     <div class="wy-menu wy-menu-vertical" data-spy="affix">
 
       <div data-menu-wrap="all-content" class="current move-center">
-        {{#if session.user}}
-          {{session.user.email}}
-          <button type="button" class="btn fa fa-check-circle" {{action logoutUser on="click"}}> Logout</button>
-        {{/if}}
         {{#if model}}
           <header>Your content</header>
           <ul>
