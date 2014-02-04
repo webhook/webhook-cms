@@ -52,7 +52,10 @@ Ember.Application.initializer({
   initialize: function (container, application) {
     application.deferReadiness();
 
-    var session = Ember.Object.create();
+    var self = this,
+        siteName = Ember.$('meta[name="siteName"]').attr('content'),
+        buildLive = Ember.$('meta[name="buildLive"]').attr('content'),
+        session = Ember.Object.create();
 
     // Add `session` to all the things
     application.register('firebase-simple-login:session:current', session, { instantiate: false, singleton: true });
@@ -61,8 +64,6 @@ Ember.Application.initializer({
     });
 
     session.set('auth', new FirebaseSimpleLogin(window.ENV.firebaseRoot, function(error, user) {
-
-      var siteName = Ember.$('meta[name="siteName"]').attr('content');
 
       if (error) {
         // an error occurred while attempting login
@@ -79,7 +80,12 @@ Ember.Application.initializer({
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
+          if (session.get('transition')) {
+            session.get('transition').retry();
+          }
+
           application.advanceReadiness();
+
         }, function (error) {
           session.get('auth').logout();
           session.set('error', error);
@@ -92,9 +98,6 @@ Ember.Application.initializer({
       }
     }));
 
-    var buildLive = Ember.$('meta[name="buildLive"]').attr('content');
-    var siteName = Ember.$('meta[name="siteName"]').attr('content');
-    var self = this;
     window.ENV.sendBuildSignal = function() {
       var user = session.get('user.email');
 
@@ -116,6 +119,7 @@ Ember.Route.reopen({
   beforeModel: function (transition) {
     var openRoutes = ['login', 'password-reset', 'create-user'];
     if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
+      this.get('session').set('transition', transition);
       transition.abort();
       this.transitionTo('login');
     }
