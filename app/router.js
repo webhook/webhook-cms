@@ -28,6 +28,7 @@ Router.map(function() {
     });
 
     this.resource('wh.content', { path: '/content/' }, function () {
+      this.route('all-types');
       this.route('start');
 
       this.resource('wh.content.type', { path: '/:type_id' }, function () {
