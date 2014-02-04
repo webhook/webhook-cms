@@ -2,7 +2,7 @@ export default Ember.Route.extend({
   actions: {
     logoutUser: function () {
       this.get('session.auth').logout();
-      this.transitionTo('index');
+      this.transitionTo('login');
     }
   }
 });

@@ -1,0 +1,35 @@
+<div class="wh-login">
+  <div class="wh-logo"></div>
+  <form class="wy-form-stacked" {{action createUser on="submit"}}>
+
+    {{#if error}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{error.code}}</div>
+        {{error.message}}
+      </div>
+    {{/if}}
+
+    <div class="wy-control-group fluid-input">
+      <label>Email</label>
+      <div class="wy-control">
+        {{input type="email" value=email}}
+      </div>
+    </div>
+    <div class="wy-control-group fluid-input">
+      <label>Password</label>
+      <div class="wy-control">
+        {{input type="password" value=password}}
+      </div>
+    </div>
+    <div {{bind-attr class=":wy-control-group :fluid-input passwordMatches::wy-control-group-error"}}>
+      <label>Password Again</label>
+      <div class="wy-control">
+        {{input type="password" value=password2}}
+        {{#unless passwordMatches}}<span class="wy-form-message">You idiot, passwords need to match.</span>{{/unless}}
+      </div>
+    </div>
+    <div class="wy-btn-group">
+      <button class="btn fa fa-check-circle"> Create User</button>
+    </div>
+  </form>
+</div>

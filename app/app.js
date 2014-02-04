@@ -73,12 +73,16 @@ Ember.Application.initializer({
         session.set('user', user);
         session.set('error', null);
 
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', function(snapshot) {
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', function (snapshot) {
 
           var bucket = snapshot.val();
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
-          
+
+          application.advanceReadiness();
+        }, function (error) {
+          session.get('auth').logout();
+          session.set('error', error);
           application.advanceReadiness();
         });
       } else {
@@ -94,9 +98,10 @@ Ember.Application.initializer({
 
 Ember.Route.reopen({
   beforeModel: function (transition) {
-    if (transition.targetName !== 'index' && !this.get('session.user')) {
+    var openRoutes = ['login', 'password-reset', 'create-user'];
+    if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
       transition.abort();
-      this.transitionTo('index');
+      this.transitionTo('login');
     }
   }
 });

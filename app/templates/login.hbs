@@ -1,16 +1,24 @@
 <div class="wh-login">
   <div class="wh-logo"></div>
-  <form class="wy-form-stacked">
+  <form class="wy-form-stacked" {{action loginUser on="submit"}}>
+
+    {{#if session.error}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{session.error.code}}</div>
+        {{session.error.message}}
+      </div>
+    {{/if}}
+
     <div class="wy-control-group fluid-input">
       <label>Email</label>
       <div class="wy-control">
-        <input type="email"/>
+        {{input type="email" value=email}}
       </div>
     </div>
     <div class="wy-control-group fluid-input">
       <label>Password</label>
       <div class="wy-control">
-        <input type="password" />
+        {{input type="password" value=password}}
       </div>
     </div>
     <div class="wy-btn-group">
