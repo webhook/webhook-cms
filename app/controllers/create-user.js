@@ -30,7 +30,28 @@ export default Ember.ObjectController.extend({
         } else {
           this.set('error', error);
         }
-        this.set('isSending', false);
+
+        // Mark the user as existing, queue up confirmation email
+        var token = user.token;
+        var fireRoot = window.ENV.firebaseRoot;
+        fireRoot.auth(token, function() {
+          fireRoot.child('management/users/' + user.email.replace('.', ',1') + '/exists').set(true, function(err) {
+            var data = {
+              userid: user.email
+            };
+
+            if(!this.get('buildEnvironment').isLocal) {
+              data['siteref'] = document.location.hostname;
+            }
+
+            fireRoot.child('management/commands/verification/' + user.email.replace('.', ',1')).set(data, function(err) {
+              fireRoot.unauth();
+              this.set('isSending', false);
+            }.bind(this));
+
+          }.bind(this));
+        }.bind(this));
+
       }.bind(this));
     }
   }
