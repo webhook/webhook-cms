@@ -1,6 +1,6 @@
 export default Ember.ObjectController.extend({
-  email: null,
-  password: null,
+  email    : null,
+  password : null,
   isLoading: false,
 
   userChanged: function () {
