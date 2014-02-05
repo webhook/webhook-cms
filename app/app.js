@@ -84,10 +84,7 @@ Ember.Application.initializer({
             session.get('transition').retry();
           }
 
-          window.ENV.firebaseRoot.child('management/users/' + user.email.replace('.', ',1') + '/exists').set(true, function(err) {
-            application.advanceReadiness();
-          });
-
+          application.advanceReadiness();
         }, function (error) {
           session.get('auth').logout();
           session.set('error', error);
