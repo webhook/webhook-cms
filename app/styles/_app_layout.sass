@@ -1,5 +1,6 @@
 .wh-logo
   +wh-logo(40px,$gray-dark)
+  position: relative
 
 .wy-affix
   position: fixed
@@ -337,6 +338,17 @@ code
   a
     cursor: pointer
 
+.wh-logo-spinner:after
+  content: ""
+  height: 46px
+  width: 46px
+  border: 4px solid lighten($spinner-color, 55%)
+  border-top: 4px solid $gray-darker
+  position: absolute
+  border-radius: 100%
+  left: -7px
+  top: -7px
+  +animation(rotation .9s infinite linear)
 +media($tablet)
   .wy-body-for-nav
     background: $section-background-color
