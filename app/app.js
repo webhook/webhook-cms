@@ -80,7 +80,6 @@ Ember.Application.initializer({
 
     application.deferReadiness();
 
-    window.console.log(application.get('buildEnvironment'));
     var self = this,
         siteName = Ember.$('meta[name="siteName"]').attr('content'),
         session = Ember.Object.create();
@@ -99,9 +98,6 @@ Ember.Application.initializer({
         session.set('error', error);
         application.advanceReadiness();
       } else if (user) {
-        // user authenticated with Firebase
-        session.set('user', user);
-        session.set('error', null);
 
         window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', function (snapshot) {
 
@@ -109,6 +105,9 @@ Ember.Application.initializer({
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
+          // user authenticated with Firebase
+          session.set('user', user);
+          session.set('error', null);
           application.advanceReadiness();
         }, function (error) {
           session.get('auth').logout();
