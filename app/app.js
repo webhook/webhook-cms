@@ -85,7 +85,6 @@ Ember.Application.initializer({
           }
 
           application.advanceReadiness();
-
         }, function (error) {
           session.get('auth').logout();
           session.set('error', error);
