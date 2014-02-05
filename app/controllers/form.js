@@ -9,7 +9,7 @@ export default Ember.ObjectController.extend({
       // firebase doesn't like undefined values and for some reason `_super` is
       // being added to arrays in ember with undefined value
       this.get('model.controls').forEach(function (control) {
-        if (control.get('controlType.widget') === 'radio') {
+        if (control.get('controlType.widget') === 'radio' || control.get('controlType.widget') === 'checkbox') {
           delete control.get('meta.data.options')._super;
         }
       });
@@ -32,7 +32,7 @@ export default Ember.ObjectController.extend({
 
       var meta = this.store.createRecord('meta-data');
 
-      if (controlType.get('widget') === 'radio') {
+      if (controlType.get('widget') === 'radio' || controlType.get('widget') === 'checkbox') {
         meta.set('data', {
           options: [
             { value: 'Option 1' },

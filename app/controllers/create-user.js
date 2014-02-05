@@ -1,10 +1,11 @@
-export default Ember.Route.extend({
-  email: null,
-  password: "",
+export default Ember.ObjectController.extend({
+  email    : null,
+  password : "",
   password2: "",
   isSending: false,
-  success: false,
-  error: null,
+  success  : false,
+  error    : null,
+
   passwordMatches: function () {
     return this.get('password') === this.get('password2');
   }.property('password', 'password2'),
