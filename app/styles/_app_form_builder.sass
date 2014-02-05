@@ -67,13 +67,6 @@
     padding-bottom: 0
     background: $gray
 
-.wy-nav-side-widget-edit .wh-form-builder-tabs
-  border-color: $orange
-  li.active
-    background: $orange
-  .fa
-    color: lighten($orange, 20%)
-
 .wh-form-builder-tabs
   margin: 0 -6px
   margin-bottom: $base-line-height / 2
@@ -135,7 +128,7 @@
     border: dashed 1px $gray-light
     cursor: pointer
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
-    background: darken($gray-dark, 5%)
+    background: $blue
     position: relative
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
@@ -153,7 +146,7 @@
       left: -30px
       top: 50%
       margin-top: -15px
-      +triangle(30px, darken($gray-dark, 5%), left)
+      +triangle(30px, $blue, left)
       z-index: $z-index-popover + 1
   .wy-star
     font-size: 200%
