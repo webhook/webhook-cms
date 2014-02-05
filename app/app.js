@@ -48,13 +48,41 @@ var App = Ember.Application.extend({
 });
 
 Ember.Application.initializer({
-  name: "FirebaseSimpleLogin",
+  name: "BuildEnvironmentDetector",
   initialize: function (container, application) {
     application.deferReadiness();
 
     var self = this,
+        buildEnv = Ember.Object.create();
+
+    application.register('build-environment:environment:current', buildEnv, { instantiate: false, singleton: true });
+    Ember.A(['model', 'controller', 'view', 'route']).forEach(function(component) {
+      application.inject(component, 'buildEnvironment', 'build-environment:environment:current');
+    });
+
+
+    var isLocal = false;
+    if(document.location.hostname === "localhost" || document.location.hostname === "127.0.0.1")
+    {
+      isLocal = true;
+    }
+
+    buildEnv.set('local', isLocal);
+    application.set('buildEnvironment', buildEnv);
+
+    application.advanceReadiness();
+  }
+});
+
+Ember.Application.initializer({
+  name: "FirebaseSimpleLogin",
+  initialize: function (container, application) {
+
+    application.deferReadiness();
+
+    window.console.log(application.get('buildEnvironment'));
+    var self = this,
         siteName = Ember.$('meta[name="siteName"]').attr('content'),
-        buildLive = Ember.$('meta[name="buildLive"]').attr('content'),
         session = Ember.Object.create();
 
     // Add `session` to all the things
@@ -62,6 +90,7 @@ Ember.Application.initializer({
     Ember.A(['model', 'controller', 'view', 'route']).forEach(function(component) {
       application.inject(component, 'session', 'firebase-simple-login:session:current');
     });
+    application.set('session', session);
 
     session.set('auth', new FirebaseSimpleLogin(window.ENV.firebaseRoot, function(error, user) {
 
@@ -80,10 +109,6 @@ Ember.Application.initializer({
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
-          if (session.get('transition')) {
-            session.get('transition').retry();
-          }
-
           application.advanceReadiness();
         }, function (error) {
           session.get('auth').logout();
@@ -100,7 +125,7 @@ Ember.Application.initializer({
     window.ENV.sendBuildSignal = function() {
       var user = session.get('user.email');
 
-      if(buildLive === 'true')
+      if(application.get('buildEnvironment').isLocal === false)
       {
         var data = {
           'userid': user,
@@ -113,7 +138,7 @@ Ember.Application.initializer({
   }
 });
 
-
+// Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
     var openRoutes = ['login', 'password-reset', 'create-user'];

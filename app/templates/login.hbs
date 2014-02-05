@@ -21,9 +21,11 @@
         {{input type="password" value=password}}
       </div>
     </div>
+
     <div class="wy-btn-group">
-      <button class="btn fa fa-check-circle"> Sign in</button>
+      <button class="btn btn-neutral fa fa-check-circle"> Sign in{{#if isLoading}} <div class="wy-spinner"></div>{{/if}}</button>
       {{#link-to 'password-reset' classNames='btn btn-small btn-link'}}Forgot password?{{/link-to}}
     </div>
+
   </form>
 </div>
