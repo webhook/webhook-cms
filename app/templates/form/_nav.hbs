@@ -1,11 +1,14 @@
 {{#if editingControl}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" data-spy="affix" style="display:block">
+  <div class="wh-form-builder-note">
+    <div class="wh-logo"></div>
+  </div>
+  <ul class="wh-form-builder-tabs">
+    <li {{action stopEditing}}>Add field</li>
+    <li class="active">Edit details <span class="fa fa-arrow-right"></span></li>
+  </ul>
   <form class="wy-form-stacked">
-    <legend>Edit field</legend>
-
-    <hr>
-
     <div class="wy-control-group">
       {{#unless editingControl.locked}}
         <div class="wy-form-halves">
@@ -41,7 +44,6 @@
     <hr>
 
     <div class="wy-btn-group">
-      <button class="btn btn-neutral fa fa-check-circle" {{action stopEditing}}> OK</button>
       {{#if editingControl.locked}}{{else}}
         <button class="btn btn-link fa fa-times-circle" {{action deleteControl editingControl}}> Delete</button>
       {{/if}}
@@ -52,6 +54,13 @@
 {{else}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side" data-spy="affix">
+  <div class="wh-form-builder-note">
+    <div class="wh-logo"></div>
+  </div>
+  <ul class="wh-form-builder-tabs">
+    <li class="active">Add field <span class="fa fa-arrow-down"></span></li>
+    <li>Edit details</li>
+  </ul>
   {{#each controlTypeGroups}}
     <dl>
       <dt>{{name}}</dt>

@@ -60,6 +60,46 @@
     &:hover
       color: $text-lighter
       border-color: $gray-lighter
+
+  .wh-form-builder-note
+    margin: -12px -6px 0 -6px
+    padding: $base-line-height / 2
+    padding-bottom: 0
+    background: $gray
+
+.wy-nav-side-widget-edit .wh-form-builder-tabs
+  border-color: $orange
+  li.active
+    background: $orange
+  .fa
+    color: lighten($orange, 20%)
+
+.wh-form-builder-tabs
+  margin: 0 -6px
+  margin-bottom: $base-line-height / 2
+  padding: $base-line-height / 2
+  padding-bottom: 0
+  background: $gray
+  border-bottom: solid 2px $blue
+  +clearfix
+  li
+    width: 50%
+    display: block
+    float: left
+    padding: $base-line-height / 4
+    text-align: center
+    color: $white
+    border-radius-top: 4px
+    color: $text-medium
+    cursor: pointer
+    &:hover
+      color: $white
+    &.active
+      background: $blue
+      border: none
+      color: $text-invert
+    .fa
+      color: lighten($blue, 20%)
 .wh-form-builder .wy-nav-content-wrap
   margin-left: 30%
   .wy-nav-content
@@ -120,8 +160,9 @@
 
 .wy-nav-side.wy-nav-side-widget-edit
   background: $gray-dark
-  padding: $gutter
   display: none
+  form
+    padding: $base-line-height / 2
   .wy-control-group
     margin-bottom: 0
   legend

@@ -29,11 +29,9 @@
           </fieldset>
 
           <div class="wh-form-builder-save wy-btn-group">
-            <button type="submit" class="btn fa fa-check-circle float-right"> Save form</button>
-            <button type="button" class="btn btn-neutral fa fa-times-circle float-right" {{action quitForm}}> Quit</button>
+            <button type="submit" class="btn btn-success fa fa-check-circle float-right"> Save form</button>
+            <button type="button" class="btn btn-link btn-back-to-cms fa fa-times-circle float-right" {{action quitForm}}> Quit and return to the CMS</button>
 
-            {{#link-to "wh" class="wh-logo"}}{{/link-to}}
-            {{#link-to "wh" class="fa fa-arrow-left"}} Back to the CMS{{/link-to}}
           </div>
 
         </form>
