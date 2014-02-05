@@ -140,7 +140,7 @@ Ember.Application.initializer({
 // Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
-    var openRoutes = ['login', 'password-reset', 'create-user'];
+    var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email'];
     if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
       this.get('session').set('transition', transition);
       transition.abort();

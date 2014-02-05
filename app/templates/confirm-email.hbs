@@ -1,0 +1,28 @@
+<div class="wh-login">
+  {{#if isSending}}
+  <div class="wh-logo wh-logo-spinner"></div>
+  {{else}}
+  <div class="wh-logo"></div>
+  {{/if}}
+  <form class="wy-form-stacked">
+
+    {{#if error}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{error.code}}</div>
+        {{error.message}}
+      </div>
+    {{/if}}
+
+    {{#if success}}
+      <div class="wy-alert wy-alert-success">
+        Email Verified
+      </div>
+    {{/if}}
+
+    {{#if isSending}}
+    <div>
+      Confirming...
+    </div>
+    {{/if}}
+  </form>
+</div>
