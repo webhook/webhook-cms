@@ -77,6 +77,7 @@ Ember.Application.initializer({
 Ember.Application.initializer({
   name: "FirebaseSimpleLogin",
   initialize: function (container, application) {
+
     application.deferReadiness();
 
     window.console.log(application.get('buildEnvironment'));
@@ -108,10 +109,6 @@ Ember.Application.initializer({
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
-          if (session.get('transition')) {
-            session.get('transition').retry();
-          }
-
           application.advanceReadiness();
         }, function (error) {
           session.get('auth').logout();
@@ -141,6 +138,7 @@ Ember.Application.initializer({
   }
 });
 
+// Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
     var openRoutes = ['login', 'password-reset', 'create-user'];
