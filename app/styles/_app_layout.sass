@@ -245,10 +245,14 @@
   h1
     text-align: center
   img
-    width: 150px
+    width: 175px
     margin: auto
     margin-bottom: $base-line-height
     display: block
+    opacity: .6
+    +transition(all .2s ease-in)
+  section:hover img
+    opacity: 1
 
 .wh-themes
   +outer-container
