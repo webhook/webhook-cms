@@ -66,7 +66,7 @@ export default Ember.ObjectController.extend({
       array.removeObject(option);
     },
     quitForm: function () {
-      this.transitionToRoute('wh.content');
+      this.transitionToRoute('wh.content.all-types');
     }
   }
 });
