@@ -1,17 +1,13 @@
 <div class="wy-control-group">
-  <label for="Options">Multiple choice options <i class="icon icon-question-sign"></i></label>
+  <label for="Options">Multiple choice options <i class="fa fa-question-circle"></i></label>
   <div class="wy-control">
-    <label for="check-x" class="wy-checkbox">
+    {{#each option in editingControl.meta.data.options}}
+    <label class="wy-checkbox">
       <input id="check-x" name="check-example" type="radio" value="">
-      <input type="text" value="Option 1">
-      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
-      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
+      {{input placeholder="Label" value=option.value}}
+      <span class="fa fa-plus-circle" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action addOption editingControl.meta.data.options}}></span>
+      <span class="fa fa-times-circle" data-toggle="tooltip" title="Remove this checkbox option." {{action removeOption editingControl.meta.data.options option}}></span>
     </label>
-    <label for="check-y" class="wy-checkbox">
-      <input id="check-y" name="check-example" type="radio" value="">
-      <input type="text" value="Option 2">
-      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one."></span>
-      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option.">
-    </label>
+    {{/each}}
   </div>
 </div>

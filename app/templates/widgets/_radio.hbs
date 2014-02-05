@@ -1,8 +1,6 @@
-<label for="option-radiox" class="wy-radio">
-  <input id="option-radiox" name="option-radio-example1" type="radio" value="">
-  Option 1
+{{#each option in control.meta.data.options}}
+<label class="wy-radio">
+  {{view "radio-button" name=control.name selection=control.value value=option.value}}
+  {{option.value}}
 </label>
-<label for="option-radioy" class="wy-radio">
-  <input id="option-radioy" name="option-radio-example1" type="radio" value="">
-  Option 2
-</label>
+{{/each}}
