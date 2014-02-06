@@ -31,7 +31,9 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      item.destroyRecord();
+      item.destroyRecord().then(function () {
+        window.ENV.sendBuildSignal();
+      }.bind(this));
     },
     toggleShowInCms: function (control) {
       control.toggleProperty('showInCms');
