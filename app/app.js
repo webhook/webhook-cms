@@ -49,6 +49,10 @@ Ember.Application.initializer({
       localSocket.socket.onopen = function() {
         localSocket.connected = true;
       };
+
+      if(window.LiveReload) {
+        window.LiveReload.disconnect();
+      }
     }
 
     buildEnv.set('local', isLocal);
