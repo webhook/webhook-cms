@@ -4,7 +4,7 @@
       {{#link-to 'wh' class="wh-logo wh-logo-spinner"}}{{/link-to}}
       <div class="wh-user-dropdown">
         {{#if session.user}}
-          <span class="fa fa-user"> {{session.user.email}}</a>
+          {{session.user.email}}
           (<a {{action logoutUser on="click"}}>Logout</a>)
         {{/if}}
       </div>
