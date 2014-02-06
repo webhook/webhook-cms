@@ -26,7 +26,6 @@ export default Ember.ObjectController.extend({
       }).save().then(function () {
         this.get('type.controls').setEach('value', null);
 
-        window.ENV.sendGruntCommand('build');
         window.ENV.sendBuildSignal();
 
         this.transitionToRoute('wh.content.type', this.get('type'));

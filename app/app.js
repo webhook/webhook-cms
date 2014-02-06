@@ -10,39 +10,6 @@ var App = Ember.Application.extend({
   Resolver: Resolver['default'],
   init: function () {
     window.ENV.firebaseRoot = new Firebase("https://" + window.ENV.dbName + ".firebaseio.com/");
-
-    // Open a connection to the local web socket, and set up send command
-    var localSocket = new window.WebSocket('ws://localhost:6557');
-    var connected = false;
-    var storedCommands = [];
-    var emptyCallback = function() { };
-    var doneCallback = emptyCallback;
-
-    window.ENV.sendGruntCommand = function(command, callback) {
-      if(connected) {
-        localSocket.send(command);
-        if(callback) doneCallback = callback;
-      } else {
-        storedCommands.push(command);
-      }
-    };
-
-    localSocket.onmessage = function(event) {
-      if(event.data === 'done') {
-        doneCallback();
-        doneCallback = emptyCallback; //Reset so done doesn't get called twice
-      }
-    };
-
-    localSocket.onopen = function() {
-      connected = true;
-
-      storedCommands.forEach(function(item) {
-        window.ENV.sendGruntCommand(item);
-      });
-      storedCommands = [];
-    };
-
     this._super.apply(this, arguments);
   }
 });
@@ -62,12 +29,31 @@ Ember.Application.initializer({
 
 
     var isLocal = false;
+    var localSocket = null;
     if(document.location.hostname === "localhost" || document.location.hostname === "127.0.0.1")
     {
       isLocal = true;
+      localSocket = {
+        socket: new window.WebSocket('ws://localhost:6557'),
+        doneCallback: null,
+        connected: false
+      };
+
+      localSocket.socket.onmessage = function(event) {
+        if(event.data === 'done') {
+          if(localSocket.doneCallback) localSocket.doneCallback();
+          localSocket.doneCallback = null; //Reset so done doesn't get called twice
+        }
+      };
+
+      localSocket.socket.onopen = function() {
+        localSocket.connected = true;
+      };
     }
 
     buildEnv.set('local', isLocal);
+    buildEnv.set('localSocket', localSocket);
+
     application.set('buildEnvironment', buildEnv);
 
     application.advanceReadiness();
@@ -132,15 +118,25 @@ Ember.Application.initializer({
         };
 
         window.ENV.firebase.root().child('management/commands/build/' + siteName).set(data, function() {});
+      } else {
+        window.ENV.sendGruntCommand('build');
       }
     };
+
+    window.ENV.sendGruntCommand = function(command, callback) {
+      var localSocket = application.get('buildEnvironment').localSocket;
+      if(localSocket && localSocket.connected) {
+        localSocket.socket.send(command);
+        if(callback) localSocket.doneCallback = callback;
+      }
+    }.bind(this);
   }
 });
 
 // Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
-    var openRoutes = ['login', 'password-reset', 'create-user'];
+    var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email'];
     if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
       this.get('session').set('transition', transition);
       transition.abort();

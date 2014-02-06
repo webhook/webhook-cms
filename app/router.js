@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('password-reset');
   this.route('password-change');
   this.route('create-user');
+  this.route('confirm-email');
   this.route('start');
   this.route('theme');
 
