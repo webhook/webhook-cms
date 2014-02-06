@@ -16,8 +16,7 @@
     "firebase-simple-login": "1.2.3"
   },
   "resolutions": {
-    "ember": "~1.3.0-beta.4",
-    "jquery": "~1.9.1"
+    "ember": "~1.3.0-beta.4"
   },
   "devDependencies": {
     "wyrm": "~0.0.x"

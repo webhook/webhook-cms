@@ -15,7 +15,6 @@ export default Ember.ObjectController.extend({
       this.store.createRecord(modelName, {
         data: data
       }).save().then(function () {
-        window.ENV.sendGruntCommand('build');
         window.ENV.sendBuildSignal();
 
         this.transitionToRoute('wh.content.type', this.get('model'));

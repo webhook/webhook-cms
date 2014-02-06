@@ -3,7 +3,7 @@ export default Ember.Route.extend({
 
     function getURLParameter(name) {
       return decodeURI(
-        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.hash)||[,''])[1]
+        ((new RegExp(name + '=' + '(.+?)(&|$)')).exec(location.hash)||[,''])[1]
         );
     }
 
