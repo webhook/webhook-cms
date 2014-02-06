@@ -49,6 +49,14 @@ Ember.Application.initializer({
       localSocket.socket.onopen = function() {
         localSocket.connected = true;
       };
+
+      // Shut down LiveReload
+      if(window.LiveReload) {
+        var shutDown = new CustomEvent('LiveReloadShutDown');
+        document.addEventListener("LiveReloadConnect", function() {
+          document.dispatchEvent(shutDown);
+        }, false);
+      }
     }
 
     buildEnv.set('local', isLocal);
