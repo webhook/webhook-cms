@@ -52,7 +52,8 @@ Ember.Application.initializer({
 
       // Shut down LiveReload
       if(window.LiveReload) {
-        Ember.$(document).trigger('LiveReloadShutDown');
+        var shutDown = new CustomEvent('LiveReloadShutDown');
+        Ember.$(document)[0].dispatchEvent(shutDown);
       }
     }
 
