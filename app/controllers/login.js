@@ -21,8 +21,8 @@ export default Ember.ObjectController.extend({
       if (this.get('isLoading')) {
         return;
       }
-      this.set('isLoading', true);
       this.get('session').set('error', null);
+      this.set('isLoading', true);
       this.get('session.auth').login('password', {
         email     : this.get('email'),
         password  : this.get('password'),
