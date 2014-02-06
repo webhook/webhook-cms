@@ -21,6 +21,14 @@ export default Ember.ObjectController.extend({
         data[control.get('name')] = value;
       });
 
+      // checkboxes are special
+      this.get('type.controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
+        data[control.get('name')] = [];
+        control.get('meta.data.options').forEach(function (option) {
+          data[control.get('name')].push(option);
+        });
+      });
+
       this.get('model').setProperties({
         data: data
       }).save().then(function () {

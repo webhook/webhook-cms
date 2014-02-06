@@ -5,12 +5,19 @@ export default Ember.ObjectController.extend({
   actions: {
     updateType: function () {
 
-      // hax
-      // firebase doesn't like undefined values and for some reason `_super` is
-      // being added to arrays in ember with undefined value
       this.get('model.controls').forEach(function (control) {
+        // hax
+        // firebase doesn't like undefined values and for some reason `_super` is
+        // being added to arrays in ember with undefined value
         if (control.get('controlType.widget') === 'radio' || control.get('controlType.widget') === 'checkbox') {
           delete control.get('meta.data.options')._super;
+        }
+
+        // Option names match label, but lowercase and underscored
+        if (control.get('controlType.widget') === 'checkbox') {
+          control.get('meta.data.options').forEach(function (option) {
+            option.name = option.label.toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, '');
+          });
         }
       });
 
@@ -32,13 +39,23 @@ export default Ember.ObjectController.extend({
 
       var meta = this.store.createRecord('meta-data');
 
-      if (controlType.get('widget') === 'radio' || controlType.get('widget') === 'checkbox') {
-        meta.set('data', {
-          options: [
-            { value: 'Option 1' },
-            { value: 'Option 2' }
-          ]
-        });
+      switch (controlType.get('widget')) {
+        case 'radio':
+          meta.set('data', {
+            options: [
+              { value: 'Option 1' },
+              { value: 'Option 2' }
+            ]
+          });
+          break;
+        case 'checkbox':
+          meta.set('data', {
+            options: [
+              { label: 'Option 1' },
+              { label: 'Option 2' }
+            ]
+          });
+          break;
       }
 
       control.set('meta', meta);
