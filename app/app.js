@@ -50,8 +50,9 @@ Ember.Application.initializer({
         localSocket.connected = true;
       };
 
+      // Shut down LiveReload
       if(window.LiveReload) {
-        window.LiveReload.disconnect();
+        Ember.$(document).trigger('LiveReloadShutDown');
       }
     }
 
