@@ -1,13 +1,13 @@
-  <div class="wh-user-dropdown">
-    {{#if session.user}}
-      <span class="fa fa-user"> {{session.user.email}}</a>
-      (<a {{action logoutUser on="click"}}>Logout</a>)
-    {{/if}}
-  </div>
   <!-- SIDE NAV, TOGGLES ON MOBILE -->
   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
     <div class="wy-side-nav-search">
       {{#link-to 'wh' class="wh-logo wh-logo-spinner"}}{{/link-to}}
+      <div class="wh-user-dropdown">
+        {{#if session.user}}
+          <span class="fa fa-user"> {{session.user.email}}</a>
+          (<a {{action logoutUser on="click"}}>Logout</a>)
+        {{/if}}
+      </div>
       <input type="text" placeholder="search">
     </div>
 
