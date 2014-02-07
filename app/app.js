@@ -103,6 +103,10 @@ Ember.Application.initializer({
           // user authenticated with Firebase
           session.set('user', user);
           session.set('error', null);
+          session.set('site', {
+            name: siteName,
+            token: bucket
+          });
           application.advanceReadiness();
         }, function (error) {
           session.get('auth').logout();
@@ -112,6 +116,7 @@ Ember.Application.initializer({
       } else {
         // user is logged out
         session.set('user', null);
+        session.set('site', null);
         application.advanceReadiness();
       }
     }));
