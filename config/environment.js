@@ -88,7 +88,7 @@ window.ENV = {
           name     : 'Name',
           widget   : 'name',
           valueType: 'object',
-          iconClass  : 'icon-file-plus'
+          iconClass  : 'icon-user'
         },
         {
           name     : 'Address',
