@@ -18,17 +18,15 @@ export default Ember.Route.extend({
     type.get('controls').forEach(function (control) {
       var value = data[control.get('name')];
 
-      if (control.get('controlType.widget') === 'checkbox') {
+      if (value && control.get('controlType.widget') === 'checkbox') {
         control.get('meta.data.options').forEach(function (option) {
-          option.value = value.findBy('name', option.name).value;
+          option.value = value.findBy('label', option.label).value;
         });
       }
 
       if (!value && control.get('controlType.valueType') === 'object') {
         value = {};
       }
-
-      window.console.log(control.get('meta.data.options'));
 
       control.set('value', value);
     });

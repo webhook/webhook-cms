@@ -12,13 +12,6 @@ export default Ember.ObjectController.extend({
         if (control.get('controlType.widget') === 'radio' || control.get('controlType.widget') === 'checkbox') {
           delete control.get('meta.data.options')._super;
         }
-
-        // Option names match label, but lowercase and underscored
-        if (control.get('controlType.widget') === 'checkbox') {
-          control.get('meta.data.options').forEach(function (option) {
-            option.name = option.label.toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, '');
-          });
-        }
       });
 
       this.get('model').save().then(function () {
