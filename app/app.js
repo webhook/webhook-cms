@@ -30,6 +30,7 @@ Ember.Application.initializer({
 
     var isLocal = false;
     var localSocket = null;
+    var keepReload = Ember.$('meta[name="keepReload"]').attr('content');
     if(document.location.hostname === "localhost" || document.location.hostname === "127.0.0.1")
     {
       isLocal = true;
@@ -51,7 +52,7 @@ Ember.Application.initializer({
       };
 
       // Shut down LiveReload
-      if(window.LiveReload) {
+      if(window.LiveReload && !keepReload) {
         var shutDown = new CustomEvent('LiveReloadShutDown');
         document.addEventListener("LiveReloadConnect", function() {
           document.dispatchEvent(shutDown);
