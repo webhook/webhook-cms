@@ -5,8 +5,8 @@
     <label class="wy-checkbox">
       <input id="check-x" name="check-example" type="radio" value="">
       {{input placeholder="Label" value=option.value}}
-      <span class="icon icon-plus-circle" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action addOption editingControl.meta.data.options}}></span>
-      <span class="icon icon-times-circle" data-toggle="tooltip" title="Remove this checkbox option." {{action removeOption editingControl.meta.data.options option}}></span>
+      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action addOption editingControl.meta.data.options}}></span>
+      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action removeOption editingControl.meta.data.options option}}></span>
     </label>
     {{/each}}
   </div>

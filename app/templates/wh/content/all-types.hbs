@@ -7,7 +7,7 @@
       live at a specific time you define. Articles, galleries, and podcasts
       are all examples of time-based publishing.
     </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-circle"}} Create publishable{{/link-to}}
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create publishable{{/link-to}}
   </li>
   <li>
     <h5><span class="icon icon-files-o"></span> Objects in a set</h5>
@@ -16,7 +16,7 @@
       add into a repeatable form. A collection of comic books
       are an example of objects in a set.
     </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-circle"}} Create new set{{/link-to}}
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create new set{{/link-to}}
   </li>
   <li>
     <h5><span class="icon icon-file-o"></span> One-off</h5>
@@ -25,7 +25,7 @@
       need a form to edit the content of just one thing.
       An about us page or a changable widget is an example of a one-off.
     </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-circle"}} Create a one-off{{/link-to}}
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create a one-off{{/link-to}}
   </li>
 </ul>
 
@@ -51,9 +51,9 @@
           <td>{{name}}</td>
           <td>Time-based publishable</td>
           <td>22</td>
-          <td><span class="icon icon-check-circle"></span></td>
+          <td><span class="icon icon-ok-sign"></span></td>
           <td class="wy-table-actions">
-            <button class="btn btn-link icon icon-times-circle" {{action deleteType this}}></button>
+            <button class="btn btn-link icon icon-remove-sign" {{action deleteType this}}></button>
           </td>
         {{/link-to}}
       {{/each}}

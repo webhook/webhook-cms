@@ -43,7 +43,7 @@
     font-size: 80%
     padding: $base-line-height / 4
     width: 100%
-    color: $text-medium
+    color: $text-lighter
     +clearfix
   dd
     width: 50%
@@ -79,7 +79,7 @@
   padding: $base-line-height / 2
   padding-bottom: 0
   background: $gray
-  border-bottom: solid 2px $blue
+  border-bottom: solid 2px $gray-darker
   +clearfix
   li
     width: 50%
@@ -96,7 +96,7 @@
     &:hover
       color: $white
     &.active
-      background: $blue
+      background: $gray-darker
       border: none
       color: $text-invert
     .fa
@@ -179,14 +179,8 @@
     margin-bottom: $base-line-height / 2
   .btn:before
     color: $green
-  .btn-link
-    color: $text-lighter
-    &:before
-      color: $red
-  .icon-plus-sign
-    color: $green
-  .icon-remove-sign
-    color: $red
+  .icon:hover
+    color: $white
   input[type=text], textarea
     background: $gray-darker
     border-color: $gray

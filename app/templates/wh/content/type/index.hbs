@@ -1,6 +1,6 @@
 <section class="wh-content-list">
   <section class="wh-content-list-title">
-    {{#link-to 'wh.content.type.new' contentType class="btn btn-neutral icon icon-plus-circle float-right"}} Add new {{contentType.name}}{{/link-to}}
+    {{#link-to 'wh.content.type.new' contentType class="btn btn-neutral icon icon-plus-sign float-right"}} Add new {{contentType.name}}{{/link-to}}
     <h1>{{contentType.name}}</h1>
   </section>
 
@@ -56,7 +56,7 @@
             <td>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}
           <td class="wy-table-actions">
-            <button type="button" class="btn btn-link icon icon-times-circle" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
+            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
           </td>
           {{/link-to}}
         {{else}}
