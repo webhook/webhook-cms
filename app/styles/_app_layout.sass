@@ -229,6 +229,7 @@
     background: $section-background-color
     margin-top: $gutter
     padding: $base-line-height
+    border: solid 5px $white
     color: $text-color
   section.wh-start-or
     +span-columns(2)
@@ -236,6 +237,7 @@
     text-align: center
     color: $gray-light
     font-size: 120%
+    border: none
     font-weight: bold
   h1
     text-align: center
@@ -244,10 +246,6 @@
     margin: auto
     margin-bottom: $base-line-height
     display: block
-    opacity: .6
-    +transition(all .2s ease-in)
-  section:hover img
-    opacity: 1
 
 .wh-themes
   +outer-container
