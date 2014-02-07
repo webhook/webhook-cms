@@ -51,18 +51,21 @@
     padding: $base-line-height / 4
   dd a
     display: block
-    background: $gray-dark
+    background: darken($gray-dark,5%)
+    border-radius: 2px
     width: 100%
     padding: $base-line-height / 4
-    border: solid 1px $gray
-    color: $text-light
+    color: $text-medium
     font-size: 90%
     cursor: pointer
     &:before
-      color: $text-invert
+      color: $text-light
     &:hover
       color: $text-lighter
       border-color: $gray-lighter
+      background: darken($gray-dark,10%)
+      &:before
+        color: $text-invert
 
   .wh-form-builder-note
     margin: -12px -6px 0 -6px
