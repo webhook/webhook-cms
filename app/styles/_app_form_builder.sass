@@ -136,26 +136,17 @@
     border: dashed 1px $gray-light
     cursor: pointer
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
-    background: $blue
+    background: $gray-lighter
     position: relative
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
     padding-left: $gutter * 2 + em($base-line-height / 4)
     padding-right: $gutter * 2 + em($base-line-height / 4)
     .wy-control
-      +clearfix
     label, .wy-form-message
-      color: $white
+      color: $text-medium
     &:hover
       border-color: transparent
-    &:after
-      content: " "
-      position: absolute
-      left: -30px
-      top: 50%
-      margin-top: -15px
-      +triangle(30px, $blue, left)
-      z-index: $z-index-popover + 1
   .wy-star
     font-size: 200%
 
