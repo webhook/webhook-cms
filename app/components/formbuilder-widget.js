@@ -11,7 +11,7 @@ export default Ember.Component.extend({
     if (this.get('doEdit')) {
       this.$(this.get('element')).tooltip({
         placement: 'left',
-        title: 'Click to edit control details.'
+        title: 'Click to edit field details.'
       });
     }
   },

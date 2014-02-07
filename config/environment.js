@@ -15,21 +15,21 @@ window.ENV = {
       controlTypes: [
         {
           name     : 'Single line text',
-          faClass  : 'fa-font'
+          iconClass  : 'icon-font'
         },
         {
           name     : 'Paragraph text',
-          faClass  : 'fa-align-left',
+          iconClass  : 'icon-align-left',
           widget   : 'textarea'
         },
         {
           name     : 'WYSIWYG text',
-          faClass  : 'fa-magic',
+          iconClass  : 'icon-magic',
           widget   : 'wysiwyg',
         },
         {
           name     : 'Markdown text',
-          faClass  : 'fa-tag',
+          iconClass  : 'icon-markdown-mark',
           widget   : 'markdown',
           help     : 'Learn about Markdown syntax <a href="http://guides.github.com/overviews/mastering-markdown/" target="_blank">here</a>'
         }
