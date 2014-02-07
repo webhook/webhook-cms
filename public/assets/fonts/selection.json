@@ -1998,7 +1998,7 @@
 			"metrics": {
 				"emSize": 512,
 				"baseline": 14,
-				"whitespace": 50
+				"whitespace": 25
 			},
 			"autoHost": false,
 			"resetPoint": 61440,
