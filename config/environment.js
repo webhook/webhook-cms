@@ -78,7 +78,7 @@ window.ENV = {
         {
           name  : 'Other file',
           widget: 'file',
-          iconClass  : 'icon-file-plus'
+          iconClass  : 'icon-paper-clip'
         }
       ]
     }, {
