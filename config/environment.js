@@ -39,19 +39,23 @@ window.ENV = {
       controlTypes: [
         {
           name  : 'Number',
-          widget: 'number'
+          widget: 'number',
+          iconClass  : 'icon-list-ol'
         },
         {
           name  : 'Checkbox',
-          widget: 'checkbox'
+          widget: 'checkbox',
+          iconClass  : 'icon-checkbox-checked'
         },
         {
           name  : 'Multiple choice',
-          widget: 'radio'
+          widget: 'radio',
+          iconClass  : 'icon-radio-checked'
         },
         {
           name  : 'Dropdown',
-          widget: 'select'
+          widget: 'select',
+          iconClass  : 'icon-menu'
         }
       ]
     }, {
@@ -59,18 +63,22 @@ window.ENV = {
       controlTypes: [
         {
           name  : 'Image',
-          widget: 'image'
+          widget: 'image',
+          iconClass  : 'icon-image'
         },
         {
-          name: 'Gallery'
+          name: 'Gallery',
+          iconClass  : 'icon-images'
         },
         {
           name  : 'Audio file',
-          widget: 'audio'
+          widget: 'audio',
+          iconClass  : 'icon-music'
         },
         {
           name  : 'Other file',
-          widget: 'file'
+          widget: 'file',
+          iconClass  : 'icon-file-plus'
         }
       ]
     }, {
@@ -79,38 +87,46 @@ window.ENV = {
         {
           name     : 'Name',
           widget   : 'name',
-          valueType: 'object'
+          valueType: 'object',
+          iconClass  : 'icon-file-plus'
         },
         {
           name     : 'Address',
           widget   : 'address',
-          valueType: 'object'
+          valueType: 'object',
+          iconClass  : 'icon-direction'
         },
         {
           name  : 'Phone number',
-          widget: 'phone'
+          widget: 'phone',
+          iconClass  : 'icon-phone-sign'
         },
         {
           name  : 'Email',
-          widget: 'email'
+          widget: 'email',
+          iconClass  : 'icon-envelop'
         },
         {
           name  : 'Date time',
-          widget: 'datetime'
+          widget: 'datetime',
+          iconClass  : 'icon-calendar'
         },
         {
           name       : 'Website',
           widget     : 'url',
           label      : 'Website',
-          placeholder: 'http://www.sitename.com'
+          placeholder: 'http://www.sitename.com',
+          iconClass  : 'icon-link'
         },
         {
           name  : 'Rating',
-          widget: 'rating'
+          widget: 'rating',
+          iconClass  : 'icon-star'
         },
         {
           name  : 'Tags',
-          widget: 'tag'
+          widget: 'tag',
+          iconClass  : 'icon-tags'
         }
       ]
     }
