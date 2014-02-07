@@ -144,9 +144,20 @@
     padding-right: $gutter * 2 + em($base-line-height / 4)
     .wy-control
     label, .wy-form-message
-      color: $text-medium
+      color: $text-color
     &:hover
       border-color: transparent
+    &:after
+      font-family: 'hook'
+      content: "\f05a"
+      height: 30px
+      width: 30px
+      font-size: 30px
+      position: absolute
+      left: 10px
+      top: 50%
+      margin-top: -15px
+      z-index: $z-index-popover + 1
   .wy-star
     font-size: 200%
 
