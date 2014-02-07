@@ -13,24 +13,24 @@
       <dt>Show columns</dt>
       {{#each contentType.controls}}
         <dd>
-          <span {{bind-attr class=":fa showInCms:icon-ok-sign:icon-ok-sign"}} {{action toggleShowInCms this on="click"}}>
+          <span {{bind-attr class=":icon showInCms:icon-ok-sign:icon-circle-blank"}} {{action toggleShowInCms this on="click"}}>
             {{label}}
           </span>
         </dd>
       {{/each}}
       <dt>Sort by</dt>
       <dd>
-        <span class="icon icon-circle">
+        <span class="icon icon-circle-blank">
           Last updated
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-o">
+        <span class="icon icon-circle-blank">
           Last created
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-o">
+        <span class="icon icon-circle-blank">
           Alphabetical
         </span>
       </dd>
