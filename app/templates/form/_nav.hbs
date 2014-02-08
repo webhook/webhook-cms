@@ -12,21 +12,21 @@
     <div class="wy-control-group">
       {{#unless editingControl.locked}}
         <div class="wy-form-halves">
-          <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-circle"></i></label>
+          <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign"></i></label>
           {{input valueBinding="editingControl.label" viewName="label"}}
         </div>
       {{/unless}}
       <div class="wy-form-halves">
-        <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-circle"></i></label>
+        <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign"></i></label>
         {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
       </div>
       <div class="wy-form-full">
-        <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-circle"></i></label>
+        <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign"></i></label>
         {{textarea valueBinding="editingControl.help" viewName="help"}}
       </div>
       {{#unless editingControl.locked}}
         <div class="wy-form-full">
-          <label for="check-example">Required <i class="icon icon-question-circle"></i></label>
+          <label for="check-example">Required <i class="icon icon-question-sign"></i></label>
           <div class="wy-control">
             <label class="wy-checkbox">
               {{view Ember.Checkbox checkedBinding="editingControl.required"}}
