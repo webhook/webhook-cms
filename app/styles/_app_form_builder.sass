@@ -144,7 +144,8 @@
       border: dashed 1px $gray-light
       cursor: pointer
   .wy-control-group
-    padding: $base-line-height / 4
+    padding: $base-line-height / 2
+    margin-bottom: 0
     border: solid 1px transparent
   .wy-control-group:hover
     border: dashed 1px $gray-light
@@ -154,8 +155,8 @@
     position: relative
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
-    padding-left: $gutter * 2 + em($base-line-height / 4)
-    padding-right: $gutter * 2 + em($base-line-height / 4)
+    padding-left: $gutter * 2 + em($base-line-height / 2)
+    padding-right: $gutter * 2 + em($base-line-height / 2)
     .wy-control
     label, .wy-form-message
       color: $text-color
@@ -197,12 +198,18 @@
     margin: 0
     margin-bottom: $base-line-height / 2
   .btn:before
-    color: $green
+    color: $red
+  .icon-question-sign
+    color: $text-dark
   .icon:hover
     color: $white
+  .icon-plus-sign:hover
+    color: $green
+  .icon-remove-sign:hover
+    color: $red
   input[type=text], textarea
-    background: $gray-darker
-    border-color: $gray
+    background: darken($gray-dark,5%)
+    border-color: $gray-darker
     color: $text-light
     box-shadow: none
 
