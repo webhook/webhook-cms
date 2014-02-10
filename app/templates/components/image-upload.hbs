@@ -1,4 +1,9 @@
 <a class="wy-form-upload">
+  {{#if control.value}}
+  <div class="wy-form-upload-image">
+    {{cdnconnect-image control.value maxwidth="100" maxheight="100"}}
+  </div>
+  {{/if}}
   <div class="wy-form-upload-content">
     <div class="image-drag">
       <p>Drag or select image</p>
