@@ -9,6 +9,7 @@
 
 window.ENV = {
   dbName: 'ianbox',
+  uploadUrl: 'http://23.253.89.18:3000/upload-file/',
   controlTypeGroups: [
     {
       name: 'Text',

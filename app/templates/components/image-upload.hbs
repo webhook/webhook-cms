@@ -1,9 +1,7 @@
 <a class="wy-form-upload">
-  {{#if control.value}}
   <div class="wy-form-upload-image">
-    {{cdnconnect-image control.value maxwidth="100" maxheight="100"}}
+    {{#if initial}}{{cdnconnect-image initial maxwidth="100" maxheight="100"}}{{/if}}
   </div>
-  {{/if}}
   <div class="wy-form-upload-content">
     <div class="image-drag">
       <p>Drag or select image</p>

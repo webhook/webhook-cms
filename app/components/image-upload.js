@@ -1,7 +1,11 @@
 export default Ember.Component.extend({
   didInsertElement: function () {
-    var session = this.get('session'),
+    var self = this,
+        session = this.get('session'),
         control = this.get('control');
+
+    this.set('initial', control.get('value'));
+
     this.$('input').upload({
       uploadTrigger: this.$('.wy-form-upload'),
       uploadDropzone: this.$('.wy-form-upload')
@@ -20,7 +24,7 @@ export default Ember.Component.extend({
         $(this).data('upload').$dropzone.find('.image-error').show().text(response);
       },
       'start.wh.upload': function () {
-        $(this).data('upload').options.uploadUrl   = 'http://23.253.89.18:3000/upload-file/';
+        $(this).data('upload').options.uploadUrl   = window.ENV.uploadUrl;
         $(this).data('upload').options.uploadSite  = session.get('site.name');
         $(this).data('upload').options.uploadToken = session.get('site.token');
         $(this).data('upload').$dropzone.addClass('wy-form-uploading');
@@ -28,9 +32,9 @@ export default Ember.Component.extend({
         $(this).data('upload').$dropzone.find('.image-loading p').html('Uploading <span>0%</span>');
       },
       'thumb.wh.upload': function (event, thumb) {
-        var widget = $(this).data('upload').$dropzone;
-        widget.find('.wy-form-upload-image').remove();
-        $('<div class="wy-form-upload-image">').append(thumb).prependTo(widget);
+        self.set('initial', null);
+        $(this).data('upload').$dropzone.find('.wy-form-upload-image img.blob').remove();
+        $(this).data('upload').$dropzone.find('.wy-form-upload-image').append($(thumb).addClass('blob'));
       },
       'progress.wh.upload': function (event, percentage) {
         if (percentage < 100) {
