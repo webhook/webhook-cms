@@ -3,7 +3,7 @@
   <fieldset>
     <legend>New {{name}}</legend>
     {{#each control in controls}}
-      {{formbuilder-widget control=control}}
+      {{formbuilder-widget control=control session=session}}
     {{/each}}
     <button type="submit" class="btn">Save</button>
     {{#if saved}}{{saved}}{{/if}}

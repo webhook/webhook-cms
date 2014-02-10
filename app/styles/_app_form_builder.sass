@@ -223,3 +223,13 @@
   .wh-form-builder-list > li
     +span-columns(4)
     +omega(1n)
+
+
+.wy-form-upload
+  &.wy-form-uploading
+    .image-drag, .image-drop, .image-desktop, .image-url
+      display: none
+    .image-loading
+      display: block
+  .image-error
+    display: none

@@ -1,4 +1,4 @@
-<a class="wy-form-upload" data-upload-dropzone="example" data-upload-trigger="example">
+<a class="wy-form-upload">
   <div class="wy-form-upload-content">
     <div class="image-drag">
       <p>Drag or select image</p>
@@ -6,7 +6,16 @@
     <div class="image-desktop">
       <p>Select from desktop</p>
     </div>
-    <div class="wy-input-prefix"><span class="wy-input-context"><i class="icon icon-link"></i></span><input type="text" placeholder=" Or paste URL"></div>
+    <div class="image-drop">
+      <p>Drop files here</p>
+    </div>
+    <div class="image-loading">
+      <div class="wy-spinner wy-spinner-margin"></div>
+      <p>Uploading <span>0%</span></p>
+    </div>
+    <div class="image-error wy-alert wy-alert-danger"></div>
+    <div class="image-url">
+      <div class="wy-input-prefix"><span class="wy-input-context"><i class="icon icon-link"></i></span>{{input type="text" placeholder="Or paste URL" value=control.value}}</div>
+    </div>
   </div>
-  <input type="hidden" data-upload data-upload-group="example">
 </a>
