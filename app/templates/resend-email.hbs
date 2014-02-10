@@ -1,0 +1,32 @@
+<div class="wh-login">
+  {{#if isSending}}
+  <div class="wh-logo wh-logo-spinner"></div>
+  {{else}}
+  <div class="wh-logo"></div>
+  {{/if}}
+  <form class="wy-form-stacked" {{action resendEmail on="submit"}}>
+
+    {{#if error}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{error.code}}</div>
+        {{error.message}}
+      </div>
+    {{/if}}
+
+    {{#if success}}
+      <div class="wy-alert wy-alert-success">
+        {{success.message}}
+      </div>
+    {{/if}}
+
+    <div class="wy-control-group fluid-input">
+      <label>Email</label>
+      <div class="wy-control">
+        {{input type="email" value=email}}
+      </div>
+    </div>
+    <div class="wy-btn-group">
+      <button class="btn fa fa-user"> Resend verification email</button>
+    </div>
+  </form>
+</div>

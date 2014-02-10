@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('password-change');
   this.route('create-user');
   this.route('confirm-email');
+  this.route('resend-email');
   this.route('start');
   this.route('theme');
 
