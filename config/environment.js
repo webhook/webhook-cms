@@ -15,21 +15,22 @@ window.ENV = {
       controlTypes: [
         {
           name     : 'Single line text',
-          iconClass  : 'icon-font'
+          iconClass: 'icon-font',
+          widget   : 'textfield'
         },
         {
           name     : 'Paragraph text',
-          iconClass  : 'icon-align-left',
+          iconClass: 'icon-align-left',
           widget   : 'textarea'
         },
         {
           name     : 'WYSIWYG text',
-          iconClass  : 'icon-magic',
+          iconClass: 'icon-magic',
           widget   : 'wysiwyg',
         },
         {
           name     : 'Markdown text',
-          iconClass  : 'icon-markdown-mark',
+          iconClass: 'icon-markdown-mark',
           widget   : 'markdown',
           help     : 'Learn about Markdown syntax <a href="http://guides.github.com/overviews/mastering-markdown/" target="_blank">here</a>'
         }
@@ -40,7 +41,7 @@ window.ENV = {
         {
           name  : 'Number',
           widget: 'number',
-          iconClass  : 'icon-list-ol'
+          iconClass: 'icon-list-ol'
         },
         {
           name  : 'Checkbox',
@@ -68,7 +69,8 @@ window.ENV = {
         },
         {
           name: 'Gallery',
-          iconClass  : 'icon-images'
+          iconClass: 'icon-images',
+          widget: 'gallery'
         },
         {
           name  : 'Audio file',

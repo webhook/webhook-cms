@@ -30,9 +30,8 @@ var controlTypeGroupId = 0,
 $.each(window.ENV.controlTypeGroups, function (index, group) {
   controlTypeGroupId++;
   $.each(group.controlTypes, function (index, control) {
-    controlTypeId++;
     ControlType.FIXTURES.push($.extend({
-      id: controlTypeId,
+      id: control.widget,
       group: controlTypeGroupId
     }, control));
   });

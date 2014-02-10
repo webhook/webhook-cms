@@ -14,8 +14,7 @@ $.each(window.ENV.controlTypeGroups, function (index, group) {
     id: controlTypeGroupId,
     name: group.name,
     controlTypes: $.map(group.controlTypes, function (control, index) {
-      controlTypeId++;
-      return controlTypeId;
+      return control.widget;
     })
   });
 });

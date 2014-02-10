@@ -20,7 +20,7 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      this.store.find('control-type', 1).then(function (controlType) {
+      this.store.find('control-type', 'textfield').then(function (controlType) {
 
         // controls that are locked
         var controls = [
