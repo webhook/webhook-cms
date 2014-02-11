@@ -14,3 +14,7 @@ Run the following commands.
 
 * `grunt dist` - build the newest dist.
 * `grunt push-prod` - deploy to google.
+
+Handlebar Helpers:
+
+* resize-image: Accepts a width, height, a grow parameter. If grow is not specified, images will be resized to width/height but small images will not be filled in. If grow is set to true, small images will be filled into resize dimensions.
