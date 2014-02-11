@@ -1,14 +1,14 @@
 <div class="wy-form-upload-container">
   <div class="wy-form-upload">
-    <div class="wy-form-upload-image">
-      {{#if initial}}
+    {{#if initial}}
+      <div class="wy-form-upload-image">
         {{resize-image initial width="75" height="75"}}
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
     <div class="wy-form-upload-content">
-      <div class="image-drag btn btn-neutral">Drag or select image</div>
-      <div class="image-desktop btn btn-neutral">Select from desktop</div>
-      <div class="image-drop btn btn-success">Drop files here</div>
+      <div class="image-drag btn btn-neutral icon icon-image"> Drag or select image</div>
+      <div class="image-desktop btn btn-neutral icon icon-desktop">Select from desktop</div>
+      <div class="image-drop btn btn-success icon icon-arrow-down">Drop files here</div>
       <div class="image-loading btn btn-info">
         <div class="wy-spinner wy-spinner-margin"></div>
         <span></span>
