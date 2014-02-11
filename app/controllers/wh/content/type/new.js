@@ -17,6 +17,7 @@ export default Ember.ObjectController.extend({
       }).save().then(function () {
         window.ENV.sendBuildSignal();
 
+        this.send('notify', 'success', 'Item created!');
         this.transitionToRoute('wh.content.type', this.get('model'));
       }.bind(this));
 

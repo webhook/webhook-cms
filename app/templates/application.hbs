@@ -1,1 +1,7 @@
+<ul class="wy-tray-container on">
+  {{#each notifications}}
+    <li {{bind-attr class="className state"}} style="display: block;">{{message}}</li>
+  {{/each}}
+</ul>
+
 {{outlet}}
