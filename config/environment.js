@@ -9,7 +9,7 @@
 
 window.ENV = {
   dbName: 'ianbox',
-  uploadUrl: 'http://23.253.89.18:3000/upload-file/',
+  uploadUrl: 'http://23.253.89.18:3000/',
   resizeKey: '13dde81b8137446e89c7933edca679eb',
   resizeUrl: 'http://i.embed.ly/1/display/resize',
   controlTypeGroups: [
