@@ -1,5 +1,10 @@
 export default Ember.Component.extend({
+
+  // map action to formbuilder-widget action...
+  notify: 'notify',
+
   didInsertElement: function () {
+
     var self = this,
         session = this.get('session'),
         control = this.get('control');
@@ -27,6 +32,7 @@ export default Ember.Component.extend({
       },
       'error.wh.upload': function (event, response) {
         $(this).data('upload').$dropzone.removeClass('wy-form-uploading');
+        self.sendAction('notify', 'danger', 'Mike, make this error more useful. kthx.');
       },
       'start.wh.upload': function () {
         $container.show();
@@ -49,6 +55,7 @@ export default Ember.Component.extend({
       'load.wh.upload': function (event, response) {
         $(this).data('upload').$dropzone.removeClass('wy-form-uploading');
         control.set('value', response.url);
+        self.sendAction('notify', 'success', 'Mother effin\' file uploaded!');
       }
     });
 
@@ -60,5 +67,5 @@ export default Ember.Component.extend({
     this.$('.upload-method-toggle').on('click', function () {
       this.$('.wy-form-upload-container, .wy-form-upload-url').toggle();
     }.bind(this));
-  }
+  },
 });

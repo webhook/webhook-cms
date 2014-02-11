@@ -11,6 +11,8 @@ export default Ember.Route.extend({
     },
     notify: function (type, message) {
 
+      window.console.log(arguments);
+
       var notifications = this.get('notifications'),
           notification = Ember.Object.create({
             className: 'wy-tray-item' + (type ? '-' + type : ''),

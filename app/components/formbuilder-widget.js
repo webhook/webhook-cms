@@ -18,5 +18,13 @@ export default Ember.Component.extend({
 
   click: function () {
     this.sendAction('doEdit', this.get('control'));
+  },
+
+  notify: 'notify',
+
+  actions: {
+    notify: function (type, message) {
+      this.sendAction('notify', type, message);
+    }
   }
 });
