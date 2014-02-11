@@ -1,32 +1,28 @@
 <div class="wy-form-upload-container">
   <div class="wy-form-upload">
-    <div class="wy-form-upload-image">
-      {{#if initial}}{{resize-image initial width="100" height="100"}}{{/if}}
-    </div>
+    {{#if initial}}
+      <div class="wy-form-upload-image">
+        {{resize-image initial width="75" height="75"}}
+      </div>
+    {{/if}}
     <div class="wy-form-upload-content">
-      <div class="image-drag">
-        <span>Drag or select image</span>
-      </div>
-      <div class="image-desktop">
-        <span>Select from desktop</span>
-      </div>
-      <div class="image-drop">
-        <span>Drop files here</span>
-      </div>
-      <div class="image-loading">
+      <div class="image-drag btn btn-neutral icon icon-image"> Drag or select image</div>
+      <div class="image-desktop btn btn-neutral icon icon-desktop">Select from desktop</div>
+      <div class="image-drop btn btn-success icon icon-arrow-down">Drop files here</div>
+      <div class="image-loading btn btn-info">
         <div class="wy-spinner wy-spinner-margin"></div>
         <span></span>
       </div>
     </div>
   </div>
 
-  <button type="button" class="btn btn-link upload-method-toggle">or URL?</button>
+  <button type="button" class="btn btn-link upload-method-toggle">or use a URL?</button>
 </div>
 
-<div class="wy-form-upload-url">
-  <input type="text">
-  <button type="button" class="btn upload-url">Upload</button>
-  <button type="button" class="btn btn-link upload-method-toggle wy-text-danger fa fa-times-circle"> cancel</button>
+<div class="wy-form-upload-url wy-input-prefix">
+  <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
+  <button type="button" class="btn btn-neutral btn-small upload-url">Fetch it!</button>
+  <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
 </div>
 
 {{input type="hidden" placeholder="Or paste URL" value=control.value}}
