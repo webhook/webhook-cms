@@ -11,51 +11,65 @@ export default Ember.Component.extend({
 
     this.set('initial', control.get('value'));
 
+    var resetButton = function () {
+      this.$('.wy-form-upload-content button')
+        .removeClass('icon-desktop icon-arrow-down btn-success')
+        .addClass('icon-image btn-neutral')
+        .text(' Drag or select image');
+    }.bind(this);
+
     var $container = this.$('.wy-form-upload-container'),
-        $url = $('.wy-form-upload-url');
+        $upload = this.$('.wy-form-upload'),
+        $url = this.$('.wy-form-upload-url'),
+        $loading = this.$('.wy-form-upload .image-loading');
 
     var $uploadInput = this.$('input[type=hidden]').upload({
-      uploadTrigger : this.$('.wy-form-upload'),
-      uploadDropzone: this.$('.wy-form-upload'),
+      uploadTrigger : this.$('.wy-form-upload button'),
+      uploadDropzone: this.$('.wy-form-upload button'),
       uploadUrl     : window.ENV.uploadUrl,
       uploadSite    : session.get('site.name'),
       uploadToken   : session.get('site.token')
     }).on({
       'dragenter.wh.upload': function () {
-        $(this).data('upload').$dropzone.addClass('wh-form-upload-drop');
+        $(this).data('upload').$triggerElement
+          .removeClass('icon-image icon-desktop btn-neutral')
+          .addClass('icon-arrow-down btn-success')
+          .text(' Drop files here');
       },
-      'dragleave.wh.upload': function () {
-        $(this).data('upload').$dropzone.removeClass('wh-form-upload-drop');
-      },
-      'dragdrop.wh.upload': function () {
-        $(this).data('upload').$dropzone.removeClass('wh-form-upload-drop');
-      },
+      'dragleave.wh.upload': resetButton,
+      'dragdrop.wh.upload': resetButton,
       'error.wh.upload': function (event, response) {
-        $(this).data('upload').$dropzone.removeClass('wy-form-uploading');
         self.sendAction('notify', 'danger', 'Mike, make this error more useful. kthx.');
       },
       'start.wh.upload': function () {
         $container.show();
         $url.hide();
-        $(this).data('upload').$dropzone.addClass('wy-form-uploading');
-        $(this).data('upload').$dropzone.find('.image-loading span').html('Uploading <span>0%</span>');
+        $(this).data('upload').$triggerElement.hide();
+        $loading.css('display', 'inline-block');
+        $loading.find('span').html('Uploading <span>0%</span>');
       },
       'thumb.wh.upload': function (event, thumb) {
         self.set('initial', null);
-        $(this).data('upload').$dropzone.find('.wy-form-upload-image img.blob').remove();
-        $(this).data('upload').$dropzone.find('.wy-form-upload-image').append($(thumb).addClass('blob'));
+        $upload.find('.wy-form-upload-image.edit').remove();
+        $('<div class="wy-form-upload-image edit">')
+          .prependTo($upload)
+          .append(thumb);
       },
       'progress.wh.upload': function (event, percentage) {
         if (percentage < 100) {
-          $(this).data('upload').$dropzone.find('.image-loading span').html('Uploading <span>' + percentage + '%</span>');
+          $loading.find('span').html('Uploading <span>' + percentage + '%</span>');
         } else {
-          $(this).data('upload').$dropzone.find('.image-loading span').text('Finishing up...');
+          $loading.find('span').text('Finishing up...');
         }
       },
       'load.wh.upload': function (event, response) {
-        $(this).data('upload').$dropzone.removeClass('wy-form-uploading');
         control.set('value', response.url);
         self.sendAction('notify', 'success', 'Mother effin\' file uploaded!');
+        $(this).data('upload').$element.val(response.url);
+      },
+      'done.wh.upload': function () {
+        $loading.hide();
+        $(this).data('upload').$triggerElement.show();
       }
     });
 
