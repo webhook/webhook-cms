@@ -1,4 +1,9 @@
 export default Ember.Handlebars.makeBoundHelper(function(src, options) {
+
+  if (!src) {
+    return '';
+  }
+
   var params = [];
   ['width', 'height', 'grow'].forEach(function (key) {
     if (options.hash[key]) {
