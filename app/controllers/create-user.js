@@ -40,7 +40,7 @@ export default Ember.ObjectController.extend({
               userid: user.email
             };
 
-            if(!this.get('buildEnvironment').isLocal) {
+            if(!this.get('buildEnvironment').local) {
               data['siteref'] = document.location.hostname;
             }
 
