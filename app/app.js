@@ -125,7 +125,7 @@ Ember.Application.initializer({
     window.ENV.sendBuildSignal = function() {
       var user = session.get('user.email');
 
-      if(application.get('buildEnvironment').isLocal === false)
+      if(application.get('buildEnvironment').local === false)
       {
         var data = {
           'userid': user,
