@@ -50,7 +50,7 @@
     </thead>
     <tbody>
       {{#with contentType as contentTypeNav}}
-      {{#each item in model}}
+      {{#each item in cmsItems}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
           {{#each item.cmsControls}}
             <td>{{partial this.controlType.valuePartialPath}}</td>

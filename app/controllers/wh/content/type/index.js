@@ -1,33 +1,35 @@
 export default Ember.ArrayController.extend({
-  type: null,
+  contentType: null,
   cmsControls: null,
 
-  controlsChanged: function () {
-
-    this.set('cmsControls', this.get('contentType.controls').filterBy('showInCms'));
-
-    this._updateItemControls();
-
-  }.observes('contentType.controls.@each.showInCms'),
-
-  contentChanged: function () {
-    this._updateItemControls();
-  }.observes('@each'),
-
-  _updateItemControls: function () {
-
-    this.get('content').forEach(function (item) {
-      var cmsControls = Ember.A([]);
-      this.get('cmsControls').forEach(function (control) {
-        cmsControls.pushObject({
-          value: item.get('data')[control.get('name')],
-          controlType: control.get('controlType')
-        });
+  _updateItemControls: function (item) {
+    var cmsControls = Ember.A([]);
+    this.get('cmsControls').filterBy('showInCms').forEach(function (control) {
+      cmsControls.pushObject({
+        value: item.get('data')[control.get('name')],
+        controlType: control.get('controlType')
       });
-      item.set('cmsControls', cmsControls);
-    }, this);
-
+    });
+    item.set('cmsControls', cmsControls);
+    return item;
   },
+
+  cmsItems: Ember.arrayComputed('model.@each.data', 'cmsControls.@each.showInCms', {
+    addedItem: function (array, item, changeMeta) {
+      if (item.constructor.typeKey === 'control') {
+        array.forEach(this._updateItemControls.bind(this));
+      } else {
+        array.pushObject(this._updateItemControls(item));
+      }
+      return array;
+    },
+    removedItem: function (array, item) {
+      if (item.constructor.typeKey !== 'control') {
+        array.removeObject(item);
+      }
+      return array;
+    }
+  }),
 
   actions: {
     deleteItem: function (item) {
