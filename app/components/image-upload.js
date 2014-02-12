@@ -64,7 +64,7 @@ export default Ember.Component.extend({
       },
       'load.wh.upload': function (event, response) {
         control.set('value', response.url);
-        self.sendAction('notify', 'success', 'Mother effin\' file uploaded!');
+        self.sendAction('notify', 'success', 'File upload complete.');
         $(this).data('upload').$element.val(response.url);
       },
       'done.wh.upload': function () {
