@@ -1,7 +1,6 @@
 
 <form class="wy-form-stacked" {{action createType on="submit"}}>
-  <div class="wh-content-type-create-form">
-    <h5>1. What is the name of your new set?</h5>
+    <h5>What do you want to add to the CMS?</h5>
     <div class="wy-control-group">
       <div class="wy-control">
         <div class="wy-inline-validate wy-inline-validate-info">
@@ -13,56 +12,24 @@
         </div>
       </div>
     </div>
+    {{#if newTypeName}}
+    <div class="wy-control-group">
+      <label>How many {{newTypeName}} are there?
+      <div class="wy-control">
+        <label class="wy-radio">
+          <input type="radio">
+          There is only one {{newTypeName}}.
+        </label>
+        <label class="wy-radio">
+          <input type="radio">
+          There are multiple {{newTypeName}}.
+        </label>
+      </div>
+    </div>
     <div class="wy-button-group">
       <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
       {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
     </div>
-    <p></p>
-  </div>
+    {{/if}}
 
 </form>
-
-
-<h5>2. Great, what kind of content is/are <span class="wy-text-success">{{newTypeName}}</span> ?</h5>
-<ul class="wh-content-type-selector">
-  <li>
-    <h5><span class="icon icon-clock-o"></span> Time-based publishing</h5>
-    <p>
-      Publishable content starts as a draft, then goes
-      live at a specific time you define. Articles, galleries, and podcasts
-      are all examples of time-based publishing.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create publishable{{/link-to}}
-  </li>
-  <li>
-    <h5><span class="icon icon-files-o"></span> Objects in a set</h5>
-    <p>
-      You need to create a bunch of pages based upon content you
-      add into a repeatable form. A collection of comic books
-      are an example of objects in a set.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create new set{{/link-to}}
-  </li>
-  <li>
-    <h5><span class="icon icon-file-o"></span> One-off</h5>
-    <p>
-      One-offs are for single pages or content. You simply
-      need a form to edit the content of just one thing.
-      An about us page or a changable widget is an example of a one-off.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create a one-off{{/link-to}}
-  </li>
-</ul>
-
-<h5>3. Cool, let's just confirm some things.</h5>
-
-<ol class="wy-plain-list-decimal">
-  <li>We're creating <span class="wy-text-success">{{newTypeName}}</span> on your site.</li>
-  <li><strong>{{newTypeName}}</strong> are <span class="wy-text-success">objects in a set</span>. This means you plan to enter multiple <strong>{{newTypeName}}</strong> into the CMS.</li>
-  <!-- other examples here -->
-  <!-- <li><strong>{{newTypeName}}</strong> is a <span class="wy&#45;text&#45;success">one&#45;off</span>. You just need some editable data you can call in template files. -->
-  <!-- <li><strong>{{newTypeName}}</strong> are <span class="wy&#45;text&#45;success">time based publishables</span>. This means you'll enter them like you would a blog post, first having a draft, then setting a time to go live.</li> -->
-  <li>We'll build {{newTypeName}} pages for you at <a href="">http://www.sitename.com/{{newTypeName}}/</a></li>
-</ol>
-
-<button class="btn btn-success icon icon-ok-sign"> Looks good, let's build the {{newTypeName}} form</button>
