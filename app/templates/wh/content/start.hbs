@@ -1,18 +1,17 @@
-
 <form class="wy-form-stacked" {{action createType on="submit"}}>
-    <h5>What do you want to add to the CMS?</h5>
-    <div class="wy-control-group">
-      <div class="wy-control">
-        <div class="wy-inline-validate wy-inline-validate-info">
-          {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
-            <span class="wy-input-context"> Use a short lowercase word, without spaces.</span>
-          {{#if isDuplicate}}
-            <span class="wy-input-context"> There is already an content type with that name</span>
-          {{/if}}
-        </div>
+  <h5>What do you want to add to the CMS?</h5>
+  <div class="wy-control-group">
+    <div class="wy-control">
+      <div class="wy-inline-validate wy-inline-validate-info">
+        {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
+          <span class="wy-input-context"> Use a short lowercase word, without spaces.</span>
+        {{#if isDuplicate}}
+          <span class="wy-input-context"> There is already an content type with that name</span>
+        {{/if}}
       </div>
     </div>
-    {{#if newTypeName}}
+  </div>
+  {{#if newTypeName}}
     <div class="wy-control-group">
       <label>How many {{newTypeName}} are there?
       <div class="wy-control">
@@ -30,6 +29,5 @@
       <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
       {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
     </div>
-    {{/if}}
-
+  {{/if}}
 </form>
