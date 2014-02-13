@@ -1,6 +1,29 @@
-<!-- Show this bit first -->
 
-<h1>What kind of content do you need a form for?</h1>
+<form class="wy-form-stacked" {{action createType on="submit"}}>
+  <div class="wh-content-type-create-form">
+    <h5>1. What is the name of your new set?</h5>
+    <div class="wy-control-group">
+      <div class="wy-control">
+        <div class="wy-inline-validate wy-inline-validate-info">
+          {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
+            <span class="wy-input-context"> Use a short lowercase word, without spaces.</span>
+          {{#if isDuplicate}}
+            <span class="wy-input-context"> There is already an content type with that name</span>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <div class="wy-button-group">
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
+      {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
+    </div>
+    <p></p>
+  </div>
+
+</form>
+
+
+<h5>2. Great, what kind of content is/are <span class="wy-text-success">{{newTypeName}}</span> ?</h5>
 <ul class="wh-content-type-selector">
   <li>
     <h5><span class="icon icon-clock-o"></span> Time-based publishing</h5>
@@ -31,40 +54,12 @@
   </li>
 </ul>
 
-<!-- Then, after they select one of the above, show this bit -->
+<h5>3. Cool, let's just confirm some things.</h5>
 
-<form class="wy-form-stacked" {{action createType on="submit"}}>
-  <div class="wh-content-type-create-form">
-    <h5>What is the name of your new set?</h5>
-    <div class="wy-control-group">
-      <div class="wy-control">
-        <div class="wy-inline-validate wy-inline-validate-info">
-          {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
-            <span class="wy-input-context"> Use a short lowercase word, without spaces.</span>
-          {{#if isDuplicate}}
-            <span class="wy-input-context"> There is already an content type with that name</span>
-          {{/if}}
-        </div>
-      </div>
-    </div>
-    <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
-      {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
-    </div>
-    <p></p>
-  </div>
+<ol class="wy-plain-list-decimal">
+  <li>We're creating <span class="wy-text-success">{{newTypeName}}</span> on your site.</li>
+  <li><strong>{{newTypeName}}</strong> are <span class="wy-text-success">objects in a set</span>. This means you plan to enter multiple <strong>{{newTypeName}}</strong> into the CMS.</li>
+  <li>We'll build {{newTypeName}} pages for you at <a href="">http://www.sitename.com/{{newTypeName}}/</a></li>
+</ol>
 
-  <hr/>
-  <h5>The URLs will follow this format</h5>
-  <ul class="wy-plain-list-disc">
-    <li>A list of all <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist at <code>http://www.yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code></li>
-    <li>Individual <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist at <code>http://www.yoursite.com/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/$name/</code></li>
-  </ul>
-
-  <h5>Editable HTML templates will be generated in</h5>
-
-  <ul class="wy-plain-list-disc">
-    <li>The list of all <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> template will exist in <code>/templates/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/list.swig</code></li>
-    <li>The template for a single <code>{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}</code> will exist in <code>/templates/{{#if newTypeName}}{{newTypeName}}{{else}}comics{{/if}}/individual.swig</code></li>
-  </ul>
-</form>
+<button class="btn btn-success icon icon-ok-sign"> Looks good, let's build the {{newTypeName}} form</button>
