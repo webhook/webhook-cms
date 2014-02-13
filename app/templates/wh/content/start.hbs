@@ -17,11 +17,11 @@
       <label>How many {{newTypeName}} are there?
       <div class="wy-control">
         <label class="wy-radio">
-          <input type="radio">
+          {{view "radio-button" name="contentTypeType" selection=newTypeType value="single"}}
           There is only one {{newTypeName}}.
         </label>
         <label class="wy-radio">
-          <input type="radio">
+          {{view "radio-button" name="contentTypeType" selection=newTypeType value="multiple"}}
           There are multiple {{newTypeName}}.
         </label>
       </div>
