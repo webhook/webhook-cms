@@ -1,62 +1,28 @@
-<h1>What kind of content do you need a form for?</h1>
-<ul class="wh-content-type-selector">
-  <li>
-    <h5><span class="icon icon-clock-o"></span> Time-based publishing</h5>
-    <p>
-      Publishable content starts as a draft, then goes
-      live at a specific time you define. Articles, galleries, and podcasts
-      are all examples of time-based publishing.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create publishable{{/link-to}}
-  </li>
-  <li>
-    <h5><span class="icon icon-files-o"></span> Objects in a set</h5>
-    <p>
-      You need to create a bunch of pages based upon content you
-      add into a repeatable form. A collection of comic books
-      are an example of objects in a set.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create new set{{/link-to}}
-  </li>
-  <li>
-    <h5><span class="icon icon-file-o"></span> One-off</h5>
-    <p>
-      One-offs are for single pages or content. You simply
-      need a form to edit the content of just one thing.
-      An about us page or a changable widget is an example of a one-off.
-    </p>
-    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create a one-off{{/link-to}}
-  </li>
-</ul>
+{{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign float-right"}} Add new content type{{/link-to}}
 
-{{#if model}}
+<h1>Your existing content types</h1>
 
-  <hr>
-
-  <h1>Your existing content types</h1>
-
-  <table class="wy-table wy-table-bordered-rows wh-content">
-    <thead>
-      <tr>
-        <th>Content type</th>
-        <th>Form style</th>
-        <th>Items</th>
-        <th>RSS</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each}}
-        {{#link-to 'form' name tagName='tr'}}
-          <td>{{name}}</td>
-          <td>Time-based publishable</td>
-          <td>22</td>
-          <td><span class="icon icon-ok-sign"></span></td>
-          <td class="wy-table-actions">
-            <button class="btn btn-link icon icon-remove-sign" {{action deleteType this}}></button>
-          </td>
-        {{/link-to}}
-      {{/each}}
-    </tbody>
-  </table>
-{{/if}}
+<table class="wy-table wy-table-bordered-rows wh-content">
+  <thead>
+    <tr>
+      <th>Content type</th>
+      <th>Form style</th>
+      <th>Items</th>
+      <th>RSS</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each}}
+      {{#link-to 'form' name tagName='tr'}}
+        <td>{{name}}</td>
+        <td>Time-based publishable</td>
+        <td>22</td>
+        <td><span class="icon icon-ok-sign"></span></td>
+        <td class="wy-table-actions">
+          <button class="btn btn-link icon icon-remove-sign" {{action deleteType this}}></button>
+        </td>
+      {{/link-to}}
+    {{/each}}
+  </tbody>
+</table>

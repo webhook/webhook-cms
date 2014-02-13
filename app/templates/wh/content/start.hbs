@@ -1,3 +1,37 @@
+<!-- Show this bit first -->
+
+<h1>What kind of content do you need a form for?</h1>
+<ul class="wh-content-type-selector">
+  <li>
+    <h5><span class="icon icon-clock-o"></span> Time-based publishing</h5>
+    <p>
+      Publishable content starts as a draft, then goes
+      live at a specific time you define. Articles, galleries, and podcasts
+      are all examples of time-based publishing.
+    </p>
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create publishable{{/link-to}}
+  </li>
+  <li>
+    <h5><span class="icon icon-files-o"></span> Objects in a set</h5>
+    <p>
+      You need to create a bunch of pages based upon content you
+      add into a repeatable form. A collection of comic books
+      are an example of objects in a set.
+    </p>
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create new set{{/link-to}}
+  </li>
+  <li>
+    <h5><span class="icon icon-file-o"></span> One-off</h5>
+    <p>
+      One-offs are for single pages or content. You simply
+      need a form to edit the content of just one thing.
+      An about us page or a changable widget is an example of a one-off.
+    </p>
+    {{#link-to 'wh.content.start' class="btn btn-neutral icon icon-plus-sign"}} Create a one-off{{/link-to}}
+  </li>
+</ul>
+
+<!-- Then, after they select one of the above, show this bit -->
 
 <form class="wy-form-stacked" {{action createType on="submit"}}>
   <div class="wh-content-type-create-form">
