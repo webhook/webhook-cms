@@ -3,6 +3,8 @@ export default Ember.Component.extend({
   // map action to formbuilder-widget action...
   notify: 'notify',
 
+  control: Ember.Object.create(),
+
   didInsertElement: function () {
 
     var self = this,
