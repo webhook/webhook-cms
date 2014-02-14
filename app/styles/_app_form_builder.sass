@@ -151,6 +151,19 @@
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
+  .disabled
+    display: none
+  .wy-control-group-edit .disabled
+    position: absolute
+    display: block
+    top: 0
+    left: 0
+    content: ""
+    width: 100%
+    height: 100%
+    background: transparent
+    z-index: $z-index-popover - 1
+    cursor: normal
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
     background: $menu-background-color
     position: relative
@@ -158,7 +171,6 @@
     margin-right: - $gutter * 2
     padding-left: $gutter * 2 + em($base-line-height / 2)
     padding-right: $gutter * 2 + em($base-line-height / 2)
-    .wy-control
     label, .wy-form-message
       color: $text-color
     .wh-template-var
