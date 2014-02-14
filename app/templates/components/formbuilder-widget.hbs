@@ -1,8 +1,7 @@
-{{!-- we only set `doEdit` on the formbuilder --}}
-<div {{bind-attr class="doEdit:wy-control-group-disabled"}}>
-  {{partial 'widgets/common/label'}}
-  <div class="wy-control">
-    {{partial control.controlType.controlPartialPath}}
-    {{partial 'widgets/common/help'}}
-  </div>
+{{partial 'widgets/common/label'}}
+<div class="wy-control">
+  {{partial control.controlType.controlPartialPath}}
+  {{partial 'widgets/common/help'}}
 </div>
+{{!-- we only set `doEdit` on the formbuilder --}}
+{{#if doEdit}}<div class="disabled"></div>{{/if}}
