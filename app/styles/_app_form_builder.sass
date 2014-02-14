@@ -148,12 +148,11 @@
     padding: $base-line-height / 2
     margin-bottom: 0
     border: solid 1px transparent
+    position: relative
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
   .disabled
-    display: none
-  .wy-control-group-edit .disabled
     position: absolute
     display: block
     top: 0
@@ -163,10 +162,8 @@
     height: 100%
     background: transparent
     z-index: $z-index-popover - 1
-    cursor: normal
   .wy-control-group.wy-control-group-edit, .wy-control-group:active
     background: $menu-background-color
-    position: relative
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
     padding-left: $gutter * 2 + em($base-line-height / 2)
