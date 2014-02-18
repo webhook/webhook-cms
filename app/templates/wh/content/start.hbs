@@ -1,14 +1,12 @@
 <form class="wy-form-stacked" {{action createType on="submit"}}>
-  <h5>What do you want to add to the CMS?</h5>
+  <h1>What do you want to add to the CMS navigation?</h1>
   <div class="wy-control-group">
     <div class="wy-control">
-      <div class="wy-inline-validate wy-inline-validate-info">
-        {{input value=newTypeName placeholder="ex: comics" class="wy-input-large"}}
-          <span class="wy-input-context"> Use a short lowercase word, without spaces.</span>
-        {{#if isDuplicate}}
-          <span class="wy-input-context"> There is already an content type with that name</span>
-        {{/if}}
-      </div>
+      <p>Use a short lowercase word, without spaces.</p>
+      {{input value=newTypeName placeholder="ex: comics, articles, about us, cities, vampires" class="wy-input-large full-width"}}
+      {{#if isDuplicate}}
+        <span class="wy-input-context"> There is already an content type with that name</span>
+      {{/if}}
     </div>
   </div>
   {{#if newTypeName}}
