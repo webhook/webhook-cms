@@ -4,7 +4,7 @@
     "handlebars": "~1.1.2",
     "jquery": "~1.9.1",
     "qunit": "~1.12.0",
-    "ember": "~1.3.1",
+    "ember": "~1.4.x",
     "ember-data": "~1.0.0-beta.6",
     "ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master",
     "ic-ajax": "~0.2",
@@ -13,12 +13,13 @@
     "webhook-js": "*",
     "webhook-redactor": "git@github.com:webhook/webhook-redactor.git",
     "emberFire": "gpbmike/emberFire#7289bdb4a36dadfbf8aadc2479017b5c8fd978f8",
-    "firebase-simple-login": "1.2.5"
+    "firebase-simple-login": "1.2.5",
+    "jquery-ui": "~1.10.x"
   },
   "devDependencies": {
     "wyrm": "~0.0.x"
   },
   "resolutions": {
-    "ember": "~1.3.1"
+    "ember": "~1.4.x"
   }
 }

@@ -27,16 +27,6 @@
       <!-- PAGE CONTENT -->
       <div class="wy-nav-content">
 
-        {{#if controls}}{{else}}
-          <div class="wy-alert wy-alert-info">
-            <div class="wy-alert-title">Welcome to the form builder</div>
-            <p>
-              This tool will create a form that you'll use to enter in {{name}}. Start
-              by selecting the first field type you need on the left.
-            </p>
-          </div>
-        {{/if}}
-
         <form class="wy-form-stacked" {{action updateType on="submit"}}>
           <fieldset>
             <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">{{name}}</h2>
@@ -45,9 +35,11 @@
               <span class="wy-form-message">{{this}}</span>
             {{/each}}
 
-            {{#each control in controls}}
-              {{formbuilder-widget control=control editingControl=editingControl doEdit="editControl" session=session}}
-            {{/each}}
+            {{#view "sortable"}}
+              {{#each control in controls}}
+                <li data-id="{{unbound control.id}}" {{bind-attr data-locked=control.locked}}>{{formbuilder-widget control=control editingControl=editingControl doEdit="editControl" session=session}}</li>
+              {{/each}}
+            {{/view}}
 
           </fieldset>
 
@@ -55,7 +47,6 @@
             <button type="button" class="btn btn-link icon icon-question-sign"> Help</button>
             <button type="submit" class="btn btn-success icon icon-ok-sign float-right"> Save form</button>
             <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action quitForm}}> Cancel my edits</button>
-
           </div>
 
         </form>

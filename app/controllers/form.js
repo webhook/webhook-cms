@@ -1,6 +1,19 @@
-export default Ember.ObjectController.extend({
+export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
   editingControl   : null,
+
+  updateOrder: function (originalindex, newindex) {
+
+    window.console.log(originalindex, newindex);
+
+    var controls = this.get('model.controls');
+
+    var control = controls.objectAt(originalindex);
+
+    controls.removeAt(originalindex);
+    controls.insertAt(newindex, control);
+
+  },
 
   actions: {
     updateType: function () {
@@ -19,8 +32,11 @@ export default Ember.ObjectController.extend({
         this.send('notify', 'success', 'Form saved!');
         this.transitionToRoute('wh.content.type.index', this.get('content'));
       }.bind(this));
+
     },
+
     addControl: function (controlType) {
+
       var controls, control;
 
       controls = this.get('model.controls');
@@ -55,11 +71,16 @@ export default Ember.ObjectController.extend({
       control.set('meta', meta);
 
       controls.pushObject(control);
+
+      this.trigger('addControl');
+
     },
     deleteControl: function (control) {
       this.get('model.controls').removeObject(control);
       control.destroyRecord();
       this.send('stopEditing');
+
+      this.trigger('deleteControl');
     },
     editControl: function (control) {
       if (!control.get('meta')) {
