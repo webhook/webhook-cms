@@ -26,6 +26,14 @@
   width: 100%
   max-width: 100%
 
+.wh-form-builder-mobile
+  display: none
+  text-align: center
+  padding: $gutter
+  img
+    width: 200px
+    height: 200px
+    margin-bottom: $base-line-height
 
 .wy-control-group
   .wh-template-var
@@ -221,6 +229,9 @@
     color: $text-light
     box-shadow: none
 
+.wy-form-upload-url
+  display: none
+
 [fake-toggle*=fake-widget-form]
   display: none
 
@@ -228,10 +239,17 @@
   .wh-form-builder-list > li
     +span-columns(4)
     +omega-type(2n)
+  .wh-form-builder
+    display: none
+  .wh-form-builder-mobile
+    display: block
+
 +media($mobile)
   .wh-form-builder-list > li
     +span-columns(4)
     +omega(1n)
+  .wh-form-builder
+    display: none
+  .wh-form-builder-mobile
+    display: block
 
-.wy-form-upload-url
-  display: none
