@@ -12,9 +12,11 @@ export default Ember.View.extend({
     var originalindex;
 
     this.$().sortable({
-      items: "> li:not([data-locked])",
+      items      : "> li:not([data-locked])",
       placeholder: 'wh-form-control-placeholder',
-      helper: 'clone',
+      helper     : 'clone',
+      axis       : 'y',
+
       start: function (event, ui) {
 
         ui.helper.find('.wy-control-group-edit').removeClass('wy-control-group-edit');
