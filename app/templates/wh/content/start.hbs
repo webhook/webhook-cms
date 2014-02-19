@@ -1,4 +1,4 @@
-<form class="wy-form-stacked" {{action createType on="submit"}}>
+<form class="wy-form-stacked" {{action "createType" on="submit"}}>
   <h1>What do you want to add to your CMS?</h1>
   <div class="wy-control-group">
     <div class="wy-control">
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDuplicate"}}> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
       {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
     </div>
   {{/if}}

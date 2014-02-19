@@ -5,12 +5,10 @@
       <div class="wh-user-dropdown">
         {{#if session.user}}
           {{session.user.email}}
-          (<a {{action logoutUser on="click"}}>Logout</a>)
+          (<a {{action "logoutUser" on="click"}}>Logout</a>)
         {{/if}}
       </div>
       <input type="text" placeholder="search">
-
-      <!-- <button type="button" class="btn" {{action "notify" "danger" "dave clicked me"}}>CLICK ME DAVE</button> -->
     </div>
 
     <div class="wy-menu wy-menu-vertical" data-spy="affix">
@@ -20,7 +18,7 @@
           <header>Your content</header>
           <ul>
           {{#each}}
-            <li>{{#link-to 'wh.content.type' name}}{{name}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}</li>
           {{/each}}
           </ul>
         {{/if}}

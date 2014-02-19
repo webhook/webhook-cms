@@ -7,6 +7,8 @@ export default function getItemModelName(typeName) {
   var formattedTypeName = Ember.String.singularize(typeName.toLowerCase()),
       modelName = formattedTypeName.charAt(0).toUpperCase() + formattedTypeName.slice(1);
 
+  window.console.log(formattedTypeName, modelName);
+
   // Make a dynamic model/adapter so we can save data to `data/[modelName]`
   if (!window.App[modelName]) {
 
