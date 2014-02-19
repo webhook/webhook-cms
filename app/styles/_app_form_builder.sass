@@ -170,7 +170,7 @@
     height: 100%
     background: transparent
     z-index: $z-index-popover - 1
-  .wy-control-group.wy-control-group-edit, .wy-control-group:active
+  .wy-control-group.wy-control-group-edit
     background: $menu-background-color
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
@@ -232,6 +232,19 @@
 .wy-form-upload-url
   display: none
 
+.ui-sortable-helper .wy-control-group
+  background: rgba(255,255,255,.7)
+  border: solid 5px $gray-lighter !important
+.wh-form-control-placeholder
+  background: lighten($green, 50%)
+  text-align: center
+  height: 50px
+  opacity: .7
+  &:after
+    content: "Drop to place here."
+    color: $green
+    font-size: 150%
+    line-height : 50px
 [fake-toggle*=fake-widget-form]
   display: none
 
