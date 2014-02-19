@@ -157,8 +157,8 @@
     margin-bottom: 0
     border: solid 1px transparent
     position: relative
-    +transition(background .5s ease-in)
-    +transition(height .5s ease-in)
+    opacity: 1
+    +transition(background .2s linear, height .2s linear, opacity .2s linear)
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
@@ -256,6 +256,9 @@
   background: lighten($green, 30%) !important
 .wy-control-group-removed
   height: 0px
+  padding-top: 0px !important
+  padding-bottom: 0px !important
+  opacity: 0
   overflow: hidden
 .wh-form-control-clone
   padding: $base-line-height
