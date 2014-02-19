@@ -3,8 +3,7 @@ export default Ember.Component.extend({
   classNameBindings: [
     'control.required:wy-control-group-required',
     'isEditingThis:wy-control-group-edit',
-    'justAdded:wy-control-group-placed',
-    'control.justDeleted:wy-control-group-removed'
+    'justAdded:wy-control-group-placed'
   ],
 
   isEditingThis: false,
@@ -16,6 +15,8 @@ export default Ember.Component.extend({
 
   prepForDelete: function () {
     this.$().height(this.$().height());
+    this.$().addClass('wy-control-group-removed');
+    this.$().height(0);
   }.observes('control.justDeleted'),
 
   didInsertElement: function () {
