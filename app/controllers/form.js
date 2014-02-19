@@ -88,7 +88,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     deleteControl: function (control) {
       this.get('model.controls').removeObject(control);
-      control.destroyRecord();
       this.set('editingControl', null);
       this.send('stopEditing');
     },
