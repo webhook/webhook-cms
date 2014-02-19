@@ -18,11 +18,24 @@ export default Ember.View.extend({
       },
       update: function  (event, ui) {
 
-        var newindex = ui.item.parent().children('li').index(ui.item);
+        var newindex = ui.item.parent().children(':not(script)').index(ui.item);
 
-        $(this).sortable('cancel');
+        if (ui.item.hasClass('ui-draggable')) {
 
-        controller.updateOrder(originalindex, newindex);
+          var type = ui.item.data('id');
+
+          $(this).sortable('cancel');
+          ui.item.remove();
+
+          controller.addControlAtIndex(type, newindex);
+
+        } else {
+
+          $(this).sortable('cancel');
+
+          controller.updateOrder(originalindex, newindex);
+
+        }
 
       }
     });
