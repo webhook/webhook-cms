@@ -1,6 +1,7 @@
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
   editingControl   : null,
+  isEditing        : false,
 
   updateOrder: function (originalindex, newindex) {
 
@@ -88,9 +89,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     deleteControl: function (control) {
       this.get('model.controls').removeObject(control);
       control.destroyRecord();
+      this.set('editingControl', null);
       this.send('stopEditing');
-
-      this.trigger('deleteControl');
     },
 
     editControl: function (control) {
@@ -98,10 +98,18 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         control.set('meta', this.store.createRecord('meta-data'));
       }
       this.set('editingControl', control);
+      this.set('isEditing', true);
     },
 
     stopEditing: function () {
-      this.set('editingControl', null);
+      this.set('isEditing', false);
+    },
+
+    startEditing: function () {
+      if (!this.get('editingControl')) {
+        this.set('editingControl', this.get('model.controls.firstObject'));
+      }
+      this.set('isEditing', true);
     },
 
     addOption: function (array) {

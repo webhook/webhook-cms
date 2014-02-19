@@ -10,11 +10,9 @@ export default Ember.Route.extend({
     var contentType = this.modelFor('wh.content.type'),
         cmsControls = contentType.get('controls');
 
-    // need to have these in the store to save later.
-    // type.get('controls').mapBy('controlType');
-
     controller.set('cmsControls', cmsControls);
     controller.set('contentType', contentType);
+
     this._super.apply(this, arguments);
   }
 });

@@ -37,7 +37,7 @@
 
             {{#view "sortable"}}
               {{#each control in controls}}
-                <li data-id="{{unbound control.id}}" {{bind-attr data-locked=control.locked}}>{{formbuilder-widget control=control editingControl=editingControl doEdit="editControl" session=session}}</li>
+                <li data-id="{{unbound control.id}}" {{bind-attr data-locked=control.locked}}>{{formbuilder-widget control=control editingControl=editingControl isEditing=isEditing doEdit="editControl" session=session}}</li>
               {{/each}}
             {{/view}}
 
