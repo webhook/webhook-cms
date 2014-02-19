@@ -44,7 +44,10 @@ export default Ember.ArrayController.extend({
         type.get('controls').pushObjects(controls);
 
         type.save().then(function (type) {
-          this.send('notify', 'success', 'Type created!');
+          this.send('notify', 'success', 'Type created!', {
+            icon: 'ok-sign',
+            className: 'wh-tray-wide'
+          });
           this.transitionToRoute('form', type);
           this.set('newTypeName', null);
         }.bind(this));

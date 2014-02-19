@@ -37,8 +37,7 @@ export default Ember.ObjectController.extend({
         window.ENV.sendBuildSignal();
 
         this.send('notify', 'success', 'Item saved!', {
-          icon: 'desktop',
-          className: 'dave-dave-dave ian-ian'
+          icon: 'ok-sign'
         });
         this.transitionToRoute('wh.content.type', this.get('type'));
       }.bind(this));
