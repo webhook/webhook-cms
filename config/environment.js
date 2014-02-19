@@ -12,6 +12,38 @@ window.ENV = {
   uploadUrl: 'http://23.253.89.18:3000/',
   resizeKey: '13dde81b8137446e89c7933edca679eb',
   resizeUrl: 'http://i.embed.ly/1/display/resize',
+  themes: [
+    {
+      name:  'Portfolio',
+      image: 'http://cms.webhook.com/v1/assets/images/hm01_wide.jpg',
+      url:   'http://dump.webhook.com/static/portfolio.zip',
+      description: 'Portfolio bearly knew her!'
+    },
+    {
+      name:  'Blog',
+      image: 'http://cms.webhook.com/v1/assets/images/hm02_wide.jpg',
+      url:   'http://dump.webhook.com/static/portfolio.zip',
+      description: 'Haha what?'
+    },
+    {
+      name:  'News',
+      image: 'http://cms.webhook.com/v1/assets/images/hm03_wide.jpg',
+      url:   'http://dump.webhook.com/static/portfolio.zip',
+      description: 'Its the news at 11!'
+    },
+    {
+      name:  'Heavy Metal',
+      image: 'http://cms.webhook.com/v1/assets/images/hm04_wide.jpg',
+      url:   'http://dump.webhook.com/static/portfolio.zip',
+      description: 'Everyones favorite band.'
+    },
+    {
+      name:  'Porn Site',
+      image: 'http://cms.webhook.com/v1/assets/images/hm05_wide.jpg',
+      url:   'http://dump.webhook.com/static/portfolio.zip',
+      description: 'Its inevitable'
+    },
+  ],
   controlTypeGroups: [
     {
       name: 'Text',
