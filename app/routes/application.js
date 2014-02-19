@@ -23,6 +23,10 @@ export default Ember.Route.extend({
         notification.set('iconClass', 'icon icon-' + options.icon);
       }
 
+      if (options.className) {
+        notification.set('extraClassName', options.className);
+      }
+
       notifications.pushObject(notification);
 
       setTimeout(function () {
