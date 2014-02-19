@@ -3,10 +3,12 @@ export default Ember.Component.extend({
   classNameBindings: [
     'control.required:wy-control-group-required',
     'isEditingThis:wy-control-group-edit',
-    'justPlaced:wy-control-group-placed'
+    'justAdded:wy-control-group-placed',
+    'control.justDeleted:wy-control-group-removed'
   ],
+
   isEditingThis: false,
-  justPlaced: true,
+  justAdded    : true,
 
   controlChanged: function () {
     this.set('isEditingThis', this.get('isEditing') && this.get('control') === this.get('editingControl'));
@@ -19,7 +21,7 @@ export default Ember.Component.extend({
         title: 'Click to edit field details.'
       });
       setTimeout(function () {
-        this.set('justPlaced', false);
+        this.set('justAdded', false);
       }.bind(this), 500);
     }
   },
