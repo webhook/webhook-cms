@@ -45,6 +45,10 @@ Ember.Application.initializer({
         if(event.data === 'done') {
           if(localSocket.doneCallback) localSocket.doneCallback();
           localSocket.doneCallback = null; //Reset so done doesn't get called twice
+        } else if (event.data.indexOf('data:') === 0) {
+          var data = JSON.parse(event.data.replace('data:', ''))
+          if(localSocket.doneCallback) localSocket.doneCallback(data);
+          localSocket.doneCallback = null; //Reset so done doesn't get called twice
         }
       };
 
