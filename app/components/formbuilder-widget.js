@@ -3,7 +3,7 @@ export default Ember.Component.extend({
   classNameBindings: [
     'control.required:wy-control-group-required',
     'isEditingThis:wy-control-group-edit',
-    'justAdded:wy-control-group-placed'
+    'isPlaced:wy-control-group-placed'
   ],
 
   isEditingThis: false,
@@ -12,6 +12,10 @@ export default Ember.Component.extend({
   controlChanged: function () {
     this.set('isEditingThis', this.get('isEditing') && this.get('control') === this.get('editingControl'));
   }.observes('control', 'editingControl', 'isEditing'),
+
+  isPlaced: function () {
+    return this.get('doEdit') && this.get('justAdded');
+  }.property('doEdit', 'justAdded'),
 
   prepForDelete: function () {
     this.$().height(this.$().height());
