@@ -14,6 +14,10 @@ export default Ember.Component.extend({
     this.set('isEditingThis', this.get('isEditing') && this.get('control') === this.get('editingControl'));
   }.observes('control', 'editingControl', 'isEditing'),
 
+  prepForDelete: function () {
+    this.$().height(this.$().height());
+  }.observes('control.justDeleted'),
+
   didInsertElement: function () {
     if (this.get('doEdit')) {
       this.$(this.get('element')).tooltip({
