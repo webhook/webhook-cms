@@ -9,6 +9,10 @@ export default Ember.ArrayController.extend({
     });
   },
 
+  isDisabled: function () {
+    return this.get('isDuplicate') || this.get('newTypeType') === null;
+  }.property('isDuplicate', 'newTypeType'),
+
   isDuplicate: function () {
     return this.get('model').isAny('id', this.get('newTypeId'));
   }.property('newTypeId'),

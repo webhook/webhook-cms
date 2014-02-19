@@ -2,7 +2,7 @@ import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
   model: function (params) {
-    var modelName = getItemModelName(this.modelFor('wh.content.type').get('name'));
+    var modelName = getItemModelName(this.modelFor('wh.content.type'));
     return this.store.find(modelName, params.item_id);
   },
   afterModel: function () {

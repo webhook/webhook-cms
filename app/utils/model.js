@@ -2,12 +2,10 @@ import ItemAdapter from 'appkit/adapters/item';
 import ItemModel from 'appkit/models/item';
 import ItemSerializer from 'appkit/serializers/item';
 
-export default function getItemModelName(typeName) {
+export default function getItemModelName(contentType) {
 
-  var formattedTypeName = Ember.String.singularize(typeName.toLowerCase()),
+  var formattedTypeName = Ember.String.singularize(contentType.get('id')),
       modelName = formattedTypeName.charAt(0).toUpperCase() + formattedTypeName.slice(1);
-
-  window.console.log(formattedTypeName, modelName);
 
   // Make a dynamic model/adapter so we can save data to `data/[modelName]`
   if (!window.App[modelName]) {

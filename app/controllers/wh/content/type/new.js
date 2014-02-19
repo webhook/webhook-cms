@@ -10,7 +10,7 @@ export default Ember.ObjectController.extend({
         data[control.get('name')] = control.get('value');
       });
 
-      var modelName = getItemModelName(this.get('model.name'));
+      var modelName = getItemModelName(this.get('model'));
 
       this.store.createRecord(modelName, {
         data: data
