@@ -13,6 +13,7 @@ export default Ember.View.extend({
 
     this.$().sortable({
       items: "li:not([data-locked])",
+      placeholder: 'wh-form-control-placeholder',
       start: function (event, ui) {
         originalindex = ui.item.parent().children('li').index(ui.item);
       },
