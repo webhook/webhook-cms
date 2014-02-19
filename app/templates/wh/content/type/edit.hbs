@@ -3,7 +3,7 @@
   <h1>Editing {{id}}</h1>
   <hr/>
 
-  <form class="wy-form-stacked" {{action saveItem on="submit"}}>
+  <form class="wy-form-stacked" {{action "saveItem" on="submit"}}>
     <fieldset>
       {{#each control in type.controls}}
         {{formbuilder-widget control=control session=session}}

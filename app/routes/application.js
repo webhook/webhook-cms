@@ -9,15 +9,19 @@ export default Ember.Route.extend({
       this.get('session.auth').logout();
       this.transitionTo('login');
     },
-    notify: function (type, message) {
+    notify: function (type, message, options) {
 
-      window.console.log(arguments);
+      options = options || {};
 
       var notifications = this.get('notifications'),
           notification = Ember.Object.create({
             className: 'wy-tray-item' + (type ? '-' + type : ''),
             message: message
           });
+
+      if (options.icon) {
+        notification.set('iconClass', 'icon icon-' + options.icon);
+      }
 
       notifications.pushObject(notification);
 
