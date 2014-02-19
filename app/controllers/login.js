@@ -8,7 +8,7 @@ export default Ember.ObjectController.extend({
     if (this.get('session.transition')) {
       this.get('session.transition').retry();
     } else {
-      this.transitionToRoute('wh');
+      this.transitionToRoute('index');
     }
   }.observes('session.user'),
 

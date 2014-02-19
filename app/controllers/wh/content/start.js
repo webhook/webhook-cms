@@ -1,17 +1,17 @@
 export default Ember.ArrayController.extend({
-  newTypeName: null,
+  newTypeName     : null,
   contentTypeNames: [],
-  isDuplicate: false,
+  isDuplicate     : false,
 
-  // force a valid name
-  forceValid: function () {
-    var name = this.get('newTypeName'),
-        regex = /(\W|[A-Z])/g;
-    if (name && regex.test(name)) {
-      this.set('newTypeName', name.replace(regex, ''));
-    }
-    this.set('isDuplicate', this.get('model').isAny('name', this.get('newTypeName')));
-  }.observes('newTypeName'),
+  // // force a valid name
+  // forceValid: function () {
+  //   var name = this.get('newTypeName'),
+  //       regex = /(\W|[A-Z])/g;
+  //   if (name && regex.test(name)) {
+  //     this.set('newTypeName', name.replace(regex, ''));
+  //   }
+  //   this.set('isDuplicate', this.get('model').isAny('name', this.get('newTypeName')));
+  // }.observes('newTypeName'),
 
   actions: {
     createType: function () {
