@@ -7,22 +7,32 @@
   </p>
 
   {{#if isSending}}
-  <div class="wy-spinner wy-spinner-large"></div>
+    <div class="wy-spinner wy-spinner-large"></div>
   {{else}}
-  <ul class="wh-themes">
-    {{#each theme in themes}}
-    <li>
-      <a href="" {{ action downloadPreset theme }}>
-        <h5>{{theme.name}}</h5>
-        <img {{bind-attr src="theme.image"}} />
-        <p>
-          {{theme.description}}
-        </p>
-      </a>
-    </li>
-    {{/each}}
-  </ul>
-  {{/if}}
+    <ul class="wh-themes">
+      {{#each theme in themes}}
+      <li>
+        <a href="" {{ action downloadPreset theme }}>
+          <h5>{{theme.name}}</h5>
+          <img {{bind-attr src="theme.image"}} />
+          <p>
+            {{theme.description}}
+          </p>
+        </a>
+      </li>
+      {{/each}}
+    </ul>
 
+    {{#if error}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{error.code}}</div>
+        {{error.message}}
+      </div>
+    {{/if}}
+
+    <div>
+      {{input type="text" value=customUrl}}<button {{ action downloadCustom }}>Custom Theme</button>
+    </div>
+  {{/if}}
 </div>
 
