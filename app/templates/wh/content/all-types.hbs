@@ -8,7 +8,6 @@
       <th>Content type</th>
       <th>Form style</th>
       <th>Items</th>
-      <th>RSS</th>
       <th></th>
     </tr>
   </thead>
@@ -16,9 +15,8 @@
     {{#each}}
       {{#link-to 'form' name tagName='tr'}}
         <td>{{name}}</td>
-        <td>Time-based publishable</td>
+        <td>Multiple items</td>
         <td>22</td>
-        <td><span class="icon icon-ok-sign"></span></td>
         <td class="wy-table-actions">
           <button class="btn btn-link icon icon-remove-sign" {{action deleteType this}}></button>
         </td>

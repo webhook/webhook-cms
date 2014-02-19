@@ -9,7 +9,25 @@
   {{#if isSending}}
     <div class="wy-spinner wy-spinner-large"></div>
   {{else}}
+
     <ul class="wh-themes">
+      <li class="wh-themes-custom">
+        <h5>Custom theme</h5>
+        {{#if error}}
+          <div class="wy-alert wy-alert-warning">
+            <div class="wy-alert-title">Whoops</div>
+            {{error.message}}
+          </div>
+        {{/if}}
+        <div class="wy-control-group">
+          <label>Location of theme's zip file</label>
+          <div class="wy-control">
+            {{input type="text" placeholder="http://site.com/theme.zip" class="full-width" value=customUrl}}
+          </div>
+        </div>
+        <button class="btn btn-neutral icon icon-rocket" {{ action downloadCustom }}> Load this custom theme</button>
+
+      </li>
       {{#each theme in themes}}
       <li>
         <a href="" {{ action downloadPreset theme }}>
@@ -23,16 +41,7 @@
       {{/each}}
     </ul>
 
-    {{#if error}}
-      <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">{{error.code}}</div>
-        {{error.message}}
-      </div>
-    {{/if}}
 
-    <div>
-      {{input type="text" value=customUrl}}<button {{ action downloadCustom }}>Custom Theme</button>
-    </div>
   {{/if}}
 </div>
 
