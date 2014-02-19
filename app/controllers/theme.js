@@ -15,6 +15,7 @@ export default Ember.ObjectController.extend({
       this.set('isSending', true);
       window.ENV.sendGruntCommand('preset:' + theme.url, function() {
         this.set('isSending', false);
+        this.transitionToRoute('wh');
       }.bind(this));
     }
   }
