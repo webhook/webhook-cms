@@ -157,6 +157,7 @@
     margin-bottom: 0
     border: solid 1px transparent
     position: relative
+    +transition(background .5s ease-out)
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
@@ -234,18 +235,33 @@
 
 .ui-sortable-helper .wy-control-group
   background: rgba(255,255,255,.7)
-  border: solid 5px $gray-lighter !important
+  border: dashed 1px $gray-lighter !important
   cursor: move !important
+
 .wh-form-control-placeholder
   background: $gray-darker
   text-align: center
-  height: 50px
+  height: 75px
   opacity: .7
   &:after
     content: "Drop to place here."
     color: $white
     font-size: 150%
-    line-height : 50px
+    line-height : 75px
+.wy-control-group-placed
+  background: lighten($blue, 50%) !important
+.wh-form-control-clone
+  padding: $base-line-height
+  color: $gray-darker
+  background: rgba(255,255,255,.8)
+  border: dashed 1px $gray-lighter !important
+  z-index: $z-index-tooltip + 1
+  &:after
+    content: "Drop me in form"
+    color: $gray-dark
+    float: right
+
+
 [fake-toggle*=fake-widget-form]
   display: none
 
