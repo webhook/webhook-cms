@@ -8,7 +8,7 @@
     Right now he's probably playing videogames and not
     thinking about this at all. Pssh... Dave.
   </p>
-  <button type="button" class="btn icon icon-circle-arrow-left" {{action quitForm}}> Take me back</button>
+  <button type="button" class="btn icon icon-circle-arrow-left" {{action "quitForm"}}> Take me back</button>
 </div>
 
 <div class="wh-form-builder">
@@ -27,7 +27,7 @@
       <!-- PAGE CONTENT -->
       <div class="wy-nav-content">
 
-        <form class="wy-form-stacked" {{action updateType on="submit"}}>
+        <form class="wy-form-stacked" {{action "updateType" on="submit"}}>
           <fieldset>
             <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">{{name}}</h2>
 
@@ -46,7 +46,7 @@
           <div class="wh-form-builder-save wy-btn-group">
             <button type="button" class="btn btn-link icon icon-question-sign"> Help</button>
             <button type="submit" class="btn btn-success icon icon-ok-sign float-right"> Save form</button>
-            <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action quitForm}}> Cancel my edits</button>
+            <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action "quitForm"}}> Cancel my edits</button>
           </div>
 
         </form>

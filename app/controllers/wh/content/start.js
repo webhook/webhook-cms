@@ -1,17 +1,24 @@
 export default Ember.ArrayController.extend({
   newTypeName     : null,
-  contentTypeNames: [],
-  isDuplicate     : false,
+  newTypeType     : null,
 
-  // // force a valid name
-  // forceValid: function () {
-  //   var name = this.get('newTypeName'),
-  //       regex = /(\W|[A-Z])/g;
-  //   if (name && regex.test(name)) {
-  //     this.set('newTypeName', name.replace(regex, ''));
-  //   }
-  //   this.set('isDuplicate', this.get('model').isAny('name', this.get('newTypeName')));
-  // }.observes('newTypeName'),
+  reset: function () {
+    this.setProperties({
+      newTypeName: null,
+      newTypeType: null
+    });
+  },
+
+  isDuplicate: function () {
+    return this.get('model').isAny('id', this.get('newTypeId'));
+  }.property('newTypeId'),
+
+  newTypeId: function () {
+    var name = this.get('newTypeName');
+
+    return name ? name.replace(/\s+|\W/g, '').toLowerCase() : '';
+
+  }.property('newTypeName'),
 
   actions: {
     createType: function () {
@@ -37,9 +44,13 @@ export default Ember.ArrayController.extend({
         // creating a new content-type
         // a textcontrol (name) is required
         var type = this.store.createRecord('content-type', {
-          id: this.get('newTypeName'),
-          name: this.get('newTypeName')
+          id    : this.get('newTypeId'),
+          name  : this.get('newTypeName')
         });
+
+        if (this.get('newTypeType') === 'single') {
+          type.set('oneOff', true);
+        }
 
         type.get('controls').pushObjects(controls);
 
@@ -49,7 +60,7 @@ export default Ember.ArrayController.extend({
             className: 'wh-tray-wide'
           });
           this.transitionToRoute('form', type);
-          this.set('newTypeName', null);
+          this.reset();
         }.bind(this));
 
       }.bind(this));
