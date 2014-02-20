@@ -16,11 +16,14 @@
       <div data-menu-wrap="all-content" class="current move-center">
         {{#if model}}
           <header>Your content</header>
-          <ul>
+          {{#collection 'animate-collection' content=model}}
+            {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
+          {{/collection}}
+          {{!-- <ul>
           {{#each}}
-            <li>{{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}</li>
+            {{#view 'animate-add' tagName='li'}}{{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}{{/view}}
           {{/each}}
-          </ul>
+          </ul> --}}
         {{/if}}
         <header>Configuration</header>
         <ul>
