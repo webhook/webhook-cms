@@ -1,6 +1,8 @@
 export default Ember.CollectionView.extend({
   tagName: "ul",
   initialsAdded: 0,
+  animationLength: 500,
+
   itemViewClass: Ember.View.extend({
     classNames: ['wy-animate-add'],
     didInsertElement: function () {
@@ -9,13 +11,23 @@ export default Ember.CollectionView.extend({
         this.$().addClass('wy-just-added');
         this.set('addedTimeout', setTimeout(function () {
           this.$().removeClass('wy-just-added');
-        }.bind(this), 500));
+        }.bind(this), this.get('animationLength')));
       } else {
         collectionView.incrementProperty('initialsAdded');
       }
+
+      this.get('context').on('didUpdate', function () {
+        this.$().addClass('wy-just-updated');
+        this.set('updatedTimeout', setTimeout(function () {
+          this.$().removeClass('wy-just-updated');
+        }.bind(this), this.get('animationLength')));
+      }.bind(this));
+
     },
     willDestroyElement: function () {
+      this.get('context').off('didUpdate');
       window.clearTimeout(this.get('addedTimeout'));
+      window.clearTimeout(this.get('updateTimeout'));
     }
   }),
   willInsertElement: function () {
