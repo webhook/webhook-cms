@@ -10,7 +10,30 @@ export default Ember.Component.extend({
     var self = this,
         session = this.get('session');
 
+    var rteButtons = $.webhookRedactor.options.buttons.slice(),
+        rtePlugins = $.webhookRedactor.options.plugins.slice();
+
+    var rteOptions = this.get('options') || {};
+
+    window.console.log(rteOptions);
+
+    ['link'].forEach(function (button) {
+      if (!rteOptions[button]) {
+        rteButtons.splice(rteButtons.indexOf(button), 1);
+      }
+    });
+
+    ['table', 'video', 'image', 'quote'].forEach(function (plugin) {
+      if (!rteOptions[plugin]) {
+        rtePlugins.splice(rtePlugins.indexOf(plugin), 1);
+      }
+    });
+
+    window.console.log(rteButtons, rtePlugins);
+
     var rte = this.$('textarea').webhookRedactor({
+      buttons: rteButtons,
+      plugins: rtePlugins,
       initCallback: function() {
         if (self.get('value')) {
           this.set(self.get('value'));
@@ -23,37 +46,39 @@ export default Ember.Component.extend({
 
     var whRedactor = rte.webhookRedactor('getObject');
 
-    whRedactor.buttonAddBefore('video', 'image', 'Image', function () {
+    if (rteOptions['image']) {
+      whRedactor.buttonAddBefore('video', 'image', 'Image', function () {
 
-      // maintain undo buffer
-      whRedactor.bufferSet();
+        // maintain undo buffer
+        whRedactor.bufferSet();
 
-      // or call a modal with a code
-      this.modalInit('Insert Image', '#' + self.get('imageModelId'), 500, function () {
+        // or call a modal with a code
+        this.modalInit('Insert Image', '#' + self.get('imageModelId'), 500, function () {
 
-        var widget = Ember.$('#' + self.get('imageModelSectionId')).on('load', function (event, url) {
+          var widget = Ember.$('#' + self.get('imageModelSectionId')).on('load', function (event, url) {
 
-          var data = '<figure data-type="image"><img src="' + url + '"><figcaption>Type to add caption (optional)</figcaption></figure>';
+            var data = '<figure data-type="image"><img src="' + url + '"><figcaption>Type to add caption (optional)</figcaption></figure>';
 
-          whRedactor.selectionRestore();
+            whRedactor.selectionRestore();
 
-          var current = whRedactor.getBlock() || whRedactor.getCurrent();
+            var current = whRedactor.getBlock() || whRedactor.getCurrent();
 
-          if (current) {
-            $(current).after(data);
-          } else {
-            whRedactor.insertHtmlAdvanced(data, false);
-          }
+            if (current) {
+              $(current).after(data);
+            } else {
+              whRedactor.insertHtmlAdvanced(data, false);
+            }
 
-          whRedactor.sync();
-          whRedactor.modalClose();
+            whRedactor.sync();
+            whRedactor.modalClose();
+
+          });
+
+          self.initWidget.call(self, widget);
 
         });
-
-        self.initWidget.call(self, widget);
-
       });
-    });
+    }
   },
 
   initWidget: function (widget) {
