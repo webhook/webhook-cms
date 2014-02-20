@@ -1,28 +1,30 @@
 <form class="wy-form-stacked" {{action "createType" on="submit"}}>
-  <h1>What do you want to add to your CMS?</h1>
+  <h1>OK, let's add a new form to the CMS</h1>
   <div class="wy-control-group">
+    <label>Name of new object</label>
     <div class="wy-control">
-      <p>Use a short lowercase word, without spaces.</p>
-      {{input value=newTypeName placeholder="ex: comics, articles, about us, cities, vampires" class="wy-input-large full-width"}}
-      {{#if isDuplicate}}
-        <span class="wy-input-context"> There is already an content type with that name</span>
-      {{/if}}
+      {{input value=newTypeName placeholder="ex: comics, articles, about us, homepage, cities, vampires" class="wy-input-large full-width"}}
     </div>
   </div>
+  {{#if isDuplicate}}
+    <span class="wy-input-context"> There is already an content type with that name</span>
+  {{/if}}
+  <p>This will be the CMS menu name (on <span class="icon icon-circle-arrow-left"></span> left) and also define the URL pattern on your front-facing site, so choose wisey.</p>
   {{#if newTypeName}}
-    <div class="wy-control-group">
-      <label>How many {{newTypeName}} are there?
+    <h2>So... how many {{newTypeName}} are there?</h2>
+    <div class="wy-control-group wh-select-type">
       <div class="wy-control">
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="single"}}
-          There is only one {{newTypeName}}.
+          There is only <strong>one</strong> {{newTypeName}}.
         </label>
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="multiple"}}
-          There are multiple {{newTypeName}}.
+          There are <strong>multiple</strong> {{newTypeName}}.
         </label>
       </div>
     </div>
+    <p>We just need to know if you need to enter a bunch of repeatable items into the form.</p>
     <div class="wy-button-group">
       <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDisabled"}}> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
       {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
