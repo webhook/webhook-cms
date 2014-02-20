@@ -29,10 +29,14 @@ export default Ember.Component.extend({
         placement: 'left',
         title: 'Click to edit field details.'
       });
-      setTimeout(function () {
+      this.set('addedTimeout', setTimeout(function () {
         this.set('justAdded', false);
-      }.bind(this), 500);
+      }.bind(this), 500));
     }
+  },
+
+  willDestroyElement: function () {
+    window.clearTimeout(this.get('addedTimeout'));
   },
 
   click: function () {
