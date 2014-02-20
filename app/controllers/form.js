@@ -35,6 +35,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     switch (controlType.get('widget')) {
       case 'radio':
+      case 'select':
         meta.set('data', {
           options: [
             { value: 'Option 1' },
@@ -69,7 +70,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         // hax
         // firebase doesn't like undefined values and for some reason `_super` is
         // being added to arrays in ember with undefined value
-        if (control.get('controlType.widget') === 'radio' || control.get('controlType.widget') === 'checkbox') {
+        if (control.get('meta.data.options._super') === undefined) {
           delete control.get('meta.data.options')._super;
         }
       });

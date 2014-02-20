@@ -74,48 +74,48 @@ window.ENV = {
       name: 'Basics',
       controlTypes: [
         {
-          name  : 'Number',
-          widget: 'number',
+          name     : 'Number',
+          widget   : 'number',
           iconClass: 'icon-list-ol'
         },
         {
-          name  : 'Checkbox',
-          widget: 'checkbox',
-          iconClass  : 'icon-checkbox-checked'
+          name     : 'Checkbox',
+          widget   : 'checkbox',
+          iconClass: 'icon-checkbox-checked'
         },
         {
-          name  : 'Multiple choice',
-          widget: 'radio',
-          iconClass  : 'icon-radio-checked'
+          name     : 'Multiple choice',
+          widget   : 'radio',
+          iconClass: 'icon-radio-checked'
         },
         {
-          name  : 'Dropdown',
-          widget: 'select',
-          iconClass  : 'icon-menu'
+          name     : 'Dropdown',
+          widget   : 'select',
+          iconClass: 'icon-menu'
         }
       ]
     }, {
       name: 'Files',
       controlTypes: [
         {
-          name  : 'Image',
-          widget: 'image',
-          iconClass  : 'icon-image'
+          name     : 'Image',
+          widget   : 'image',
+          iconClass: 'icon-image'
         },
         {
-          name: 'Gallery',
+          name     : 'Gallery',
           iconClass: 'icon-images',
-          widget: 'gallery'
+          widget   : 'gallery'
         },
         {
-          name  : 'Audio file',
-          widget: 'audio',
-          iconClass  : 'icon-music'
+          name     : 'Audio file',
+          widget   : 'audio',
+          iconClass: 'icon-music'
         },
         {
-          name  : 'Other file',
-          widget: 'file',
-          iconClass  : 'icon-paper-clip'
+          name     : 'Other file',
+          widget   : 'file',
+          iconClass: 'icon-paper-clip'
         }
       ]
     }, {
@@ -125,28 +125,28 @@ window.ENV = {
           name     : 'Name',
           widget   : 'name',
           valueType: 'object',
-          iconClass  : 'icon-user'
+          iconClass: 'icon-user'
         },
         {
           name     : 'Address',
           widget   : 'address',
           valueType: 'object',
-          iconClass  : 'icon-direction'
+          iconClass: 'icon-direction'
         },
         {
-          name  : 'Phone number',
-          widget: 'phone',
-          iconClass  : 'icon-phone-sign'
+          name     : 'Phone number',
+          widget   : 'phone',
+          iconClass: 'icon-phone-sign'
         },
         {
-          name  : 'Email',
-          widget: 'email',
-          iconClass  : 'icon-envelop'
+          name     : 'Email',
+          widget   : 'email',
+          iconClass: 'icon-envelop'
         },
         {
-          name  : 'Date time',
-          widget: 'datetime',
-          iconClass  : 'icon-calendar'
+          name     : 'Date time',
+          widget   : 'datetime',
+          iconClass: 'icon-calendar'
         },
         {
           name       : 'Website',
@@ -156,14 +156,14 @@ window.ENV = {
           iconClass  : 'icon-link'
         },
         {
-          name  : 'Rating',
-          widget: 'rating',
-          iconClass  : 'icon-star'
+          name     : 'Rating',
+          widget   : 'rating',
+          iconClass: 'icon-star'
         },
         {
-          name  : 'Tags',
-          widget: 'tag',
-          iconClass  : 'icon-tags'
+          name     : 'Tags',
+          widget   : 'tag',
+          iconClass: 'icon-tags'
         }
       ]
     }
