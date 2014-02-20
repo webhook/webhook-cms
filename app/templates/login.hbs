@@ -1,6 +1,6 @@
 <div class="wh-login">
   <div {{bind-attr class=":wh-logo isLoading:wh-logo-spinner"}}></div>
-  <form class="wy-form-stacked" {{action loginUser on="submit"}}>
+  <form class="wy-form-stacked" {{action "loginUser" on="submit"}}>
 
     {{#if session.error}}
       <div class="wy-alert wy-alert-warning">
