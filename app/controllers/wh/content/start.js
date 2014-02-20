@@ -63,7 +63,18 @@ export default Ember.ArrayController.extend({
             icon: 'ok-sign',
             className: 'wh-tray-wide'
           });
-          this.transitionToRoute('form', type);
+          if (type.get('oneOff')) {
+            this.store.createRecord('data', {
+              id: type.get('id'),
+              data: {
+                name: ""
+              }
+            }).save().then(function () {
+              this.transitionToRoute('form', type);
+            }.bind(this));
+          } else {
+            this.transitionToRoute('form', type);
+          }
           this.reset();
         }.bind(this));
 

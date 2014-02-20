@@ -2,6 +2,10 @@ import ItemAdapter from 'appkit/adapters/item';
 import ItemModel from 'appkit/models/item';
 import ItemSerializer from 'appkit/serializers/item';
 
+import DataAdapter from 'appkit/adapters/data';
+import DataModel from 'appkit/models/data';
+import DataSerializer from 'appkit/serializers/data';
+
 export default function getItemModelName(contentType) {
 
   var formattedTypeName = Ember.String.singularize(contentType.get('id')),
@@ -10,16 +14,33 @@ export default function getItemModelName(contentType) {
   // Make a dynamic model/adapter so we can save data to `data/[modelName]`
   if (!window.App[modelName]) {
 
-    // dynamic model
-    window.App[modelName] = ItemModel.extend();
+    if (contentType.get('oneOff')) {
 
-    // dynamic adapter
-    window.App[modelName + 'Adapter'] = ItemAdapter.extend({
-      firebase: window.ENV.firebase.child('data'),
-    });
+      formattedTypeName = 'data';
 
-    // dynamic serializer
-    window.App[modelName + 'Serializer'] = ItemSerializer.extend();
+      // // dynamic model
+      // window.App[modelName] = DataModel.extend();
+
+      // // dynamic adapter
+      // window.App[modelName + 'Adapter'] = DataAdapter.extend();
+
+      // // dynamic serializer
+      // window.App[modelName + 'Serializer'] = DataSerializer.extend();
+
+    } else {
+
+      // dynamic model
+      window.App[modelName] = ItemModel.extend();
+
+      // dynamic adapter
+      window.App[modelName + 'Adapter'] = ItemAdapter.extend({
+        firebase: window.ENV.firebase.child('data'),
+      });
+
+      // dynamic serializer
+      window.App[modelName + 'Serializer'] = ItemSerializer.extend();
+
+    }
 
   }
 

@@ -1,18 +1,16 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
-  // beforeModel: function () {
-  //   var contentType = this.modelFor('wh.content.type');
-  //   if (contentType.get('oneOff')) {
-  //     // check if there is data
-
-  //     // if no data, send to create page
-  //     this.transitionTo('wh.content.type.new', contentType);
-  //   }
-  // },
+  beforeModel: function () {
+    var contentType = this.modelFor('wh.content.type');
+    if (contentType.get('oneOff')) {
+      return this.store.find('data', contentType.get('id')).then(function (type) {
+        this.transitionTo('wh.content.type.edit', type);
+      }.bind(this));
+    }
+  },
   model: function () {
-    var itemModelName = getItemModelName(this.modelFor('wh.content.type'));
-    return this.store.find(itemModelName);
+    return this.store.find(getItemModelName(this.modelFor('wh.content.type')));
   },
   setupController: function (controller, model) {
 

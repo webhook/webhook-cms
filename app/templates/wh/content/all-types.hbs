@@ -13,12 +13,12 @@
   </thead>
   <tbody>
     {{#each}}
-      {{#link-to 'form' name tagName='tr'}}
+      {{#link-to 'form' id tagName='tr'}}
         <td>{{name}}</td>
         <td>Multiple items</td>
         <td>22</td>
         <td class="wy-table-actions">
-          <button class="btn btn-link icon icon-remove-sign" {{action deleteType this}}></button>
+          <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this}}></button>
         </td>
       {{/link-to}}
     {{/each}}

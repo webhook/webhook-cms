@@ -29,17 +29,17 @@ export default Ember.ObjectController.extend({
         });
       });
 
-      this.get('model').setProperties({
-        data: data
-      }).save().then(function () {
-        this.get('type.controls').setEach('value', null);
-
-        window.ENV.sendBuildSignal();
+      this.get('model').set('data', data).save().then(function () {
 
         this.send('notify', 'success', 'Item saved!', {
           icon: 'ok-sign'
         });
-        this.transitionToRoute('wh.content.type', this.get('type'));
+
+        if (!this.get('type.oneOff')) {
+          window.ENV.sendBuildSignal();
+          this.get('type.controls').setEach('value', null);
+          this.transitionToRoute('wh.content.type', this.get('type'));
+        }
       }.bind(this));
 
     }
