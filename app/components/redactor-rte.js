@@ -15,8 +15,6 @@ export default Ember.Component.extend({
 
     var rteOptions = this.get('options') || {};
 
-    window.console.log(rteOptions);
-
     ['link'].forEach(function (button) {
       if (!rteOptions[button]) {
         rteButtons.splice(rteButtons.indexOf(button), 1);
@@ -28,8 +26,6 @@ export default Ember.Component.extend({
         rtePlugins.splice(rtePlugins.indexOf(plugin), 1);
       }
     });
-
-    window.console.log(rteButtons, rtePlugins);
 
     var rte = this.$('textarea').webhookRedactor({
       buttons: rteButtons,

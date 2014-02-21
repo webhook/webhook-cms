@@ -35,11 +35,19 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     switch (controlType.get('widget')) {
       case 'radio':
-      case 'select':
         meta.set('data', {
           options: [
             { value: 'Option 1' },
             { value: 'Option 2' }
+          ]
+        });
+        break;
+      case 'select':
+        meta.set('data', {
+          defaultValue: '',
+          options: [
+            { value: '' },
+            { value: 'Option 1' }
           ]
         });
         break;

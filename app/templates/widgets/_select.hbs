@@ -1,1 +1,7 @@
-{{view Ember.Select content=control.meta.data.options value=control.value optionLabelPath="content.value" optionValuePath="content.value"}}
+{{view "select-control"
+  content=control.meta.data.options
+  value=control.value
+  defaultValue=control.meta.data.defaultValue
+  optionLabelPath="content.value"
+  optionValuePath="content.value"
+}}
