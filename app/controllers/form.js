@@ -3,6 +3,27 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   editingControl   : null,
   isEditing        : false,
 
+  nameChange: function () {
+
+    var names = this.get('controls').mapBy('name').sort(),
+        dupes = [];
+
+    for (var i = 0; i < names.length - 1; i++) {
+      if (names[i + 1] === names[i]) {
+        dupes.push(names[i]);
+      }
+    }
+
+    dupes = dupes.uniq();
+
+    this.get('controls').setEach('invalid', null);
+
+    this.get('controls').filter(function (control) {
+      return dupes.indexOf(control.get('name')) >= 0;
+    }).setEach('invalid', true);
+
+  }.observes('model.controls.@each.name'),
+
   updateOrder: function (originalindex, newindex) {
 
     var controls = this.get('model.controls'),
@@ -73,6 +94,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   actions: {
     updateType: function () {
+
+      if (this.get('model.controls').isAny('invalid')) {
+        window.alert('Fix your invalid controls and try again.');
+        return;
+      }
 
       this.get('model.controls').forEach(function (control) {
         // hax
