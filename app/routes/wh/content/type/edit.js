@@ -15,8 +15,6 @@ export default Ember.Route.extend({
     var data = model.get('data'),
         type = this.modelFor('wh.content.type');
 
-    window.console.log(type);
-
     type.get('controls').forEach(function (control) {
       var value = data[control.get('name')];
 

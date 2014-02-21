@@ -5,7 +5,7 @@ export default Ember.Select.extend({
   }.observes('defaultValue'),
 
   willInsertElement: function () {
-    if (!this.get('value') && this.get('defaultValue')) {
+    if (this.get('value') !== undefined && this.get('defaultValue')) {
       this.set('value', this.get('defaultValue'));
     }
   }
