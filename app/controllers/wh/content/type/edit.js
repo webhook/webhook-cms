@@ -11,6 +11,7 @@ export default Ember.ObjectController.extend({
         var value = control.get('value');
 
         if (control.get('controlType.valueType') === 'object') {
+          window.console.log(value);
           Ember.$.each(value, function (key, childValue) {
             if (!childValue) {
               delete value[key];
@@ -35,8 +36,9 @@ export default Ember.ObjectController.extend({
           icon: 'ok-sign'
         });
 
+        window.ENV.sendBuildSignal();
+
         if (!this.get('type.oneOff')) {
-          window.ENV.sendBuildSignal();
           this.get('type.controls').setEach('value', null);
           this.transitionToRoute('wh.content.type', this.get('type'));
         }
