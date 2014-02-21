@@ -1,4 +1,4 @@
-export default DS.Model.extend(Ember.Validations.Mixin, {
+export default DS.Model.extend({
   name       : DS.attr('string'),
   label      : DS.attr('string'),
   placeholder: DS.attr('string'),
@@ -13,11 +13,5 @@ export default DS.Model.extend(Ember.Validations.Mixin, {
     if (!this.get('locked') && this.get('label')) {
       this.set('name', this.get('label').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
     }
-  }.observes('label'),
-
-  validations: {
-    type: {
-      presence: true
-    }
-  }
+  }.observes('label')
 });

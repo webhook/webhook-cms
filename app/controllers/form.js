@@ -16,11 +16,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     dupes = dupes.uniq();
 
-    this.get('controls').setEach('invalid', null);
+    this.get('controls').setEach('isValid', true);
 
-    this.get('controls').filter(function (control) {
+    var invalidControls = this.get('controls').filter(function (control, index) {
       return dupes.indexOf(control.get('name')) >= 0;
-    }).setEach('invalid', true);
+    }).setEach('isValid', false);
 
   }.observes('model.controls.@each.name'),
 
@@ -95,7 +95,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   actions: {
     updateType: function () {
 
-      if (this.get('model.controls').isAny('invalid')) {
+      if (!this.get('model.controls').isEvery('isValid')) {
         window.alert('Fix your invalid controls and try again.');
         return;
       }
