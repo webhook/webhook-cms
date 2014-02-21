@@ -1,5 +1,5 @@
 /*globals CustomEvent*/
-import Resolver from 'resolver';
+import Resolver from 'ember/resolver';
 
 var App = Ember.Application.extend({
   LOG_ACTIVE_GENERATION: true,
