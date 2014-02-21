@@ -11,7 +11,6 @@ export default Ember.ObjectController.extend({
         var value = control.get('value');
 
         if (control.get('controlType.valueType') === 'object') {
-          window.console.log(value);
           Ember.$.each(value, function (key, childValue) {
             if (!childValue) {
               delete value[key];
