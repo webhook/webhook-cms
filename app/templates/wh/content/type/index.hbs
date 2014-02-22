@@ -13,7 +13,7 @@
       <dt>Show columns</dt>
       {{#each contentType.controls}}
         <dd>
-          <span {{bind-attr class=":icon showInCms:icon-ok-sign:icon-circle-blank"}} {{action toggleShowInCms this on="click"}}>
+          <span {{bind-attr class=":icon showInCms:icon-ok-sign:icon-circle-blank"}} {{action "toggleShowInCms" this on="click"}}>
             {{label}}
           </span>
         </dd>

@@ -40,6 +40,16 @@ export default Ember.ArrayController.extend({
     },
     toggleShowInCms: function (control) {
       control.toggleProperty('showInCms');
+
+      this.get('contentType.controls').forEach(function (control) {
+        // hax
+        // firebase doesn't like undefined values and for some reason `_super` is
+        // being added to arrays in ember with undefined value
+        if (Ember.isArray(control.get('meta.data.options'))) {
+          delete control.get('meta.data.options')._super;
+        }
+      });
+
       this.get('contentType').save();
     }
   }
