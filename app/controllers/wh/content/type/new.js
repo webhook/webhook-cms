@@ -1,8 +1,20 @@
 import getItemModelName from 'appkit/utils/model';
+import validateControl from 'appkit/utils/validators';
 
 export default Ember.ObjectController.extend({
+
+  // Run validators on every change.
+  valueChanged: function () {
+    this.get('model.controls').forEach(validateControl);
+  }.observes('model.controls.@each.value'),
+
   actions: {
     createItem: function () {
+
+      if (!this.get('model.controls').isEvery('isValid')) {
+        window.alert('Fix your problems.');
+        return;
+      }
 
       var data = {};
 

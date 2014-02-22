@@ -3,5 +3,14 @@
   {{partial control.controlType.controlPartialPath}}
   {{partial 'widgets/common/help'}}
 </div>
+
+{{#if control.widgetErrors}}
+  <ul>
+    {{#each control.widgetErrors}}
+      <li class="wy-text-danger">{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
+
 {{!-- we only set `doEdit` on the formbuilder --}}
 <div class="disabled"></div>
