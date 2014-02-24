@@ -1,43 +1,37 @@
-  <!-- SIDE NAV, TOGGLES ON MOBILE -->
-  <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-    <div class="wy-side-nav-search">
-      {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
-      <div class="wh-user-dropdown">
-        {{#if session.user}}
-          {{session.user.email}}
-          (<a {{action "logoutUser" on="click"}}>Logout</a>)
-        {{/if}}
-      </div>
-      <input type="text" placeholder="search">
+<!-- SIDE NAV, TOGGLES ON MOBILE -->
+<nav data-toggle="wy-nav-shift" class="wy-nav-side">
+  <div class="wy-side-nav-search">
+    {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
+    <div class="wh-user-dropdown">
+      {{session.user.email}}
+      (<a {{action "logoutUser" on="click"}}>Logout</a>)
+      {{#link-to 'password-change'}}Change Password{{/link-to}}
+    </div>
+    <input type="text" placeholder="search">
+  </div>
+
+  <div class="wy-menu wy-menu-vertical" data-spy="affix">
+
+    <div data-menu-wrap="all-content" class="current move-center">
+      {{#if model}}
+        <header>Your content</header>
+        {{#collection 'animate-collection' content=model}}
+          {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
+        {{/collection}}
+      {{/if}}
+      <header>Configuration</header>
+      <ul>
+        <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
+        <li>{{#link-to 'wh.settings.general'}}General settings{{/link-to}}</li>
+        <li>{{#link-to 'wh.settings.billing'}}Billing{{/link-to}}</li>
+        <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
+        <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
+        <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
+      </ul>
     </div>
 
-    <div class="wy-menu wy-menu-vertical" data-spy="affix">
-
-      <div data-menu-wrap="all-content" class="current move-center">
-        {{#if model}}
-          <header>Your content</header>
-          {{#collection 'animate-collection' content=model}}
-            {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
-          {{/collection}}
-          {{!-- <ul>
-          {{#each}}
-            {{#view 'animate-add' tagName='li'}}{{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}{{/view}}
-          {{/each}}
-          </ul> --}}
-        {{/if}}
-        <header>Configuration</header>
-        <ul>
-          <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.general'}}General settings{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.billing'}}Billing{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
-        </ul>
-      </div>
-
-    </div>
-    &nbsp;
-  </nav>
+  </div>
+  &nbsp;
+</nav>
 
 
