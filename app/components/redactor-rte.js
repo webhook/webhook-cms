@@ -1,35 +1,21 @@
 import uuid from 'appkit/utils/uuid';
 
 export default Ember.Component.extend({
+
+  whRedactor: null,
+
   willInsertElement: function () {
+    // make a random id for the model template
     var id = uuid();
     this.set('imageModelId', 'imageModel' + id);
     this.set('imageModelSectionId', 'imageModelSection' + id);
   },
+
   didInsertElement: function () {
     var self = this,
         session = this.get('session');
 
-    var rteButtons = $.webhookRedactor.options.buttons.slice(),
-        rtePlugins = $.webhookRedactor.options.plugins.slice();
-
-    var rteOptions = this.get('options') || {};
-
-    ['link'].forEach(function (button) {
-      if (!rteOptions[button]) {
-        rteButtons.splice(rteButtons.indexOf(button), 1);
-      }
-    });
-
-    ['table', 'video', 'image', 'quote'].forEach(function (plugin) {
-      if (!rteOptions[plugin]) {
-        rtePlugins.splice(rtePlugins.indexOf(plugin), 1);
-      }
-    });
-
     var rte = this.$('textarea').webhookRedactor({
-      buttons: rteButtons,
-      plugins: rtePlugins,
       initCallback: function() {
         if (self.get('value')) {
           this.set(self.get('value'));
@@ -41,43 +27,62 @@ export default Ember.Component.extend({
     });
 
     var whRedactor = rte.webhookRedactor('getObject');
+    this.set('whRedactor', whRedactor);
 
-    if (rteOptions['image']) {
-      whRedactor.buttonAddBefore('video', 'image', 'Image', function () {
+    whRedactor.buttonAddBefore('video', 'image', 'Image', this.imageButtonCallback.bind(this));
 
-        // maintain undo buffer
-        whRedactor.bufferSet();
+    // turn off buttons that are disabled
+    Ember.$.each(this.get('options'), function (option, value) {
+      if (!value) {
+        Ember.$(whRedactor.buttonGet(option)).toggle();
+      }
+    });
 
-        // or call a modal with a code
-        this.modalInit('Insert Image', '#' + self.get('imageModelId'), 500, function () {
+    // Observe changes to options (form builder)
+    this.observeOptions();
 
-          var widget = Ember.$('#' + self.get('imageModelSectionId')).on('load', function (event, url) {
-
-            var data = '<figure data-type="image"><img src="' + url + '"><figcaption>Type to add caption (optional)</figcaption></figure>';
-
-            whRedactor.selectionRestore();
-
-            var current = whRedactor.getBlock() || whRedactor.getCurrent();
-
-            if (current) {
-              $(current).after(data);
-            } else {
-              whRedactor.insertHtmlAdvanced(data, false);
-            }
-
-            whRedactor.sync();
-            whRedactor.modalClose();
-
-          });
-
-          self.initWidget.call(self, widget);
-
-        });
-      });
-    }
   },
 
-  initWidget: function (widget) {
+  imageButtonCallback: function () {
+
+    // maintain undo buffer
+    this.get('whRedactor').bufferSet();
+
+    // every time we call the redactor modal, we have to add the event listeners
+    // redactor destroys dom elements (listeners)
+    this.get('whRedactor').modalInit('Insert Image', '#' + this.get('imageModelId'), 500, this.addImageModelListener.bind(this));
+
+  },
+
+  addImageModelListener: function () {
+
+    var whRedactor = this.get('whRedactor');
+
+    var widget = Ember.$('#' + this.get('imageModelSectionId')).on('load', function (event, url) {
+
+      var data = '<figure data-type="image"><img src="' + url + '"><figcaption>Type to add caption (optional)</figcaption></figure>';
+
+      whRedactor.selectionRestore();
+
+      var current = whRedactor.getBlock() || whRedactor.getCurrent();
+
+      if (current) {
+        $(current).after(data);
+      } else {
+        whRedactor.insertHtmlAdvanced(data, false);
+      }
+
+      whRedactor.sync();
+      whRedactor.modalClose();
+
+    });
+
+    this.initImageWidget.call(this, widget);
+
+  },
+
+  // This handles the behavior of the image widget
+  initImageWidget: function (widget) {
 
     var self = this,
         session = this.get('session');
@@ -165,5 +170,17 @@ export default Ember.Component.extend({
 
     return widget;
 
+  },
+
+  observeOptions: function () {
+    this.addObserver('options.table', this.toggleOption);
+    this.addObserver('options.video', this.toggleOption);
+    this.addObserver('options.image', this.toggleOption);
+    this.addObserver('options.quote', this.toggleOption);
+    this.addObserver('options.link', this.toggleOption);
+  },
+
+  toggleOption: function (component, option) {
+    Ember.$(this.get('whRedactor').buttonGet(option.split('.').pop())).toggle();
   }
 });

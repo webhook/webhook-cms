@@ -80,6 +80,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           ]
         });
         break;
+      case 'wysiwyg':
+        meta.set('data', {
+          image: true,
+          link : true,
+          quote: true,
+          table: true,
+          video: true
+        });
     }
 
     control.set('meta', meta);
