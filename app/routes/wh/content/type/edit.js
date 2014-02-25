@@ -12,6 +12,9 @@ export default Ember.Route.extend({
   },
   setupController: function (controller, model) {
 
+    controller.set('lastUpdated', null);
+    controller.set('createDate', null);
+
     var data = model.get('data'),
         type = this.modelFor('wh.content.type');
 
@@ -26,7 +29,10 @@ export default Ember.Route.extend({
 
       // remove offset so datetime input can display
       if (value && control.get('controlType.widget') === 'datetime') {
+
         value = moment(value).format('YYYY-MM-DDTHH:mm');
+
+        // Set `lastUpdated` and `createDate` on controller for Dave.
         if (['last_updated', 'create_date'].indexOf(control.get('name')) >= 0) {
           controller.set(control.get('name').camelize(), value);
         }

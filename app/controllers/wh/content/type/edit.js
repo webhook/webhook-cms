@@ -1,4 +1,5 @@
 import validateControl from 'appkit/utils/validators';
+import dataFromControls from 'appkit/utils/controls';
 
 export default Ember.ObjectController.extend({
   type       : null,
@@ -10,38 +11,14 @@ export default Ember.ObjectController.extend({
     // automatically update `update_date`
     this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
 
-    var data = {};
-
-    // gather and clean data for storage
-    this.get('type.controls').filterBy('value').forEach(function (control) {
-      var value = control.get('value');
-
-      if (control.get('controlType.valueType') === 'object') {
-        Ember.$.each(value, function (key, childValue) {
-          if (!childValue) {
-            delete value[key];
-          }
-        });
-      }
-
-      data[control.get('name')] = value;
-    });
-
-    // checkboxes are special
-    this.get('type.controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
-      data[control.get('name')] = [];
-      control.get('meta.data.options').forEach(function (option) {
-        data[control.get('name')].push(option);
-      });
-    });
+    var data = dataFromControls(this.get('type.controls'));
 
     this.get('model').set('data', data).save().then(function () {
+      window.ENV.sendBuildSignal();
 
       this.send('notify', 'success', 'Item saved!', {
         icon: 'ok-sign'
       });
-
-      window.ENV.sendBuildSignal();
 
       if (!this.get('type.oneOff')) {
         this.get('type.controls').setEach('value', null);

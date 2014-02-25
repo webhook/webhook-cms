@@ -168,10 +168,4 @@ Ember.Route.reopen({
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };
 Ember.Inflector.inflector.singularize = function (string ) { return string; };
 
-// This helps ember-validations not blow up
-// https://github.com/dockyard/ember-validations/issues/26#issuecomment-31877071
-// DS.Model.reopen({
-//   isValid: false
-// });
-
 export default App;
