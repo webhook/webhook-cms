@@ -24,6 +24,11 @@ export default Ember.Route.extend({
         });
       }
 
+      // remove offset so datetime input can display
+      if (value && control.get('controlType.widget') === 'datetime') {
+        value = moment(value).format('YYYY-MM-DDTHH:mm');
+      }
+
       if (!value && control.get('controlType.valueType') === 'object') {
         value = {};
       }

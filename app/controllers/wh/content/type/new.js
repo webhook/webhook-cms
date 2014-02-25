@@ -3,17 +3,14 @@ import validateControl from 'appkit/utils/validators';
 
 export default Ember.ObjectController.extend({
 
-  // Run validators on every change.
-  valueChanged: function () {
-    this.get('model.controls').forEach(validateControl);
-  }.observes('model.controls.@each.value'),
-
   saveItem: function () {
 
-    if (!this.get('model.controls').isEvery('isValid')) {
-      window.alert('Fix your problems.');
-      return;
-    }
+    // automatically set the update and create dates to now
+    this.get('model.controls').filter(function (control) {
+      return control.get('name') === 'update_date' || control.get('name') === 'create_date';
+    }).forEach(function (control) {
+      control.set('value', moment().format('YYYY-MM-DDTHH:mm'));
+    });
 
     var data = {};
 
@@ -29,6 +26,11 @@ export default Ember.ObjectController.extend({
         });
       }
 
+      // add timezone to datetime values
+      if (control.get('controlType.widget') === 'datetime') {
+        value = moment(value).format();
+      }
+
       data[control.get('name')] = value;
     });
 
@@ -40,9 +42,7 @@ export default Ember.ObjectController.extend({
       });
     });
 
-    var modelName = getItemModelName(this.get('model'));
-
-    this.store.createRecord(modelName, {
+    this.store.createRecord(getItemModelName(this.get('model')), {
       data: data
     }).save().then(function () {
       window.ENV.sendBuildSignal();

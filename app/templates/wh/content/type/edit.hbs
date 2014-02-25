@@ -6,7 +6,9 @@
   {{#view 'item-form'}}
     <fieldset>
       {{#each control in type.controls}}
-        {{formbuilder-widget control=control session=session}}
+        {{#unless control.hidden}}
+          {{formbuilder-widget control=control session=session}}
+        {{/unless}}
       {{/each}}
       <div class="wy-btn-group">
         <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Save</button>

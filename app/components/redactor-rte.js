@@ -38,7 +38,7 @@ export default Ember.Component.extend({
     whRedactor.buttonAddBefore('video', 'image', 'Image', this.imageButtonCallback.bind(this));
 
     // turn off buttons that are disabled
-    Ember.$.each(this.get('options'), function (option, value) {
+    Ember.$.each(this.get('options') || {}, function (option, value) {
       if (!value) {
         Ember.$(whRedactor.buttonGet(option)).toggle();
       }

@@ -56,18 +56,16 @@
             <td>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}
           <td class="wy-table-actions">
-            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action deleteItem item}}></button>
+            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" item}}></button>
           </td>
-          {{/link-to}}
-        {{else}}
+        {{/link-to}}
       {{/each}}
       {{/with}}
     </tbody>
   </table>
-  {{#if model}}
-  {{else}}
+  {{#unless model}}
     <div class="wy-alert wy-alert-warning">
       <span class="icon icon-exclamation-circle"></span> You haven't added any {{contentType.name}} yet.
     </div>
-  {{/if}}
+  {{/unless}}
 </section>

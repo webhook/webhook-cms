@@ -10,7 +10,8 @@
     "$",
     "EmberFire",
     "Firebase",
-    "FirebaseSimpleLogin"
+    "FirebaseSimpleLogin",
+    "moment"
   ],
   "node" : false,
   "browser" : false,

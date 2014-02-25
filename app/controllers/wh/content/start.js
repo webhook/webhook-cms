@@ -19,9 +19,7 @@ export default Ember.ArrayController.extend({
 
   newTypeId: function () {
     var name = this.get('newTypeName');
-
     return name ? name.replace(/\s+|\W/g, '').toLowerCase() : '';
-
   }.property('newTypeName'),
 
   actions: {
@@ -31,25 +29,55 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      this.store.find('control-type', 'textfield').then(function (controlType) {
+      var store = this.store,
+          controlPromises = Ember.A([]),
+          controls = Ember.A([]);
 
-        // controls that are locked
-        var controls = [
-          this.store.createRecord('control', {
-            controlType: controlType,
-            name       : 'name',
-            label      : 'Name',
-            locked     : true,
-            showInCms  : true,
-            required   : true
-          })
-        ];
+      // Required `name` field on all items.
+      var textfieldControl = store.find('control-type', 'textfield').then(function (controlType) {
+        controls.pushObject(store.createRecord('control', {
+          controlType: controlType,
+          name       : 'name',
+          label      : 'Name',
+          locked     : true,
+          showInCms  : true,
+          required   : true
+        }));
+      });
+
+      // Required/hidden createDate and updateDate fields on all items.
+      var datetimeControls = store.find('control-type', 'datetime').then(function (controlType) {
+
+        var datetimeDefaults = {
+          controlType: controlType,
+          locked     : true,
+          showInCms  : true,
+          required   : true,
+          hidden     : true
+        };
+
+        var createDateData = Ember.$.extend({
+          name : 'create_date',
+          label: 'Create Date',
+        }, datetimeDefaults);
+
+        var updateDateData = Ember.$.extend({
+          name : 'update_date',
+          label: 'Update Date',
+        }, datetimeDefaults);
+
+        controls.pushObject(store.createRecord('control', createDateData));
+        controls.pushObject(store.createRecord('control', updateDateData));
+
+      });
+
+      // Wait until we get all the controls and then create the content type.
+      Ember.RSVP.Promise.all([textfieldControl, datetimeControls]).then(function () {
 
         // creating a new content-type
-        // a textcontrol (name) is required
         var type = this.store.createRecord('content-type', {
-          id    : this.get('newTypeId'),
-          name  : this.get('newTypeName')
+          id  : this.get('newTypeId'),
+          name: this.get('newTypeName')
         });
 
         if (this.get('newTypeType') === 'single') {
@@ -59,22 +87,23 @@ export default Ember.ArrayController.extend({
         type.get('controls').pushObjects(controls);
 
         type.save().then(function (type) {
+
           this.send('notify', 'success', 'Type created!', {
-            icon: 'ok-sign',
+            icon     : 'ok-sign',
             className: 'wh-tray-wide'
           });
+
           if (type.get('oneOff')) {
             this.store.createRecord('data', {
-              id: type.get('id'),
-              data: {
-                name: ""
-              }
+              id  : type.get('id'),
+              data: { name: "" }
             }).save().then(function () {
               this.transitionToRoute('form', type);
             }.bind(this));
           } else {
             this.transitionToRoute('form', type);
           }
+
           this.reset();
         }.bind(this));
 

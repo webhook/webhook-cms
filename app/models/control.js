@@ -7,6 +7,7 @@ export default DS.Model.extend({
   controlType: DS.belongsTo('control-type'),
   showInCms  : DS.attr('boolean'),
   locked     : DS.attr('boolean'),
+  hidden     : DS.attr('boolean'),
   meta       : DS.belongsTo('meta-data', { embedded: 'always' }),
 
   setName: function () {
