@@ -11,7 +11,6 @@ Router.map(function() {
 
   this.route('login');
   this.route('password-reset');
-  this.route('password-change');
   this.route('create-user');
   this.route('confirm-email');
   this.route('resend-email');
@@ -27,6 +26,7 @@ Router.map(function() {
       this.route('domain');
       this.route('general');
       this.route('team');
+      this.route('password-change');
     });
 
     this.resource('wh.content', { path: '/content/' }, function () {
