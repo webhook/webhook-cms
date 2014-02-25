@@ -1,14 +1,14 @@
 import validateControl from 'appkit/utils/validators';
 
 export default Ember.ObjectController.extend({
-  type: null,
+  type       : null,
+  lastUpdated: null,
+  createDate : null,
 
   saveItem: function () {
 
     // automatically update `update_date`
-    this.get('type.controls').filterBy('name', 'update_date').forEach(function (control) {
-      control.set('value', moment().format('YYYY-MM-DDTHH:mm'));
-    });
+    this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
 
     var data = {};
 

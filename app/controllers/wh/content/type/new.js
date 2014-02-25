@@ -7,7 +7,7 @@ export default Ember.ObjectController.extend({
 
     // automatically set the update and create dates to now
     this.get('model.controls').filter(function (control) {
-      return control.get('name') === 'update_date' || control.get('name') === 'create_date';
+      return control.get('name') === 'last_updated' || control.get('name') === 'create_date';
     }).forEach(function (control) {
       control.set('value', moment().format('YYYY-MM-DDTHH:mm'));
     });
