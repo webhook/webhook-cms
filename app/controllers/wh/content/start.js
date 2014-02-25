@@ -62,8 +62,8 @@ export default Ember.ArrayController.extend({
         }, datetimeDefaults);
 
         var updateDateData = Ember.$.extend({
-          name : 'update_date',
-          label: 'Update Date',
+          name : 'last_updated',
+          label: 'Last Updated',
         }, datetimeDefaults);
 
         controls.pushObject(store.createRecord('control', createDateData));

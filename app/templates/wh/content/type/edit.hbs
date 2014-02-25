@@ -3,6 +3,8 @@
   <h1>Editing {{id}}</h1>
   <hr/>
 
+  <p>Created: {{createDate}}. Last updated: {{lastUpdated}}</p>
+
   {{#view 'item-form'}}
     <fieldset>
       {{#each control in type.controls}}

@@ -27,6 +27,9 @@ export default Ember.Route.extend({
       // remove offset so datetime input can display
       if (value && control.get('controlType.widget') === 'datetime') {
         value = moment(value).format('YYYY-MM-DDTHH:mm');
+        if (['last_updated', 'create_date'].indexOf(control.get('name')) >= 0) {
+          controller.set(control.get('name').camelize(), value);
+        }
       }
 
       if (!value && control.get('controlType.valueType') === 'object') {

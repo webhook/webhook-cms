@@ -3,26 +3,26 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   editingControl   : null,
   isEditing        : false,
 
-  nameChange: function () {
+  // nameChange: function () {
 
-    var names = this.get('controls').mapBy('name').sort(),
-        dupes = [];
+  //   var names = this.get('controls').mapBy('name').sort(),
+  //       dupes = [];
 
-    for (var i = 0; i < names.length - 1; i++) {
-      if (names[i + 1] === names[i]) {
-        dupes.push(names[i]);
-      }
-    }
+  //   for (var i = 0; i < names.length - 1; i++) {
+  //     if (names[i + 1] === names[i]) {
+  //       dupes.push(names[i]);
+  //     }
+  //   }
 
-    dupes = dupes.uniq();
+  //   dupes = dupes.uniq();
 
-    this.get('controls').setEach('isValid', true);
+  //   this.get('controls').setEach('isValid', true);
 
-    var invalidControls = this.get('controls').filter(function (control, index) {
-      return dupes.indexOf(control.get('name')) >= 0;
-    }).setEach('isValid', false);
+  //   var invalidControls = this.get('controls').filter(function (control, index) {
+  //     return dupes.indexOf(control.get('name')) >= 0;
+  //   }).setEach('isValid', false);
 
-  }.observes('model.controls.@each.name'),
+  // }.observes('model.controls.@each.name'),
 
   updateOrder: function (originalindex, newindex) {
 
