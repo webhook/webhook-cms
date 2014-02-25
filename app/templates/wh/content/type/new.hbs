@@ -1,5 +1,4 @@
-
-<form class="wy-form-stacked" {{action "createItem" on="submit"}}>
+{{#view 'item-form'}}
   <fieldset>
     <legend>New {{name}}</legend>
     {{#each control in controls}}
@@ -8,4 +7,4 @@
     <button type="submit" class="btn">Save</button>
     {{#if saved}}{{saved}}{{/if}}
   </fieldset>
-</form>
+{{/view}}
