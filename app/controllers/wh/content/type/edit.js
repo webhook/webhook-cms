@@ -8,53 +8,53 @@ export default Ember.ObjectController.extend({
     this.get('type.controls').forEach(validateControl);
   }.observes('type.controls.@each.value'),
 
-  actions: {
-    saveItem: function () {
+  saveItem: function () {
 
-      if (!this.get('type.controls').isEvery('isValid')) {
-        window.alert('Fix your problems.');
-        return;
+    this.get('type.controls').forEach(validateControl);
+
+    if (!this.get('type.controls').isEvery('isValid')) {
+      window.alert('Fix your problems.');
+      return;
+    }
+
+    var data = {};
+
+    // gather and clean data for storage
+    this.get('type.controls').filterBy('value').forEach(function (control) {
+      var value = control.get('value');
+
+      if (control.get('controlType.valueType') === 'object') {
+        Ember.$.each(value, function (key, childValue) {
+          if (!childValue) {
+            delete value[key];
+          }
+        });
       }
 
-      var data = {};
+      data[control.get('name')] = value;
+    });
 
-      // gather and clean data for storage
-      this.get('type.controls').filterBy('value').forEach(function (control) {
-        var value = control.get('value');
+    // checkboxes are special
+    this.get('type.controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
+      data[control.get('name')] = [];
+      control.get('meta.data.options').forEach(function (option) {
+        data[control.get('name')].push(option);
+      });
+    });
 
-        if (control.get('controlType.valueType') === 'object') {
-          Ember.$.each(value, function (key, childValue) {
-            if (!childValue) {
-              delete value[key];
-            }
-          });
-        }
+    this.get('model').set('data', data).save().then(function () {
 
-        data[control.get('name')] = value;
+      this.send('notify', 'success', 'Item saved!', {
+        icon: 'ok-sign'
       });
 
-      // checkboxes are special
-      this.get('type.controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
-        data[control.get('name')] = [];
-        control.get('meta.data.options').forEach(function (option) {
-          data[control.get('name')].push(option);
-        });
-      });
+      window.ENV.sendBuildSignal();
 
-      this.get('model').set('data', data).save().then(function () {
+      if (!this.get('type.oneOff')) {
+        this.get('type.controls').setEach('value', null);
+        this.transitionToRoute('wh.content.type', this.get('type'));
+      }
+    }.bind(this));
 
-        this.send('notify', 'success', 'Item saved!', {
-          icon: 'ok-sign'
-        });
-
-        window.ENV.sendBuildSignal();
-
-        if (!this.get('type.oneOff')) {
-          this.get('type.controls').setEach('value', null);
-          this.transitionToRoute('wh.content.type', this.get('type'));
-        }
-      }.bind(this));
-
-    }
   }
 });

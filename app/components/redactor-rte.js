@@ -15,16 +15,22 @@ export default Ember.Component.extend({
     var self = this,
         session = this.get('session');
 
-    var rte = this.$('textarea').webhookRedactor({
-      initCallback: function() {
+    var rte = this.$('textarea');
+
+    rte.one({
+      'init.webhookRedactor': function (event, redactor) {
         if (self.get('value')) {
-          this.set(self.get('value'));
+          redactor.set(self.get('value'));
         }
-      },
-      changeCallback: function(html) {
-        self.set('value', html);
+        rte.on('mutate.webhookRedactor', function (event, redactor) {
+          self.set('value', redactor.get());
+          // data isn't being set in time for the save so force it.
+          Ember.run.sync();
+        });
       }
     });
+
+    rte.webhookRedactor();
 
     var whRedactor = rte.webhookRedactor('getObject');
     this.set('whRedactor', whRedactor);
@@ -60,7 +66,7 @@ export default Ember.Component.extend({
 
     var widget = Ember.$('#' + this.get('imageModelSectionId')).on('load', function (event, url) {
 
-      var data = '<figure data-type="image"><img src="' + url + '"><figcaption>Type to add caption (optional)</figcaption></figure>';
+      var data = '<figure data-type="image"><img src="' + url + '"><figcaption></figcaption></figure>';
 
       whRedactor.selectionRestore();
 
