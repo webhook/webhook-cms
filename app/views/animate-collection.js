@@ -9,25 +9,25 @@ export default Ember.CollectionView.extend({
       var collectionView = this.get('parentView');
       if (collectionView.get('initialsAdded') === collectionView.get('initialLength')) {
         this.$().addClass('wy-just-added');
-        this.set('addedTimeout', setTimeout(function () {
+        this.set('addedTimeout', Ember.run.later(this, function () {
           this.$().removeClass('wy-just-added');
-        }.bind(this), this.get('animationLength')));
+        }, this.get('animationLength')));
       } else {
         collectionView.incrementProperty('initialsAdded');
       }
 
       this.get('context').on('didUpdate', function () {
         this.$().addClass('wy-just-updated');
-        this.set('updatedTimeout', setTimeout(function () {
+        this.set('updatedTimeout', Ember.run.later(this, function () {
           this.$().removeClass('wy-just-updated');
-        }.bind(this), this.get('animationLength')));
+        }, this.get('animationLength')));
       }.bind(this));
 
     },
     willDestroyElement: function () {
       this.get('context').off('didUpdate');
-      window.clearTimeout(this.get('addedTimeout'));
-      window.clearTimeout(this.get('updateTimeout'));
+      Ember.run.cancel(this.get('addedTimeout'));
+      Ember.run.cancel(this.get('updateTimeout'));
     }
   }),
   willInsertElement: function () {
