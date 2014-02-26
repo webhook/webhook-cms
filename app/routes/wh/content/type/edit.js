@@ -19,6 +19,10 @@ export default Ember.Route.extend({
         type = this.modelFor('wh.content.type');
 
     type.get('controls').forEach(function (control) {
+
+      control.set('widgetIsValid', true);
+      control.set('widgetErrors', Ember.A([]));
+
       var value = data[control.get('name')];
 
       if (value && control.get('controlType.widget') === 'checkbox') {

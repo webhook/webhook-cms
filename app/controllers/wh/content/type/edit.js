@@ -1,4 +1,4 @@
-import validateControl from 'appkit/utils/validators';
+import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 
 export default Ember.ObjectController.extend({
@@ -10,6 +10,12 @@ export default Ember.ObjectController.extend({
 
     // automatically update `update_date`
     this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
+
+    validateControls(this.get('type.controls'));
+
+    if (this.get('type.controls').isAny('widgetIsValid', false)) {
+      return;
+    }
 
     var data = dataFromControls(this.get('type.controls'));
 

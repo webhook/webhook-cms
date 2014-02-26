@@ -1,5 +1,5 @@
 import getItemModelName from 'appkit/utils/model';
-import validateControl from 'appkit/utils/validators';
+import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 
 export default Ember.ObjectController.extend({
@@ -10,6 +10,12 @@ export default Ember.ObjectController.extend({
     this.get('model.controls').filter(function (control) {
       return control.get('name') === 'last_updated' || control.get('name') === 'create_date';
     }).setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
+
+    validateControls(this.get('model.controls'));
+
+    if (this.get('model.controls').isAny('widgetIsValid', false)) {
+      return;
+    }
 
     var data = dataFromControls(this.get('model.controls'));
 

@@ -1,3 +1,5 @@
+import validateControl from 'appkit/utils/validators';
+
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
   editingControl   : null,
@@ -102,11 +104,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   actions: {
     updateType: function () {
-
-      if (!this.get('model.controls').isEvery('isValid')) {
-        window.alert('Fix your invalid controls and try again.');
-        return;
-      }
 
       this.get('model.controls').forEach(function (control) {
         // hax

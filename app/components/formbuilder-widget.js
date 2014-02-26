@@ -3,7 +3,8 @@ export default Ember.Component.extend({
   classNameBindings: [
     'control.required:wy-control-group-required',
     'isEditingThis:wy-control-group-edit',
-    'isPlaced:wy-control-group-placed'
+    'isPlaced:wy-control-group-placed',
+    'control.widgetIsValid::wy-control-group-error'
   ],
 
   isEditingThis: false,

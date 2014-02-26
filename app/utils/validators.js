@@ -1,12 +1,16 @@
-export default function validateControl (control) {
+export default function validateControls (controls) {
 
-  control.set('isValid', true);
-  control.set('widgetErrors', Ember.A([]));
+  controls.setEach('widgetIsValid', true);
 
-  if (control.get('required') && !control.get('value')) {
-    control.set('isValid', false);
-    control.get('widgetErrors').pushObject('This field is required.');
-  }
+  controls.forEach(function (control) {
+    control.set('widgetErrors', Ember.A([]));
+
+    if (control.get('required') && !control.get('value')) {
+      control.set('widgetIsValid', false);
+      control.get('widgetErrors').pushObject('This field is required.');
+    }
+
+  });
 
   // switch (control.get('controlType.widget')) {
   // case 'name':

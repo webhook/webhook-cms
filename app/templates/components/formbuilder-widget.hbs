@@ -2,15 +2,15 @@
 <div class="wy-control">
   {{partial control.controlType.controlPartialPath}}
   {{partial 'widgets/common/help'}}
-</div>
 
-{{#if control.widgetErrors}}
-  <ul>
-    {{#each control.widgetErrors}}
-      <li class="wy-text-danger">{{this}}</li>
-    {{/each}}
-  </ul>
-{{/if}}
+  {{#if control.widgetErrors}}
+    <ul>
+      {{#each control.widgetErrors}}
+        <li><span class="wy-form-message">{{this}}</span></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
 
 {{!-- we only set `doEdit` on the formbuilder --}}
 <div class="disabled"></div>

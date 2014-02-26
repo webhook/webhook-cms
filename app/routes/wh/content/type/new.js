@@ -3,7 +3,12 @@ export default Ember.Route.extend({
     return this.modelFor('wh.content.type');
   },
   setupController: function (controller, model) {
+
     model.get('controls').forEach(function (control) {
+
+      control.set('widgetIsValid', true);
+      control.set('widgetErrors', Ember.A([]));
+
       var value = '';
       switch (control.get('controlType.valueType')) {
       case 'object':
