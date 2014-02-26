@@ -54,6 +54,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       showInCms: (controls.get('length') < 3)
     });
 
+    control.set('widgetIsValid', true);
+
     var meta = this.store.createRecord('meta-data');
 
     switch (controlType.get('widget')) {
