@@ -47,6 +47,9 @@ export default Ember.Component.extend({
     // Observe changes to options (form builder)
     this.observeOptions();
 
+    // Watch images for size changes
+    this.observeImages();
+
   },
 
   imageButtonCallback: function () {
@@ -56,17 +59,29 @@ export default Ember.Component.extend({
 
     // every time we call the redactor modal, we have to add the event listeners
     // redactor destroys dom elements (listeners)
-    this.get('whRedactor').modalInit('Insert Image', '#' + this.get('imageModelId'), 500, this.addImageModelListener.bind(this));
+    this.get('whRedactor').modalInit('Insert Image', '#' + this.get('imageModelId'), 500, this.addImageModalListener.bind(this));
 
   },
 
-  addImageModelListener: function () {
+  embedlyUrl: function (url, width) {
 
-    var whRedactor = this.get('whRedactor');
+    var params = [];
+    params.push('width=' + width);
+    params.push('url=' + encodeURIComponent(url));
+    params.push('key=' + window.ENV.resizeKey);
+
+    return window.ENV.resizeUrl + '?' + params.join('&');
+
+  },
+
+  addImageModalListener: function () {
+
+    var self = this,
+        whRedactor = this.get('whRedactor');
 
     var widget = Ember.$('#' + this.get('imageModelSectionId')).on('load', function (event, url) {
 
-      var data = '<figure data-type="image"><img src="' + url + '"><figcaption></figcaption></figure>';
+      var data = '<figure data-type="image"><a href="' + url + '"><img src="' + self.embedlyUrl(url, 1200) + '"></a><figcaption></figcaption></figure>';
 
       whRedactor.selectionRestore();
 
@@ -176,6 +191,32 @@ export default Ember.Component.extend({
 
     return widget;
 
+  },
+
+  observeImages: function () {
+    var self = this;
+    this.get('whRedactor').$editor.on('imageCommand', 'figure', function (event, command) {
+
+      var size;
+
+      switch (command) {
+      case 'small':
+        size = 300;
+        break;
+      case 'medium':
+        size = 600;
+        break;
+      case 'large':
+        size = 1200;
+        break;
+      }
+
+      if (size) {
+        var url = $(this).find('a').attr('href'),
+            resizeUrl = self.embedlyUrl(url, size);
+        $(this).find('img').attr('src', resizeUrl);
+      }
+    });
   },
 
   observeOptions: function () {
