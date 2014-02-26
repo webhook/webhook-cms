@@ -11,9 +11,13 @@ export default Ember.ObjectController.extend({
     // automatically update `update_date`
     this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
 
+    // make sure `create_date` is set
+    this.get('type.controls').filterBy('name', 'create_date').rejectBy('value').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
+
     validateControls(this.get('type.controls'));
 
     if (this.get('type.controls').isAny('widgetIsValid', false)) {
+      window.console.log(this.get('type.controls').filterBy('widgetIsValid', false).getEach('name'));
       return;
     }
 
