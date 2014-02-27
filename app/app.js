@@ -56,6 +56,12 @@ Ember.Application.initializer({
         localSocket.connected = true;
       };
 
+      if(!$('meta[name=suppressAlert]').attr('content')) {
+        localSocket.socket.onclose = function() {
+          alert('Local Socket unable to connect');
+        };
+      }
+
       // Shut down LiveReload
       if(window.LiveReload && !keepReload) {
         var shutDown = new CustomEvent('LiveReloadShutDown');
