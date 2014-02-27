@@ -1,8 +1,4 @@
 $( document ).ready(function() {
-  // Highlight anything in pre tags, this comes from Wyrm
-  $('pre').addClass('highlight');
-  $('pre.highlight').each(function(i, e) {hljs.highlightBlock(e)});
-
   // Shift nav in mobile when clicking the menu.
   $(document).on('click', "[data-toggle='wy-nav-top']", function(event) {
     $("[data-toggle='wy-nav-shift']").toggleClass("shift");
