@@ -77,7 +77,7 @@ export default Ember.Route.extend({
 
       var addControl = function (data) {
         controls.pushObject(this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
-      };
+      }.bind(this);
 
       if (!controls.isAny('name', 'create_date')) {
         addControl({
