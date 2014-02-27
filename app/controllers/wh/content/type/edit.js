@@ -50,10 +50,7 @@ export default Ember.ObjectController.extend({
 
     this.get('model').set('data', data).save().then(function () {
 
-      // Only send build signal if item is live.
-      if (this.get('isLive')) {
-        window.ENV.sendBuildSignal();
-      }
+      window.ENV.sendBuildSignal();
 
       this.send('notify', 'success', 'Item saved!', {
         icon: 'ok-sign'
