@@ -3,19 +3,18 @@
   <h1>Editing {{id}}</h1>
   <hr/>
 
-  <p>Created: {{createDate}}. Last updated: {{lastUpdated}}</p>
+  <p>Created: {{format-time createDate format="YYYY"}}. Last updated: {{format-time lastUpdated}}</p>
 
   {{#view 'item-form'}}
     <fieldset>
       {{#each control in type.controls}}
-        {{#unless control.hidden}}
+
           {{formbuilder-widget control=control session=session}}
-        {{/unless}}
+
       {{/each}}
       <div class="wy-btn-group">
         <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Save</button>
       </div>
-      {{#if saved}}{{saved}}{{/if}}
     </fieldset>
   {{/view}}
 </section>
