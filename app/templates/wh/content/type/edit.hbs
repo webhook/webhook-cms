@@ -1,9 +1,12 @@
 <section class="wh-content-edit">
   <button class="btn btn-neutral icon icon-eye-open float-right"> Preview</button>
   <h1>Editing {{id}}</h1>
+  <p class="wh-item-publish-time">
+    Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>
+    Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>
+  </p>
   <hr/>
 
-  <p>Created: {{format-time createDate format="YYYY"}}. Last updated: {{format-time lastUpdated}}</p>
 
   {{#view 'item-form'}}
     <fieldset>
@@ -42,14 +45,12 @@
           <button type="button" class="btn btn-small btn-link float-left" {{action "saveDraft"}}>Save as a draft instead?</button>
 
           <div class="wy-btn-group">
-            <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "publishFuture"}}> Publish</button>
+            <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "publishFuture"}}> Publish at this time</button>
           </div>
 
           <div class="wy-control-group">
             <div class="wy-control">
-              <div class="wy-input-prefix">
-                <span class="wy-input-context"><i class="icon icon-calendar"></i> Publish date</span>{{input type="datetime-local" value=publishDate}}
-              </div>
+              {{input type="datetime-local" value=publishDate}}
             </div>
           </div>
 
@@ -60,7 +61,7 @@
         <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
         <div class="wy-btn-group">
-          <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Unpublish?</button>
+          <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
           <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
         </div>
 
