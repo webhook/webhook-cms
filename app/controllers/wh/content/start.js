@@ -45,7 +45,7 @@ export default Ember.ArrayController.extend({
         }));
       });
 
-      // Required/hidden createDate and updateDate fields on all items.
+      // Required/hidden `createDate`, `updateDate`, `publishDate` fields on all items.
       var datetimeControls = store.find('control-type', 'datetime').then(function (controlType) {
 
         var datetimeDefaults = {
@@ -56,18 +56,20 @@ export default Ember.ArrayController.extend({
           hidden     : true
         };
 
-        var createDateData = Ember.$.extend({
+        controls.pushObject(store.createRecord('control', Ember.$.extend({
           name : 'create_date',
           label: 'Create Date',
-        }, datetimeDefaults);
+        }, datetimeDefaults)));
 
-        var updateDateData = Ember.$.extend({
+        controls.pushObject(store.createRecord('control', Ember.$.extend({
           name : 'last_updated',
           label: 'Last Updated',
-        }, datetimeDefaults);
+        }, datetimeDefaults)));
 
-        controls.pushObject(store.createRecord('control', createDateData));
-        controls.pushObject(store.createRecord('control', updateDateData));
+        controls.pushObject(store.createRecord('control', Ember.$.extend({
+          name : 'publish_date',
+          label: 'publishDate',
+        }, datetimeDefaults)));
 
       });
 

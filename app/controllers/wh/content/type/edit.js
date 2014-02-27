@@ -34,8 +34,8 @@ export default Ember.ObjectController.extend({
     // automatically update `update_date`
     this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
 
-    // make sure `create_date` is set
-    this.get('type.controls').filterBy('name', 'create_date').rejectBy('value').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
+    // sync publish date with controller
+    this.get('type.controls').findBy('name', 'publish_date').set('value', this.get('publishDate'));
 
     validateControls(this.get('type.controls'));
 
@@ -46,7 +46,6 @@ export default Ember.ObjectController.extend({
     var data = dataFromControls(this.get('type.controls'));
 
     data.isDraft = this.getWithDefault('isDraft', null);
-    data.publishDate = this.get('publishDate') ? moment(this.get('publishDate')).format() : null;
 
     this.get('model').set('data', data).save().then(function () {
 
