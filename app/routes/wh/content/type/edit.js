@@ -21,8 +21,6 @@ export default Ember.Route.extend({
   },
   setupController: function (controller, model) {
 
-    controller.set('lastUpdated', null);
-    controller.set('createDate', null);
     controller.set('showSchedule', false);
 
     var data = model.get('data'),
@@ -55,6 +53,9 @@ export default Ember.Route.extend({
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
     controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
+
+    controller.set('lastUpdated', type.get('controls').findBy('name', 'last_updated').get('value'));
+    controller.set('createDate', type.get('controls').findBy('name', 'create_date').get('value'));
 
     controller.set('type', type);
     this._super.apply(this, arguments);
