@@ -13,10 +13,11 @@
         {{/unless}}
       {{/each}}
 
+    <div class="wh-save-item">
       {{#if type.oneOff}}
 
         <div class="wy-btn-group">
-          <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Save</button>
+          <button type="submit" class="btn btn-small btn-info icon icon-ok-sign"> Save</button>
         </div>
 
       {{else}}
@@ -24,8 +25,8 @@
         {{#if isDraft}}
 
           <div class="wy-btn-group">
-            <div class="wy-dropdown wy-dropdown-bubble">
-              <button type="button" class="btn btn-info icon icon-question-sign caret"> Save... </button>
+            <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
+              <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
               <dl class="wy-dropdown-menu">
                 <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
                 <dd><a {{action "publishNow"}}>Publish now</a></dd>
@@ -38,35 +39,35 @@
 
         {{#if isScheduled}}
 
-          <div class="wy-control-group">
-            <label for="right-label" >Publish date</label>
-            <div class="wy-control">
-              <div class="wy-input-prefix">
-                <span class="wy-input-context"><i class="icon icon-calendar"></i></span>{{input type="datetime-local" value=publishDate}}
-              </div>
-            </div>
-          </div>
+          <button type="button" class="btn btn-small btn-link float-left" {{action "saveDraft"}}>Save as a draft instead?</button>
 
           <div class="wy-btn-group">
-            <button type="button" class="btn icon icon-ok-sign caret" {{action "publishFuture"}}> Publish on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}</button>
-            <button type="button" class="btn btn-link" {{action "saveDraft"}}>Save as a draft</button>
+            <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "publishFuture"}}> Publish</button>
+          </div>
+
+          <div class="wy-control-group">
+            <div class="wy-control">
+              <div class="wy-input-prefix">
+                <span class="wy-input-context"><i class="icon icon-calendar"></i> Publish date</span>{{input type="datetime-local" value=publishDate}}
+              </div>
+            </div>
           </div>
 
         {{/if}}
 
         {{#if isLive}}
 
-          <p>This {{type.name}} went live on your site on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. <button type="button" class="btn btn-link" {{action "changePublishDate"}}>Change publish date?</button></p>
+        <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
-          <div class="wy-btn-group">
-            <button type="submit" class="btn icon icon-ok-sign caret"> Save</button>
-            <button type="button" class="btn btn-link wy-text-danger" {{action "deleteItem"}}>Delete {{type.name}}</button>
-          </div>
+        <div class="wy-btn-group">
+          <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Unpublish?</button>
+          <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
+        </div>
 
         {{/if}}
 
       {{/if}}
-
+    </div>
     </fieldset>
   {{/view}}
 </section>

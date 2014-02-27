@@ -332,6 +332,30 @@ code
 .wy-tray-container li.wh-tray-wide
   width: 30%
 
+.wh-save-item
+  position: fixed
+  bottom: 0
+  width: 100%
+  right: 0
+  background: $white
+  border-top: solid 1px rgba(0,0,0,.1)
+  padding: $base-line-height / 2 $base-line-height
+  padding-left: $nav-desktop-width + $base-line-height
+  +clearfix
+  .wy-btn-group
+    margin-bottom: 0
+    display: inline-block
+    float: right
+  .wy-control-group
+    display: inline-block
+    float: right
+    margin: 0
+    margin-right: $base-line-height / 2
+  .wh-save-info
+    padding-top: $base-line-height / 4
+    float: left
+    font-size: 80%
+
 +media($tablet)
   .wy-body-for-nav
     background: $section-background-color
@@ -356,6 +380,8 @@ code
       top: 0
       height: 100%
       overflow: hidden
+  .wh-save-item
+    padding-left: $base-line-height
 
 @media print
   .wy-nav-side
