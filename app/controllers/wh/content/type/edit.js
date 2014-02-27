@@ -5,6 +5,29 @@ export default Ember.ObjectController.extend({
   type       : null,
   lastUpdated: null,
   createDate : null,
+  isDraft    : null,
+  publishDate: null,
+  showSchedule: false,
+
+  isLive: function () {
+    if (this.get('showSchedule')) {
+      return false;
+    }
+    if (!this.get('publishDate') || this.get('isDraft')) {
+      return false;
+    }
+    return moment(this.get('publishDate')).isBefore();
+  }.property('publishDate', 'isDraft', 'showSchedule'),
+
+  isScheduled: function () {
+    if (this.get('showSchedule')) {
+      return true;
+    }
+    if (!this.get('publishDate') || this.get('isDraft')) {
+      return false;
+    }
+    return moment(this.get('publishDate')).isAfter();
+  }.property('publishDate', 'isDraft', 'showSchedule'),
 
   saveItem: function () {
 
@@ -17,11 +40,13 @@ export default Ember.ObjectController.extend({
     validateControls(this.get('type.controls'));
 
     if (this.get('type.controls').isAny('widgetIsValid', false)) {
-      window.console.log(this.get('type.controls').filterBy('widgetIsValid', false).getEach('name'));
       return;
     }
 
     var data = dataFromControls(this.get('type.controls'));
+
+    data.isDraft = this.getWithDefault('isDraft', null);
+    data.publishDate = this.get('publishDate') ? moment(this.get('publishDate')).format() : null;
 
     this.get('model').set('data', data).save().then(function () {
       window.ENV.sendBuildSignal();
@@ -36,5 +61,32 @@ export default Ember.ObjectController.extend({
       }
     }.bind(this));
 
+  },
+
+  actions: {
+    saveDraft: function () {
+      this.set('isDraft', true);
+      this.set('showSchedule', null);
+      this.saveItem();
+    },
+    publishNow: function () {
+      this.set('isDraft', null);
+      this.set('publishDate', moment().format());
+      this.saveItem();
+    },
+    publishFuture: function () {
+      this.set('isDraft', null);
+      this.saveItem();
+    },
+    changePublishDate: function () {
+      this.set('isDraft', null);
+      this.set('showSchedule', true);
+    },
+    deleteItem: function () {
+      if (window.confirm('Are you sure?')) {
+        this.get('model').destroyRecord();
+        this.transitionToRoute('wh.content.type', this.get('type'));
+      }
+    }
   }
 });

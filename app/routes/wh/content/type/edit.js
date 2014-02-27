@@ -14,9 +14,13 @@ export default Ember.Route.extend({
 
     controller.set('lastUpdated', null);
     controller.set('createDate', null);
+    controller.set('showSchedule', false);
 
     var data = model.get('data'),
         type = this.modelFor('wh.content.type');
+
+    controller.set('publishDate', data.publishDate ? moment(data.publishDate).format('YYYY-MM-DDTHH:mm') : null);
+    controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
 
     type.get('controls').forEach(function (control) {
 

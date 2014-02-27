@@ -5,8 +5,6 @@
 
   <p>Created: {{format-time createDate format="YYYY"}}. Last updated: {{format-time lastUpdated}}</p>
 
-  <pre>asdf</pre>
-
   {{#view 'item-form'}}
     <fieldset>
       {{#each control in type.controls}}
@@ -14,9 +12,61 @@
           {{formbuilder-widget control=control session=session}}
         {{/unless}}
       {{/each}}
-      <div class="wy-btn-group">
-        <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Save</button>
-      </div>
+
+      {{#if type.oneOff}}
+
+        <div class="wy-btn-group">
+          <button type="submit" class="btn btn-neutral icon icon-ok-sign"> Save</button>
+        </div>
+
+      {{else}}
+
+        {{#if isDraft}}
+
+          <div class="wy-btn-group">
+            <div class="wy-dropdown wy-dropdown-bubble">
+              <button type="button" class="btn btn-info icon icon-question-sign caret"> Save... </button>
+              <dl class="wy-dropdown-menu">
+                <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
+                <dd><a {{action "publishNow"}}>Publish now</a></dd>
+                <dd><a {{action "changePublishDate"}}>Publish at a specific time</a></dd>
+              </dl>
+            </div>
+          </div>
+
+        {{/if}}
+
+        {{#if isScheduled}}
+
+          <div class="wy-control-group">
+            <label for="right-label" >Publish date</label>
+            <div class="wy-control">
+              <div class="wy-input-prefix">
+                <span class="wy-input-context"><i class="icon icon-calendar"></i></span>{{input type="datetime-local" value=publishDate}}
+              </div>
+            </div>
+          </div>
+
+          <div class="wy-btn-group">
+            <button type="button" class="btn icon icon-ok-sign caret" {{action "publishFuture"}}> Publish on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}</button>
+            <button type="button" class="btn btn-link" {{action "saveDraft"}}>Save as a draft</button>
+          </div>
+
+        {{/if}}
+
+        {{#if isLive}}
+
+          <p>This {{type.name}} went live on your site on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. <button type="button" class="btn btn-link" {{action "changePublishDate"}}>Change publish date?</button></p>
+
+          <div class="wy-btn-group">
+            <button type="submit" class="btn icon icon-ok-sign caret"> Save</button>
+            <button type="button" class="btn btn-link wy-text-danger" {{action "deleteItem"}}>Delete {{type.name}}</button>
+          </div>
+
+        {{/if}}
+
+      {{/if}}
+
     </fieldset>
   {{/view}}
 </section>
