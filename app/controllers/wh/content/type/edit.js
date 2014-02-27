@@ -66,6 +66,7 @@ export default Ember.ObjectController.extend({
   actions: {
     saveDraft: function () {
       this.set('isDraft', true);
+      this.set('publishDate', null);
       this.set('showSchedule', null);
       this.saveItem();
     },
