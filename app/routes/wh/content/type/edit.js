@@ -1,7 +1,7 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
-  beforeModel: function () {
+  beforeModel: function (transition, params) {
     // return this.store.find('control-type');
     return Ember.RSVP.Promise.all([
       // need to make sure all the content types are in the store
@@ -12,19 +12,24 @@ export default Ember.Route.extend({
     ]);
   },
   model: function (params) {
-    var modelName = getItemModelName(this.modelFor('wh.content.type'));
-    return this.store.find(modelName, params.item_id);
+    this.set('modelId', params.item_id);
+    return this.modelFor('wh.content.type');
   },
   afterModel: function (model) {
-    // Make sure item has `create_date` value
-    return this.fixItem(model);
+    window.console.log(this.get('modelId'));
+    if (this.get('modelId')) {
+      return this.store.find(getItemModelName(model), this.get('modelId')).then(function (item) {
+        this.fixItem(item);
+        this.set('itemModel', item);
+      }.bind(this));
+    }
   },
-  setupController: function (controller, model) {
+  setupController: function (controller, type) {
 
     controller.set('showSchedule', false);
+    controller.set('itemModel', this.get('itemModel'));
 
-    var data = model.get('data'),
-        type = this.modelFor('wh.content.type');
+    var data = this.getWithDefault('itemModel.data', {});
 
     type.get('controls').forEach(function (control) {
 
@@ -104,8 +109,8 @@ export default Ember.Route.extend({
       contentType.save();
 
     }.bind(this));
-
   },
+
   fixItem: function (item) {
     if (!item.get('data').create_date) {
       item.get('data').create_date = moment().format('YYYY-MM-DDTHH:mm');

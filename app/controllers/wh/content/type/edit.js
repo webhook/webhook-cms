@@ -1,13 +1,15 @@
+import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 
 export default Ember.ObjectController.extend({
-  type       : null,
-  lastUpdated: null,
-  createDate : null,
-  isDraft    : null,
-  publishDate: null,
+  type        : null,
+  lastUpdated : null,
+  createDate  : null,
+  isDraft     : null,
+  publishDate : null,
   showSchedule: false,
+  itemModel   : null,
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -31,11 +33,18 @@ export default Ember.ObjectController.extend({
 
   saveItem: function () {
 
+    var controls = this.get('type.controls');
+
     // automatically update `update_date`
-    this.get('type.controls').filterBy('name', 'last_updated').setEach('value', moment().format('YYYY-MM-DDTHH:mm'));
+    controls.findBy('name', 'last_updated').set('value', moment().format('YYYY-MM-DDTHH:mm'));
 
     // sync publish date with controller
-    this.get('type.controls').findBy('name', 'publish_date').set('value', this.get('publishDate'));
+    controls.findBy('name', 'publish_date').set('value', this.get('publishDate'));
+
+    // set create_date if missing
+    if (!controls.findBy('name', 'create_date').get('value')) {
+      controls.findBy('name', 'create_date').set('value', moment().format('YYYY-MM-DDTHH:mm'));
+    }
 
     validateControls(this.get('type.controls'));
 
@@ -47,7 +56,7 @@ export default Ember.ObjectController.extend({
 
     data.isDraft = this.getWithDefault('isDraft', null);
 
-    this.get('model').set('data', data).save().then(function () {
+    this.getWithDefault('itemModel', this.store.createRecord(getItemModelName(this.get('model')))).set('data', data).save().then(function () {
 
       window.ENV.sendBuildSignal();
 

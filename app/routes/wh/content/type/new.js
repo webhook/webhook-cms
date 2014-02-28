@@ -1,25 +1,5 @@
-export default Ember.Route.extend({
-  model: function () {
-    return this.modelFor('wh.content.type');
-  },
-  setupController: function (controller, model) {
+import EditRoute from 'appkit/routes/wh/content/type/edit';
 
-    model.get('controls').forEach(function (control) {
-
-      control.set('widgetIsValid', true);
-      control.set('widgetErrors', Ember.A([]));
-
-      var value = '';
-      switch (control.get('controlType.valueType')) {
-      case 'object':
-        value = {};
-        break;
-      case 'string':
-        value = '';
-        break;
-      }
-      control.set('value', value);
-    });
-    this._super.apply(this, arguments);
-  }
+export default EditRoute.extend({
+  templateName: 'wh/content/type/edit'
 });

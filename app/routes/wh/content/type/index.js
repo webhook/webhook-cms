@@ -4,9 +4,10 @@ export default Ember.Route.extend({
   beforeModel: function () {
     var contentType = this.modelFor('wh.content.type');
     if (contentType.get('oneOff')) {
-      return this.store.find('data', contentType.get('id')).then(function (type) {
-        this.transitionTo('wh.content.type.edit', type);
-      }.bind(this));
+      this.transitionTo('wh.content.type.edit', contentType.get('id'));
+      // return this.store.find('data', contentType.get('id')).then(function (type) {
+      //   this.transitionTo('wh.content.type.edit', type);
+      // }.bind(this));
     }
   },
   model: function () {
