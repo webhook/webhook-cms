@@ -56,7 +56,9 @@ export default Ember.ObjectController.extend({
 
     data.isDraft = this.getWithDefault('isDraft', null);
 
-    this.getWithDefault('itemModel', this.store.createRecord(getItemModelName(this.get('model')))).set('data', data).save().then(function () {
+    var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
+
+    itemModel.set('data', data).save().then(function () {
 
       window.ENV.sendBuildSignal();
 
@@ -81,15 +83,20 @@ export default Ember.ObjectController.extend({
     },
     publishNow: function () {
       this.set('isDraft', null);
-      this.set('publishDate', moment().format());
+      this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
       this.saveItem();
     },
     publishFuture: function () {
-      this.set('isDraft', null);
-      this.saveItem();
+      if (this.get('publishDate')) {
+        this.set('isDraft', null);
+        this.saveItem();
+      } else {
+        window.alert('Set a publish date');
+      }
     },
     changePublishDate: function () {
       this.set('isDraft', null);
+      this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
       this.set('showSchedule', true);
     },
     deleteItem: function () {
@@ -97,6 +104,9 @@ export default Ember.ObjectController.extend({
         this.get('model').destroyRecord();
         this.transitionToRoute('wh.content.type', this.get('type'));
       }
+    },
+    setPublishNow: function () {
+      this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
     }
   }
 });
