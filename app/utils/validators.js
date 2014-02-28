@@ -14,22 +14,37 @@ export default function validateControls (controls) {
 
   controls.forEach(function (control) {
 
-    var value = control.get('value');
+    var value = control.get('value'),
+        options = control.getWithDefault('meta.data', {});
 
     control.set('widgetErrors', Ember.A([]));
 
-    if (control.get('required') && !value) {
-      invalidate(control, 'This field is required');
-    }
-
     if (!value) {
+      if (control.get('required')) {
+        invalidate(control, 'This field is required');
+      }
       return;
     }
 
     switch (control.get('controlType.widget')) {
+    case 'textfield':
+    case 'textarea':
+      if (options.min && value.length < options.min) {
+        invalidate(control, 'This field has a minimum length of ' + options.min + '.');
+      }
+      if (options.max && value.length > options.max) {
+        invalidate(control, 'This field has a maximum length of ' + options.max + '.');
+      }
+      break;
     case 'number':
-      if (Ember.typeOf(value) !== 'number') {
+      if (!Ember.$.isNumeric(value)) {
         invalidate(control, 'This field must be a number.');
+      }
+      if (options.min && parseInt(value, 10) < options.min) {
+        invalidate(control, 'This field has a minimum value of ' + options.min + '.');
+      }
+      if (options.max && parseInt(value, 10) > options.max) {
+        invalidate(control, 'This field has a maximum value of ' + options.max + '.');
       }
       break;
     case 'email':
