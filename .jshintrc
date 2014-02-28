@@ -11,7 +11,8 @@
     "EmberFire",
     "Firebase",
     "FirebaseSimpleLogin",
-    "moment"
+    "moment",
+    "markdown"
   ],
   "node" : false,
   "browser" : false,

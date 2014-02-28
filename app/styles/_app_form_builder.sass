@@ -291,3 +291,30 @@
   .wh-form-builder-mobile
     display: block
 
+.wh-markdown-editor
+  position: relative
+  &.wh-markdown-editor-fullscreen
+    z-index: 1000
+    top: 0
+    left: 0
+    position: fixed
+    width: 100%
+    height: 100%
+    background: white
+    textarea
+      position: absolute
+      top: 0
+      left: 0
+      height: 100%
+      width: 50%
+    .wh-markdown-preview
+      position: absolute
+      top: 0
+      right: 0
+      height: 100%
+      width: 50%
+      background: #eeeeee
+  .fullscreen-toggle
+    position: absolute
+    right: 10px
+    top: 10px
