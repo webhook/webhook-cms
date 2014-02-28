@@ -1,9 +1,9 @@
 <section class="wh-content-edit">
   <button class="btn btn-neutral icon icon-eye-open float-right"> Preview</button>
-  <h1>Edit {{type.name}}</h1>
+  <h1>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}</h1>
   <p class="wh-item-publish-time">
-    Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>
-    Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>
+    {{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}
+    {{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}
   </p>
   <hr/>
 
@@ -51,6 +51,7 @@
           <div class="wy-control-group">
             <div class="wy-control">
               {{input type="datetime-local" value=publishDate}}
+              <button type="button" class="btn btn-small btn-link icon icon-" {{action "setPublishNow"}}>Now</button>
             </div>
           </div>
 
@@ -58,13 +59,13 @@
 
         {{#if isLive}}
 
-        <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
+          <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
-        <div class="wy-btn-group">
-          <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
-          <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
-          <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
-        </div>
+          <div class="wy-btn-group">
+            <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
+            <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
+            <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
+          </div>
 
         {{/if}}
 
