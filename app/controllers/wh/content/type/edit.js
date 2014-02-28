@@ -78,7 +78,7 @@ export default Ember.ObjectController.extend({
 
       // Future
       else {
-        this.send('notify', 'success', 'Set for the future', {
+        this.send('notify', 'info', 'Saved, will go live later', {
           icon: 'ok-sign'
         });
       }
