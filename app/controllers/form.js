@@ -92,6 +92,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           table: true,
           video: true
         });
+        break;
+      case 'rating':
+        meta.set('data', {
+          min: 0,
+          max: 10,
+          step: 0.5
+        });
+        break;
     }
 
     control.set('meta', meta);
