@@ -6,5 +6,11 @@ export default Ember.View.extend({
     event.preventDefault();
     this.$().triggerHandler('submit');
     this.get('controller').saveItem();
+  },
+
+  didInsertElement: function () {
+    this.$('.wy-dropdown-menu').on('click', function () {
+      $(this).hide();
+    });
   }
 });

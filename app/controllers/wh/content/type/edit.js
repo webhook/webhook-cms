@@ -56,20 +56,35 @@ export default Ember.ObjectController.extend({
 
     data.isDraft = this.getWithDefault('isDraft', null);
 
-    var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
+    if (!this.get('itemModel')) {
+      this.set('itemModel', this.store.createRecord(getItemModelName(this.get('model'))));
+    }
 
-    itemModel.set('data', data).save().then(function () {
+    this.get('itemModel').set('data', data).save().then(function () {
 
       window.ENV.sendBuildSignal();
 
-      this.send('notify', 'success', 'Item saved!', {
-        icon: 'ok-sign'
-      });
-
-      if (!this.get('type.oneOff')) {
-        this.get('type.controls').setEach('value', null);
-        this.transitionToRoute('wh.content.type', this.get('type'));
+      // Draft
+      if (data.isDraft) {
+        this.send('notify', 'info', 'Draft saved', {
+          icon: 'ok-sign'
+        });
       }
+
+      // Live
+      else if (data.publish_date && moment(data.publish_date).isBefore()) {
+        this.send('notify', 'success', 'Saved and viewable live', {
+          icon: 'ok-sign'
+        });
+      }
+
+      // Future
+      else {
+        this.send('notify', 'success', 'Set for the future', {
+          icon: 'ok-sign'
+        });
+      }
+
     }.bind(this));
 
   },
