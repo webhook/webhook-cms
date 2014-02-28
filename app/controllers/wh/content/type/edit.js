@@ -56,11 +56,9 @@ export default Ember.ObjectController.extend({
 
     data.isDraft = this.getWithDefault('isDraft', null);
 
-    if (!this.get('itemModel')) {
-      this.set('itemModel', this.store.createRecord(getItemModelName(this.get('model'))));
-    }
+    var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
 
-    this.get('itemModel').set('data', data).save().then(function () {
+    itemModel.set('data', data).save().then(function (item) {
 
       window.ENV.sendBuildSignal();
 
@@ -83,6 +81,10 @@ export default Ember.ObjectController.extend({
         this.send('notify', 'success', 'Set for the future', {
           icon: 'ok-sign'
         });
+      }
+
+      if (!this.get('itemModel')) {
+        this.transitionToRoute('wh.content.type.edit', itemModel.get('id'));
       }
 
     }.bind(this));

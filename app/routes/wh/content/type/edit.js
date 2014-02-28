@@ -16,7 +16,6 @@ export default Ember.Route.extend({
     return this.modelFor('wh.content.type');
   },
   afterModel: function (model) {
-    window.console.log(this.get('modelId'));
     if (this.get('modelId')) {
       return this.store.find(getItemModelName(model), this.get('modelId')).then(function (item) {
         this.fixItem(item);
