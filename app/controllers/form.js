@@ -96,7 +96,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       case 'rating':
         meta.set('data', {
           min: 0,
-          max: 10,
+          max: 5,
           step: 0.5
         });
         break;
