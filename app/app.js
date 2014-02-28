@@ -58,7 +58,7 @@ Ember.Application.initializer({
 
       if(!$('meta[name=suppressAlert]').attr('content')) {
         localSocket.socket.onclose = function() {
-          alert('Local Socket unable to connect');
+          window.alert('Local Socket unable to connect');
         };
       }
 
