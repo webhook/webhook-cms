@@ -111,6 +111,29 @@ Ember.Application.initializer({
 
           window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
+          // Presence
+          var presenceRef   = window.ENV.firebase.child('presence'),
+              onlineRef     = presenceRef.child('online/' + user.uid),
+              lastOnlineRef = presenceRef.child('lastOnline/' + user.uid),
+              connectedRef  = window.ENV.firebaseRoot.child('.info/connected');
+
+          connectedRef.on('value', function (snap) {
+            if (snap.val() === true) {
+              // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+
+              // add this device to my connections list
+              // this value could contain info about the device or a timestamp too
+              onlineRef.set(user.email);
+
+              // when I disconnect, remove this device
+              onlineRef.onDisconnect().remove();
+
+              // when I disconnect, update the last time I was seen online
+              lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+            }
+          });
+
+
           // user authenticated with Firebase
           session.set('user', user);
           session.set('error', null);

@@ -22,7 +22,7 @@ export default Ember.View.extend({
   },
 
   syncPreview: function () {
-    this.$('.wh-markdown-preview').html(markdown.toHTML(this.$('textarea').val()));
+    this.$('.wh-markdown-preview').html(marked(this.$('textarea').val()));
   }
 
 });

@@ -12,7 +12,7 @@
     "Firebase",
     "FirebaseSimpleLogin",
     "moment",
-    "markdown"
+    "marked"
   ],
   "node" : false,
   "browser" : false,
