@@ -298,26 +298,35 @@
     top: 0
     left: 0
     position: fixed
-    width: 100%
     height: 100%
-    background: white
+    background: $section-background-color
+    +outer-container
+    max-width: 100%
+    padding: $gutter
     textarea
-      position: absolute
-      top: 0
-      left: 0
       height: 100%
-      width: 50%
+      +span-columns(6)
+      padding: $gutter
+      font-size: 16px
+      box-shadow: none
+      border: none
+      line-height: 1.5
     .wh-markdown-preview
       display: block
-      position: absolute
-      top: 0
-      right: 0
       height: 100%
-      width: 50%
-      background: #eeeeee
+      +span-columns(6)
+      +omega-type()
+      background: $white
+      padding: $gutter
+      overflow-x: hidden
+      overflow-y: auto
+      pre code
+        @extend .hljs
   .fullscreen-toggle
     position: absolute
     right: 10px
     top: 10px
+    color: $text-color
+    cursor: pointer
   .wh-markdown-preview
     display: none
