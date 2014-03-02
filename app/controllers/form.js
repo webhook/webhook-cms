@@ -126,7 +126,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       this.get('model').save().then(function () {
         if(!this.get('model.oneOff')) {
-          window.ENV.sendGruntCommand('scaffolding:' + this.get('model.name'));
+          window.ENV.sendGruntCommand('scaffolding:' + this.get('model.id'));
         }
         this.send('notify', 'success', 'Form saved!');
         this.transitionToRoute('wh.content.type.index', this.get('content'));
