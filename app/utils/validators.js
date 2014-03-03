@@ -15,7 +15,7 @@ export default function validateControls (controls) {
   controls.forEach(function (control) {
 
     var value = control.get('value'),
-        options = control.getWithDefault('meta.data', {});
+        options = control.get('meta.data') || {};
 
     control.set('widgetErrors', Ember.A([]));
 
