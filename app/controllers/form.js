@@ -142,9 +142,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       control.set('justDeleted', true);
 
-      setTimeout(function () {
+      Ember.run.later(this, function () {
         this.get('model.controls').removeObject(control);
-      }.bind(this), 500);
+      }, 500);
 
       this.set('editingControl', null);
       this.send('stopEditing');
@@ -153,7 +153,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     editControl: function (control) {
       if (!control.get('meta')) {
-        control.set('meta', this.store.createRecord('meta-data'));
+        control.set('meta', this.store.createRecord('meta-data', { data: {}}));
       }
       this.set('editingControl', control);
       this.set('isEditing', true);
