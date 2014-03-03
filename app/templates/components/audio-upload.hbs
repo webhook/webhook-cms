@@ -1,12 +1,13 @@
+{{#if control.value}}
+  <audio controls>
+    <source {{bind-attr src="control.value"}}>
+  </audio>
+{{/if}}
+
 <div class="wy-form-upload-container">
   <div class="wy-form-upload">
-    {{#if initial}}
-      <div class="wy-form-upload-image">
-        {{resize-image initial width="75" height="75"}}
-      </div>
-    {{/if}}
     <div class="wy-form-upload-content">
-      <button type="button" class="btn btn-neutral icon icon-image"> Drag or select image</button>
+      <button type="button" class="btn btn-neutral icon icon-music"> Drag or select audio file</button>
       <div class="image-loading btn btn-info">
         <div class="wy-spinner"></div>
         <span></span>
