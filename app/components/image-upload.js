@@ -92,4 +92,11 @@ export default Ember.Component.extend({
       this.$('.wy-form-upload-container, .wy-form-upload-url').toggle();
     }.bind(this));
   },
+
+  actions: {
+    clear: function () {
+      this.set('control.value', null);
+      this.$('.wy-form-upload .wy-form-upload-image').remove();
+    }
+  }
 });
