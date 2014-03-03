@@ -26,6 +26,7 @@ export default Ember.Component.extend({
         $loading = this.$('.wy-form-upload .image-loading');
 
     var $uploadButton = this.$('.wy-form-upload-content button').upload({
+      multiple   : true,
       uploadUrl  : window.ENV.uploadUrl,
       uploadSite : session.get('site.name'),
       uploadToken: session.get('site.token')
@@ -52,8 +53,6 @@ export default Ember.Component.extend({
         $loading.css('display', 'inline-block');
         $loading.find('span').html('Uploading <span>0%</span>');
       },
-      'thumb': function (event, thumb) {
-      },
       'progress': function (event, percentage) {
         if (percentage < 100) {
           $loading.find('span').html('Uploading <span>' + percentage + '%</span>');
@@ -62,7 +61,7 @@ export default Ember.Component.extend({
         }
       },
       'load': function (event, response) {
-        self.get('control.value').pushObject(response.url);
+        self.get('control.value').pushObject({url: response.url});
         self.sendAction('notify', 'success', 'File upload complete.');
       },
       'done': function () {
@@ -93,9 +92,8 @@ export default Ember.Component.extend({
       this.set('control.value', null);
     },
 
-    removeImage: function (url) {
-      // force primitive value
-      this.get('control.value').removeObject(url + '');
+    removeImage: function (image) {
+      this.get('control.value').removeObject(image);
     }
   }
 });
