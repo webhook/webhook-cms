@@ -68,7 +68,7 @@ export default Ember.Component.extend({
     var params = [];
     params.push('width=' + width);
     params.push('url=' + encodeURIComponent(url));
-    params.push('key=' + window.ENV.resizeKey);
+    params.push('key=' + window.ENV.embedlyKey);
 
     return window.ENV.resizeUrl + '?' + params.join('&');
 
