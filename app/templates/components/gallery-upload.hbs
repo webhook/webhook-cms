@@ -32,7 +32,7 @@
       {{/if}}
       <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
       {{caption}}
-      <span class="icon icon-remove-sign" {{action 'removeImage' item.image}}></span>
+      <span class="icon icon-remove-sign" {{action 'removeImage' item}}></span>
     </li>
   {{/each}}
   </ul>

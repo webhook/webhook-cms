@@ -14,14 +14,19 @@ export default FileUploadComponent.extend({
     }));
   }.property('control.value'),
 
+  willInsertElment: function () {
+    this.set('control.value', Ember.A(this.get('control.value')));
+  },
+
   doneUpload: function (file, url) {
     this.get('control.value').pushObject({ url: url });
     this.sendAction('notify', 'success', this.get('successMsg'));
   },
 
   actions: {
-    removeImage: function (image) {
-      this.get('control.value').removeObject(image);
+    removeImage: function (item) {
+      this.get('control.value').removeObject(item.image);
+      this.get('items').removeObject(item);
     },
     editImage: function (item) {
       this.get('items').setEach('editing', null);
