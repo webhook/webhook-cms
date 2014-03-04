@@ -22,6 +22,9 @@ export default FileUploadComponent.extend({
 
   actions: {
     removeImage: function (image) {
+      if (image === this.get('editingImage')) {
+        this.set('editingImage', null);
+      }
       this.get('control.value').removeObject(image);
     },
     editImage: function (image) {

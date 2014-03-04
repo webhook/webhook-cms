@@ -23,6 +23,7 @@
   {{resize-image editingImage.url width="300" height="300"}}
   {{textarea value=editingImage.caption}}
   <button type="button" class="btn btn-small" {{action "closeEdit"}}>Save/Close</button>
+  <button type="button" class="btn btn-small icon icon-remove-sign" {{action 'removeImage' editingImage}}>Remove</button>
   <hr>
 {{/if}}
 
