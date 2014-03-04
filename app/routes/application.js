@@ -29,17 +29,17 @@ export default Ember.Route.extend({
 
       notifications.pushObject(notification);
 
-      setTimeout(function () {
+      Ember.run.later(this, function () {
         notification.set('state', 'on');
       }, 10);
 
-      setTimeout(function () {
+      Ember.run.later(this, function () {
         notification.set('state', null);
-      }.bind(this), 4500);
+      }, 4500);
 
-      setTimeout(function () {
+      Ember.run.later(this, function () {
         notifications.removeObject(notification);
-      }.bind(this), 5000);
+      }, 5000);
 
     }
   }
