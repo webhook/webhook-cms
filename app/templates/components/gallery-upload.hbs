@@ -18,6 +18,14 @@
   <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
 </div>
 
+{{#if editingImage}}
+  <hr>
+  {{resize-image editingImage.url width="300" height="300"}}
+  {{textarea value=editingImage.caption}}
+  <button type="button" class="btn btn-small" {{action "closeEdit"}}>Save/Close</button>
+  <hr>
+{{/if}}
+
 {{#if control.value}}
   <ul class="wy-form-gallery">
   {{#each control.value}}
@@ -25,7 +33,7 @@
       <div class="wy-form-gallery-hover">
         {{resize-image url width="188" height="188"}}
       </div>
-      {{resize-image url width="29" height="29" crop="true"}}
+      <a {{action 'editImage' this}}>{{resize-image url width="29" height="29" crop="true"}}</a>
       {{input value=caption placeholder="caption"}}
       <span class="icon icon-remove-sign" {{action 'removeImage' this}}></span>
     </li>
