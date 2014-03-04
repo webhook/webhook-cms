@@ -18,23 +18,21 @@
   <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
 </div>
 
-
-
 {{#if control.value}}
   <ul class="wy-form-gallery">
-  {{#each image in control.value }}
+  {{#each item in items}}
     <li>
-      {{#if image.editing}}
+      {{#if item.editing}}
         <div class="wy-form-gallery-edit">
-          <div class="wy-form-gallery-edit-img">{{resize-image editingImage.url width="300" height="300"}}</div>
-          {{textarea value=editingImage.caption}}
-          <button type="button" class="btn btn-small" {{action "closeEdit"}}>Save/Close</button>
-          <button type="button" class="btn btn-small icon icon-remove-sign" {{action 'removeImage' editingImage}}>Remove</button>
+          <div class="wy-form-gallery-edit-img">{{resize-image item.image.url width="300" height="300"}}</div>
+          {{textarea value=item.image.caption}}
+          <button type="button" class="btn btn-small" {{action "closeEdit" item}}>Save/Close</button>
+          <button type="button" class="btn btn-small icon icon-remove-sign" {{action 'removeImage' item.image}}>Remove</button>
         </div>
       {{/if}}
-      <a {{action 'editImage' image}}>{{resize-image image.url width="30" height="30" crop="true"}}</a>
+      <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
       {{caption}}
-      <span class="icon icon-remove-sign" {{action 'removeImage' image}}></span>
+      <span class="icon icon-remove-sign" {{action 'removeImage' item.image}}></span>
     </li>
   {{/each}}
   </ul>
