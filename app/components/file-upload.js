@@ -5,85 +5,118 @@ export default Ember.Component.extend({
 
   control: Ember.Object.create(),
 
+  successMsg    : ' File upload complete.',
+  defaultClasses: 'icon-paper-clip',
+
   didInsertElement: function () {
 
-    var self = this,
-        session = this.get('session'),
-        control = this.get('control');
+    var self = this;
 
-    this.set('initial', control.get('value'));
+    this.$container = this.$('.wy-form-upload-container');
+    this.$upload    = this.$('.wy-form-upload');
+    this.$url       = this.$('.wy-form-upload-url');
+    this.$loading   = this.$('.wy-form-upload .image-loading');
+    this.$uploadBtn = this.$('.wy-form-upload-content button');
 
-    var resetButton = function () {
-      this.$('.wy-form-upload-content button')
-        .removeClass('icon-desktop icon-arrow-down btn-success')
-        .addClass('icon-paper-clip btn-neutral')
-        .text(' Drag or select file');
-    }.bind(this);
+    this.set('defaultText', this.$uploadBtn.text());
 
-    var $container = this.$('.wy-form-upload-container'),
-        $upload = this.$('.wy-form-upload'),
-        $url = this.$('.wy-form-upload-url'),
-        $loading = this.$('.wy-form-upload .image-loading');
+    // create uploader with required params
+    this.uploader = new Webhook.Uploader(window.ENV.uploadUrl, this.get('session.site.name'), this.get('session.site.token'));
 
-    var $uploadButton = this.$('.wy-form-upload-content button').upload({
-      uploadUrl  : window.ENV.uploadUrl,
-      uploadSite : session.get('site.name'),
-      uploadToken: session.get('site.token')
-    }).dropzone().on({
-      dropzonewindowenter: function () {
-        $(this)
-          .removeClass('icon-paper-clip icon-desktop btn-neutral')
-          .addClass('icon-arrow-down btn-success')
-          .text(' Drop files here');
-      },
-      dropzonewindowdrop: resetButton,
-      dropzonewindowleave: resetButton,
-      drop: function (event) {
-        $(this).upload('upload', event.originalEvent.dataTransfer.files[0]);
-        resetButton.call(this);
-      },
-      'error': function (event, response) {
-        self.sendAction('notify', 'danger', 'Mike, make this error more useful. kthx.');
-      },
-      'start': function () {
-        $container.show();
-        $url.hide();
-        $uploadButton.hide();
-        $loading.css('display', 'inline-block');
-        $loading.find('span').html('Uploading <span>0%</span>');
-      },
-      'progress': function (event, percentage) {
-        if (percentage < 100) {
-          $loading.find('span').html('Uploading <span>' + percentage + '%</span>');
-        } else {
-          $loading.find('span').text('Finishing up...');
-        }
-      },
-      'load': function (event, response) {
-        control.set('value', response.url);
-        self.sendAction('notify', 'success', 'File upload complete.');
-      },
-      'done': function () {
-        $loading.hide();
-        $uploadButton.show();
-      },
-      mouseenter: function () {
-        $(this)
-          .removeClass('icon-paper-clip icon-arrow-down btn-success')
-          .addClass('icon-desktop btn-neutral')
-          .text(' Select from desktop');
-      },
-      mouseleave: resetButton
+    // when a file is selected, upload
+    this.$uploadBtn.selectFile({
+      accept: this.get('selectAccept'),
+      multiple: this.get('selectMultiple')
+    }).on('selectedFile', function (event, file) {
+
+      self.beforeUpload.call(self, file);
+
+      // upload returns promise
+      var uploading = self.uploader.upload(file);
+
+      uploading.progress(function (event) {
+        self.progressUpload.call(self, file, Math.ceil((event.loaded * 100) / event.total));
+      });
+
+      uploading.done(function (response) {
+        self.doneUpload.call(self, file, response.url);
+      });
+
+      uploading.always(function () {
+        self.afterUpload.call(self, file);
+      });
+
     });
 
     this.$('.wy-form-upload-url .upload-url').on('click', function () {
-      $uploadButton.upload('upload', this.$('.wy-form-upload-url input').val());
+      this.$uploadBtn.upload('upload', this.$('.wy-form-upload-url input').val());
       this.$('.wy-form-upload-url input').val('');
     }.bind(this));
 
     this.$('.upload-method-toggle').on('click', function () {
       this.$('.wy-form-upload-container, .wy-form-upload-url').toggle();
     }.bind(this));
+
+    var resetButton = function () {
+      this.$('.wy-form-upload-content button')
+        .removeClass('icon-desktop icon-arrow-down btn-success')
+        .addClass(this.get('defaultClasses'))
+        .text(this.get('defaultText'));
+    }.bind(this);
+
+    // Dropzone behavior
+    this.$uploadBtn.dropzone().on({
+      dropzonewindowenter: function () {
+        $(this)
+          .removeClass('icon-image icon-desktop btn-neutral')
+          .addClass('icon-arrow-down btn-success')
+          .text(' Drop files here');
+      },
+      dropzonewindowdrop: resetButton,
+      dropzonewindowleave: resetButton,
+      drop: function (event) {
+        Ember.$.each(event.originalEvent.dataTransfer.files, function (index, file) {
+          $(this).trigger('selectedFile', file);
+        }.bind(this));
+        resetButton();
+      }
+    });
+
+    // Just some additional styles
+    this.$uploadBtn.on({
+      mouseenter: function () {
+        $(this)
+          .removeClass(self.get('defaultClasses'))
+          .addClass('icon-desktop btn-neutral')
+          .text(' Select from desktop');
+      },
+      mouseleave: resetButton
+    });
+  },
+
+  beforeUpload: function (file) {
+    this.$container.show();
+    this.$url.hide();
+    this.$uploadBtn.hide();
+    this.$loading.css('display', 'inline-block');
+  },
+
+  progressUpload: function (file, percentage) {
+    if (percentage < 100) {
+      this.$loading.find('span').html('Uploading <span>' + percentage + '%</span>');
+    } else {
+      this.$loading.find('span').text('Finishing up...');
+    }
+  },
+
+  doneUpload: function (file, url) {
+    this.set('control.value', url);
+    this.sendAction('notify', 'success', this.get('successMsg'));
+  },
+
+  afterUpload: function () {
+    this.$loading.hide();
+    this.$uploadBtn.show();
   },
 
   actions: {
