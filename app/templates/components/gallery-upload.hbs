@@ -25,9 +25,8 @@
       {{#if item.editing}}
         <div class="wy-form-gallery-edit">
           <div class="wy-form-gallery-edit-img">{{resize-image item.image.url width="300" height="300"}}</div>
-          {{textarea value=item.image.caption}}
-          <button type="button" class="btn btn-small" {{action "closeEdit" item}}>Save/Close</button>
-          <button type="button" class="btn btn-small icon icon-remove-sign" {{action 'removeImage' item.image}}>Remove</button>
+          {{textarea value=item.image.caption placeholder="caption"}}
+          <button type="button" class="btn btn-small btn-info full-width icon icon-ok-sign" {{action "closeEdit" item}}> Save</button>
         </div>
       {{/if}}
       <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>

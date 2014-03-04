@@ -378,12 +378,32 @@ code
   margin: $base-line-height / 4
 
 .wy-form-gallery-edit
-  padding: $base-line-height / 2
-.wy-form-gallery-edit-img
-  width: 300px
-  height: 300px
-  display: inline-block
-  margin-right: $base-line-height / 2
+  position: absolute
+  bottom: 100%
+  width: 212px
+  text-align: center
+  background: $gray-dark
+  left: -100px
+  padding: $base-line-height / 4
+  textarea
+    background: $gray-darker
+    border: none
+    box-shadow: none
+    color: $text-invert
+    margin: $base-line-height / 4 0
+.wy-form-gallery .wy-form-gallery-edit-img
+  width: 200px
+  height: 200px
+  line-height: 200px
+  img
+    max-width: 200px
+    max-height: 200px
+.wy-form-gallery-save
+  background: $blue
+  padding: $base-line-height / 4
+  display: block
+  color: $white
+  font-size: 90%
 .wy-form-gallery
   margin-top: $base-line-height / 2
   +outer-container
@@ -392,13 +412,14 @@ code
     margin-bottom: $base-line-height / 4
     display: inline-block
     position: relative
+    border-radius: 50px
     +transition(background .3s ease-in)
-  img
+  a img
     width: 30px
     height: 30px
     vertical-align: middle
     border-radius: 50px
-  .icon
+  .icon-remove-sign
     color: $gray-lighter
     cursor: pointer
     opacity: 0
