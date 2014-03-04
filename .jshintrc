@@ -12,7 +12,8 @@
     "Firebase",
     "FirebaseSimpleLogin",
     "moment",
-    "marked"
+    "marked",
+    "Webhook"
   ],
   "node" : false,
   "browser" : false,
