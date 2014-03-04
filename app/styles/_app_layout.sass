@@ -373,6 +373,48 @@ code
 .wh-form-markdown
   min-height: 200px
 
+.wy-form-gallery
+  margin-top: $base-line-height / 2
+  +outer-container
+  li
+    padding: $base-line-height / 4
+    margin-bottom: $base-line-height / 4
+    display: inline-block
+    position: relative
+    +transition(background .3s ease-in)
+  img
+    width: 29px
+    height: 29px
+    vertical-align: middle
+  .icon
+    color: $gray-lighter
+    cursor: pointer
+    opacity: 0
+  .wy-form-gallery-hover
+    height: 0
+    width: 100%
+    overflow: hidden
+    position: absolute
+    bottom: 100%
+    left: 0
+    line-height: 200px
+    padding: 0
+    +transition(height .3s ease-in, padding .3s ease-in)
+    +transition-delay(.2s)
+    text-align: center
+    background: $gray-darker
+    img
+      width: auto
+      height: auto
+  li:hover
+    background: $menu-background-color
+    .wy-form-gallery-hover
+      height: 200px
+      padding: $base-line-height / 4
+    .icon
+      opacity: 1
+
+
 +media($tablet)
   .wy-body-for-nav
     background: $section-background-color
@@ -398,7 +440,7 @@ code
       height: 100%
       overflow: hidden
   .wh-save-item
-    padding-left: $base-line-height
+    left: 0
 
 @media print
   .wy-nav-side
