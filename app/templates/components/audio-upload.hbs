@@ -5,25 +5,23 @@
     <audio controls>
       <source {{bind-attr src="control.value"}}>
     </audio>
-  {{else}}
-    <div class="wy-form-upload-container">
-      <div class="wy-form-upload">
-        <div class="wy-form-upload-content">
-          <button type="button" class="btn btn-neutral icon icon-music"> Drag or select audio file</button>
-          <div class="image-loading btn btn-info">
-            <div class="wy-spinner"></div>
-            <span></span>
-          </div>
+  {{/if}}
+  <div {{ bind-attr class=":wy-form-upload-container control.value::on" }}>
+    <div class="wy-form-upload">
+      <div class="wy-form-upload-content">
+        <button type="button" class="btn btn-neutral icon icon-music"> Drag or select audio file</button>
+        <div class="image-loading btn btn-info">
+          <div class="wy-spinner"></div>
+          <span></span>
         </div>
       </div>
-
-      <button type="button" class="btn btn-link upload-method-toggle">or use a URL?</button>
     </div>
 
+    <button type="button" class="btn btn-link upload-method-toggle">or use a URL?</button>
     <div class="wy-form-upload-url wy-input-prefix">
       <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
       <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
       <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
     </div>
-  {{/if}}
+  </div>
 </div>
