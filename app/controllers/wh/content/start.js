@@ -56,20 +56,25 @@ export default Ember.ArrayController.extend({
           hidden     : true
         };
 
-        controls.pushObject(store.createRecord('control', Ember.$.extend({
+        var pushDateTimeControl = function (data) {
+          controls.pushObject(store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
+        };
+
+        pushDateTimeControl({
           name : 'create_date',
-          label: 'Create Date',
-        }, datetimeDefaults)));
+          label: 'Create Date'
+        });
 
-        controls.pushObject(store.createRecord('control', Ember.$.extend({
+        pushDateTimeControl({
           name : 'last_updated',
-          label: 'Last Updated',
-        }, datetimeDefaults)));
+          label: 'Last Updated'
+        });
 
-        controls.pushObject(store.createRecord('control', Ember.$.extend({
+        pushDateTimeControl({
           name : 'publish_date',
-          label: 'publishDate',
-        }, datetimeDefaults)));
+          label: 'Publish Date',
+          required: false
+        });
 
       });
 
