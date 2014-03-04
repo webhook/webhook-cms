@@ -12,9 +12,9 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
   });
 
   params.push('url=' + encodeURIComponent(src));
-  params.push('key=' + window.ENV.resizeKey);
+  params.push('key=' + window.ENV.embedlyKey);
 
-  var imageSource = window.ENV.resizeUrl + '?' + params.join('&');
+  var imageSource = window.ENV.displayUrl + (options.hash.crop ? 'crop' : 'resize') + '?' + params.join('&');
   return new Ember.Handlebars.SafeString('<img src="' +  imageSource + '">');
 });
 
