@@ -1,25 +1,26 @@
-{{control.value}}
-
-<div class="wy-form-upload-container">
-  <div class="wy-form-upload">
-    <div class="wy-form-upload-content">
-      <button type="button" class="btn btn-neutral icon icon-paper-clip"> Drag or select file</button>
-      <div class="image-loading btn btn-info">
-        <div class="wy-spinner"></div>
-        <span></span>
+<div class="wy-control-group-file">
+  {{#if control.value}}
+    <a href="{{ control.value }}" class="wy-file-location icon icon-paper-clip"> {{ control.value }}</a>
+    <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}> Remove this file?</span>
+  {{else}}
+    <div class="wy-form-upload-container">
+      <div class="wy-form-upload">
+        <div class="wy-form-upload-content">
+          <button type="button" class="btn btn-neutral icon icon-paper-clip"> Drag or select file</button>
+          <div class="image-loading btn btn-info">
+            <div class="wy-spinner"></div>
+            <span></span>
+          </div>
+        </div>
       </div>
+
+      <button type="button" class="btn btn-link upload-method-toggle">or use a URL?</button>
     </div>
-  </div>
 
-  <button type="button" class="btn btn-link upload-method-toggle">or use a URL?</button>
+    <div class="wy-form-upload-url wy-input-prefix">
+      <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
+      <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
+      <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
+    </div>
+  {{/if}}
 </div>
-
-<div class="wy-form-upload-url wy-input-prefix">
-  <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
-  <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-  <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
-</div>
-
-{{#if control.value}}
-  <button type="button" class="btn btn-link icon wy-text-danger icon-remove-sign" {{action "clear"}}> Baleeted</button>
-{{/if}}
