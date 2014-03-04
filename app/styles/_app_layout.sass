@@ -373,6 +373,17 @@ code
 .wh-form-markdown
   min-height: 200px
 
+.wy-form-gallery-instructions
+  font-size: 90%
+  margin: $base-line-height / 4
+
+.wy-form-gallery-edit
+  padding: $base-line-height / 2
+.wy-form-gallery-edit-img
+  width: 300px
+  height: 300px
+  display: inline-block
+  margin-right: $base-line-height / 2
 .wy-form-gallery
   margin-top: $base-line-height / 2
   +outer-container
@@ -383,34 +394,19 @@ code
     position: relative
     +transition(background .3s ease-in)
   img
-    width: 29px
-    height: 29px
+    width: 30px
+    height: 30px
     vertical-align: middle
+    border-radius: 50px
   .icon
     color: $gray-lighter
     cursor: pointer
     opacity: 0
-  .wy-form-gallery-hover
-    height: 0
-    width: 100%
-    overflow: hidden
     position: absolute
-    bottom: 100%
-    left: 0
-    line-height: 188px
-    padding: 0
-    +transition(height .3s ease-in, padding .3s ease-in)
-    +transition-delay(.2s)
-    text-align: center
-    background: $gray-dark
-    img
-      width: auto
-      height: auto
+    top: -($base-font-size / 2)
+    right: -($base-font-size / 2)
   li:hover
     background: $menu-background-color
-    .wy-form-gallery-hover
-      height: 200px
-      padding: $base-line-height / 4
     .icon
       opacity: 1
 
