@@ -1,10 +1,10 @@
 <div class="wy-control-group-file">
   {{#if control.value}}
     <a href="{{ control.value }}" class="wy-file-location icon icon-music"> {{ control.value }}</a>
+    <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}></span>
     <audio controls>
       <source {{bind-attr src="control.value"}}>
     </audio>
-    <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}> Remove this audio file?</span>
   {{else}}
     <div class="wy-form-upload-container">
       <div class="wy-form-upload">
