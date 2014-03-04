@@ -11,6 +11,10 @@ export default FileUploadComponent.extend({
     this.set('control.value', Ember.A(this.get('control.value')));
   },
 
+  didInsertElement: function () {
+    this._super();
+  },
+
   doneUpload: function (file, url) {
     this.get('control.value').pushObject({url: url});
     this.sendAction('notify', 'success', this.get('successMsg'));
@@ -19,6 +23,12 @@ export default FileUploadComponent.extend({
   actions: {
     removeImage: function (image) {
       this.get('control.value').removeObject(image);
+    },
+    editImage: function (image) {
+      this.set('editingImage', image);
+    },
+    closeEdit: function () {
+      this.set('editingImage', null);
     }
   }
 });
