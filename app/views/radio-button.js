@@ -16,5 +16,17 @@ export default Ember.View.extend({
 
   checked : function() {
     return this.get("value") === this.get("selection");
-  }.property('selection')
+  }.property('selection'),
+
+  defaultChanged: function () {
+    if (!this.get('selection') && this.get('defaultValue')) {
+      this.set('selection', this.get('defaultValue'));
+    }
+  }.observes('defaultValue'),
+
+  willInsertElement: function () {
+    if (!this.get('selection') && this.get('defaultValue')) {
+      this.set('selection', this.get('defaultValue'));
+    }
+  }
 });
