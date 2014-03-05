@@ -71,8 +71,10 @@ Ember.Application.initializer({
       }
     }
 
+    var siteName = Ember.$('meta[name="siteName"]').attr('content');
     buildEnv.set('local', isLocal);
     buildEnv.set('localSocket', localSocket);
+    buildEnv.set('siteName', siteName);
 
     application.set('buildEnvironment', buildEnv);
 
