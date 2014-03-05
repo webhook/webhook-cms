@@ -29,6 +29,8 @@ export default Ember.Route.extend({
             isSending: false,
             success: true
           });
+
+          this.transitionTo('login');
         } else {
           root.set({ verification_key_match: key, verified: true }, function(err) {
             if(err) {
@@ -44,11 +46,13 @@ export default Ember.Route.extend({
                 isSending: false,
                 success: true
               });
+
+              this.transitionTo('login');
             }
-          });
+          }.bind(this));
         }
 
-      });
+      }.bind(this));
     }
   }
 });

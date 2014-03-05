@@ -11,7 +11,7 @@ export default Ember.ObjectController.extend({
 
   sendInviteSignal: function(inviteEmail) {
     var siteName = this.get('buildEnvironment').siteName;
-    var currentEmail = this.get('session');
+    var currentEmail = this.get('session.user.email');
 
     var data = {
       userid: inviteEmail,
@@ -84,7 +84,7 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(email, function() {
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(email, function(err) {
 
         if(err) {
           this.set('error', err);

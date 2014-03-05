@@ -100,6 +100,56 @@ Ember.Application.initializer({
     application.set('session', session);
 
     session.set('auth', new FirebaseSimpleLogin(window.ENV.firebaseRoot, function(error, user) {
+      
+      var initializeUser = function(snapshot) {
+        var bucket = snapshot.val();
+
+        window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
+
+        // Presence
+        var presenceRef   = window.ENV.firebase.child('presence'),
+            onlineRef     = presenceRef.child('online/' + user.uid),
+            lastOnlineRef = presenceRef.child('lastOnline/' + user.uid),
+            connectedRef  = window.ENV.firebaseRoot.child('.info/connected');
+
+        connectedRef.on('value', function (snap) {
+          if (snap.val() === true) {
+            // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+
+            // add this device to my connections list
+            // this value could contain info about the device or a timestamp too
+            onlineRef.set(user.email);
+
+            // when I disconnect, remove this device
+            onlineRef.onDisconnect().remove();
+
+            // when I disconnect, update the last time I was seen online
+            lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+          }
+        });
+
+
+        // user authenticated with Firebase
+        session.set('user', user);
+        session.set('error', null);
+        session.set('site', {
+          name: siteName,
+          token: bucket
+        });
+
+        window.ENV.firebaseRoot.child('management/sites/' + siteName).once('value', function(snapshot) {
+          var siteData = snapshot.val();
+          var escapedEmail = user.email.replace(/\./g, ',1');
+
+          if(siteData.owners[escapedEmail]) {
+            session.set('isOwner', true);
+          } else if (siteData.users[escapedEmail]) {
+            session.set('isOwner', false);
+          }
+
+          application.advanceReadiness();
+        });
+      };
 
       if (error) {
         // an error occurred while attempting login
@@ -107,59 +157,41 @@ Ember.Application.initializer({
         application.advanceReadiness();
       } else if (user) {
 
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', function (snapshot) {
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', initializeUser, function (error) {
 
-          var bucket = snapshot.val();
-
-          window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
-
-          // Presence
-          var presenceRef   = window.ENV.firebase.child('presence'),
-              onlineRef     = presenceRef.child('online/' + user.uid),
-              lastOnlineRef = presenceRef.child('lastOnline/' + user.uid),
-              connectedRef  = window.ENV.firebaseRoot.child('.info/connected');
-
-          connectedRef.on('value', function (snap) {
-            if (snap.val() === true) {
-              // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
-
-              // add this device to my connections list
-              // this value could contain info about the device or a timestamp too
-              onlineRef.set(user.email);
-
-              // when I disconnect, remove this device
-              onlineRef.onDisconnect().remove();
-
-              // when I disconnect, update the last time I was seen online
-              lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
-            }
-          });
-
-
-          // user authenticated with Firebase
-          session.set('user', user);
-          session.set('error', null);
-          session.set('site', {
-            name: siteName,
-            token: bucket
-          });
-
-          window.ENV.firebaseRoot.child('management/sites/' + siteName).once('value', function(snapshot) {
-            var siteData = snapshot.val();
+          if(error.code === 'PERMISSION_DENIED')
+          {
             var escapedEmail = user.email.replace(/\./g, ',1');
-
-            if(siteData.owners[escapedEmail]) {
-              session.set('isOwner', true);
-            } else if (siteData.users[escapedEmail]) {
-              session.set('isOwner', false);
-            }
-
+            // Try to add to use list, if this is allowed they were a potential user
+            window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(user.email, function(error) {
+              if(error) {
+                session.get('auth').logout();
+                session.set('error', error);
+                application.advanceReadiness();
+              } else {
+                // Try to delete self from potential user list
+                window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).remove(function(error) {
+                  if(error) {
+                    session.get('auth').logout();
+                    session.set('error', error);
+                    application.advanceReadiness();
+                  } else {
+                    // Redo original authorization call
+                    window.ENV.firebaseRoot.child('management/sites/' + siteName + '/key').once('value', initializeUser, function (error) {
+                      session.get('auth').logout();
+                      session.set('error', error);
+                      application.advanceReadiness();
+                    });
+                  }
+                });
+              }
+            });
+            // User may be a potential, try and elevate to user
+          } else {
+            session.get('auth').logout();
+            session.set('error', error);
             application.advanceReadiness();
-          });
-        }, function (error) {
-          session.get('auth').logout();
-          session.set('error', error);
-          application.advanceReadiness();
+          }
         });
       } else {
         // user is logged out
