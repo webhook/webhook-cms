@@ -383,18 +383,22 @@ code
   width: 212px
   text-align: center
   background: $gray-dark
-  left: -100px
+  left: -84px
   padding: $base-line-height / 4
+  z-index: $z-index-popover
   textarea
     background: $gray-darker
     border: none
     box-shadow: none
     color: $text-invert
     margin: $base-line-height / 4 0
+  .triangle
+    +triangle(10px, $gray-dark, down)
+    position: absolute
+    bottom: -10px
+    left: 100px
 .wy-form-gallery .wy-form-gallery-edit-img
   width: 200px
-  height: 200px
-  line-height: 200px
   img
     max-width: 200px
     max-height: 200px
@@ -413,23 +417,27 @@ code
     display: inline-block
     position: relative
     border-radius: 50px
+    cursor: pointer
     +transition(background .3s ease-in)
   a img
     width: 30px
     height: 30px
     vertical-align: middle
     border-radius: 50px
-  .icon-remove-sign
-    color: $gray-lighter
-    cursor: pointer
-    opacity: 0
-    position: absolute
-    top: -($base-font-size / 2)
-    right: -($base-font-size / 2)
   li:hover
     background: $menu-background-color
     .icon
       opacity: 1
+
+.wh-form-gallery-placeholder
+  background: $gray-dark
+  @extend %icon
+  @extend .icon-arrow-down
+  line-height: 18px
+  color: $white
+  font-size: 80%
+  &:after
+    content: " Position here."
 
 .wy-control-group-file
   audio
