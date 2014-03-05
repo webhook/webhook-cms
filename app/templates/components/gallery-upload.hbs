@@ -33,7 +33,7 @@
         </div>
       {{/if}}
       {{#if item.image.url}}
-        <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
+        <a {{action 'editImage' item bubbles=false}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
       {{else}}
         <span class="progress">{{item.progress}}</span>
       {{/if}}

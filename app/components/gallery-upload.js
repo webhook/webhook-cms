@@ -22,6 +22,15 @@ export default FileUploadComponent.extend({
 
   },
 
+  didInsertElement: function () {
+    this._super.apply(this, arguments);
+    Ember.$(window).on('click', this.closeEdit.bind(this));
+  },
+
+  willDestroyElement: function () {
+    Ember.$(window).off('click', this.closeEdit.bind(this));
+  },
+
   // Override default behavior.
   // Keep track of progress for each image.
   selectedFile: function (file) {
@@ -44,17 +53,21 @@ export default FileUploadComponent.extend({
 
   },
 
+  closeEdit: function () {
+    this.get('items').setEach('editing', null);
+  },
+
   actions: {
     removeImage: function (item) {
       this.get('control.value').removeObject(item.image);
       this.get('items').removeObject(item);
     },
     editImage: function (item) {
-      this.get('items').setEach('editing', null);
+      this.closeEdit();
       item.set('editing', true);
     },
-    closeEdit: function (item) {
-      item.set('editing', null);
+    closeEdit: function () {
+      this.closeEdit();
     }
   }
 });
