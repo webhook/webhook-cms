@@ -68,8 +68,11 @@ export default FileUploadComponent.extend({
       this.get('items').removeObject(item);
     },
     editImage: function (item) {
+      var wasEditing = item.get('editing');
       this.closeEdit();
-      item.set('editing', true);
+      if (!wasEditing) {
+        item.set('editing', true);
+      }
     },
     closeEdit: function () {
       this.closeEdit();
