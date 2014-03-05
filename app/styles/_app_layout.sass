@@ -375,7 +375,9 @@ code
 
 .wy-form-gallery-instructions
   font-size: 90%
-  margin: $base-line-height / 4
+  margin: $base-line-height / 4 0 0 0
+  color: $text-light
+  padding-left: $base-line-height / 4
 
 .wy-form-gallery-edit
   position: absolute
@@ -397,6 +399,8 @@ code
     position: absolute
     bottom: -10px
     left: 100px
+  .icon-remove-sign
+    color: $text-invert
 .wy-form-gallery .wy-form-gallery-edit-img
   width: 200px
   img
@@ -409,7 +413,6 @@ code
   color: $white
   font-size: 90%
 .wy-form-gallery
-  margin-top: $base-line-height / 2
   +outer-container
   li
     padding: $base-line-height / 4
@@ -418,14 +421,16 @@ code
     position: relative
     border-radius: 50px
     cursor: pointer
-    +transition(background .3s ease-in)
+    border: solid 1px transparent
+  li.captioned
+    border-color: $gray-light
   a img
     width: 30px
     height: 30px
     vertical-align: middle
     border-radius: 50px
   li:hover
-    background: $menu-background-color
+    border-color: $gray
     .icon
       opacity: 1
 
