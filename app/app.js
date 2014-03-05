@@ -143,7 +143,19 @@ Ember.Application.initializer({
             name: siteName,
             token: bucket
           });
-          application.advanceReadiness();
+
+          window.ENV.firebaseRoot.child('management/sites/' + siteName).once('value', function(snapshot) {
+            var siteData = snapshot.val();
+            var escapedEmail = user.email.replace(/\./g, ',1');
+
+            if(siteData.owners[escapedEmail]) {
+              session.set('isOwner', true);
+            } else if (siteData.users[escapedEmail]) {
+              session.set('isOwner', false);
+            }
+
+            application.advanceReadiness();
+          });
         }, function (error) {
           session.get('auth').logout();
           session.set('error', error);
@@ -191,9 +203,19 @@ Ember.Route.reopen({
       this.get('session').set('transition', transition);
       transition.abort();
       this.transitionTo('login');
+    } else { // Only executed if your logged in
+      var ownerRoutes = ['wh.settings.team'];
+      console.log(transition.targetName);
+      if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
+        this.get('session').set('transition', transition);
+        transition.abort();
+        this.transitionTo('wh.index');
+      }
     }
+
   }
 });
+
 
 // Ian doesn't like pluralizing, singularizing
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };
