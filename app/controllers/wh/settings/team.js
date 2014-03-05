@@ -44,6 +44,11 @@ export default Ember.ObjectController.extend({
 
       window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function() {
         window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove();
+
+        // Hey if this was you.. kick you out of this page now
+        if(this.get('session.user.email') === email) {
+          this.transitionToRoute('wh');
+        }
       });
 
       // Send email to user
@@ -68,6 +73,10 @@ export default Ember.ObjectController.extend({
 
       window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function() {
         window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove();
+
+        if(this.get('session.user.email') === email) {
+          this.transitionToRoute('wh');
+        }
       });
     },
 
@@ -84,8 +93,6 @@ export default Ember.ObjectController.extend({
       var email = this.get('inviteEmail');
       var escapedEmail = email.replace(/\./g, ',1');
       var siteName = this.get('buildEnvironment').siteName;
-
-      // Should probably do... some level of veriication here?
 
       // Also we need to make sure they arent already on the list...
 
