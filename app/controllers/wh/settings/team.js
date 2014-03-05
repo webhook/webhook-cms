@@ -42,14 +42,26 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function() {
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove();
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function(err) {
 
-        // Hey if this was you.. kick you out of this page now
-        if(this.get('session.user.email') === email) {
-          this.transitionToRoute('wh');
+        if(err) {
+          this.set('error', err);
+          return;
         }
-      });
+
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove(function(err) {
+          if(err) {
+            this.set('error', err);
+            return;
+          }
+
+          // Hey if this was you.. kick you out of this page now
+          if(this.get('session.user.email') === email) {
+            this.transitionToRoute('wh');
+          }
+        }.bind(this));
+
+      }.bind(this));
 
       // Send email to user
     },
@@ -60,8 +72,21 @@ export default Ember.ObjectController.extend({
       var siteName = this.get('buildEnvironment').siteName;
 
       window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(email, function() {
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove();
-      });
+
+        if(err) {
+          this.set('error', err);
+          return;
+        }
+
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function(err) {
+
+          if(err) {
+            this.set('error', err);
+            return;
+          }
+
+        }.bind(this));
+      }.bind(this));
 
       // Send email to user
     },
@@ -71,13 +96,24 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function() {
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove();
-
-        if(this.get('session.user.email') === email) {
-          this.transitionToRoute('wh');
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function(err) {
+        if(err) {
+          this.set('error', err);
+          return;
         }
-      });
+
+        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function(err) {
+          if(err) {
+            this.set('error', err);
+            return;
+          }
+
+          if(this.get('session.user.email') === email) {
+            this.transitionToRoute('wh');
+          }
+        }.bind(this));
+
+      }.bind(this));
     },
 
     removePotential: function(user) {
@@ -85,8 +121,12 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(null, function() {
-      });
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(null, function(err) {
+        if(err) {
+          this.set('error', err);
+          return;
+        }
+      }.bind(this));
     },
 
     sendInvite: function() {
@@ -94,7 +134,7 @@ export default Ember.ObjectController.extend({
       var escapedEmail = email.replace(/\./g, ',1');
       var siteName = this.get('buildEnvironment').siteName;
 
-      // Also we need to make sure they arent already on the list...
+      // Make sure they arent already on the list
       var inList = false;
 
       this.get('allUsers').forEach(function(user) {
@@ -104,7 +144,7 @@ export default Ember.ObjectController.extend({
       });
 
       if(inList) {
-        this.set('error', 'This person has already been invited to your site.');
+        this.set('error', { message: 'This person has already been invited to your site.', code: 'Error' });
         this.set('inviteEmail', '');
         return;
       }
@@ -114,15 +154,28 @@ export default Ember.ObjectController.extend({
 
         if(!value) // Not a verified email, add to the potential user list
         {
-          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(email, function() {
-          });
+          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(email, function(err) {
+            if(err) {
+              this.set('error', err);
+              return;
+            }
+          }.bind(this));
         } else {   // Verified user, add to the real users list
-          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function() {
-          });
+          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function(err) {
+            if(err) {
+              this.set('error', err);
+              return;
+            }
+          }.bind(this));
         }
 
         // Either way send a signal to build environment to send email
-      });
+      }.bind(this), function(err) {
+        if(err) {
+          this.set('error', err);
+          return;
+        }
+      }.bind(this));
 
       this.set('inviteEmail', '');
     },

@@ -12,8 +12,8 @@
 
   {{#if error}}
     <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">Error</div>
-      {{error}}
+      <div class="wy-alert-title">{{ error.code }}</div>
+      {{error.essage}}
     </div>
   {{/if}}
 
