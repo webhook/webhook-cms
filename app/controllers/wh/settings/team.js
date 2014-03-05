@@ -9,6 +9,21 @@ export default Ember.ObjectController.extend({
   success  : false,
   error    : null,
 
+  sendInviteSignal: function(inviteEmail) {
+    var siteName = this.get('buildEnvironment').siteName;
+    var currentEmail = this.get('session');
+
+    var data = {
+      userid: inviteEmail,
+      from_userid: currentEmail,
+      siteref: siteName
+    };
+
+    window.ENV.firebaseRoot.child('management/commands/invite').push(data, function(err) {
+      this.set('error', err);
+    }.bind(this));
+  },
+
   allUsers: function () {
     var combined = [];
     combined = Ember.$.merge(combined, this.get('owners'));
@@ -62,8 +77,6 @@ export default Ember.ObjectController.extend({
         }.bind(this));
 
       }.bind(this));
-
-      // Send email to user
     },
     makeOwner : function(user) {
       // If they are on the user list... they must be verified (unless they are the original owner, in which case.. whoops)
@@ -87,8 +100,6 @@ export default Ember.ObjectController.extend({
 
         }.bind(this));
       }.bind(this));
-
-      // Send email to user
     },
 
     removeUser: function(user) {
@@ -159,6 +170,7 @@ export default Ember.ObjectController.extend({
               this.set('error', err);
               return;
             }
+            this.sendInviteSignal(email);
           }.bind(this));
         } else {   // Verified user, add to the real users list
           window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function(err) {
@@ -166,10 +178,10 @@ export default Ember.ObjectController.extend({
               this.set('error', err);
               return;
             }
+            this.sendInviteSignal(email);
           }.bind(this));
         }
-
-        // Either way send a signal to build environment to send email
+        
       }.bind(this), function(err) {
         if(err) {
           this.set('error', err);
