@@ -31,8 +31,11 @@
           <span class="triangle"></span>
         </div>
       {{/if}}
-      <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
-      {{caption}}
+      {{#if item.image.url}}
+        <a {{action 'editImage' item}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
+      {{else}}
+        <a>{{item.progress}}</a>
+      {{/if}}
     </li>
   {{/each}}
   {{/view}}

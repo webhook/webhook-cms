@@ -28,24 +28,7 @@ export default Ember.Component.extend({
       accept: this.get('selectAccept'),
       multiple: this.get('selectMultiple')
     }).on('selectedFile', function (event, file) {
-
-      self.beforeUpload.call(self, file);
-
-      // upload returns promise
-      var uploading = self.uploader.upload(file);
-
-      uploading.progress(function (event) {
-        self.progressUpload.call(self, file, Math.ceil((event.loaded * 100) / event.total));
-      });
-
-      uploading.done(function (response) {
-        self.doneUpload.call(self, file, response.url);
-      });
-
-      uploading.always(function () {
-        self.afterUpload.call(self, file);
-      });
-
+      self.selectedFile.call(self, file);
     });
 
     this.$('.wy-form-upload-url .upload-url').on('click', function () {
@@ -92,6 +75,30 @@ export default Ember.Component.extend({
       },
       mouseleave: resetButton
     });
+  },
+
+  selectedFile: function (file) {
+
+    var self = this;
+
+    self.beforeUpload.call(self, file);
+
+    // upload returns promise
+    var uploading = self.uploader.upload(file);
+
+    uploading.progress(function (event) {
+      self.progressUpload.call(self, file, Math.ceil((event.loaded * 100) / event.total));
+    });
+
+    uploading.done(function (response) {
+      self.doneUpload.call(self, file, response.url);
+    });
+
+    uploading.always(function () {
+      self.afterUpload.call(self, file);
+    });
+
+    return uploading;
   },
 
   beforeUpload: function (file) {

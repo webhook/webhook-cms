@@ -205,7 +205,6 @@ Ember.Route.reopen({
       this.transitionTo('login');
     } else { // Only executed if your logged in
       var ownerRoutes = ['wh.settings.team'];
-      console.log(transition.targetName);
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
         this.get('session').set('transition', transition);
         transition.abort();
