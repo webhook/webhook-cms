@@ -44,6 +44,9 @@ export default FileUploadComponent.extend({
 
     var uploading = this.uploader.upload(file);
 
+    // have something to start
+    item.set('progress', '...');
+
     uploading.progress(function (event) {
       item.set('progress', Math.ceil((event.loaded * 100) / event.total));
     });
