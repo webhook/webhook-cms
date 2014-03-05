@@ -95,6 +95,19 @@ export default Ember.ObjectController.extend({
       var siteName = this.get('buildEnvironment').siteName;
 
       // Also we need to make sure they arent already on the list...
+      var inList = false;
+
+      this.get('allUsers').forEach(function(user) {
+        if(user.email === email) {
+          inList = true;
+        }
+      });
+
+      if(inList) {
+        this.set('error', 'This person has already been invited to your site.');
+        this.set('inviteEmail', '');
+        return;
+      }
 
       window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/verification/verified').once('value', function(snapshot) {
         var value = snapshot.val();

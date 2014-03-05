@@ -215,7 +215,9 @@ Ember.Route.reopen({
 
   }
 });
-
+Ember.TextField.reopen({
+  attributeBindings: [ 'required' ]
+});
 
 // Ian doesn't like pluralizing, singularizing
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };

@@ -3,12 +3,20 @@
 <form class="wy-aligned">
   <div class="wy-control-group">
     <label>Invite a new collaborator by email</label>
-    {{input type="email" value=inviteEmail }}
+    {{input type="email" required="required" value=inviteEmail }}
     <div class="wy-form-message">The person will not be active until they verify their email address.</div>
   </div>
   <div class="wy-btn-group">
     <button class="btn btn-neutral icon icon-user" {{ action "sendInvite" }}> Send invite</button>
   </div>
+
+  {{#if error}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">Error</div>
+      {{error}}
+    </div>
+  {{/if}}
+
 </form>
 
 <hr/>
