@@ -5,7 +5,11 @@
   <div class="wy-control">
     {{#each option in editingControl.meta.data.options}}
     <label class="wy-checkbox">
-      {{view "radio-button" name="default-option" selection=editingControl.meta.data.defaultValue value=option.value}}
+      {{view "radio-button"
+        name="default-option"
+        selection=editingControl.meta.data.defaultValue
+        value=option.value
+      }}
       {{input value=option.value}}
       <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.data.options}}></span>
       <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.data.options option}}></span>

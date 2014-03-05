@@ -1,6 +1,11 @@
 {{#each option in control.meta.data.options}}
 <label class="wy-radio">
-  {{view "radio-button" name=control.name selection=control.value value=option.value}}
+  {{view "radio-button"
+    name=control.name
+    selection=control.value
+    value=option.value
+    defaultValue=control.meta.data.defaultValue
+  }}
   {{option.value}}
 </label>
 {{/each}}

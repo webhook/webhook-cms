@@ -1,6 +1,9 @@
 {{#each option in control.meta.data.options}}
   <label class="wy-checkbox">
-    {{view Ember.Checkbox checked=option.value}}
+    {{view 'checkbox-control'
+      checked=option.value
+      defaultValue=option.defaultValue
+    }}
     {{option.label}}
   </label>
 {{/each}}

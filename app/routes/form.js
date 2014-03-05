@@ -1,4 +1,7 @@
 export default Ember.Route.extend({
+  beforeModel: function () {
+    return this.store.find('control-type');
+  },
   model: function (params) {
     return this.store.find('content-type', params.id);
   },
@@ -9,6 +12,10 @@ export default Ember.Route.extend({
 
     model.get('controls').setEach('widgetIsValid', true);
     model.get('controls').setEach('value', null);
+
+    model.get('controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
+      control.get('meta.data.options').setEach('value', undefined);
+    });
 
     this._super.apply(this, arguments);
   }
