@@ -32,7 +32,7 @@ export default Ember.Component.extend({
     });
 
     this.$('.wy-form-upload-url .upload-url').on('click', function () {
-      this.$uploadBtn.upload('upload', this.$('.wy-form-upload-url input').val());
+      this.selectedFile(this.$('.wy-form-upload-url input').val());
       this.$('.wy-form-upload-url input').val('');
     }.bind(this));
 
