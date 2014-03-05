@@ -28,11 +28,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   updateOrder: function (originalindex, newindex) {
 
-    var controls = this.get('model.controls'),
-        control = controls.objectAt(originalindex);
+    var allControls          = this.get('model.controls'),
+        shownControls        = allControls.rejectBy('hidden'),
+        control              = shownControls.objectAt(originalindex),
+        originalControlIndex = allControls.indexOf(control),
+        newControlIndex      = allControls.indexOf(shownControls.objectAt(newindex));
 
-    controls.removeAt(originalindex);
-    controls.insertAt(newindex, control);
+    allControls.removeAt(originalControlIndex);
+    allControls.insertAt(newControlIndex, control);
 
   },
 
@@ -122,6 +125,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         if (Ember.isArray(control.get('meta.data.options'))) {
           delete control.get('meta.data.options')._super;
         }
+
+        if (control.get('controlType.widget') === 'checkbox') {
+          control.get('meta.data.options').setEach('value', null);
+        }
+
       });
 
       this.get('model').save().then(function () {
