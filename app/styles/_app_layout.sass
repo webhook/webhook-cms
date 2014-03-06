@@ -56,13 +56,16 @@
         padding: $gutter / 4 $gutter * 1.5
         &:hover
           background: darken($section-background-color, 15%)
-    &.start-here:after
+    &:after
       position: absolute
       top: 4px
       left: 100%
-      content: "\f05a  Start here!"
       font-family: $icon-font-family
-      background: $green
+      background: transparent
+      opacity: 0
+      width: 0
+      height: 0
+      overflow: hidden
       display: inline-block
       color: $text-invert
       border-radius: 4px
@@ -70,6 +73,26 @@
       white-space: nowrap
       margin-left: -$base-line-height * 2
       padding: $base-line-height / 4
+      +transition(opacity .2s ease-in)
+    &.wy-just-added:after
+      width: auto
+      height: auto
+      content: "\f05a  Added!"
+      opacity: 1
+      background: $green
+    &.wy-just-updated:after
+      width: auto
+      height: auto
+      content: "\f05a  Updated!"
+      background: $blue
+      opacity: 1
+    &.start-here:after
+      width: auto
+      height: auto
+      content: "\f05a  Start here!"
+      opacity: 1
+      background: $green
+
   // On state for the first level
   a.active
     color: $section-background-color
@@ -535,9 +558,3 @@ pre code
     margin-left: 0
 
 
-.wy-animate-add
-  +transition(all .2s ease-in)
-  &.wy-just-added
-    background-color: blue
-  &.wy-just-updated
-    background-color: green

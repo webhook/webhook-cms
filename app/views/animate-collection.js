@@ -1,7 +1,7 @@
 export default Ember.CollectionView.extend({
   tagName: "ul",
   initialsAdded: 0,
-  animationLength: 500,
+  animationLength: 5000,
 
   itemViewClass: Ember.View.extend({
     classNames: ['wy-animate-add'],
