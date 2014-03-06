@@ -62,8 +62,15 @@ export default Ember.ObjectController.extend({
 
       window.ENV.sendBuildSignal();
 
+      // One Off
+      if (this.get('type.oneOff')) {
+        this.send('notify', 'success', 'Saved and viewable live', {
+          icon: 'ok-sign'
+        });
+      }
+
       // Draft
-      if (data.isDraft) {
+      else if (data.isDraft) {
         this.send('notify', 'info', 'Draft saved', {
           icon: 'ok-sign'
         });
