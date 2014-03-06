@@ -3,10 +3,10 @@ export default Ember.Component.extend({
 
   didInsertElement: function () {
 
-    var disqus_shortname = this.get('forum');
-    var disqus_identifier = 'alphatest';
+    window.disqus_shortname = this.get('shortname');
+    window.disqus_identifier = this.get('identifier');
 
-    var src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    var src = 'http://' + window.disqus_shortname + '.disqus.com/embed.js';
 
     if (!Ember.$('script[src="' + src + '"]').length) {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
