@@ -51,7 +51,6 @@ export default Ember.ArrayController.extend({
         var datetimeDefaults = {
           controlType: controlType,
           locked     : true,
-          showInCms  : true,
           required   : true,
           hidden     : true
         };

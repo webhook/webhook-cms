@@ -54,7 +54,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     control = this.store.createRecord('control', {
       label: controlType.get('name'),
       controlType: controlType,
-      showInCms: (controls.get('length') < 3)
+      showInCms: (controls.filterBy('showInCms').get('length') < 3)
     });
 
     control.set('widgetIsValid', true);
