@@ -11,7 +11,7 @@ export default Ember.CollectionView.extend({
         this.$().addClass('wy-just-added');
         this.set('addedTimeout', Ember.run.later(this, function () {
           this.$().removeClass('wy-just-added');
-        }, this.get('animationLength')));
+        }, collectionView.get('animationLength')));
       } else {
         collectionView.incrementProperty('initialsAdded');
       }
@@ -20,7 +20,7 @@ export default Ember.CollectionView.extend({
         this.$().addClass('wy-just-updated');
         this.set('updatedTimeout', Ember.run.later(this, function () {
           this.$().removeClass('wy-just-updated');
-        }, this.get('animationLength')));
+        }, collectionView.get('animationLength')));
       }.bind(this));
 
     },
