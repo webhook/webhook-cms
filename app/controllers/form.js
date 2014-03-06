@@ -132,12 +132,38 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       });
 
-      this.get('model').save().then(function () {
-        if(!this.get('model.oneOff')) {
-          window.ENV.sendGruntCommand('scaffolding:' + this.get('model.id'));
-        }
+      var wasNew = this.get('model.isNew');
+
+      this.get('model').save().then(function (contentType) {
         this.send('notify', 'success', 'Form saved!');
-        this.transitionToRoute('wh.content.type.index', this.get('content'));
+
+        if (contentType.get('oneOff')) {
+
+          if (wasNew) {
+            this.store.createRecord('data', {
+              id  : contentType.get('id'),
+              data: { name: "" }
+            }).save().then(function () {
+              this.transitionToRoute('wh.content.type.index', contentType);
+            }.bind(this));
+          } else {
+            this.transitionToRoute('wh.content.type.index', contentType);
+          }
+
+        } else {
+
+          if (wasNew) {
+            window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
+              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' created.');
+            }.bind(this));
+          } else {
+            // ask if they want to rebuild scaffolding
+          }
+
+          this.transitionToRoute('wh.content.type.index', contentType);
+
+        }
+
       }.bind(this));
 
     },
@@ -187,6 +213,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     quitForm: function () {
+
+      // changed your mind on a new contentType? BALEETED
+      if (this.get('model.isNew')) {
+        this.get('model').deleteRecord();
+      }
+
       this.transitionToRoute('wh.content.all-types');
     }
   }
