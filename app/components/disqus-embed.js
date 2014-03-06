@@ -4,6 +4,7 @@ export default Ember.Component.extend({
   didInsertElement: function () {
 
     var disqus_shortname = this.get('forum');
+    var disqus_identifier = 'alphatest';
 
     var src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
 
