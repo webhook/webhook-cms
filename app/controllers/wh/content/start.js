@@ -51,7 +51,6 @@ export default Ember.ArrayController.extend({
         var datetimeDefaults = {
           controlType: controlType,
           locked     : true,
-          showInCms  : true,
           required   : true,
           hidden     : true
         };
@@ -93,26 +92,9 @@ export default Ember.ArrayController.extend({
 
         type.get('controls').pushObjects(controls);
 
-        type.save().then(function (type) {
+        this.transitionToRoute('form', type);
 
-          this.send('notify', 'success', 'Type created!', {
-            icon     : 'ok-sign',
-            className: 'wh-tray-wide'
-          });
-
-          if (type.get('oneOff')) {
-            this.store.createRecord('data', {
-              id  : type.get('id'),
-              data: { name: "" }
-            }).save().then(function () {
-              this.transitionToRoute('form', type);
-            }.bind(this));
-          } else {
-            this.transitionToRoute('form', type);
-          }
-
-          this.reset();
-        }.bind(this));
+        this.reset();
 
       }.bind(this));
 
