@@ -50,7 +50,6 @@ export default Ember.Route.extend({
         window.Env.firebaseRoot.child("management/sites/" + siteName + "/potential_users").off('value', this.get('potentialListener'));
       }
 
-      console.log("adgagdagadgagadgdagag");
       return true;
     }
   }
