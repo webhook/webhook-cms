@@ -1,0 +1,11 @@
+{{input value=url disabled=isFetching action="getEmbed"}}
+
+<button type="button" class="btn btn-small" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}>{{#if isFetching}}<span class="wy-spinner"></span> {{/if}}GO!</button>
+
+<button type="button" class="btn btn-small" {{action "togglePreview"}}>Toggle Preview</button>
+
+<div class="preview" {{bind-attr style="previewStyle"}}></div>
+
+{{#if showCode}}
+  <pre class="hljs">{{dataString}}</pre>
+{{/if}}
