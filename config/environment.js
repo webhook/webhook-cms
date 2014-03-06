@@ -165,6 +165,17 @@ window.ENV = {
           name     : 'Tags',
           widget   : 'tag',
           iconClass: 'icon-tags'
+        },
+        {
+          name     : 'Embed.ly',
+          widget   : 'embedly',
+          valueType: 'object',
+          iconClass: 'icon-tags'
+        },
+        {
+          name     : 'Color',
+          widget   : 'color',
+          iconClass: 'icon-tags'
         }
       ]
     }

@@ -62,7 +62,9 @@ export default FileUploadComponent.extend({
   },
 
   closeEdit: function () {
-    this.get('items').setEach('editing', null);
+    if (this.get('items')) {
+      this.get('items').setEach('editing', null);
+    }
   },
 
   actions: {
