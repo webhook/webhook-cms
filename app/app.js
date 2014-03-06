@@ -58,7 +58,7 @@ Ember.Application.initializer({
 
       if(!$('meta[name=suppressAlert]').attr('content')) {
         localSocket.socket.onclose = function() {
-          window.alert('Local Socket unable to connect');
+          window.alert('It looks like your local runserver stopped. To use the CMS please restart it.');
         };
       }
 
@@ -100,7 +100,7 @@ Ember.Application.initializer({
     application.set('session', session);
 
     session.set('auth', new FirebaseSimpleLogin(window.ENV.firebaseRoot, function(error, user) {
-      
+
       var initializeUser = function(snapshot) {
         var bucket = snapshot.val();
 
