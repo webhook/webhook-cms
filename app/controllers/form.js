@@ -154,10 +154,15 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           if (wasNew) {
             window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' created.');
+              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
             }.bind(this));
           } else {
             // ask if they want to rebuild scaffolding
+            if (window.confirm('You just changed ' + contentType.get('name') + '. Would you like us to build new scaffolding? Note, this will replace any edits to the template you may have already made.')) {
+              window.ENV.sendGruntCommand('scaffolding_force:' + contentType.get('id'), function () {
+                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+              }.bind(this));
+            }
           }
 
           this.transitionToRoute('wh.content.type.index', contentType);

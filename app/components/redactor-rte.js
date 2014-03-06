@@ -70,7 +70,7 @@ export default Ember.Component.extend({
     params.push('url=' + encodeURIComponent(url));
     params.push('key=' + window.ENV.embedlyKey);
 
-    return window.ENV.resizeUrl + '?' + params.join('&');
+    return window.ENV.displayUrl + 'resize/?' + params.join('&');
 
   },
 
@@ -105,28 +105,45 @@ export default Ember.Component.extend({
   // This handles the behavior of the image widget
   initImageWidget: function (widget) {
 
-    var self = this,
-        session = this.get('session');
+    var self = this;
+
+    this.$widget    = widget;
+    this.$container = widget.find('.wy-form-upload-container');
+    this.$upload    = widget.find('.wy-form-upload');
+    this.$url       = widget.find('.wy-form-upload-url');
+    this.$loading   = widget.find('.wy-form-upload .image-loading');
+    this.$uploadBtn = widget.find('.wy-form-upload-content button');
+
+    this.set('defaultText', this.$uploadBtn.text());
+
+    // create uploader with required params
+    this.uploader = new Webhook.Uploader(window.ENV.uploadUrl, this.get('session.site.name'), this.get('session.site.token'));
+
+    // when a file is selected, upload
+    this.$uploadBtn.selectFile({
+      accept: 'image/*'
+    }).on('selectedFile', function (event, file) {
+      self.selectedFile.call(self, file);
+    });
+
+    this.$upload.find('.upload-url').on('click', function () {
+      this.selectedFile(this.$url.find('input').val());
+      this.$url.find('input').val('');
+    }.bind(this));
+
+    widget.find('.upload-method-toggle').on('click', function () {
+      widget.find('.wy-form-upload-container, .wy-form-upload-url').toggle();
+    }.bind(this));
 
     var resetButton = function () {
-      widget.find('.wy-form-upload-content button')
+      this.$uploadBtn
         .removeClass('icon-desktop icon-arrow-down btn-success')
-        .addClass('icon-image btn-neutral')
-        .text(' Drag or select image');
+        .addClass('icon-picture')
+        .text(this.get('defaultText'));
     }.bind(this);
 
-    var $container = widget.find('.wy-form-upload-container'),
-        $upload    = widget.find('.wy-form-upload'),
-        $url       = widget.find('.wy-form-upload-url'),
-        $loading   = widget.find('.wy-form-upload .image-loading');
-
-    $upload.find('.wy-form-upload-image.edit').remove();
-
-    var $uploadButton = widget.find('.wy-form-upload-content button').upload({
-      uploadUrl  : window.ENV.uploadUrl,
-      uploadSite : session.get('site.name'),
-      uploadToken: session.get('site.token')
-    }).dropzone().on({
+    // Dropzone behavior
+    this.$uploadBtn.dropzone().on({
       dropzonewindowenter: function () {
         $(this)
           .removeClass('icon-image icon-desktop btn-neutral')
@@ -136,61 +153,86 @@ export default Ember.Component.extend({
       dropzonewindowdrop: resetButton,
       dropzonewindowleave: resetButton,
       drop: function (event) {
-        $(this).upload('upload', event.originalEvent.dataTransfer.files[0]);
-        resetButton.call(this);
-      },
-      'error': function (event, response) {
-        self.sendAction('notify', 'danger', 'Mike, make this error more useful. kthx.');
-      },
-      'start': function () {
-        $container.show();
-        $url.hide();
-        $uploadButton.hide();
-        $loading.css('display', 'inline-block');
-        $loading.find('span').html('Uploading <span>0%</span>');
-      },
-      'thumb': function (event, thumb) {
-        self.set('initial', null);
-        $upload.find('.wy-form-upload-image.edit').remove();
-        $('<div class="wy-form-upload-image edit">')
-          .prependTo($upload)
-          .append(thumb);
-      },
-      'progress': function (event, percentage) {
-        if (percentage < 100) {
-          $loading.find('span').html('Uploading <span>' + percentage + '%</span>');
-        } else {
-          $loading.find('span').text('Finishing up...');
-        }
-      },
-      'load': function (event, response) {
-        widget.trigger('load', response.url);
-        self.sendAction('notify', 'success', 'File upload complete.');
-      },
-      'done': function () {
-        $loading.hide();
-        $uploadButton.show();
-      },
+        Ember.$.each(event.originalEvent.dataTransfer.files, function (index, file) {
+          $(this).trigger('selectedFile', file);
+        }.bind(this));
+        resetButton();
+      }
+    });
+
+    // Just some additional styles
+    this.$uploadBtn.on({
       mouseenter: function () {
         $(this)
-          .removeClass('icon-image icon-arrow-down btn-success')
+          .removeClass('icon-picture')
           .addClass('icon-desktop btn-neutral')
           .text(' Select from desktop');
       },
       mouseleave: resetButton
     });
 
-    widget.find('.wy-form-upload-url .upload-url').on('click', function () {
-      $uploadButton.upload('upload', widget.find('.wy-form-upload-url input').val());
-      widget.find('.wy-form-upload-url input').val('');
-    }.bind(this));
-
-    widget.find('.upload-method-toggle').on('click', function () {
-      widget.find('.wy-form-upload-container, .wy-form-upload-url').toggle();
-    }.bind(this));
-
     return widget;
 
+  },
+
+  selectedFile: function (file) {
+
+    var self = this;
+
+    self.beforeUpload.call(self, file);
+
+    // upload returns promise
+    var uploading = self.uploader.upload(file);
+
+    uploading.progress(function (event) {
+      self.progressUpload.call(self, file, Math.ceil((event.loaded * 100) / event.total));
+    });
+
+    uploading.done(function (response) {
+      self.doneUpload.call(self, file, response.url);
+    });
+
+    uploading.always(function () {
+      self.afterUpload.call(self, file);
+    });
+
+    return uploading;
+  },
+
+  beforeUpload: function (file) {
+    this.$container.show();
+    this.$url.hide();
+    this.$uploadBtn.hide();
+    this.$loading.css('display', 'inline-block');
+
+    this.set('initial', null);
+
+    this.$('.wy-form-upload-image').remove();
+
+    var image = Ember.$('<div class="wy-form-upload-image">');
+
+    Ember.$('<img>').attr({
+      src: (window.URL || window.webkitURL).createObjectURL(file)
+    }).appendTo(image);
+
+    image.prependTo(this.$upload);
+  },
+
+  progressUpload: function (file, percentage) {
+    if (percentage < 100) {
+      this.$loading.find('span').html('Uploading <span>' + percentage + '%</span>');
+    } else {
+      this.$loading.find('span').text('Finishing up...');
+    }
+  },
+
+  doneUpload: function (file, url) {
+    this.$widget.trigger('load', url);
+  },
+
+  afterUpload: function () {
+    this.$loading.hide();
+    this.$uploadBtn.show();
   },
 
   observeImages: function () {
