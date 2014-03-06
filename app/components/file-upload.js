@@ -75,6 +75,7 @@ export default Ember.Component.extend({
       },
       mouseleave: resetButton
     });
+
   },
 
   selectedFile: function (file) {
@@ -99,6 +100,10 @@ export default Ember.Component.extend({
     });
 
     return uploading;
+  },
+
+  willDestroyElement: function () {
+    this.$uploadBtn.data('selectFile').$fileinput.remove();
   },
 
   beforeUpload: function (file) {
