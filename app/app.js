@@ -75,6 +75,7 @@ Ember.Application.initializer({
     buildEnv.set('local', isLocal);
     buildEnv.set('localSocket', localSocket);
     buildEnv.set('siteName', siteName);
+    buildEnv.set('siteUrl', 'http://' + siteName + '.webhook.com/');
 
     application.set('buildEnvironment', buildEnv);
 

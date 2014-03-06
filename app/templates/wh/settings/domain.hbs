@@ -1,15 +1,20 @@
 <h1>Domains</h1>
 
 <p>
-  Your site is currently available at <a href="">sitename.webhook.com</a>
+  Your site is currently available at
+  {{buildEnvironment.siteName}}.webhook.com
 </p>
 
 <hr/>
 
 <h2>Want to use a custom domain?</h2>
 
-<p>
-  You'll need to upgrade to our paid plan to make use of custom domains.
-</p>
+<div class="wy-alert wy-alert-warning">
+  <div class="wy-alert-title">Hey alpha testers!</div>
+  <p>
+    We're still thinking up the best way to do this. Might be a reverse proxy, might have you authenticate through
+    Google (where the buckets actually live). For now, just ping one of us and we can get your domain pointed over.
+  </p>
 
-<a href="" class="btn btn-neutral icon icon-rocket"> Upgrade now</a>
+  <p>I'm sure some of you have big opinions on this. Please let us know what you want.</p>
+</div>
