@@ -34,19 +34,24 @@ export default Ember.Route.extend({
     this._super.apply(this, arguments);
   },
 
-  deactivate: function() {
+  actions: {
+    willTransition: function(transition) {
+      var siteName = this.get('buildEnvironment').siteName;
 
-    var siteName = this.get('buildEnvironment').siteName;
-    if(this.get('ownerListner')) {
-      window.Env.firebaseRoot.child("management/sites/" + siteName + "/owners").off('value', this.get('ownerListner'));
-    }
+      if(this.get('ownerListner')) {
+        window.Env.firebaseRoot.child("management/sites/" + siteName + "/owners").off('value', this.get('ownerListner'));
+      }
 
-    if(this.get('userListener')) {
-      window.Env.firebaseRoot.child("management/sites/" + siteName + "/users").off('value', this.get('userListener'));
-    }
+      if(this.get('userListener')) {
+        window.Env.firebaseRoot.child("management/sites/" + siteName + "/users").off('value', this.get('userListener'));
+      }
 
-    if(this.get('potentialListener')) {
-      window.Env.firebaseRoot.child("management/sites/" + siteName + "/potential_users").off('value', this.get('potentialListener'));
+      if(this.get('potentialListener')) {
+        window.Env.firebaseRoot.child("management/sites/" + siteName + "/potential_users").off('value', this.get('potentialListener'));
+      }
+
+      console.log("adgagdagadgagadgdagag");
+      return true;
     }
   }
 });
