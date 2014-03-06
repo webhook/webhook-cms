@@ -15,9 +15,6 @@ export default Ember.Component.extend({
   },
 
   previewValue: function () {
-    if (Ember.isNone(this.get('control.value'))) {
-      return;
-    }
 
     switch (this.get('control.value.type')) {
     case 'video':
@@ -28,7 +25,11 @@ export default Ember.Component.extend({
       $('<img>').attr('src', this.get('control.value.thumbnail_url')).appendTo(this.$('.preview'));
       break;
     default:
-      this.$('.preview').text(this.get('control.value.title') + ' (' + this.get('control.value.original_url') + ')');
+      if (this.get('control.value.title')) {
+        this.$('.preview').text(this.get('control.value.title') + ' (' + this.get('control.value.original_url') + ')');
+      } else {
+        this.$('.preview').empty();
+      }
       break;
     }
 
@@ -56,6 +57,11 @@ export default Ember.Component.extend({
     togglePreview: function () {
       this.toggleProperty('showCode');
       this.toggleProperty('showPreview');
+    },
+
+    clearValue: function () {
+      this.set('control.value', {});
+      this.previewValue();
     }
   }
 });
