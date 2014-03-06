@@ -43,6 +43,7 @@
   ul
     margin-bottom: $base-line-height
   li
+    position: relative
     &.divide-top
       border-top: solid 1px hsl(0, 0%, 25%)
     &.divide-bottom
@@ -55,6 +56,19 @@
         padding: $gutter / 4 $gutter * 1.5
         &:hover
           background: darken($section-background-color, 15%)
+    &.start-here:after
+      position: absolute
+      top: 4px
+      left: 100%
+      content: "start here"
+      background: $green
+      display: inline-block
+      color: $text-invert
+      border-radius: 4px
+      font-size: 80%
+      white-space: nowrap
+      margin-left: -$base-line-height
+      padding: $base-line-height / 4
   // On state for the first level
   a.active
     color: $section-background-color
@@ -158,7 +172,6 @@
   top: 0
   left: 0
   width: $nav-desktop-width
-  overflow: hidden
   min-height: 100%
   background: $menu-background-color
   border-right: solid 1px rgba(0,0,0,.05)
