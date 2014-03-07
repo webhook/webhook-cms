@@ -146,12 +146,12 @@ window.ENV = {
           name     : 'Embed.ly',
           widget   : 'embedly',
           valueType: 'object',
-          iconClass: 'icon-tags'
+          iconClass: 'icon-code'
         },
         {
           name     : 'Color',
           widget   : 'color',
-          iconClass: 'icon-tags'
+          iconClass: 'icon-droplet'
         }
       ]
     }
