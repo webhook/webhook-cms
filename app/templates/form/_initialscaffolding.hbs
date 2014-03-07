@@ -1,9 +1,13 @@
 <header>
-  You just created {{contentType.name}}
+  Templates created
 </header>
 <section>
-  ... check your templates/{{contentType.id}}/ folder for some templates!
-</section>
+  <p>
+    We automatically created starter templates in your
+    <code>/{{buildEnvironment.siteName}}/templates/{{contentType.id}}/</code>
+    folder. They'll give you an idea how varialbes work, and how to call
+    your content into the template.
+  </section>
 <footer>
-  <button type="button" class="btn btn-neutral" {{action "confirm"}}>Ok</button>
+  <button type="button" class="btn btn-neutral icon icon-ok-sign" {{action "confirm"}}> OK, I got it!</button>
 </footer>
