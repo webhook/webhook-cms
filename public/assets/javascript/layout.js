@@ -66,6 +66,11 @@ $( document ).ready(function() {
 
   });
 
+  var winHeight = $(window).height();
+
+  $(".wy-nav-side").css("height", winHeight);
+  $(".wy-nav-content").css("height", winHeight);
+
   $("[data-spy=affix]").on('affix', function (event, affix) {
     if (!affix) {
       $(this).css({
