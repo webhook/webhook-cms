@@ -2,7 +2,6 @@ import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
   beforeModel: function (transition, params) {
-    // return this.store.find('control-type');
     return Ember.RSVP.Promise.all([
       // need to make sure all the content types are in the store
       // basically a hack
@@ -16,6 +15,18 @@ export default Ember.Route.extend({
     return this.modelFor('wh.content.type');
   },
   afterModel: function (model) {
+
+    var lockKey = 'presence/locked/' + getItemModelName(model) + ':' + this.get('modelId');
+    var lockRef = window.ENV.firebase.child(lockKey);
+
+    // Lock it down!
+    lockRef.set(this.get('session.user.email'));
+
+    // Unlock on disconnect
+    lockRef.onDisconnect().remove();
+
+    this.set('lockRef', lockRef);
+
     if (this.get('modelId')) {
       return this.store.find(getItemModelName(model), this.get('modelId')).then(function (item) {
         this.fixItem(item);
@@ -117,6 +128,13 @@ export default Ember.Route.extend({
   fixItem: function (item) {
     if (!item.get('data').create_date) {
       item.get('data').create_date = moment().format('YYYY-MM-DDTHH:mm');
+    }
+  },
+
+  actions: {
+    willTransition: function () {
+      // Unlock on transition
+      this.get('lockRef').remove();
     }
   }
 });
