@@ -63,6 +63,14 @@
 </div>
 
 {{webhook-modal
+  show=initialScaffoldingPrompt
+  modalTemplate="form/initialscaffolding"
+  confirm="acknoledgeScaffolding"
+  contentType=model
+  canClose=false
+}}
+
+{{webhook-modal
   show=scaffoldingPrompt
   modalTemplate="form/scaffolding"
   confirm="forceScaffolding"

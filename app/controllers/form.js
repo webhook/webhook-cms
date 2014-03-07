@@ -157,8 +157,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
               this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
             }.bind(this));
-            this.transitionToRoute('wh.content.type.index', contentType);
-            this.send('notify', 'success', 'Form saved!');
+            // Acknowledge scaffolding
+            this.toggleProperty('initialScaffoldingPrompt');
           } else {
             // ask if they want to rebuild scaffolding
             this.toggleProperty('scaffoldingPrompt');
@@ -222,6 +222,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
 
       this.transitionToRoute('wh.content.all-types');
+    },
+
+    acknoledgeScaffolding: function () {
+      this.transitionToRoute('wh.content.type.index', this.get('model'));
     },
 
     forceScaffolding: function () {
