@@ -1,19 +1,23 @@
 {{input value=url disabled=isFetching action="getEmbed"}}
 
-<button type="button" class="btn btn-neutral btn-small icon icon-file-plus" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> Fetch {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
+<button type="button" class="btn btn-neutral btn-small icon icon-cloud-download" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> Fetch {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
 
 {{#if showPreview}}
-  <button type="button" class="btn btn-neutral btn-small icon icon-code" {{action "togglePreview"}}> Code</button>
+  <button type="button" class="btn btn-small btn-link icon icon-code" {{action "togglePreview"}}> JSON</button>
 {{/if}}
 
 {{#if showCode}}
-  <button type="button" class="btn btn-neutral btn-small icon icon-code" {{action "togglePreview"}}> Preview</button>
+  <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
 {{/if}}
 
-<button type="button" class="btn btn-neutral btn-small" {{action "clearValue"}}> Clear</button>
+{{#if url}}
+<button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
+{{/if}}
 
+<div style="width: 600px; margin-top: 12px">
 <div class="preview" {{bind-attr style="previewStyle"}}></div>
 
 {{#if showCode}}
   <pre class="hljs">{{dataString}}</pre>
 {{/if}}
+</div>
