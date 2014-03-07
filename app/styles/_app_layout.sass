@@ -79,12 +79,6 @@
       content: "\f05a  Added!"
       opacity: 1
       background: $green
-    &.wy-just-updated:after
-      width: auto
-      height: auto
-      content: "\f05a  Updated!"
-      background: $blue
-      opacity: 1
     &.start-here:after
       width: auto
       height: auto
@@ -158,32 +152,8 @@
       color: $white
 
 [data-menu-wrap]
-  +transition(all .2s ease-in)
-  position: absolute
   opacity: 1
   width: 100%
-  opacity: 0
-  &.move-center
-    left: 0
-    right: auto
-    opacity: 1
-  &.move-left
-    right: auto
-    left: -100%
-    opacity: 0
-  &.move-right
-    right: -100%
-    left: auto
-    opacity: 0
-
-
-.wy-body-for-nav
-  background: left repeat-y $background-color
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjBFMDM3QzgzNzY2OTExRTM4OUM0QUY2QzkzNkFDNzVFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjBFMDM3Qzg0NzY2OTExRTM4OUM0QUY2QzkzNkFDNzVFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MEUwMzdDODE3NjY5MTFFMzg5QzRBRjZDOTM2QUM3NUUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MEUwMzdDODI3NjY5MTFFMzg5QzRBRjZDOTM2QUM3NUUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4xuspQAAAAD0lEQVR42mL4/PkzQIABAAW2AtodjFQVAAAAAElFTkSuQmCC)
-  background-size: $nav-desktop-width 1px
-  height: 100%
-  width: 100%
-  position: absolute
 
 .wy-grid-for-nav
   position: absolute
@@ -522,6 +492,7 @@ pre code
     display: none
     &.on
       display: block
+
 
 +media($tablet)
   .wy-body-for-nav
