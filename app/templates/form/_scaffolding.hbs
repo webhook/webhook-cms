@@ -2,9 +2,12 @@
   You just changed {{contentType.name}}
 </header>
 <section>
-  Would you like us to build new scaffolding? Note, this will replace any edits to the template you may have already made.
+  <p>
+    Would you like us to regenerate <code>/templates/{{contentType.id}}/</code>?
+    This will overwrite the templates completely, so please be careful.
+  </p>
 </section>
 <footer>
-  <button type="button" class="btn btn-neutral" {{action "confirm"}}>Ok</button>
-  <button type="button" class="btn btn-neutral" {{action "cancel"}}>No</button>
+  <button type="button" class="btn btn-neutral" {{action "confirm"}}>Overwrite the templates</button>
+  <button type="button" class="btn btn-neutral" {{action "cancel"}}>Don't do that</button>
 </footer>
