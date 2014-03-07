@@ -135,7 +135,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       var wasNew = this.get('model.isNew');
 
       this.get('model').save().then(function (contentType) {
-        this.send('notify', 'success', 'Form saved!');
 
         if (contentType.get('oneOff')) {
 
@@ -150,22 +149,20 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             this.transitionToRoute('wh.content.type.index', contentType);
           }
 
+          this.send('notify', 'success', 'Form saved!');
+
         } else {
 
           if (wasNew) {
             window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
               this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
             }.bind(this));
+            this.transitionToRoute('wh.content.type.index', contentType);
+            this.send('notify', 'success', 'Form saved!');
           } else {
             // ask if they want to rebuild scaffolding
-            if (window.confirm('You just changed ' + contentType.get('name') + '. Would you like us to build new scaffolding? Note, this will replace any edits to the template you may have already made.')) {
-              window.ENV.sendGruntCommand('scaffolding_force:' + contentType.get('id'), function () {
-                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-              }.bind(this));
-            }
+            this.toggleProperty('scaffoldingPrompt');
           }
-
-          this.transitionToRoute('wh.content.type.index', contentType);
 
         }
 
@@ -225,6 +222,17 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
 
       this.transitionToRoute('wh.content.all-types');
+    },
+
+    forceScaffolding: function () {
+      window.ENV.sendGruntCommand('scaffolding_force:' + this.get('model.id'), function () {
+        this.send('notify', 'success', 'Scaffolding for ' + this.get('model.name') + ' built.');
+      }.bind(this));
+      this.transitionToRoute('wh.content.type.index', this.get('model'));
+    },
+
+    abortScaffolding: function () {
+      this.transitionToRoute('wh.content.type.index', this.get('model'));
     }
   }
 });
