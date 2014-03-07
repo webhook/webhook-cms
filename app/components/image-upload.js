@@ -27,9 +27,17 @@ export default FileUploadComponent.extend({
 
     var image = Ember.$('<div class="wy-form-upload-image">');
 
-    Ember.$('<img>').attr({
-      src: (window.URL || window.webkitURL).createObjectURL(file)
-    }).appendTo(image);
+    // TEMPORARY HACK, FOR WHEN FILE IS NOT A FILE BUT A URL (URL UPLOAD)
+    if(typeof file === "string") {
+      Ember.$('<img>').attr({
+        src: file
+      }).appendTo(image);
+    } else {
+      console.log(file);
+      Ember.$('<img>').attr({
+        src: (window.URL || window.webkitURL).createObjectURL(file)
+      }).appendTo(image);
+    }
 
     image.prependTo(this.$upload);
 
