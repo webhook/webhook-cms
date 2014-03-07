@@ -77,10 +77,12 @@ export default Ember.Route.extend({
         hidden     : true
       };
 
-      var controls = contentType.get('controls');
+      var controls = contentType.get('controls'),
+          save = false;
 
       var addControl = function (data) {
         controls.pushObject(this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
+        save = true;
       }.bind(this);
 
       if (!controls.isAny('name', 'create_date')) {
@@ -105,7 +107,9 @@ export default Ember.Route.extend({
         });
       }
 
-      contentType.save();
+      if (save) {
+        contentType.save();
+      }
 
     }.bind(this));
   },

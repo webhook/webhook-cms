@@ -7,6 +7,7 @@ export default Ember.CollectionView.extend({
     classNames: ['wy-animate-add'],
     didInsertElement: function () {
       var collectionView = this.get('parentView');
+
       if (collectionView.get('initialsAdded') === collectionView.get('initialLength')) {
         this.$().addClass('wy-just-added');
         this.set('addedTimeout', Ember.run.later(this, function () {
@@ -27,7 +28,7 @@ export default Ember.CollectionView.extend({
     willDestroyElement: function () {
       this.get('context').off('didUpdate');
       Ember.run.cancel(this.get('addedTimeout'));
-      Ember.run.cancel(this.get('updateTimeout'));
+      Ember.run.cancel(this.get('updatedTimeout'));
     }
   }),
   willInsertElement: function () {
