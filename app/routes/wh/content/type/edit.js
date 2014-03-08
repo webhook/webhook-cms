@@ -35,10 +35,10 @@ export default Ember.Route.extend({
       window.alert(error.message + ' is already editing this item.');
       transition.abort();
 
+      // The user entered this URL into the browser. We need to redirect them somewhere.
       if (transition.urlMethod === 'replaceQuery') {
         this.transitionTo('wh');
       }
-      // return Ember.RSVP.reject(error);
     }.bind(this));
   },
   model: function (params) {
