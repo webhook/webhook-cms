@@ -1,14 +1,45 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
-  beforeModel: function (transition, params) {
-    return Ember.RSVP.Promise.all([
-      // need to make sure all the content types are in the store
-      // basically a hack
-      this.store.find('control-type'),
-      // make sure `create_date`, `last_updated` and `publish_date` controls exist
-      this.fixControlType(this.modelFor('wh.content.type'))
-    ]);
+  beforeModel: function (transition) {
+
+    var promises = [];
+
+    var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
+
+    if (itemId) {
+      var lockKey = 'presence/locked/' + getItemModelName(this.modelFor('wh.content.type')) + ':' + itemId;
+      var lockRef = window.ENV.firebase.child(lockKey);
+
+      promises.push(new Ember.RSVP.Promise(function (resolve, reject) {
+        lockRef.on('value', function (snapshot) {
+          if (snapshot.val()) {
+            reject(new Ember.Error(snapshot.val()));
+          } else {
+            resolve();
+          }
+        });
+      }));
+
+      this.set('lockRef', lockRef);
+    }
+
+    // need to make sure all the content types are in the store
+    // basically a hack
+    promises.push(this.store.find('control-type'));
+
+    // make sure `create_date`, `last_updated` and `publish_date` controls exist
+    promises.push(this.fixControlType(this.modelFor('wh.content.type')));
+
+    return Ember.RSVP.Promise.all(promises).catch(function (error) {
+      window.alert(error.message + ' is already editing this item.');
+      transition.abort();
+
+      if (transition.urlMethod === 'replaceQuery') {
+        this.transitionTo('wh');
+      }
+      // return Ember.RSVP.reject(error);
+    }.bind(this));
   },
   model: function (params) {
     this.set('modelId', params.item_id);
@@ -16,16 +47,11 @@ export default Ember.Route.extend({
   },
   afterModel: function (model) {
 
-    var lockKey = 'presence/locked/' + getItemModelName(model) + ':' + this.get('modelId');
-    var lockRef = window.ENV.firebase.child(lockKey);
-
     // Lock it down!
-    lockRef.set(this.get('session.user.email'));
+    this.get('lockRef').set(this.get('session.user.email'));
 
     // Unlock on disconnect
-    lockRef.onDisconnect().remove();
-
-    this.set('lockRef', lockRef);
+    this.get('lockRef').onDisconnect().remove();
 
     if (this.get('modelId')) {
       return this.store.find(getItemModelName(model), this.get('modelId')).then(function (item) {
@@ -134,7 +160,9 @@ export default Ember.Route.extend({
   actions: {
     willTransition: function () {
       // Unlock on transition
-      this.get('lockRef').remove();
+      if (this.get('lockRef')) {
+        this.get('lockRef').remove();
+      }
     }
   }
 });
