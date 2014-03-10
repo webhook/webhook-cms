@@ -4,7 +4,7 @@
     <h1>{{contentType.name}}</h1>
   </section>
 
-  <hr/>
+  <hr>
 
   <input type="search"  placeholder="Filter this list"/>
   <div class="wy-dropdown wy-dropdown-display-options float-right">
@@ -40,6 +40,7 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
+        <th></th>
         {{#each contentType.controls}}
           {{#if showInCms}}
             <th>{{label}}</th>
@@ -52,6 +53,7 @@
       {{#with contentType as contentTypeNav}}
       {{#each item in cmsItems}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
+          <td>{{#if item.lockedBy}}<span class="icon icon-lock" {{bind-attr title="item.lockedBy"}}></span>{{/if}}</td>
           {{#each item.cmsControls}}
             <td>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}

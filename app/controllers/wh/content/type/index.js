@@ -1,6 +1,7 @@
 export default Ember.ArrayController.extend({
   contentType: null,
   cmsControls: null,
+  lockedItems: Ember.A([]),
 
   _updateItemControls: function (item) {
     var cmsControls = Ember.A([]);
@@ -30,6 +31,13 @@ export default Ember.ArrayController.extend({
       return array;
     }
   }),
+
+  locksChanged: function () {
+    this.get('cmsItems').setEach('lockedBy', null);
+    this.get('lockedItems').forEach(function (lock) {
+      this.get('cmsItems').findBy('id', lock.get('id')).set('lockedBy', lock.get('email'));
+    }, this);
+  }.observes('lockedItems.@each'),
 
   actions: {
     deleteItem: function (item) {
