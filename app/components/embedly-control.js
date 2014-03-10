@@ -60,7 +60,7 @@ export default Ember.Component.extend({
     },
 
     clearValue: function () {
-      this.set('control.value', {});
+      this.set('control.value', null);
       this.previewValue();
     }
   }

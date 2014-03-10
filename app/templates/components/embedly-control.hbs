@@ -10,14 +10,16 @@
   <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
 {{/if}}
 
-{{#if url}}
-<button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
-{{/if}}
+{{#if control.value}}
 
-<div style="width: 600px; margin-top: 12px">
-<div class="preview" {{bind-attr style="previewStyle"}}></div>
+  <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
 
-{{#if showCode}}
-  <pre class="hljs">{{dataString}}</pre>
+  <div style="width: 600px; margin-top: 12px">
+    <div class="preview" {{bind-attr style="previewStyle"}}></div>
+
+    {{#if showCode}}
+      <pre class="hljs">{{dataString}}</pre>
+    {{/if}}
+  </div>
+
 {{/if}}
-</div>
