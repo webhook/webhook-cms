@@ -8,8 +8,8 @@ export default Ember.Route.extend({
     var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
 
     if (itemId) {
-      var lockKey = 'presence/locked/' + getItemModelName(this.modelFor('wh.content.type')) + ':' + itemId;
-      var lockRef = window.ENV.firebase.child(lockKey);
+      var modelName = getItemModelName(this.modelFor('wh.content.type')),
+          lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
 
       promises.push(new Ember.RSVP.Promise(function (resolve, reject) {
         lockRef.on('value', function (snapshot) {
