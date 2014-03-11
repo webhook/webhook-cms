@@ -18,24 +18,13 @@ export default function getItemModelName(contentType) {
 
       formattedTypeName = 'data';
 
-      // // dynamic model
-      // window.App[modelName] = DataModel.extend();
-
-      // // dynamic adapter
-      // window.App[modelName + 'Adapter'] = DataAdapter.extend();
-
-      // // dynamic serializer
-      // window.App[modelName + 'Serializer'] = DataSerializer.extend();
-
     } else {
 
       // dynamic model
       window.App[modelName] = ItemModel.extend();
 
       // dynamic adapter
-      window.App[modelName + 'Adapter'] = ItemAdapter.extend({
-        firebase: window.ENV.firebase.child('data'),
-      });
+      window.App[modelName + 'Adapter'] = ItemAdapter.extend();
 
       // dynamic serializer
       window.App[modelName + 'Serializer'] = ItemSerializer.extend();
