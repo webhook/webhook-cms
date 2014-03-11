@@ -20,7 +20,7 @@
         <td>{{#if oneOff}}Single Item{{else}}Multiple Items{{/if}}</td>
         <!-- <td>22</td> -->
         <td class="wy-table-actions">
-          <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this}}></button>
+          <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this bubbles=false}}></button>
         </td>
       {{/link-to}}
     {{/each}}
