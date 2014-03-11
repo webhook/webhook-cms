@@ -5,26 +5,29 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   editingControl   : null,
   isEditing        : false,
 
-  // nameChange: function () {
+  validateControls: function () {
 
-  //   var names = this.get('controls').mapBy('name').sort(),
-  //       dupes = [];
+    this.get('controls').setEach('widgetIsValid', true);
+    this.get('controls').setEach('widgetErrors', Ember.A([]));
 
-  //   for (var i = 0; i < names.length - 1; i++) {
-  //     if (names[i + 1] === names[i]) {
-  //       dupes.push(names[i]);
-  //     }
-  //   }
+    var names = this.get('controls').mapBy('name').sort(),
+        dupes = [];
 
-  //   dupes = dupes.uniq();
+    for (var i = 0; i < names.length - 1; i++) {
+      if (names[i + 1] === names[i]) {
+        dupes.push(names[i]);
+      }
+    }
 
-  //   this.get('controls').setEach('isValid', true);
+    dupes = dupes.uniq();
 
-  //   var invalidControls = this.get('controls').filter(function (control, index) {
-  //     return dupes.indexOf(control.get('name')) >= 0;
-  //   }).setEach('isValid', false);
+    this.get('controls').filter(function (control, index) {
+      return dupes.indexOf(control.get('name')) >= 0;
+    }).setEach('widgetIsValid', false);
 
-  // }.observes('model.controls.@each.name'),
+    this.get('controls').rejectBy('widgetIsValid').setEach('widgetErrors', Ember.A(['Duplicate name.']));
+
+  },
 
   updateOrder: function (originalIndex, newIndex) {
 
@@ -115,6 +118,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   actions: {
     updateType: function () {
 
+      this.set('isEditing', false);
+
+      this.validateControls();
+
+      if (this.get('model.controls').isAny('widgetIsValid', false)) {
+        return;
+      }
+
       this.get('model.controls').forEach(function (control) {
         // hax
         // firebase doesn't like undefined values and for some reason `_super` is
@@ -123,6 +134,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           delete control.get('meta.data.options')._super;
         }
 
+        // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
           control.get('meta.data.options').setEach('value', null);
         }
@@ -136,6 +148,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         if (contentType.get('oneOff')) {
 
           if (wasNew) {
+            // create a stub in firebase and then transition to it
             this.store.createRecord('data', {
               id  : contentType.get('id'),
               data: { name: "" }
