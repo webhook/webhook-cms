@@ -11,18 +11,37 @@ export default Ember.Route.extend({
       var modelName = getItemModelName(this.modelFor('wh.content.type')),
           lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
 
-      promises.push(new Ember.RSVP.Promise(function (resolve, reject) {
-        lockRef.on('value', function (snapshot) {
+      var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+        lockRef.once('value', function (snapshot) {
           if (snapshot.val()) {
-            reject(new Ember.Error(snapshot.val()));
+            reject(new Ember.Error(snapshot.val() + ' is already editing this item.'));
           } else {
             resolve();
           }
         });
-      }));
+      }).then(function () {
+
+        // Lock it down!
+        lockRef.set(this.get('session.user.email'));
+
+        // Unlock on disconnect
+        lockRef.onDisconnect().remove();
+
+        return this.store.find(modelName, itemId).then(function (item) {
+          this.fixItem(item);
+          this.set('itemModel', item);
+        }.bind(this), function () {
+          lockRef.remove();
+          return Ember.RSVP.reject(new Ember.Error(itemId + ' does not exist.'));
+        });
+
+      }.bind(this));
+
+      promises.push(lockCheck);
 
       this.set('lockRef', lockRef);
       this.set('itemId', itemId);
+
     }
 
     // need to make sure all the content types are in the store
@@ -33,7 +52,7 @@ export default Ember.Route.extend({
     promises.push(this.fixControlType(this.modelFor('wh.content.type')));
 
     return Ember.RSVP.Promise.all(promises).catch(function (error) {
-      window.alert(error.message + ' is already editing this item.');
+      window.alert(error.message);
       transition.abort();
 
       // The user entered this URL into the browser. We need to redirect them somewhere.
@@ -44,20 +63,6 @@ export default Ember.Route.extend({
   },
   model: function (params) {
     return this.modelFor('wh.content.type');
-  },
-  afterModel: function (model) {
-    if (this.get('itemId')) {
-      // Lock it down!
-      this.get('lockRef').set(this.get('session.user.email'));
-
-      // Unlock on disconnect
-      this.get('lockRef').onDisconnect().remove();
-
-      return this.store.find(getItemModelName(model), this.get('itemId')).then(function (item) {
-        this.fixItem(item);
-        this.set('itemModel', item);
-      }.bind(this));
-    }
   },
   setupController: function (controller, type) {
 
