@@ -20,17 +20,17 @@
       {{/each}}
       <dt>Sort by</dt>
       <dd>
-        <span class="icon icon-circle-blank">
-          Last updated
+        <span {{bind-attr class=":icon sortedByPublish:icon-ok-sign:icon-circle-blank"}} {{action "sortToggle" "publish_date"}}>
+          Publish date
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-blank">
+        <span {{bind-attr class=":icon sortedByCreated:icon-ok-sign:icon-circle-blank"}} {{action "sortToggle" "create_date"}}>
           Last created
         </span>
       </dd>
       <dd>
-        <span class="icon icon-circle-blank">
+        <span {{bind-attr class=":icon sortedByAlpha:icon-ok-sign:icon-circle-blank"}} {{action "sortToggle" "name"}}>
           Alphabetical
         </span>
       </dd>

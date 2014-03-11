@@ -1,6 +1,7 @@
 export default Ember.ArrayController.extend({
   sortProperties: ['data.publish_date'],
   sortAscending: false,
+  sortedByPublish: true,
 
   contentType: null,
   cmsControls: null,
@@ -17,6 +18,27 @@ export default Ember.ArrayController.extend({
     item.set('cmsControls', cmsControls);
     return item;
   },
+
+  sortedByChanged: function () {
+    this.setProperties({
+      sortedByPublish: false,
+      sortedByCreated: false,
+      sortedByAlpha: false
+    });
+
+    switch (this.get('sortProperties.firstObject')) {
+    case 'data.publish_date':
+      this.set('sortedByPublish', true);
+      break;
+    case 'data.create_date':
+      this.set('sortedByCreated', true);
+      break;
+    case 'data.name':
+      this.set('sortedByAlpha', true);
+      break;
+    }
+
+  }.observes('sortProperties'),
 
   cmsItems: Ember.arrayComputed('model.@each.data', 'cmsControls.@each.showInCms', {
     addedItem: function (array, item, changeMeta) {
