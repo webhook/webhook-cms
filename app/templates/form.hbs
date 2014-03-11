@@ -35,17 +35,7 @@
               <span class="wy-form-message">{{this}}</span>
             {{/each}}
 
-            {{#view "sortable"}}
-              {{#each control in controls}}
-                {{#unless control.hidden}}
-                  {{view 'formbuilder-widget' control=control}}
-                  {{!-- <li data-id="{{unbound control.id}}" {{bind-attr data-locked="control.locked"}}>
-                    {{formbuilder-widget control=control editingControl=editingControl isEditing=isEditing doEdit="editControl" session=session}}
-                  </li> --}}
-                {{/unless}}
-              {{/each}}
-            {{/view}}
-
+            {{collection "formbuilder" content=controls}}
           </fieldset>
 
           <div class="wh-form-builder-save wy-btn-group">

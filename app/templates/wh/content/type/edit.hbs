@@ -11,8 +11,7 @@
     <fieldset>
       {{#each control in type.controls}}
         {{#unless control.hidden}}
-          {{view 'widget' control=control}}
-          {{!-- {{formbuilder-widget control=control session=session}} --}}
+          {{view 'widget' context=control}}
         {{/unless}}
       {{/each}}
 

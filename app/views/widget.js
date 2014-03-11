@@ -3,7 +3,8 @@ export default Ember.View.extend({
   classNames: ['wy-control-group'],
 
   classNameBindings: [
-    'control.required:wy-control-group-required',
-    'control.widgetIsValid::wy-control-group-error'
+    'context.required:wy-control-group-required',
+    'context.hidden:wy-control-group-hidden',
+    'context.widgetIsValid::wy-control-group-error'
   ]
 });

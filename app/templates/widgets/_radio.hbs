@@ -1,10 +1,10 @@
 {{#each option in control.meta.data.options}}
 <label class="wy-radio">
   {{view "radio-button"
-    name=control.name
-    selection=control.value
+    name=name
+    selection=value
     value=option.value
-    defaultValue=control.meta.data.defaultValue
+    defaultValue=meta.data.defaultValue
   }}
   {{option.value}}
 </label>
