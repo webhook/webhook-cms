@@ -508,7 +508,6 @@ pre code
     display: inline-block
     padding: 4px 10px 4px 10px
     margin-left: $base-line-height / 2
-    +transition(background .2s ease-in)
     &:before
       color: $text-light
   dl
@@ -521,6 +520,11 @@ pre code
     padding-left: $base-line-height
     color: lighten($blue, 40%)
 .wh-online-users.on
+  .icon
+    background: darken($blue, 10%)
+    color: $white
+  .icon:before
+    color: lighten($blue, 25%)
   .icon:after
     content: " online now."
   dl
