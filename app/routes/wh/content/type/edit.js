@@ -92,7 +92,7 @@ export default Ember.Route.extend({
     });
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
-    controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
+    controller.set('isDraft', data.isDraft || (!controller.get('publishDate') && !type.get('oneOff')));
 
     controller.set('lastUpdated', type.get('controls').findBy('name', 'last_updated').get('value'));
     controller.set('createDate', type.get('controls').findBy('name', 'create_date').get('value'));
