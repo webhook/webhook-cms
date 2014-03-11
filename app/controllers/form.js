@@ -26,16 +26,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   // }.observes('model.controls.@each.name'),
 
-  updateOrder: function (originalindex, newindex) {
+  updateOrder: function (originalIndex, newIndex) {
 
-    var allControls          = this.get('model.controls'),
-        shownControls        = allControls.rejectBy('hidden'),
-        control              = shownControls.objectAt(originalindex),
-        originalControlIndex = allControls.indexOf(control),
-        newControlIndex      = allControls.indexOf(shownControls.objectAt(newindex));
+    var controls = this.get('model.controls'),
+        control  = controls.objectAt(originalIndex);
 
-    allControls.removeAt(originalControlIndex);
-    allControls.insertAt(newControlIndex, control);
+    controls.removeAt(originalIndex);
+    controls.insertAt(newIndex, control);
 
   },
 
@@ -52,9 +49,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     controls = this.get('model.controls');
 
     control = this.store.createRecord('control', {
-      label: controlType.get('name'),
+      label      : controlType.get('name'),
       controlType: controlType,
-      showInCms: (controls.filterBy('showInCms').get('length') < 3)
+      showInCms  : (controls.filterBy('showInCms').get('length') < 3)
     });
 
     control.set('widgetIsValid', true);
