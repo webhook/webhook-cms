@@ -98,6 +98,7 @@ export default Ember.Route.extend({
     controller.set('createDate', type.get('controls').findBy('name', 'create_date').get('value'));
 
     controller.set('type', type);
+
     this._super.apply(this, arguments);
   },
 
