@@ -1,6 +1,9 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.ArrayController.extend({
+
+  sortProperties: ['name'],
+
   actions: {
     deleteType: function (contentType) {
       if (window.confirm('Are you sure? Confirm to delete this type and all associated data.')) {
@@ -14,6 +17,14 @@ export default Ember.ArrayController.extend({
     },
     gotoEdit: function (name) {
       this.transitionToRoute('form', name);
+    },
+    toggleSort: function (property) {
+      if (this.get('sortProperties.firstObject') === property) {
+        this.toggleProperty('sortAscending');
+      } else {
+        this.set('sortProperties', [property]);
+        this.set('sortAscending', true);
+      }
     }
   }
 });

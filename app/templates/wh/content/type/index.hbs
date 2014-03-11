@@ -43,7 +43,7 @@
         <th></th>
         {{#each contentType.controls}}
           {{#if showInCms}}
-            <th>{{label}}</th>
+            <th><button type="button" class="btn btn-link" {{action "sortToggle" name}}>{{label}}</button></th>
           {{/if}}
         {{/each}}
         <th></th>
@@ -51,7 +51,7 @@
     </thead>
     <tbody>
       {{#with contentType as contentTypeNav}}
-      {{#each item in cmsItems}}
+      {{#each item in sortedCmsItems}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
           <td>{{#if item.lockedBy}}<span class="icon icon-lock" {{bind-attr title="item.lockedBy"}}></span>{{/if}}</td>
           {{#each item.cmsControls}}

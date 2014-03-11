@@ -1,4 +1,7 @@
 export default Ember.ArrayController.extend({
+  sortProperties: ['data.publish_date'],
+  sortAscending: false,
+
   contentType: null,
   cmsControls: null,
   lockedItems: Ember.A([]),
@@ -17,11 +20,13 @@ export default Ember.ArrayController.extend({
 
   cmsItems: Ember.arrayComputed('model.@each.data', 'cmsControls.@each.showInCms', {
     addedItem: function (array, item, changeMeta) {
+
       if (item.constructor.typeKey === 'control') {
         array.forEach(this._updateItemControls.bind(this));
       } else {
         array.pushObject(this._updateItemControls(item));
       }
+
       return array;
     },
     removedItem: function (array, item) {
@@ -31,6 +36,14 @@ export default Ember.ArrayController.extend({
       return array;
     }
   }),
+
+  sortedCmsItems: function () {
+    var sortedCmsItems = this.get('cmsItems').sortBy.apply(this, this.get('sortProperties'));
+    if (!this.get('sortAscending')) {
+      sortedCmsItems.reverse();
+    }
+    return sortedCmsItems;
+  }.property('cmsItems.@each', 'sortProperties', 'sortAscending'),
 
   locksChanged: function () {
     this.get('cmsItems').setEach('lockedBy', null);
@@ -59,6 +72,24 @@ export default Ember.ArrayController.extend({
       });
 
       this.get('contentType').save();
+    },
+    sortToggle: function (field) {
+
+      field = 'data.' + field;
+
+      var sortProperties = this.get('sortProperties');
+
+      if (sortProperties.get('firstObject') === field) {
+        this.toggleProperty('sortAscending');
+      } else {
+        this.set('sortAscending', true);
+      }
+
+      sortProperties.insertAt(0, field);
+      sortProperties = sortProperties.uniq();
+
+      this.set('sortProperties', sortProperties);
+
     }
   }
 
