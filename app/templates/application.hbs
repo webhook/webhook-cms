@@ -5,11 +5,13 @@
     </li>
   {{/each}}
 </ul>
-
-<ul>
-  {{#each onlineUsers}}
-    <li>{{this}}</li>
-  {{/each}}
-</ul>
+<div class="wh-online-users" data-toggle="wh-online-users">
+  <dl>
+    {{#each onlineUsers}}
+      <dd>{{this}}</dd>
+    {{/each}}
+  </dl>
+  <div class="icon icon-user"> {{onlineUsers.length}}</div>
+</div>
 
 {{outlet}}

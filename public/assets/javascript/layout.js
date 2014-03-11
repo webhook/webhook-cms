@@ -8,6 +8,10 @@ $( document ).ready(function() {
     $("[data-toggle='wy-nav-shift']").removeClass("shift");
   });
 
+  $(document).on('click', "[data-toggle='wh-online-users']", function(event) {
+    $("[data-toggle='wh-online-users']").toggleClass("on");
+  });
+
   // Close menu when you click a link
   $(document).on("click", ".wy-dropdown .btn", function(event) {
     var ele = $(this).parent().find(".wy-dropdown-menu");
