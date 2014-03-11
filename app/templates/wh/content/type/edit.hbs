@@ -5,14 +5,14 @@
     {{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}
     {{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}
   </p>
-  <hr/>
-
+  <hr>
 
   {{#view 'item-form'}}
     <fieldset>
       {{#each control in type.controls}}
         {{#unless control.hidden}}
-          {{formbuilder-widget control=control session=session}}
+          {{view 'widget' control=control}}
+          {{!-- {{formbuilder-widget control=control session=session}} --}}
         {{/unless}}
       {{/each}}
 

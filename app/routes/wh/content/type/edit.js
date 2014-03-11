@@ -22,6 +22,7 @@ export default Ember.Route.extend({
       }));
 
       this.set('lockRef', lockRef);
+      this.set('itemId', itemId);
     }
 
     // need to make sure all the content types are in the store
@@ -42,19 +43,17 @@ export default Ember.Route.extend({
     }.bind(this));
   },
   model: function (params) {
-    this.set('modelId', params.item_id);
     return this.modelFor('wh.content.type');
   },
   afterModel: function (model) {
+    if (this.get('itemId')) {
+      // Lock it down!
+      this.get('lockRef').set(this.get('session.user.email'));
 
-    // Lock it down!
-    this.get('lockRef').set(this.get('session.user.email'));
+      // Unlock on disconnect
+      this.get('lockRef').onDisconnect().remove();
 
-    // Unlock on disconnect
-    this.get('lockRef').onDisconnect().remove();
-
-    if (this.get('modelId')) {
-      return this.store.find(getItemModelName(model), this.get('modelId')).then(function (item) {
+      return this.store.find(getItemModelName(model), this.get('itemId')).then(function (item) {
         this.fixItem(item);
         this.set('itemModel', item);
       }.bind(this));
