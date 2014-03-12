@@ -40,10 +40,9 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
-        <th></th>
         {{#each contentType.controls}}
           {{#if showInCms}}
-            <th><button type="button" class="btn btn-link" {{action "sortToggle" name}}>{{label}}</button></th>
+            <th><span class="wh-content-sort" {{action "sortToggle" name}}>{{label}}</span></th>
           {{/if}}
         {{/each}}
         <th></th>
@@ -53,12 +52,15 @@
       {{#with contentType as contentTypeNav}}
       {{#each item in sortedCmsItems}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
-          <td>{{#if item.lockedBy}}<span class="icon icon-lock" {{bind-attr title="item.lockedBy"}}></span>{{/if}}</td>
           {{#each item.cmsControls}}
             <td>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}
           <td class="wy-table-actions">
-            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" item}}></button>
+            {{#if item.lockedBy}}
+              <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title="item.lockedBy"}}></button>
+            {{else}}
+              <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" item}}></button>
+            {{/if}}
           </td>
         {{/link-to}}
       {{/each}}

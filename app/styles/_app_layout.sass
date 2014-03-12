@@ -281,13 +281,17 @@
   width: 100%
   th
     text-transform: capitalize
+  .wh-content-sort
+    color: $link-color
+    cursor: pointer
   .wy-table-actions
-    opacity: 0
     width: 1px
+    .icon-remove-sign
+      opacity: 0
   tbody tr:hover
     cursor: pointer
     background: $table-bg-hover-color
-    .wy-table-actions
+    .wy-table-actions .icon-remove-sign
       opacity: 1
 
 .wh-select-type
