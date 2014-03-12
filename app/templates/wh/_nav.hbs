@@ -1,19 +1,18 @@
 <!-- SIDE NAV, TOGGLES ON MOBILE -->
 <nav data-toggle="wy-nav-shift" class="wy-nav-side">
 
+  {{#if onlineUsers.length}}
+    <div class="wh-online-users" data-toggle="wh-online-users">
+      <dl>
+        {{#each onlineUsers}}
+          <dd>{{this}}</dd>
+        {{/each}}
+      </dl>
+      <div class="icon icon-user"> {{onlineUsers.length}}</div>
+    </div>
+  {{/if}}
+
   <div class="wy-side-nav-search">
-
-    {{#if onlineUsers.length}}
-      <div class="wh-online-users" data-toggle="wh-online-users">
-        <dl>
-          {{#each onlineUsers}}
-            <dd>{{this}}</dd>
-          {{/each}}
-        </dl>
-        <div class="icon icon-user"> {{onlineUsers.length}}</div>
-      </div>
-    {{/if}}
-
     {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
     <div class="wh-user-dropdown">
       {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}

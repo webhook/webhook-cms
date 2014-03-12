@@ -513,18 +513,18 @@ pre code
   dl
     max-height: 0
     overflow: hidden
-    background: $blue
-    +transition(max-height .3s linear)
+    background: $gray-dark
   dd
     padding: $base-line-height / 4 $base-line-height / 2
     padding-left: $base-line-height
-    color: lighten($blue, 40%)
+    color: $gray-light
 .wh-online-users.on
+  position: relative
   .icon
-    background: darken($blue, 10%)
+    background: $gray-darker
     color: $white
   .icon:before
-    color: lighten($blue, 25%)
+    color: $gray
   .icon:after
     content: " online now."
   dl
