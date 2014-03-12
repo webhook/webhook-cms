@@ -15,10 +15,10 @@ window.ENV = {
 
   themes: [
     {
-      name:  'Portfolio',
-      image: 'http://cms.webhook.com/v1/assets/images/hm01_wide.jpg',
-      url:   'http://dump.webhook.com/static/portfolio.zip',
-      description: 'Portfolio bearly knew her!'
+      name:  'Wyrm Sass',
+      image: 'https://raw.github.com/snide/webhook-theme-wyrm/master/theme_screenshot.png',
+      url:   'https://github.com/snide/webhook-theme-wyrm/archive/master.zip',
+      description: 'Installs the Wyrm Sass library and modifies your grunt file to watch for changes in your Sass folder.'
     },
   ],
   controlTypeGroups: [
