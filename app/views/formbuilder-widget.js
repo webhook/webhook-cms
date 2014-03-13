@@ -23,8 +23,6 @@ export default WidgetView.extend({
 
     var collectionView = this.get('parentView');
 
-    window.console.log(this.get('context.isSaving'));
-
     if (collectionView.get('initialControlsAdded') === collectionView.get('initialControlsLength')) {
       this.set('isPlaced', true);
       this.set('addedTimeout', Ember.run.later(this, function () {

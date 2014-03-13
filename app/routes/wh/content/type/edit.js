@@ -15,9 +15,9 @@ export default Ember.Route.extend({
       var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
         lockRef.once('value', function (snapshot) {
           if (snapshot.val()) {
-            reject(new Ember.Error(snapshot.val() + ' is already editing this item.'));
+            Ember.run(null, reject, new Ember.Error(snapshot.val() + ' is already editing this item.'));
           } else {
-            resolve();
+            Ember.run(null, resolve);
           }
         });
       }).then(function () {
@@ -29,23 +29,37 @@ export default Ember.Route.extend({
         lockRef.onDisconnect().remove();
 
         return this.store.find(modelName, itemId).then(function (item) {
+
+          // item found
           this.fixItem(item);
           this.set('itemModel', item);
-        }.bind(this), function () {
+
+        }.bind(this), function (message) {
+
+          // item does not exist
 
           // create the item if we're a one-off
           if (this.modelFor('wh.content.type').get('oneOff')) {
-            this.store.createRecord('data', {
+
+            // hack to overwrite empty state model that is being put in store from find method
+            this.store.push(modelName, {
               id  : contentType.get('id'),
               data: { name: "" }
-            }).save().then(function (item) {
-              this.fixitem(item);
-              this.set('itemModel', item);
-              return Ember.RSVP.resolve(item);
-            }.bind(this));
+            });
+
+            // use the item we just put in the store
+            var item = this.store.getById(modelName, contentType.get('id'));
+
+            this.fixItem(item);
+            this.set('itemModel', item);
+
+            return Ember.RSVP.resolve(item);
+
           } else {
+
             lockRef.remove();
             return Ember.RSVP.reject(new Ember.Error(itemId + ' does not exist.'));
+
           }
 
         }.bind(this));
