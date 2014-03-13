@@ -144,10 +144,15 @@ window.ENV = {
           iconClass: 'icon-star'
         },
         {
-          name     : 'Tags',
-          widget   : 'tag',
-          iconClass: 'icon-tags'
+          name     : 'Tabular Data',
+          widget   : 'tabular',
+          valueType: 'object'
         },
+        // {
+        //   name     : 'Tags',
+        //   widget   : 'tag',
+        //   iconClass: 'icon-tags'
+        // },
         {
           name     : 'Embed.ly',
           widget   : 'embedly',

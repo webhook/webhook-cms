@@ -1,0 +1,14 @@
+<hr>
+
+<div class="wy-control-group">
+  <label for="Options">Columns <i class="icon icon-question-sign"></i></label>
+  <div class="wy-control">
+    {{#each option in editingControl.meta.data.options}}
+    <label class="wy-checkbox">
+      {{input value=option.value}}
+      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.data.options}}></span>
+      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.data.options option}}></span>
+    </label>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<table class="wy-table full-width">
+  <thead>
+    {{#each option in meta.data.options}}
+      <th>{{option.value}}</th>
+    {{/each}}
+    <th></th>
+  </thead>
+  <tbody>
+    {{#with this as control}}
+    {{#each row in value}}
+      <tr>
+        {{#each data in row}}
+          <td>{{input value=data.value}}</td>
+        {{/each}}
+        <td><button type="button" class="btn btn-link" {{action "removeTabularRow" row control}}>remove</button>
+      </tr>
+    {{/each}}
+    {{/with}}
+  </tbody>
+</table>
+
+<button type="button" class="btn" {{action "addTabularRow" this}}>Add Row</button>

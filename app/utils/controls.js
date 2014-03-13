@@ -14,11 +14,24 @@ export default function dataFromControls (controls) {
     }
 
     if (control.get('controlType.valueType') === 'object') {
-      Ember.$.each(value, function (key, childValue) {
-        if (!childValue) {
-          delete value[key];
-        }
-      });
+
+      switch (control.get('controlType.widget')) {
+      case 'tabular':
+        var convertedValue = Ember.A([]);
+        value.forEach(function (row) {
+          convertedValue.push(row.mapBy('value'));
+        });
+        value = convertedValue;
+        break;
+      default:
+        Ember.$.each(value, function (key, childValue) {
+          if (!childValue) {
+            delete value[key];
+          }
+        });
+        break;
+      }
+
     }
 
     // add timezone to datetime values

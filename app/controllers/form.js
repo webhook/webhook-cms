@@ -103,6 +103,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           step: 0.5
         });
         break;
+      case 'tabular':
+        meta.set('data', {
+          options: [
+            { value: 'Column 1' },
+            { value: 'Column 2' }
+          ]
+        });
+        break;
     }
 
     control.set('meta', meta);

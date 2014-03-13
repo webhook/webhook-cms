@@ -118,6 +118,25 @@ export default Ember.Route.extend({
         value = moment(value).format('YYYY-MM-DDTHH:mm');
       }
 
+      if (control.get('controlType.widget') === 'tabular') {
+        if (!value) {
+          value = Ember.A([]);
+        } else {
+          // we must convert data into mutable form
+          var mutableValue = Ember.A([]);
+          value.forEach(function (row) {
+            var mutableData = Ember.A([]);
+            row.forEach(function (data) {
+              mutableData.pushObject({
+                value: data
+              });
+            });
+            mutableValue.pushObject(mutableData);
+          });
+          value = mutableValue;
+        }
+      }
+
       if (!value && control.get('controlType.valueType') === 'object') {
         value = {};
       }
