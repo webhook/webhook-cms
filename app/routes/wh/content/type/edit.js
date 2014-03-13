@@ -121,6 +121,11 @@ export default Ember.Route.extend({
       if (control.get('controlType.widget') === 'tabular') {
         if (!value) {
           value = Ember.A([]);
+          var emptyRow = Ember.A([]);
+          control.get('meta.data.options').forEach(function () {
+            emptyRow.pushObject("");
+          });
+          value.pushObject(emptyRow);
         } else {
           // we must convert data into mutable form
           var mutableValue = Ember.A([]);
