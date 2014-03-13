@@ -147,18 +147,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         if (contentType.get('oneOff')) {
 
-          if (wasNew) {
-            // create a stub in firebase and then transition to it
-            this.store.createRecord('data', {
-              id  : contentType.get('id'),
-              data: { name: "" }
-            }).save().then(function () {
-              this.transitionToRoute('wh.content.type.index', contentType);
-            }.bind(this));
-          } else {
-            this.transitionToRoute('wh.content.type.index', contentType);
-          }
-
+          this.transitionToRoute('wh.content.type.index', contentType);
           this.send('notify', 'success', 'Form saved!');
 
         } else {

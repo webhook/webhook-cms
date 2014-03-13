@@ -32,38 +32,44 @@ Ember.Application.initializer({
     var isLocal = false;
     var localSocket = null;
     var keepReload = Ember.$('meta[name="keepReload"]').attr('content');
-    if(document.location.hostname === "localhost" || document.location.hostname === "127.0.0.1")
+    if (["localhost", "127.0.0.1"].indexOf(document.location.hostname) >= 0)
     {
       isLocal = true;
-      localSocket = {
-        socket: new window.WebSocket('ws://localhost:6557'),
-        doneCallback: null,
-        connected: false
-      };
+      localSocket = Ember.Object.create({
+        socket        : new window.WebSocket('ws://localhost:6557'),
+        doneCallback  : null,
+        connected     : false,
+        lostConnection: false
+      });
 
       localSocket.socket.onmessage = function(event) {
-        if(event.data === 'done') {
-          if(localSocket.doneCallback) localSocket.doneCallback();
-          localSocket.doneCallback = null; //Reset so done doesn't get called twice
+        if (event.data === 'done') {
+          if (localSocket.get('doneCallback')) {
+            localSocket.get('doneCallback')();
+          }
+          localSocket.set('doneCallback', null); //Reset so done doesn't get called twice
         } else if (event.data.indexOf('done:') === 0) {
           var data = JSON.parse(event.data.replace('done:', ''));
-          if(localSocket.doneCallback) localSocket.doneCallback(data);
-          localSocket.doneCallback = null; //Reset so done doesn't get called twice
+          if (localSocket.get('doneCallback')) {
+            localSocket.get('doneCallback')(data);
+          }
+          localSocket.set('doneCallback', null); //Reset so done doesn't get called twice
         }
       };
 
       localSocket.socket.onopen = function() {
-        localSocket.connected = true;
+        localSocket.set('connected', true);
       };
 
-      if(!$('meta[name=suppressAlert]').attr('content')) {
+      if (!$('meta[name=suppressAlert]').attr('content')) {
         localSocket.socket.onclose = function() {
-          window.alert('It looks like your local runserver stopped. To use the CMS please restart it.');
+          localSocket.set('connected', false);
+          localSocket.set('lostConnection', true);
         };
       }
 
       // Shut down LiveReload
-      if(window.LiveReload && !keepReload) {
+      if (window.LiveReload && !keepReload) {
         var shutDown = new CustomEvent('LiveReloadShutDown');
         document.addEventListener("LiveReloadConnect", function() {
           document.dispatchEvent(shutDown);

@@ -8,7 +8,8 @@ export default Ember.Route.extend({
     var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
 
     if (itemId) {
-      var modelName = getItemModelName(this.modelFor('wh.content.type')),
+      var contentType = this.modelFor('wh.content.type');
+      var modelName = getItemModelName(contentType),
           lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
 
       var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
@@ -31,9 +32,23 @@ export default Ember.Route.extend({
           this.fixItem(item);
           this.set('itemModel', item);
         }.bind(this), function () {
-          lockRef.remove();
-          return Ember.RSVP.reject(new Ember.Error(itemId + ' does not exist.'));
-        });
+
+          // create the item if we're a one-off
+          if (this.modelFor('wh.content.type').get('oneOff')) {
+            this.store.createRecord('data', {
+              id  : contentType.get('id'),
+              data: { name: "" }
+            }).save().then(function (item) {
+              this.fixitem(item);
+              this.set('itemModel', item);
+              return Ember.RSVP.resolve(item);
+            }.bind(this));
+          } else {
+            lockRef.remove();
+            return Ember.RSVP.reject(new Ember.Error(itemId + ' does not exist.'));
+          }
+
+        }.bind(this));
 
       }.bind(this));
 

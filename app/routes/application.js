@@ -4,6 +4,7 @@ export default Ember.Route.extend({
     controller.set('notifications', this.get('notifications'));
     this._super.apply(this, arguments);
   },
+
   actions: {
     logoutUser: function () {
       this.get('session.auth').logout();

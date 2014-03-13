@@ -6,7 +6,7 @@
   {{/each}}
 </ul>
 
-<div class="wh-server-down">
+<div {{bind-attr class=":wh-server-down buildEnvironment.localSocket.lostConnection:on"}}>
   <div class="wh-server-down-content">
     <h1>Restart your runserver, then refresh</h1>
     <p><a href="/cms/" target="_blank">Or just click here when you've restarted</a></p>
