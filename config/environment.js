@@ -20,6 +20,12 @@ window.ENV = {
       url:   'https://github.com/snide/webhook-theme-wyrm/archive/master.zip',
       description: 'Installs the Wyrm Sass library and modifies your grunt file to watch for changes in your Sass folder.'
     },
+    {
+      name:  'Bootstrap Blog',
+      image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
+      url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
+      description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
+    }
   ],
   controlTypeGroups: [
     {
