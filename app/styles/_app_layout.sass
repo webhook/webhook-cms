@@ -535,6 +535,21 @@ pre code
     max-height: 200px
 
 
+.wh-server-down
+  display: none
+  position: fixed
+  background: rgba(0,0,0,.9)
+  padding: $gutter * 4
+  color: $white
+  top: 0
+  left: 0
+  height: 100%
+  width: 100%
+  z-index: $z-index-tray
+  .wh-server-down-content
+    max-width: 600px
+    margin: auto
+
 +media($tablet)
   .wh-online-users
     display: none
