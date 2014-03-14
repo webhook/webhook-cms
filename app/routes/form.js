@@ -17,6 +17,19 @@ export default Ember.Route.extend({
       control.get('meta.data.options').setEach('value', undefined);
     });
 
+    model.get('controls').filterBy('controlType.widget', 'tabular').forEach(function (control) {
+
+      var value = Ember.A([]);
+      var emptyRow = Ember.A([]);
+      control.get('meta.data.options').forEach(function () {
+        emptyRow.pushObject("");
+      });
+      value.pushObject(emptyRow);
+
+      control.set('value', value);
+
+    });
+
     this._super.apply(this, arguments);
   }
 });
