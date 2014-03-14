@@ -39,7 +39,8 @@ Ember.Application.initializer({
         socket        : new window.WebSocket('ws://localhost:6557'),
         doneCallback  : null,
         connected     : false,
-        lostConnection: false
+        lostConnection: false,
+        message       : '',
       });
 
       localSocket.socket.onmessage = function(event) {
@@ -54,6 +55,9 @@ Ember.Application.initializer({
             localSocket.get('doneCallback')(data);
           }
           localSocket.set('doneCallback', null); //Reset so done doesn't get called twice
+        } else if (event.data.indexOf('message:') === 0) {
+          var message = JSON.parse(event.data.replce('message:', ''));
+          localSocket.set('message', message);
         }
       };
 
