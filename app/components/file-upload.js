@@ -2,6 +2,7 @@ export default Ember.Component.extend({
 
   // map action to formbuilder-widget action...
   notify: 'notify',
+  onDoneUpload: '',
 
   control: Ember.Object.create(),
 
@@ -132,6 +133,7 @@ export default Ember.Component.extend({
   doneUpload: function (file, url) {
     this.set('control.value', url);
     this.sendAction('notify', 'success', this.get('successMsg'));
+    this.sendAction('onDoneUpload', url);
   },
 
   afterUpload: function () {

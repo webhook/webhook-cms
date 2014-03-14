@@ -25,8 +25,8 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    confirm: function () {
-      this.sendAction('confirm');
+    confirm: function (data) {
+      this.sendAction('confirm', data);
     },
     cancel: function () {
       this.sendAction('cancel');

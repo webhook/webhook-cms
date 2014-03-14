@@ -1,10 +1,9 @@
 {{textarea id=id placeholder=placeholder value=value}}
 
-<div {{bind-attr id=imageModelId}} style="display: none;">
-  <section {{bind-attr id=imageModelSectionId}}>
-    {{partial 'components/image-upload'}}
-  </section>
-  <footer>
-    <button class="redactor_modal_btn redactor_btn_modal_close">Cancel</button>
-  </footer>
-</div>
+{{webhook-modal
+  show=showImageModal
+  modalTemplate="widgets/common/imagemodal"
+  session=session
+  confirm="handleUpload"
+  fakeControl=fakeImageControl
+}}
