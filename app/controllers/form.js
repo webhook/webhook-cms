@@ -110,6 +110,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             { value: 'Column 2' }
           ]
         });
+        var value = Ember.A([]);
+        var emptyRow = Ember.A([]);
+        meta.get('data.options').forEach(function () {
+          emptyRow.pushObject("");
+        });
+        value.pushObject(emptyRow);
+        control.set('value', value);
         break;
     }
 
@@ -215,9 +222,22 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     addOption: function (array) {
       array.pushObject({});
+      var control = this.get('editingControl');
+      if (control.get('controlType.widget') === 'tabular') {
+        control.get('value').forEach(function (row) {
+          row.pushObject("");
+        });
+      }
     },
 
     removeOption: function (array, option) {
+      var control = this.get('editingControl');
+      if (control.get('controlType.widget') === 'tabular') {
+        var optionIndex = array.indexOf(option);
+        control.get('value').forEach(function (row) {
+          row.removeAt(optionIndex);
+        });
+      }
       array.removeObject(option);
     },
 
