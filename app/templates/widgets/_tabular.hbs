@@ -1,4 +1,4 @@
-<table class="wy-table full-width">
+<table class="wy-table wy-table-bordered-all wy-table-striped">
   <thead>
     {{#each option in meta.data.options}}
       <th>{{option.value}}</th>
@@ -12,11 +12,11 @@
         {{#each data in row}}
           <td>{{input value=data.value}}</td>
         {{/each}}
-        <td><button type="button" class="btn btn-link" {{action "removeTabularRow" row control}}>remove</button>
+        <td><button type="button" class="btn btn-link icon icon-remove-sign" {{action "removeTabularRow" row control}}></button>
       </tr>
     {{/each}}
     {{/with}}
   </tbody>
 </table>
 
-<button type="button" class="btn" {{action "addTabularRow" this}}>Add Row</button>
+<button class="btn btn-link btn-small icon icon-plus-sign" {{action "addTabularRow" this}}> Add Row</button>
