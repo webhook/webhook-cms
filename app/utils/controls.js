@@ -19,7 +19,9 @@ export default function dataFromControls (controls) {
       case 'tabular':
         var convertedValue = Ember.A([]);
         value.forEach(function (row) {
-          convertedValue.push(row.mapBy('value'));
+          convertedValue.push(row.map(function (cell) {
+            return cell || "";
+          }));
         });
         value = convertedValue;
         break;
