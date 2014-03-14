@@ -1,4 +1,5 @@
 <div class="wy-control-group-file">
+
   {{#if control.value}}
     <a {{ bind-attr href=value }} target="_blank" class="wy-file-location icon icon-paper-clip"> {{ control.value }}</a>
     <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}></span>
@@ -6,7 +7,8 @@
       <source {{bind-attr src="control.value"}}>
     </audio>
   {{/if}}
-  <div {{ bind-attr class=":wy-form-upload-container control.value::on" }}>
+
+  <div {{ bind-attr class=":wy-form-upload-container showUploadButton:on" }}>
     <div class="wy-form-upload">
       <div class="wy-form-upload-content">
         <button type="button" class="btn btn-neutral icon icon-music"> Drag or select audio file</button>
@@ -17,11 +19,13 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle">or use a URL?</button>
-    <div class="wy-form-upload-url wy-input-prefix">
-      <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
-      <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-      <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign"> Cancel</button>
-    </div>
+    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
   </div>
+
+  <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix showUrlInput:on" }}>
+    <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
+    <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
+    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> Cancel</button>
+  </div>
+
 </div>

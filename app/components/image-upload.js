@@ -1,12 +1,12 @@
 import FileUploadComponent from 'appkit/components/file-upload';
 
 export default FileUploadComponent.extend({
-  selectAccept: 'image/*',
+  selectAccept  : 'image/*',
   defaultClasses: 'icon-picture',
   successMsg    : ' Image upload complete.',
 
   valueChanged: function () {
-    if (!this.get('control.value')) {
+    if (Ember.isNone(this.get('control.value'))) {
       this.$('.wy-form-upload-image').remove();
     }
   }.observes('control.value'),
@@ -16,10 +16,8 @@ export default FileUploadComponent.extend({
   },
 
   beforeUpload: function (file) {
-    this.$container.show();
-    this.$url.hide();
-    this.$uploadBtn.hide();
-    this.$loading.css('display', 'inline-block');
+
+    this._super.apply(this, arguments);
 
     this.set('initial', null);
 

@@ -8,6 +8,18 @@ export default Ember.Component.extend({
   successMsg    : ' File upload complete.',
   defaultClasses: 'icon-paper-clip',
 
+  wantUploadButton: true,
+
+  showUploadButton: function () {
+    return Ember.isNone(this.get('control.value')) && this.get('wantUploadButton');
+  }.property('control.value', 'wantUploadButton'),
+
+  wantUrlInput: false,
+
+  showUrlInput: function () {
+    return Ember.isNone(this.get('control.value')) && this.get('wantUrlInput');
+  }.property('control.value', 'wantUrlInput'),
+
   didInsertElement: function () {
 
     var self = this;
@@ -34,10 +46,6 @@ export default Ember.Component.extend({
     this.$('.wy-form-upload-url .upload-url').on('click', function () {
       this.selectedFile(this.$('.wy-form-upload-url input').val());
       this.$('.wy-form-upload-url input').val('');
-    }.bind(this));
-
-    this.$('.upload-method-toggle').on('click', function () {
-      this.$('.wy-form-upload-container, .wy-form-upload-url').toggle();
     }.bind(this));
 
     var resetButton = function () {
@@ -107,8 +115,8 @@ export default Ember.Component.extend({
   },
 
   beforeUpload: function (file) {
-    this.$container.show();
-    this.$url.hide();
+    this.set('wantUploadButton', true);
+    this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
     this.$loading.css('display', 'inline-block');
   },
@@ -134,6 +142,10 @@ export default Ember.Component.extend({
   actions: {
     clear: function () {
       this.set('control.value', null);
+    },
+    toggleMethod: function () {
+      this.toggleProperty('wantUrlInput');
+      this.toggleProperty('wantUploadButton');
     }
   }
 });
