@@ -146,6 +146,7 @@ window.ENV = {
         {
           name     : 'Tabular Data',
           widget   : 'tabular',
+          iconClass: 'icon-table',
           valueType: 'object'
         },
         // {
