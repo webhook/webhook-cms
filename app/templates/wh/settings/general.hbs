@@ -2,31 +2,24 @@
   <h1>General settings</h1>
   <hr>
 
-  <div class="wy-alert wy-alert-warning">
-    <div class="wy-alert-title">Hey alpha testers!</div>
-    <p>
-      This page is bogardus. We plan on using it to define your site's title, favicon and allow you to set custom
-      css to white label the CMS if you wish.
-    </p>
-  </div>
+  <p>These are global values used in your front end templates.</p>
 
   <form {{action "saveSettings" on="submit"}}>
     <fieldset>
       <div class="wy-control-group">
-        <label>Site Name</label>
+        <label>Site name</label>
         <div class="wy-control">
           {{input value=model.siteName disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Help text goes here!</span>
       </div>
       <div class="wy-control-group">
         <label>Site URL</label>
         <div class="wy-control">
           {{input value=model.siteUrl disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Help text goes here!</span>
+        <span class="wy-form-message">Please use full URL like http://www.example.com.</span>
       </div>
-      <button type="submit" class="btn" {{bind-attr disabled=model.isSaving}}>Save</button>
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled=model.isSaving}}> Save</button>
     </fieldset>
   </form>
 
