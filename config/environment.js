@@ -18,7 +18,7 @@ window.ENV = {
       name:  'Wyrm Sass',
       image: 'https://raw.github.com/snide/webhook-theme-wyrm/master/theme_screenshot.png',
       url:   'https://github.com/snide/webhook-theme-wyrm/archive/master.zip',
-      description: 'Installs the Wyrm Sass library and modifies your grunt file to watch for changes in your Sass folder.'
+      description: 'REQUIRES BOWER. Installs the Wyrm Sass library and modifies your grunt file to watch for changes in your Sass folder.'
     },
     {
       name:  'Bootstrap Blog',
