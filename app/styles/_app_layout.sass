@@ -155,58 +155,6 @@
   opacity: 1
   width: 100%
 
-.wy-grid-for-nav
-  position: absolute
-  width: 100%
-  height: 100%
-
-.wy-nav-side
-  position: absolute
-  top: 0
-  left: 0
-  width: $nav-desktop-width
-  min-height: 100%
-  background: $menu-background-color
-  border-right: solid 1px rgba(0,0,0,.05)
-  z-index: $z-index-popover
-
-.wy-nav-top
-  display: none
-  background: $gray-darker
-  color: $text-invert
-  padding: $gutter / 4 $gutter / 2
-  position: relative
-  line-height: 50px
-  text-align: center
-  font-size: 100%
-  +clearfix
-  a
-    color: $white
-    font-weight: bold
-    +font-smooth
-  img
-    margin-right: $base-line-height / 2
-    height: 45px
-    width: 45px
-    background-color: $menu-logo-color
-    padding: 5px
-    border-radius: 100%
-  i
-    font-size: 30px
-    line-height: 50px
-    float: left
-    cursor: pointer
-
-.wy-nav-content-wrap
-  margin-left: $nav-desktop-width
-  background: $section-background-color
-  min-height: 100%
-  // max-width: 800px
-
-.wy-nav-content
-  padding: $gutter $gutter * 2 $gutter * 4 $gutter * 2
-  height: 100%
-  margin: auto
 
 
 .wy-affix
@@ -558,36 +506,8 @@ pre code
 +media($tablet)
   .wh-online-users
     display: none
-  .wy-body-for-nav
-    background: $section-background-color
-  .wy-nav-top
-    display: block
-  .wy-nav-side
-    @if $nav-desktop-position == left
-      left: -$nav-desktop-width
-    @else
-      right: -$nav-desktop-width
-    &.shift
-      width: 85%
-      left: 0
-  .wy-nav-content-wrap
-    margin-left: 0
-    .wy-nav-content
-      padding: $gutter
-    &.shift
-      position: fixed
-      min-width: 100%
-      left: 85%
-      top: 0
-      height: 100%
-      overflow: hidden
   .wh-save-item
     left: 0
 
-@media print
-  .wy-nav-side
-    display: none
-  .wy-nav-content-wrap
-    margin-left: 0
 
 
