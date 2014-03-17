@@ -38,7 +38,7 @@ export default Ember.Component.extend({
 
     // when a file is selected, upload
     this.$uploadBtn.selectFile({
-      accept: this.get('selectAccept'),
+      accept  : this.get('selectAccept'),
       multiple: this.get('selectMultiple')
     }).on('selectedFile', function (event, file) {
       self.selectedFile.call(self, file);
@@ -120,6 +120,10 @@ export default Ember.Component.extend({
     this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
     this.$loading.css('display', 'inline-block');
+
+    if (typeof file === 'string') {
+      this.$loading.find('span').text('fetching image...');
+    }
   },
 
   progressUpload: function (file, percentage) {
@@ -137,7 +141,7 @@ export default Ember.Component.extend({
   },
 
   afterUpload: function () {
-    this.$loading.hide();
+    this.$loading.hide().find('span').text('');
     this.$uploadBtn.show();
   },
 
