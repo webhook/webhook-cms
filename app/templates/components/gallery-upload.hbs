@@ -39,7 +39,11 @@
       {{#if item.image.url}}
         <a {{action 'editImage' item bubbles=false}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
       {{else}}
-        <span class="progress">{{item.progress}}</span>
+        {{#if item.error}}
+          <span class="error">!</span>
+        {{else}}
+          <span class="progress">{{item.progress}}</span>
+        {{/if}}
       {{/if}}
     </li>
   {{/each}}

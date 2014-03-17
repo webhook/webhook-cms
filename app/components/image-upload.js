@@ -31,5 +31,9 @@ export default FileUploadComponent.extend({
 
     image.prependTo(this.$upload);
 
+  },
+
+  failUpload: function () {
+    this.$('.wy-form-upload-image').remove();
   }
 });

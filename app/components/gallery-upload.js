@@ -42,12 +42,15 @@ export default FileUploadComponent.extend({
   // Keep track of progress for each image.
   selectedFile: function (file) {
 
-    var item = Ember.Object.create();
+    // have something to start
+    var item = Ember.Object.create({
+      progress: '...',
+      name: typeof file === 'string' ? file.split('/').pop() : file.name
+    });
+
+    this.get('items').pushObject(item);
 
     var uploading = this.uploader.upload(file);
-
-    // have something to start
-    item.set('progress', '...');
 
     uploading.progress(function (event) {
       item.set('progress', Math.ceil((event.loaded * 100) / event.total));
@@ -59,7 +62,11 @@ export default FileUploadComponent.extend({
       this.sendAction('notify', 'success', this.get('successMsg'));
     }.bind(this));
 
-    this.get('items').pushObject(item);
+    uploading.fail(function (response) {
+      this.sendAction('notify', 'danger', 'Error: ' + response.statusText + '. ' + item.get('name') + ' failed to upload. ');
+      this.get('items').removeObject(item);
+      item.destroy();
+    }.bind(this));
 
   },
 

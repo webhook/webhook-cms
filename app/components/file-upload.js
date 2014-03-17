@@ -89,7 +89,8 @@ export default Ember.Component.extend({
 
   selectedFile: function (file) {
 
-    var self = this;
+    var self = this,
+        fileName = typeof file === 'string' ? file.split('/').pop() : file.name;
 
     self.beforeUpload.call(self, file);
 
@@ -108,6 +109,14 @@ export default Ember.Component.extend({
       self.afterUpload.call(self, file);
     });
 
+    uploading.fail(function (response) {
+      this.sendAction(
+        'notify',
+        'danger',
+        'Error: ' + response.statusText + '. ' +  fileName + ' failed to upload. ');
+      self.failUpload.call(self, response);
+    }.bind(this));
+
     return uploading;
   },
 
@@ -116,6 +125,7 @@ export default Ember.Component.extend({
   },
 
   beforeUpload: function (file) {
+    this.set('control.value', null);
     this.set('wantUploadButton', true);
     this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
@@ -144,6 +154,9 @@ export default Ember.Component.extend({
     this.$loading.hide().find('span').text('');
     this.$uploadBtn.show();
   },
+
+  // override for custom implementation
+  failUpload: function () {},
 
   actions: {
     clear: function () {
