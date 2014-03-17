@@ -42,9 +42,9 @@
     <hr>
 
     <div class="wy-btn-group">
-      {{#if editingControl.locked}}{{else}}
-        <button class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl}}> Delete this field</button>
-      {{/if}}
+      {{#unless editingControl.locked}}
+        <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> Delete this field</button>
+      {{/unless}}
     </div>
   </form>
 </nav>
