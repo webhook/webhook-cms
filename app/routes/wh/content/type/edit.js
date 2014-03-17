@@ -12,9 +12,11 @@ export default Ember.Route.extend({
       var modelName = getItemModelName(contentType),
           lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
 
+      var userEmail = this.get('session.user.email');
+
       var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
         lockRef.once('value', function (snapshot) {
-          if (snapshot.val()) {
+          if (snapshot.val() && snapshot.val() !== userEmail) {
             Ember.run(null, reject, new Ember.Error(snapshot.val() + ' is already editing this item.'));
           } else {
             Ember.run(null, resolve);

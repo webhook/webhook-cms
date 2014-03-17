@@ -8,23 +8,20 @@ export default Ember.ArrayController.extend({
     // Presence
     var presenceRef   = window.ENV.firebase.child('presence'),
         onlineRef     = presenceRef.child('online'),
+        userRef       = onlineRef.child(user.uid),
         lastOnlineRef = presenceRef.child('lastOnline/' + user.uid),
         connectedRef  = window.ENV.firebaseRoot.child('.info/connected');
 
-    connectedRef.once('value', function (snap) {
-      if (snap.val() === true) {
-        // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+    // when I disconnect, remove user presence
+    userRef.onDisconnect().remove();
 
-        // add user to connection list
-        var userRef = onlineRef.child(user.uid);
+    // when I disconnect, update the last time I was seen online
+    lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+
+    connectedRef.on('value', function (snapshot) {
+      if (snapshot.val() === true) {
+        // when I connect, add user presence
         userRef.set(user.email);
-
-        // when I disconnect, remove this device
-        userRef.onDisconnect().remove();
-
-        // when I disconnect, update the last time I was seen online
-        lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
-
       }
     });
 
