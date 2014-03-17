@@ -10,9 +10,6 @@ export default Ember.View.extend({
 
     var originalindex, self = this;
 
-    var items = this.get('items'),
-        images = this.get('images');
-
     this.$().sortable({
       items      : "> li",
       placeholder: 'wh-form-gallery-placeholder',
@@ -28,20 +25,22 @@ export default Ember.View.extend({
       },
       update: function  (event, ui) {
 
+        var items  = this.get('items'),
+            images = this.get('images');
+
         var newindex = ui.item.parent().children(':not(script)').index(ui.item);
 
-        $(this).sortable('cancel');
+        self.$().sortable('cancel');
 
         var image = images.objectAt(originalindex);
-        var item = items.objectAt(originalindex);
-
         images.removeAt(originalindex);
         images.insertAt(newindex, image);
 
+        var item = items.objectAt(originalindex);
         items.removeAt(originalindex);
         items.insertAt(newindex, item);
 
-      }
+      }.bind(this)
     });
 
   }

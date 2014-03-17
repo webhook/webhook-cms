@@ -24,7 +24,7 @@
 
 {{#if control.value}}
   <p class="wy-form-gallery-instructions icon icon-circle-blank"> Circled images have captions. Click to edit an individual image. Drag to sort.</p>
-  {{#view 'gallery' items=items images=value}}
+  {{#view 'gallery' items=items images=control.value}}
   {{#each item in items}}
     <li {{bind-attr class="item.progress:loading item.image.caption:captioned"}}>
       {{#if item.editing}}

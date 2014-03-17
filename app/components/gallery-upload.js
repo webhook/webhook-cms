@@ -11,13 +11,13 @@ export default FileUploadComponent.extend({
     this.set('control.value', this.get('items').filterBy('image.url').getEach('image'));
   }.observes('items.@each.image'),
 
+  items: Ember.A([]),
+
   willInsertElement: function () {
 
     // create initial set of items from control value
     this.set('items', Ember.A(this.get('control.value')).map(function (image) {
-      return Ember.Object.create({
-        image: image
-      });
+      return Ember.Object.create({ image: image });
     }));
 
   },
