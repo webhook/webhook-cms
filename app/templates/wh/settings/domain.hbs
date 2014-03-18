@@ -2,7 +2,7 @@
 
 <p>
   Your site is currently available at
-  {{buildEnvironment.siteName}}.webhook.com
+  {{buildEnvironment.siteName}}.webhook.com and {{ domain }}
 </p>
 
 <hr/>
@@ -17,4 +17,26 @@
   </p>
 
   <p>I'm sure some of you have big opinions on this. Please let us know what you want.</p>
+
 </div>
+
+{{#if success }}
+Success, follow instructions on how to set up CNAME now please.
+{{else}}
+<form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
+
+  <h1>Change Custom Domain</h1>
+
+  <div class="wy-control-group">
+    <label>Custom DNS</label>
+    <div class="wy-control">
+      {{input type="text" value=domain disabled=isSending placeholder="Enter your DNS"}} 
+    </div>
+  </div>
+
+  <div class="wy-btn-group">
+    <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Update</button>
+  </div>
+
+</form>
+{{/if}}
