@@ -40,3 +40,13 @@ Success, follow instructions on how to set up CNAME now please.
 
 </form>
 {{/if}}
+
+Once successful, point a CNAME record for your domain at 'dns.webhook.com'.
+
+i.e.: www.yoursite.com CNAME dns.webhook.com
+      or subdomain.yoursite.com CNAME dns.webhook.com
+
+If you want both http://yoursite.com and http://www.yoursite.com to go to your webhook site, we recommend using a www redirection service like wwwizer. In this case you would point the www CNAME at dns and your A record at wwwizer
+
+i.e: www.yoursite.com CNAME dns.webhook.com
+     yoursite.com A 174.129.25.170
