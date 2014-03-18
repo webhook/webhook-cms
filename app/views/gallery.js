@@ -1,4 +1,4 @@
-export default Ember.View.extend({
+export default Ember.CollectionView.extend({
   tagName : "ol",
   classNames: ["wy-form-gallery"],
 
@@ -13,7 +13,8 @@ export default Ember.View.extend({
     this.$().sortable({
       items      : "> li",
       placeholder: 'wh-form-gallery-placeholder',
-      helper     : 'clone',
+      scroll: false,
+      // helper     : 'clone',
 
       start: function (event, ui) {
 
@@ -25,7 +26,7 @@ export default Ember.View.extend({
       },
       update: function  (event, ui) {
 
-        var items  = this.get('items'),
+        var items  = this.get('content'),
             images = this.get('images');
 
         var newindex = ui.item.parent().children(':not(script)').index(ui.item);
@@ -43,5 +44,13 @@ export default Ember.View.extend({
       }.bind(this)
     });
 
-  }
+  },
+
+  itemViewClass: Ember.View.extend({
+    tagName: 'li',
+    classNameBindings: [
+      'context.progress:loading',
+      'context.image.caption:captioned'
+    ]
+  })
 });

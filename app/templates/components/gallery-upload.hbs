@@ -24,28 +24,22 @@
 
 {{#if control.value}}
   <p class="wy-form-gallery-instructions icon icon-circle-blank"> Circled images have captions. Click to edit an individual image. Drag to sort.</p>
-  {{#view 'gallery' items=items images=control.value}}
-  {{#each item in items}}
-    <li {{bind-attr class="item.progress:loading item.image.caption:captioned"}}>
-      {{#if item.editing}}
-        <div class="wy-form-gallery-edit">
-          <div class="wy-form-gallery-edit-img">{{resize-image item.image.url width="200" height="200"}}</div>
-          {{textarea value=item.image.caption placeholder="caption"}}
-          <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" item}}> Delete</button>
-          <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" item}}> Save / close</button>
-          <span class="triangle"></span>
-        </div>
-      {{/if}}
-      {{#if item.image.url}}
-        <a {{action 'editImage' item bubbles=false}}>{{resize-image item.image.url width="30" height="30" crop="true"}}</a>
-      {{else}}
-        {{#if item.error}}
-          <span class="error">!</span>
-        {{else}}
-          <span class="progress">{{item.progress}}</span>
-        {{/if}}
-      {{/if}}
-    </li>
-  {{/each}}
-  {{/view}}
+
+  {{#collection 'gallery' content=items images=control.value}}
+    {{#if editing}}
+      <div class="wy-form-gallery-edit">
+        <div class="wy-form-gallery-edit-img">{{resize-image image.url width="200" height="200"}}</div>
+        {{textarea value=image.caption placeholder="caption"}}
+        <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> Delete</button>
+        <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> Save / close</button>
+        <span class="triangle"></span>
+      </div>
+    {{/if}}
+    {{#if image.url}}
+      <a {{action 'editImage' this bubbles=false}}>{{resize-image image.url width="30" height="30" crop="true"}}</a>
+    {{else}}
+      <span class="progress">{{progress}}</span>
+    {{/if}}
+  {{/collection}}
+
 {{/if}}
