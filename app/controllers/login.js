@@ -3,15 +3,6 @@ export default Ember.ObjectController.extend({
   password : null,
   isLoading: false,
 
-  userChanged: function () {
-    this.set('isLoading', false);
-    if (this.get('session.transition')) {
-      this.get('session.transition').retry();
-    } else {
-      this.transitionToRoute('index');
-    }
-  }.observes('session.user'),
-
   errorChanged: function () {
     this.set('isLoading', false);
   }.observes('session.error'),

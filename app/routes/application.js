@@ -1,9 +1,18 @@
 export default Ember.Route.extend({
   notifications: [],
+
   setupController: function (controller) {
     controller.set('notifications', this.get('notifications'));
     this._super.apply(this, arguments);
   },
+
+  userChanged: function () {
+    if (this.get('session.transition')) {
+      this.get('session.transition').retry();
+    } else {
+      this.transitionTo('index');
+    }
+  }.observes('session.user'),
 
   actions: {
     logoutUser: function () {
