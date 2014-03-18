@@ -7,6 +7,12 @@ export default Ember.Route.extend({
   },
 
   userChanged: function () {
+
+    // if you just logged in, we have to set the firebase property
+    DS.FirebaseAdapter.reopen({
+      firebase: window.ENV.firebase
+    });
+
     if (this.get('session.transition')) {
       this.get('session.transition').retry();
     } else {

@@ -3,6 +3,10 @@ export default Ember.ObjectController.extend({
   password : null,
   isLoading: false,
 
+  userChanged: function () {
+    this.set('isLoading', false);
+  }.observes('session.user'),
+
   errorChanged: function () {
     this.set('isLoading', false);
   }.observes('session.error'),

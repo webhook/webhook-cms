@@ -1,4 +1,4 @@
-export default Ember.Controller.extend({
+export default Ember.ObjectController.extend({
   actions: {
     saveSettings: function () {
       this.get('model').save().then(function () {

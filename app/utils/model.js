@@ -24,7 +24,10 @@ export default function getItemModelName(contentType) {
       window.App[modelName] = ItemModel.extend();
 
       // dynamic adapter
-      window.App[modelName + 'Adapter'] = ItemAdapter.extend();
+      window.App[modelName + 'Adapter'] = ItemAdapter.extend({
+        // needs to be set here because it doesn't exist when adapter/item.js is parsed from the ItemAdapter import
+        firebase: window.ENV.firebase.child('data')
+      });
 
       // dynamic serializer
       window.App[modelName + 'Serializer'] = ItemSerializer.extend();
