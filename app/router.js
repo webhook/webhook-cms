@@ -5,10 +5,6 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
 
-  this.resource('formbuilder',function() {
-    this.route('create');
-  });
-
   this.route('login');
   this.route('password-reset');
   this.route('create-user');
@@ -42,11 +38,6 @@ Router.map(function() {
     });
   });
 
-  this.route('component-test');
-  this.route('helper-test');
-  // this.resource('posts', function() {
-  //   this.route('new');
-  // });
 });
 
 export default Router;
