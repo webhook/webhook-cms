@@ -67,6 +67,10 @@ export default Ember.Component.extend({
 
   embedlyUrl: function (url, width) {
 
+    if(url.indexOf('http://') === -1) {
+      url = 'http://' + window.ENV.siteDNS + url;
+    }
+
     var params = [];
     params.push('width=' + width);
     params.push('url=' + encodeURIComponent(url));
