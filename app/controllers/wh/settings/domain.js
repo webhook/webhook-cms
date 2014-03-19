@@ -13,6 +13,10 @@ export default Ember.ObjectController.extend({
       var domain = this.get('domain');
       var siteName = this.get('buildEnvironment').siteName;
 
+      if(domain.indexOf('http://') === 0) {
+        domain = domain.replace('http://');
+      }
+
       window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns").set(domain, function() {
         var commandData = {
           dnsname: domain,
