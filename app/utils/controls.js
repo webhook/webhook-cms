@@ -44,13 +44,5 @@ export default function dataFromControls (controls) {
     data[control.get('name')] = value;
   });
 
-  // checkboxes are special
-  controls.filterBy('controlType.widget', 'checkbox').forEach(function (control) {
-    data[control.get('name')] = [];
-    control.get('meta.data.options').forEach(function (option) {
-      data[control.get('name')].push(option);
-    });
-  });
-
   return data;
 }

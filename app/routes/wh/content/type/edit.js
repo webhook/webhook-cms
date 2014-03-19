@@ -1,6 +1,8 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
+  isDirty: false,
+
   beforeModel: function (transition) {
 
     var promises = [];
@@ -164,6 +166,17 @@ export default Ember.Route.extend({
 
     controller.set('type', type);
 
+    // watch for value changes so we can prevent user from accidentally leaving
+    controller.set('isDirty', false);
+    controller.addObserver('type.controls.@each.value', function () {
+      Ember.$(window).on('beforeunload', function () {
+        if (controller.get('isDirty')) {
+          return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
+        }
+      });
+      controller.set('isDirty', true);
+    }.bind(this));
+
     this._super.apply(this, arguments);
   },
 
@@ -223,11 +236,20 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    willTransition: function () {
+    willTransition: function (transition) {
+
+      if (this.get('controller.isDirty') && !window.confirm('You have changes that have not been saved, are you sure you would like to leave?')) {
+        transition.abort();
+        return;
+      }
+
       // Unlock on transition
       if (this.get('lockRef')) {
         this.get('lockRef').remove();
       }
+
+      Ember.$(window).off('beforeunload');
+
     }
   }
 });

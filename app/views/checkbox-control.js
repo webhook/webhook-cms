@@ -1,12 +1,19 @@
 export default Ember.Checkbox.extend({
 
+  stateChanged: function () {
+    this.set('option.value', this.get('checked'));
+    this.set('control.value', this.get('control.meta.data.options').map(function (option) {
+      return { label: option.label, value: option.value };
+    }));
+  }.observes('checked'),
+
   defaultChanged: function () {
-    this.set('checked', this.get('defaultValue'));
-  }.observes('defaultValue'),
+    this.set('checked', this.get('option.defaultValue'));
+  }.observes('option.defaultValue'),
 
   willInsertElement: function () {
-    if (this.get('checked') === undefined && this.get('defaultValue')) {
-      this.set('checked', this.get('defaultValue'));
+    if (this.get('checked') === undefined && this.get('option.defaultValue')) {
+      this.set('checked', this.get('option.defaultValue'));
     }
   }
 

@@ -1,9 +1,12 @@
+{{#with this as control}}
 {{#each option in meta.data.options}}
   <label class="wy-checkbox">
     {{view 'checkbox-control'
       checked=option.value
-      defaultValue=option.defaultValue
+      control=control
+      option=option
     }}
     {{option.label}}
   </label>
 {{/each}}
+{{/with}}

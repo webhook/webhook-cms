@@ -10,6 +10,7 @@ export default Ember.ObjectController.extend({
   publishDate : null,
   showSchedule: false,
   itemModel   : null,
+  isDirty     : false,
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -59,6 +60,8 @@ export default Ember.ObjectController.extend({
     var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
 
     itemModel.set('data', data).save().then(function (item) {
+
+      this.set('isDirty', false);
 
       window.ENV.sendBuildSignal();
 
