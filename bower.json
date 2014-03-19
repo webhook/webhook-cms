@@ -15,7 +15,8 @@
     "firebase-simple-login": "1.2.5",
     "jquery-ui": "~1.10.x",
     "embedly-jquery": "~3.1.1",
-    "matchbox": "*"
+    "matchbox": "*",
+    "FileSaver.js": "eligrey/FileSaver.js"
   },
   "devDependencies": {
     "wyrm": "~0.0.x"

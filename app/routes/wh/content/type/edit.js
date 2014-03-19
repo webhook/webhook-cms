@@ -169,11 +169,6 @@ export default Ember.Route.extend({
     // watch for value changes so we can prevent user from accidentally leaving
     controller.set('isDirty', false);
     controller.addObserver('type.controls.@each.value', function () {
-      Ember.$(window).on('beforeunload', function () {
-        if (controller.get('isDirty')) {
-          return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
-        }
-      });
       controller.set('isDirty', true);
     }.bind(this));
 
@@ -243,12 +238,12 @@ export default Ember.Route.extend({
         return;
       }
 
+      this.set('controller.isDirty', false);
+
       // Unlock on transition
       if (this.get('lockRef')) {
         this.get('lockRef').remove();
       }
-
-      Ember.$(window).off('beforeunload');
 
     }
   }

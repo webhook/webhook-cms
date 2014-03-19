@@ -32,6 +32,16 @@ export default Ember.ObjectController.extend({
     return moment(this.get('publishDate')).isAfter();
   }.property('publishDate', 'isDraft', 'showSchedule'),
 
+  dirtyStateChanged: function () {
+    if (this.get('isDirty')) {
+      Ember.$(window).on('beforeunload', function () {
+        return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
+      });
+    } else {
+      Ember.$(window).off('beforeunload');
+    }
+  }.observes('isDirty'),
+
   saveItem: function () {
 
     var controls = this.get('type.controls');
