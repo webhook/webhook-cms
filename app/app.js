@@ -24,7 +24,7 @@ Ember.Application.initializer({
         buildEnv = Ember.Object.create();
 
     application.register('build-environment:environment:current', buildEnv, { instantiate: false, singleton: true });
-    Ember.A(['model', 'controller', 'view', 'route']).forEach(function(component) {
+    Ember.A(['model', 'controller', 'view', 'route', 'helper']).forEach(function(component) {
       application.inject(component, 'buildEnvironment', 'build-environment:environment:current');
     });
 
@@ -86,6 +86,11 @@ Ember.Application.initializer({
     buildEnv.set('localSocket', localSocket);
     buildEnv.set('siteName', siteName);
     buildEnv.set('siteUrl', 'http://' + siteName + '.webhook.com/');
+
+    window.ENV.siteDNS = siteName + '.webhook.org';
+    window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function(snap) {
+      window.ENV.siteDNS = snap.val();
+    });
 
     application.set('buildEnvironment', buildEnv);
 
