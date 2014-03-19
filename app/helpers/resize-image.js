@@ -11,6 +11,11 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
     }
   });
 
+  // Relative url
+  if(src.indexOf('http://') === -1) {
+    src = 'http://' + window.ENV.siteDNS + src;
+  }
+
   params.push('url=' + encodeURIComponent(src));
   params.push('key=' + window.ENV.embedlyKey);
 
