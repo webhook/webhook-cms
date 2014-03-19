@@ -89,7 +89,9 @@ Ember.Application.initializer({
 
     window.ENV.siteDNS = siteName + '.webhook.org';
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function(snap) {
-      window.ENV.siteDNS = snap.val();
+      if(snap.val()) {
+        window.ENV.siteDNS = snap.val();
+      }
     });
 
     application.set('buildEnvironment', buildEnv);
