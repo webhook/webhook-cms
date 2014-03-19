@@ -132,7 +132,8 @@ Ember.Application.initializer({
           token: bucket
         });
 
-        window.ENV.firebaseRoot.child('management/sites/' + siteName).once('value', function(snapshot) {
+        session.set('isOwner', false);
+        window.ENV.firebaseRoot.child('management/sites/' + siteName).on('value', function(snapshot) {
           var siteData = snapshot.val();
           var escapedEmail = user.email.replace(/\./g, ',1');
 
@@ -141,9 +142,9 @@ Ember.Application.initializer({
           } else if (siteData.users[escapedEmail]) {
             session.set('isOwner', false);
           }
-
-          application.advanceReadiness();
         });
+
+        application.advanceReadiness();
       };
 
       if (error) {
@@ -231,7 +232,7 @@ Ember.Route.reopen({
       transition.abort();
       this.transitionTo('login');
     } else { // Only executed if your logged in
-      var ownerRoutes = ['wh.settings.team'];
+      var ownerRoutes = ['wh.settings.team', 'wh.settings.general', 'wh.settings.billing', 'wh.settings.domain', 'wh.settings.data'];
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
         this.get('session').set('transition', transition);
         transition.abort();
