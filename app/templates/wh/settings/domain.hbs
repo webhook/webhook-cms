@@ -2,51 +2,41 @@
 
 <p>
   Your site is currently available at
-  {{buildEnvironment.siteName}}.webhook.com and {{ domain }}
+  {{buildEnvironment.siteName}}.webhook.org and {{ domain }}
 </p>
 
 <hr/>
 
-<h2>Want to use a custom domain?</h2>
-
-<div class="wy-alert wy-alert-warning">
-  <div class="wy-alert-title">Hey alpha testers!</div>
-  <p>
-    We're still thinking up the best way to do this. Might be a reverse proxy, might have you authenticate through
-    Google (where the buckets actually live). For now, just ping one of us and we can get your domain pointed over.
-  </p>
-
-  <p>I'm sure some of you have big opinions on this. Please let us know what you want.</p>
-
-</div>
-
 {{#if success }}
-Success, follow instructions on how to set up CNAME now please.
+
+<h2>Almost done</h2>
+
+<p>Great. Point your host records to the following address.</p>
+
+<pre class="hljs">
+A-RECORD     @              174.129.25.170
+CNAME        www            dns.webhook.com
+</pre>
 {{else}}
 <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
 
-  <h1>Change Custom Domain</h1>
+  <h2>Use a previously purchased domain</h2>
 
-  <div class="wy-control-group">
-    <label>Custom DNS</label>
+  <p>
+    Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller, then return here.
+  </p>
+
+  <div class="wy-control-group fluid-input">
+    <label>Enter your domain name</label>
     <div class="wy-control">
-      {{input type="text" value=domain disabled=isSending placeholder="Enter your DNS"}} 
+      {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
     </div>
   </div>
 
   <div class="wy-btn-group">
-    <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Update</button>
+    <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Use this domain</button>
   </div>
 
 </form>
 {{/if}}
 
-Once successful, point a CNAME record for your domain at 'dns.webhook.com'.
-
-i.e.: www.yoursite.com CNAME dns.webhook.com
-      or subdomain.yoursite.com CNAME dns.webhook.com
-
-If you want both http://yoursite.com and http://www.yoursite.com to go to your webhook site, we recommend using a www redirection service like wwwizer. In this case you would point the www CNAME at dns and your A record at wwwizer
-
-i.e: www.yoursite.com CNAME dns.webhook.com
-     yoursite.com A 174.129.25.170
