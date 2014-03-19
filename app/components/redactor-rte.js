@@ -27,6 +27,9 @@ export default Ember.Component.extend({
           // data isn't being set in time for the save so force it.
           Ember.run.sync();
         });
+
+        // override redactor z-index
+        redactor.$box.css('z-index', 'auto');
       }
     });
 
