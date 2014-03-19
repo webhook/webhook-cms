@@ -19,9 +19,7 @@ export default Ember.View.extend({
   }.property('selection'),
 
   defaultChanged: function () {
-    // if (!this.get('selection') && this.get('defaultValue')) {
-      this.set('selection', this.get('defaultValue'));
-    // }
+    this.set('selection', this.get('defaultValue'));
   }.observes('defaultValue'),
 
   willInsertElement: function () {
