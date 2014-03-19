@@ -30,6 +30,7 @@
           {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
         {{/collection}}
       {{/if}}
+      {{# if session.isOwner }}
       <header>Configuration</header>
       <ul>
         {{#if buildEnvironment.local}}
@@ -41,6 +42,7 @@
         <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
         <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
       </ul>
+      {{/if}}
     </div>
 
   </div>
