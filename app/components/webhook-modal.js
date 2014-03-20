@@ -6,11 +6,13 @@ export default Ember.Component.extend({
 
   showChange: function () {
     this.$().toggle();
+    this.$mask.insertBefore(this.$());
+    this.$mask.css('z-index', parseInt(this.$().css('z-index'), 10) - 1);
     this.$mask.toggleClass('on');
   }.observes('show'),
 
   willInsertElement: function () {
-    this.$mask = Ember.$('<div class="wy-body-mask">').appendTo('body');
+    this.$mask = Ember.$('<div class="wy-body-mask">').css('left', 0);
   },
 
   didInsertElement: function () {
