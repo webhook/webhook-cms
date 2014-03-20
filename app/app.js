@@ -38,7 +38,7 @@ Ember.Application.initializer({
     req.send(null);
     var headers = req.getAllResponseHeaders().toLowerCase();
 
-    if (headers['X-Webhook-Local'])
+    if (headers.indexOf('x-webhook-local') !== -1)
     {
       isLocal = true;
       localSocket = Ember.Object.create({
