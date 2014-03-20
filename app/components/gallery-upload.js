@@ -22,7 +22,7 @@ export default FileUploadComponent.extend({
 
   didInsertElement: function () {
     this._super.apply(this, arguments);
-    Ember.$(window).on('click', this.closeEdit.bind(this));
+    Ember.$(window).one('click', this.closeEdit.bind(this));
 
     this.$().on('click', '.wy-form-gallery-edit', function (event) {
       if (!Ember.$(event.target).is('button')) {
