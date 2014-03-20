@@ -32,11 +32,17 @@ Ember.Application.initializer({
     var isLocal = false;
     var localSocket = null;
     var keepReload = Ember.$('meta[name="keepReload"]').attr('content');
-    if (["localhost", "127.0.0.1"].indexOf(document.location.hostname) >= 0)
+
+    var req = new XMLHttpRequest();
+    req.open('GET', document.location, false);
+    req.send(null);
+    var headers = req.getAllResponseHeaders().toLowerCase();
+
+    if (headers.indexOf('x-webhook-local') !== -1)
     {
       isLocal = true;
       localSocket = Ember.Object.create({
-        socket        : new window.WebSocket('ws://localhost:6557'),
+        socket        : new window.WebSocket('ws://' + document.location.hostname + ':6557'),
         doneCallback  : null,
         connected     : false,
         lostConnection: false,
