@@ -1,4 +1,4 @@
-export default Ember.View.extend({
+export default Ember.Component.extend({
   classNames: ['wh-markdown-editor'],
   classNameBindings: ['whMarkdownEditorFullscreen'],
 
@@ -6,7 +6,6 @@ export default Ember.View.extend({
 
   didInsertElement: function () {
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
-
   },
 
   toggleFullscreen: function () {
@@ -23,6 +22,33 @@ export default Ember.View.extend({
 
   syncPreview: function () {
     this.$('.wh-markdown-preview').html(marked(this.$('textarea').val()));
-  }
+  },
 
-});
+  actions: {
+    toggleImageModal: function () {
+
+      // fake a control
+      this.set('fakeImageControl', Ember.Object.create());
+
+      // show image upload widget
+      this.set('showImageModal', true);
+
+    },
+    handleUpload: function (url) {
+
+      if (!url) {
+        return;
+      }
+
+      // hide image upload widget
+      this.set('showImageModal', false);
+
+      if (url.indexOf('http://') === -1) {
+        url = 'http://' + window.ENV.siteDNS + url;
+      }
+
+      this.$('textarea').val(this.$('textarea').val() + '\n <img src="' + url + '">');
+
+    }
+  }
+})

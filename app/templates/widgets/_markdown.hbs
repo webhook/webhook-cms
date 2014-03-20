@@ -1,8 +1,1 @@
-{{#view 'markdown-editor'}}
-  {{textarea placeholder=placeholder class="wh-form-markdown" value=value}}
-
-  <article class="wh-markdown-preview"></article>
-
-  <span class="icon icon-fullscreen fullscreen-toggle"></span>
-
-{{/view}}
+{{markdown-editor placeholder=placeholder value=value session=controller.session}}
