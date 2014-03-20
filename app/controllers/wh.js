@@ -35,6 +35,12 @@ export default Ember.ArrayController.extend({
       this.get('onlineUsers').removeObject(snapshot.val());
     }.bind(this));
 
+    this.addObserver('session.user', function () {
+      if (this.get('session.user')) {
+        userRef.set(user.email);
+      }
+    });
+
   }
 
 });

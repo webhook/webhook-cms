@@ -22,6 +22,9 @@ export default Ember.Route.extend({
 
   actions: {
     logoutUser: function () {
+
+      window.ENV.firebase.child('presence/online').child(this.get('session.user.uid')).remove();
+
       this.get('session.auth').logout();
       this.transitionTo('login');
     },
