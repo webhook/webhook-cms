@@ -238,8 +238,8 @@ export default Ember.Route.extend({
         return;
       }
 
-      this.set('controller.isDirty', false);
       this.get('controller').removeObserver('type.controls.@each.value');
+      this.set('controller.isDirty', false);
 
       // Unlock on transition
       if (this.get('lockRef')) {
