@@ -1,4 +1,5 @@
 import getItemModelName from 'appkit/utils/model';
+import uuid from 'appkit/utils/uuid';
 
 export default Ember.Route.extend({
   isDirty: false,
@@ -35,7 +36,6 @@ export default Ember.Route.extend({
         return this.store.find(modelName, itemId).then(function (item) {
 
           // item found
-          this.fixItem(item);
           this.set('itemModel', item);
 
         }.bind(this), function (message) {
@@ -54,7 +54,6 @@ export default Ember.Route.extend({
             // use the item we just put in the store
             var item = this.store.getById(modelName, contentType.get('id'));
 
-            this.fixItem(item);
             this.set('itemModel', item);
 
             return Ember.RSVP.resolve(item);
@@ -217,17 +216,19 @@ export default Ember.Route.extend({
         });
       }
 
+      if (!controls.isAny('name', 'preview_url')) {
+        addControl({
+          controlType: this.store.getById('control-type', 'textfield'),
+          name       : 'preview_url',
+          label      : 'Preview URL'
+        });
+      }
+
       if (save) {
         contentType.save();
       }
 
     }.bind(this));
-  },
-
-  fixItem: function (item) {
-    if (!item.get('data').create_date) {
-      item.get('data').create_date = moment().format('YYYY-MM-DDTHH:mm');
-    }
   },
 
   actions: {

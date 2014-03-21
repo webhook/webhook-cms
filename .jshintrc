@@ -13,7 +13,8 @@
     "FirebaseSimpleLogin",
     "moment",
     "marked",
-    "Webhook"
+    "Webhook",
+    "XMLHttpRequest"
   ],
   "node" : false,
   "browser" : false,

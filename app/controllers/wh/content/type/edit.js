@@ -1,6 +1,7 @@
 import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
+import uuid from 'appkit/utils/uuid';
 
 export default Ember.ObjectController.extend({
   type        : null,
@@ -55,6 +56,11 @@ export default Ember.ObjectController.extend({
     // set create_date if missing
     if (!controls.findBy('name', 'create_date').get('value')) {
       controls.findBy('name', 'create_date').set('value', moment().format('YYYY-MM-DDTHH:mm'));
+    }
+
+    // set preview_url if missing
+    if (!controls.findBy('name', 'preview_url').get('value')) {
+      controls.findBy('name', 'preview_url').set('value', uuid());
     }
 
     validateControls(this.get('type.controls'));
