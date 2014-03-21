@@ -26,7 +26,10 @@
 
         {{#if isDraft}}
 
-          <div class="wy-btn-group">
+          <div class="wy-btn-group"> 
+            {{#if fullPreviewUrl }}
+              <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn btn-small btn-link icon icon-eye-open"> See Preview</a>
+            {{/if}}
             <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
               <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
               <dl class="wy-dropdown-menu">
@@ -49,6 +52,9 @@
 
           <div class="wy-control-group">
             <div class="wy-control">
+              {{#if fullPreviewUrl }}
+                <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn btn-small btn-link icon icon-eye-open"> See Preview</a>
+              {{/if}}
               <button type="button" class="btn btn-small btn-link icon icon-clock" {{action "setPublishNow"}}> Set to now?</button>
               {{input type="datetime-local" value=publishDate}}
             </div>
@@ -61,6 +67,9 @@
           <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
           <div class="wy-btn-group">
+            {{#if fullPreviewUrl }}
+              <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn btn-small btn-link icon icon-eye-open"> See Preview</a>
+            {{/if}}
             <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
             <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
             <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>

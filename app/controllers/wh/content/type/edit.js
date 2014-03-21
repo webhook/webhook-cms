@@ -12,6 +12,14 @@ export default Ember.ObjectController.extend({
   showSchedule: false,
   itemModel   : null,
   isDirty     : false,
+  previewUrl  : null,
+
+  fullPreviewUrl: function () {
+    if(this.get('previewUrl') === null) {
+      this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
+    }
+    return '/_wh_preview/' + this.get('type.name') + '/' + this.get('previewUrl') + '/';
+  }.property('previewUrl'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -61,6 +69,7 @@ export default Ember.ObjectController.extend({
     // set preview_url if missing
     if (!controls.findBy('name', 'preview_url').get('value')) {
       controls.findBy('name', 'preview_url').set('value', uuid());
+      this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
     validateControls(this.get('type.controls'));
