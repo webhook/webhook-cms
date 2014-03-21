@@ -18,6 +18,10 @@ export default Ember.ObjectController.extend({
     if(this.get('previewUrl') === null) {
       this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
     }
+
+    if(!this.get('previewUrl')) {
+      return null;
+    }
     return '/_wh_previews/' + this.get('type.name') + '/' + this.get('previewUrl') + '/';
   }.property('previewUrl'),
 
