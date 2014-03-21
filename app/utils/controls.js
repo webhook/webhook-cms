@@ -39,6 +39,8 @@ export default function dataFromControls (controls) {
     // add timezone to datetime values
     if (control.get('controlType.widget') === 'datetime') {
       value = moment(value).format();
+      // add extra data for sorting
+      data['_sort_' + control.get('name')] = moment(value).unix();
     }
 
     data[control.get('name')] = value;
