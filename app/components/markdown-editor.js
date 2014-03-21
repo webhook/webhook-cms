@@ -47,7 +47,7 @@ export default Ember.Component.extend({
         url = 'http://' + window.ENV.siteDNS + url;
       }
 
-      this.$('textarea').val(this.$('textarea').val() + '\n <img src="' + url + '">');
+      this.$('textarea').val(this.$('textarea').val() + '\n ![](' + url + ')');
 
     }
   }
