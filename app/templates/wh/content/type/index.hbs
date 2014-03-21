@@ -11,7 +11,7 @@
     <span class="btn btn-neutral btn-small icon icon-table"> Display <span class="caret"></span></span>
     <dl class="wy-dropdown-menu">
       <dt>Show columns</dt>
-      {{#each contentType.controls}}
+      {{#each columnChoices}}
         <dd>
           <span {{bind-attr class=":icon showInCms:icon-ok-sign:icon-circle-blank"}} {{action "toggleShowInCms" this on="click"}}>
             {{label}}
