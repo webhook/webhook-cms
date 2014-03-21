@@ -18,7 +18,7 @@ export default Ember.ObjectController.extend({
     if(this.get('previewUrl') === null) {
       this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
     }
-    return '/_wh_preview/' + this.get('type.name') + '/' + this.get('previewUrl') + '/';
+    return '/_wh_previews/' + this.get('type.name') + '/' + this.get('previewUrl') + '/';
   }.property('previewUrl'),
 
   isLive: function () {
