@@ -220,7 +220,8 @@ export default Ember.Route.extend({
         addControl({
           controlType: this.store.getById('control-type', 'textfield'),
           name       : 'preview_url',
-          label      : 'Preview URL'
+          label      : 'Preview URL',
+          showInCms  : false
         });
       }
 
