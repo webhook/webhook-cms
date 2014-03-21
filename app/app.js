@@ -203,7 +203,7 @@ Ember.Application.initializer({
       }
     }));
 
-    window.ENV.sendBuildSignal = function() {
+    window.ENV.sendBuildSignal = function(publish_date) {
       var user = session.get('user.email');
 
       if(application.get('buildEnvironment').local === false)
@@ -212,6 +212,10 @@ Ember.Application.initializer({
           'userid': user,
           'sitename': siteName
         };
+
+        if(publish_date) {
+          data.build_time = publish_date;
+        }
 
         window.ENV.firebase.root().child('management/commands/build/' + siteName).set(data, function() {});
       } else {
