@@ -11,6 +11,7 @@
     "ic-ajax": "~0.3.0",
     "ember-testing-httpRespond": "~0.1.1",
     "loader.js": "git://github.com/stefanpenner/loader.js",
+
     "firebase": "*",
     "webhook-js": "*",
     "webhook-redactor": "git@github.com:webhook/webhook-redactor.git",

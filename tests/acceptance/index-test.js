@@ -5,18 +5,20 @@
 //     App = startApp();
 //   },
 //   teardown: function() {
-//     Ember.Logger.info('DESTROY APP');
 //     Ember.run(App, 'destroy');
 //   }
 // });
 
-// asyncTest('index renders', function(){
-//   expect(1);
+// test('index renders', function(){
+//   expect(3);
 
 //   visit('/').then(function(){
-//     Ember.Logger.info('look for login');
-//     var loginForm = find('.wh-login');
-//     equal(loginForm.length, 1);
-//     start();
+//     var title = find('h2#title');
+//     var list = find('ul li');
+
+//     equal(title.text(), 'Welcome to Ember.js');
+
+//     equal(list.length, 3);
+//     equal(list.text(), 'redyellowblue');
 //   });
 // });
