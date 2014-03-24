@@ -11,53 +11,68 @@ var define, requireModule, require, requirejs;
     };
   };
 
+  function reify(deps, name, seen) {
+    var length = deps.length;
+    var reified = new Array(length);
+    var dep;
+    var exports;
+
+    for (var i = 0, l = length; i < l; i++) {
+      dep = deps[i];
+      if (dep === 'exports') {
+        exports = reified[i] = seen;
+      } else {
+        reified[i] = require(resolve(dep, name));
+      }
+    }
+
+    return {
+      deps: reified,
+      exports: exports
+    };
+  }
+
   requirejs = require = requireModule = function(name) {
     if (state[name] !== FAILED &&
         seen.hasOwnProperty(name)) {
       return seen[name];
     }
 
-    if (!registry.hasOwnProperty(name)) {
+    if (!registry[name]) {
       throw new Error('Could not find module ' + name);
     }
 
     var mod = registry[name];
-    var deps = mod.deps;
-    var callback = mod.callback;
-    var reified = [];
-    var exports;
-    var value;
+    var reified;
+    var module;
     var loaded = false;
 
-    seen[name] = { }; // enable run-time cycles
+    seen[name] = { }; // placeholder for run-time cycles
 
     try {
-      for (var i=0, l=deps.length; i<l; i++) {
-        if (deps[i] === 'exports') {
-          reified.push(exports = {});
-        } else {
-          reified.push(requireModule(resolve(deps[i], name)));
-        }
-      }
-
-      value = callback.apply(this, reified);
+      reified = reify(mod.deps, name, seen[name]);
+      module = mod.callback.apply(this, reified.deps);
       loaded = true;
     } finally {
       if (!loaded) {
         state[name] = FAILED;
       }
     }
-    return seen[name] = exports || value;
+
+    return reified.exports ? seen[name] : (seen[name] = module);
   };
 
   function resolve(child, name) {
     if (child.charAt(0) !== '.') { return child; }
 
     var parts = child.split('/');
-    var parentBase = name.split('/');
+    var nameParts = name.split('/');
+    var parentBase;
 
-    if (parentBase.length > 1) {
-      parentBase = parentBase.slice(0, -1);
+    if (nameParts.length === 1) {
+      parentBase = nameParts;
+    } else {
+      parentBase = nameParts.slice(0, -1);
     }
 
     for (var i = 0, l = parts.length; i < l; i++) {
@@ -74,6 +89,6 @@ var define, requireModule, require, requirejs;
   requirejs.entries = requirejs._eak_seen = registry;
   requirejs.clear = function(){
     requirejs.entries = requirejs._eak_seen = registry = {};
-    seen = {};
+    seen = state = {};
   };
 })();
