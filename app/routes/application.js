@@ -18,6 +18,7 @@ export default Ember.Route.extend({
     } else {
       this.transitionTo('index');
     }
+
   }.observes('session.user'),
 
   actions: {

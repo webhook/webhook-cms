@@ -9,8 +9,9 @@ export default Ember.ArrayController.extend({
     var presenceRef   = window.ENV.firebase.child('presence'),
         onlineRef     = presenceRef.child('online'),
         userRef       = onlineRef.child(user.uid),
-        lastOnlineRef = presenceRef.child('lastOnline/' + user.uid),
-        connectedRef  = window.ENV.firebaseRoot.child('.info/connected');
+        lastOnlineRef = presenceRef.child('lastOnline/' + user.uid);
+
+    userRef.set(user.email);
 
     // when I disconnect, remove user presence
     userRef.onDisconnect().remove();
@@ -18,13 +19,13 @@ export default Ember.ArrayController.extend({
     // when I disconnect, update the last time I was seen online
     lastOnlineRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
 
-    connectedRef.on('value', function (snapshot) {
-      if (snapshot.val() === true) {
-        // when I connect, add user presence
+    this.addObserver('session.user', function () {
+      if (this.get('session.user')) {
         userRef.set(user.email);
       }
     });
 
+    // Keep track of who is online.
     this.set('onlineUsers', Ember.A([]));
 
     onlineRef.on('child_added', function (snapshot) {
@@ -34,12 +35,6 @@ export default Ember.ArrayController.extend({
     onlineRef.on('child_removed', function (snapshot) {
       this.get('onlineUsers').removeObject(snapshot.val());
     }.bind(this));
-
-    this.addObserver('session.user', function () {
-      if (this.get('session.user')) {
-        userRef.set(user.email);
-      }
-    });
 
   }
 
