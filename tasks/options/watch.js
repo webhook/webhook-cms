@@ -1,12 +1,17 @@
 var Helpers = require('../helpers'),
-    filterAvailable = Helpers.filterAvailableTasks;
+    filterAvailable = Helpers.filterAvailableTasks,
+    LIVERELOAD_PORT = 35729,
+    liveReloadPort = (parseInt(process.env.PORT || 8000, 10) - 8000) + LIVERELOAD_PORT;
 
-var scripts = '{app,tests}/**/*.{js,coffee,em}',
+var docs = '{app}/**/*.{js,coffee,em}',
+    scripts = '{app,tests,config}/**/*.{js,coffee,em}',
     templates = 'app/templates/**/*.{hbs,handlebars,hjs,emblem}',
     sprites = 'app/sprites/**/*.{png,jpg,jpeg}',
     styles = ['app/styles/**/*.{css,sass,scss,less,styl}','vendor/wyrm/**/*.{css,sass,scss,less,styl}'],
     indexHTML = 'app/index.html',
-    other = '{app,tests,public}/**/*';
+    other = '{app,tests,public}/**/*',
+    bowerFile = 'bower.json',
+    npmFile = 'package.json';
 
 module.exports = {
   scripts: {
@@ -29,8 +34,12 @@ module.exports = {
     files: [indexHTML],
     tasks: ['lock', 'buildIndexHTML:debug', 'unlock']
   },
+  docs: {
+    files: [docs],
+    tasks: ['lock', 'buildDocs', 'unlock']
+  },
   other: {
-    files: [other, '!'+scripts, '!'+templates, '!'+styles, '!'+indexHTML],
+    files: [other, '!'+scripts, '!'+templates, '!'+styles, '!'+indexHTML, bowerFile, npmFile],
     tasks: ['lock', 'build:debug', 'unlock']
   },
 
@@ -39,6 +48,6 @@ module.exports = {
     debounceDelay: 0,
     // When we don't have inotify
     interval: 100,
-    livereload: Helpers.isPackageAvailable("connect-livereload")
+    livereload: liveReloadPort
   }
 };
