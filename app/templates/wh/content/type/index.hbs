@@ -53,7 +53,7 @@
       {{#each item in sortedCmsItems}}
         {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
           {{#each item.cmsControls}}
-            <td>{{partial this.controlType.valuePartialPath}}</td>
+          <td {{ bind-attr class=this.controlType.widget }}>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}
           <td class="wy-table-actions">
             {{#if item.lockedBy}}

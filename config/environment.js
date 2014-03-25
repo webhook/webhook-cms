@@ -99,7 +99,7 @@ window.ENV = {
       name: 'Specifics',
       controlTypes: [
         {
-          name     : 'Name',
+          name     : 'Person',
           widget   : 'name',
           valueType: 'object',
           iconClass: 'icon-user'
