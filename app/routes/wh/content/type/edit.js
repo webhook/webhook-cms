@@ -171,6 +171,8 @@ export default Ember.Route.extend({
       controller.set('isDirty', true);
     }.bind(this));
 
+    controller.set('previewUrl', null);
+
     this._super.apply(this, arguments);
   },
 

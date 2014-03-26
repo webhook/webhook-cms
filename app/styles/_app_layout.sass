@@ -291,9 +291,6 @@ pre code
   top: -7px
   +animation(rotation .9s infinite linear)
 
-.wy-tray-container li.wh-tray-wide
-  width: 30%
-
 .wh-save-item
   position: fixed
   bottom: 0
@@ -302,6 +299,7 @@ pre code
   background: $white
   border-top: solid 1px rgba(0,0,0,.1)
   padding: $base-line-height / 2 $base-line-height
+  z-index: $z-index-tooltip
   +clearfix
   .wy-btn-group
     margin-bottom: 0
@@ -482,6 +480,8 @@ pre code
   dl
     max-height: 200px
 
+.btn-preview
+  float: right
 
 .wh-server-down
   display: none
@@ -503,7 +503,16 @@ pre code
 .wh-table-tabular
   margin-bottom: 0
 
+.wh-embedly-content
+  margin-top: $base-line-height / 2
+
 +media($tablet)
+  .wh-save-info
+    display: none
+  .btn-preview
+    float: none
+    width: 100%
+    margin-bottom: $base-line-height / 2
   .wh-online-users
     display: none
   .wh-save-item
