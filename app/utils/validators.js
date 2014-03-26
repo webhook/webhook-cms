@@ -53,7 +53,7 @@ export default function validateControls (controls) {
       }
       break;
     case 'url':
-      if (!regex.email.test(value)) {
+      if (!regex.url.test(value)) {
         invalidate(control, 'This field must be a URL.');
       }
       break;

@@ -20,7 +20,7 @@ export default function dataFromControls (controls) {
         var convertedValue = Ember.A([]);
         value.forEach(function (row) {
           convertedValue.push(row.map(function (cell) {
-            return cell || "";
+            return cell.value || "";
           }));
         });
         value = convertedValue;
