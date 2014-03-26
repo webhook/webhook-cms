@@ -18,7 +18,8 @@
       {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
       (<a {{action "logoutUser" on="click"}}>Logout</a>)
     </div>
-    <input type="text" placeholder="search is coming soon">
+
+    {{ input placeholder="search is coming soon" action="searchGlobal" value=searchQuery }}
   </div>
 
   <div class="wy-menu wy-menu-vertical" data-spy="affix">

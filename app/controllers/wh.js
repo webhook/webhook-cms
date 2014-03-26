@@ -1,5 +1,6 @@
 export default Ember.ArrayController.extend({
   sortProperties: ['name'],
+  searchQuery:   '',
 
   init: function () {
 
@@ -36,6 +37,11 @@ export default Ember.ArrayController.extend({
       this.get('onlineUsers').removeObject(snapshot.val());
     }.bind(this));
 
+  },
+  actions: {
+    searchGlobal: function () {
+      this.transitionToRoute('wh.search-global-results');
+    },
   }
 
 });

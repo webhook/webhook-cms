@@ -1,0 +1,35 @@
+{{#if isLoading }}
+  <div class="wy-spinner wy-spinner wy-spinner-absolute"></div>
+{{else}}
+  {{#if isEmpty }}
+    Please enter a search query
+  {{else}}
+    Results for {{ searchQuery }}
+    <br/>
+
+    <table class="wy-table wy-table-bordered-rows wh-content">
+      <thead>
+        <tr>
+          Name
+        </tr>
+        <tr>
+          Type
+        </tr>
+      </thead>
+      <tbody>
+      {{#each item in results }}
+      <tr>
+        <td class="wy-table-actions">
+          {{#link-to 'wh.content.type.edit' item.type item.id }}
+            {{ item.name }}
+          {{/link-to}}
+        </td>
+        <td class="wy-table-actions">
+          {{ item.type }}
+        </td>
+      </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+{{/if}}

@@ -1,6 +1,6 @@
 export default Ember.Route.extend({
   notifications: [],
-
+  
   setupController: function (controller) {
     controller.set('notifications', this.get('notifications'));
     this._super.apply(this, arguments);
