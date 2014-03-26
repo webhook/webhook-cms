@@ -241,7 +241,7 @@ Ember.Application.initializer({
             var items = [];
             Ember.$.each(data.hits, function(index, value) {
               items.push({
-                name: value.name,
+                name: value.fields.name[0],
                 id: value._id,
                 type: value._type
               });
