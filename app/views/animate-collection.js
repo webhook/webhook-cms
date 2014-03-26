@@ -1,7 +1,11 @@
 export default Ember.CollectionView.extend({
-  tagName: "ul",
-  initialsAdded: 0,
+  tagName        : "ul",
+  initialsAdded  : 0,
   animationLength: 5000,
+
+  willInsertElement: function () {
+    this.set('initialLength', this.get('content.length'));
+  },
 
   itemViewClass: Ember.View.extend({
     classNames: ['wy-animate-add'],
@@ -30,8 +34,5 @@ export default Ember.CollectionView.extend({
       Ember.run.cancel(this.get('addedTimeout'));
       Ember.run.cancel(this.get('updatedTimeout'));
     }
-  }),
-  willInsertElement: function () {
-    this.set('initialLength', this.get('content.length'));
-  }
+  })
 });
