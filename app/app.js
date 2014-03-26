@@ -253,7 +253,8 @@ Ember.Application.initializer({
             var items = [];
             Ember.$.each(data.hits, function(index, value) {
               items.push({
-                name: value.fields.name[0],
+                name: value.fields.name ? value.fields.name[0] : '',
+                oneOff: value.fields.__oneOff ? (value.fields.__oneOff[0] === "true" ? true : false ): false,
                 id: value._id,
                 type: value._type
               });
@@ -268,7 +269,7 @@ Ember.Application.initializer({
       });
     };
 
-    window.ENV.indexItem = function(id, data, typeName) {
+    window.ENV.indexItem = function(id, data, oneOff, typeName) {
       var site = siteName;
       var key = bucket;
 
@@ -280,7 +281,8 @@ Ember.Application.initializer({
           token: key,
           site: site,
           data: JSON.stringify(data),
-          typeName: typeName
+          typeName: typeName,
+          oneOff: oneOff
         },
         success: function(data, status, xhr) {
         }
