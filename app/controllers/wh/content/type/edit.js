@@ -93,7 +93,7 @@ export default Ember.ObjectController.extend({
       this.set('isDirty', false);
 
       window.ENV.sendBuildSignal(data.publish_date);
-      window.ENV.indexItem(itemModel.get('id'), data, this.get('type.id'));
+      window.ENV.indexItem(itemModel.get('id'), data, this.get('type.oneOff'), this.get('type.id'));
 
       // One Off
       if (this.get('type.oneOff')) {
