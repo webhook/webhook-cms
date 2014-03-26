@@ -1,35 +1,42 @@
-{{#if isLoading }}
-  <div class="wy-spinner wy-spinner wy-spinner-absolute"></div>
-{{else}}
-  {{#if isEmpty }}
-    Please enter a search query
-  {{else}}
-    Results for {{ searchQuery }}
-    <br/>
+<h1>Search Results</h1>
+<hr>
 
-    <table class="wy-table wy-table-bordered-rows wh-content">
+{{#if debouncedQuery}}
+  {{#if model}}
+    <p>Search results for {{debouncedQuery}}.</p>
+  {{else}}
+    <p>No results for {{debouncedQuery}}.</p>
+  {{/if}}
+{{else}}
+  <p>Please enter a search query.</p>
+{{/if}}
+
+{{#if isLoading }}
+  <div class="wy-spinner wy-spinner"></div>
+{{else}}
+
+  {{#if model}}
+
+    <table class="wy-table wy-table-bordered full-width">
       <thead>
-        <tr>
-          Name
-        </tr>
-        <tr>
-          Type
-        </tr>
+        <tr><th>Name</th><th>Content Type</th></tr>
       </thead>
       <tbody>
-      {{#each item in results }}
-      <tr>
-        <td class="wy-table-actions">
-          {{#link-to 'wh.content.type.edit' item.type item.id }}
-            {{ item.name }}
-          {{/link-to}}
-        </td>
-        <td class="wy-table-actions">
-          {{ item.type }}
-        </td>
-      </tr>
-      {{/each}}
+        {{#each}}
+          <tr>
+            <td>
+              {{#link-to 'wh.content.type.edit' type id }}
+                {{ name }}
+              {{/link-to}}
+            </td>
+            <td>
+              {{ type }}
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
+
   {{/if}}
+
 {{/if}}
