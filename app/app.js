@@ -241,7 +241,7 @@ Ember.Application.initializer({
             var items = [];
             Ember.$.each(data.hits, function(index, value) {
               items.push({
-                name: value.name,
+                name: value.fields.name[0],
                 id: value._id,
                 type: value._type
               });
@@ -293,7 +293,9 @@ Ember.Application.initializer({
       });
     };
 
-    window.ENV.sendBuildSignal = function(publish_date) {
+    session.set('auth', firebaseAuth);
+
+    window.ENV.sendBuildSignal = function (publish_date) {
       var user = session.get('user.email');
 
       if (application.get('buildEnvironment').local === false) {
