@@ -22,7 +22,7 @@ export default Ember.ObjectController.extend({
     if(!this.get('previewUrl')) {
       return null;
     }
-    return '/_wh_previews/' + this.get('type.name') + '/' + this.get('previewUrl') + '/';
+    return '/_wh_previews/' + this.get('type.id') + '/' + this.get('previewUrl') + '/';
   }.property('previewUrl'),
 
   isLive: function () {
