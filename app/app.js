@@ -114,7 +114,8 @@ Ember.Application.initializer({
 
     var self     = this,
         siteName = Ember.$('meta[name="siteName"]').attr('content'),
-        session  = Ember.Object.create();
+        session = Ember.Object.create(),
+        bucket = '';
 
     // Add `session` to all the things
     application.register('firebase-simple-login:session:current', session, { instantiate: false, singleton: true });
@@ -126,8 +127,8 @@ Ember.Application.initializer({
 
     var firebaseAuth = new FirebaseSimpleLogin(window.ENV.firebaseRoot, function (error, user) {
 
-      var initializeUser = function (snapshot) {
-        var bucket = snapshot.val();
+      var initializeUser = function(snapshot) {
+        bucket = snapshot.val();
 
         window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
@@ -211,7 +212,88 @@ Ember.Application.initializer({
 
     session.set('auth', firebaseAuth);
 
-    window.ENV.sendBuildSignal = function (publish_date) {
+    window.ENV.search = function(query, page, typeName, callback) {
+      var site = siteName;
+      var key = bucket;
+
+      if(typeof typeName === 'function') {
+        callback = typeName;
+        typeName = null;
+      }
+
+      Ember.$.ajax({
+        url: 'http://server.webhook.com:3000/search/',
+        type: 'POST',
+        data: {
+          token: key,
+          site: site,
+          query: query,
+          page: page,
+          typeName: typeName
+        },
+        success: function(data, status, xhr) {
+
+          if(data.error) {
+            callback(data.error, []);
+          } else if (!data.hits) {
+            callback('NO IDEA', []);
+          } else {
+            var items = [];
+            Ember.$.each(data.hits, function(index, value) {
+              items.push({
+                name: value.name,
+                id: value._id,
+                type: value._type
+              });
+            });
+
+            callback(null, items);
+          }
+        },
+        error: function(xhr, status, error) {
+          callback(error, []);
+        }
+      });
+    };
+
+    window.ENV.indexItem = function(id, data, typeName) {
+      var site = siteName;
+      var key = bucket;
+
+      Ember.$.ajax({
+        url: 'http://server.webhook.com:3000/search/index/',
+        type: 'POST',
+        data: {
+          id: id,
+          token: key,
+          site: site,
+          data: JSON.stringify(data),
+          typeName: typeName
+        },
+        success: function(data, status, xhr) {
+        }
+      });
+    };
+
+    window.ENV.deleteIndex = function(id, typeName) {
+      var site = siteName;
+      var key = bucket;
+
+      Ember.$.ajax({
+        url: 'http://server.webhook.com:3000/search/delete/',
+        type: 'POST',
+        data: {
+          id: id,
+          token: key,
+          site: site,
+          typeName: typeName
+        },
+        success: function(data, status, xhr) {
+        }
+      });
+    };
+
+    window.ENV.sendBuildSignal = function(publish_date) {
       var user = session.get('user.email');
 
       if (application.get('buildEnvironment').local === false) {
