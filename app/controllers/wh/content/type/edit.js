@@ -93,6 +93,7 @@ export default Ember.ObjectController.extend({
       this.set('isDirty', false);
 
       window.ENV.sendBuildSignal(data.publish_date);
+      window.ENV.indexItem(itemModel.get('id'), data, this.get('type.id'));
 
       // One Off
       if (this.get('type.oneOff')) {
@@ -154,12 +155,6 @@ export default Ember.ObjectController.extend({
       this.set('isDraft', null);
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
       this.set('showSchedule', true);
-    },
-    deleteItem: function () {
-      if (window.confirm('Are you sure?')) {
-        this.get('model').destroyRecord();
-        this.transitionToRoute('wh.content.type', this.get('type'));
-      }
     },
     setPublishNow: function () {
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));

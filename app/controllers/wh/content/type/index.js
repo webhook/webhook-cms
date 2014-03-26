@@ -76,8 +76,10 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
+      var id = item.get('id');
       item.destroyRecord().then(function () {
         window.ENV.sendBuildSignal();
+        window.ENV.deleteIndex(id, this.get('contentType.id'));
         this.send('notify', 'success', 'Item removed!');
       }.bind(this));
     },
