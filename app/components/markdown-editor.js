@@ -4,8 +4,17 @@ export default Ember.Component.extend({
 
   wyMarkdownEditorFullscreen: false,
 
+  selectionStart: 0,
+
   didInsertElement: function () {
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
+
+    this.$('textarea').on('keyup', this.updateSelectionStart.bind(this));
+    this.$('textarea').on('mouseup', this.updateSelectionStart.bind(this));
+  },
+
+  updateSelectionStart: function () {
+    this.set('selectionStart', this.$('textarea').get(0).selectionStart);
   },
 
   toggleFullscreen: function () {
@@ -47,7 +56,11 @@ export default Ember.Component.extend({
         url = 'http://' + window.ENV.siteDNS + url;
       }
 
-      this.$('textarea').val(this.$('textarea').val() + '\n ![](' + url + ')');
+      var value = this.$('textarea').val();
+      var image = '![](' + url + ')';
+      var position = this.get('selectionStart');
+
+      this.$('textarea').val([value.slice(0, position), image, value.slice(position)].join(''));
 
     }
   }
