@@ -482,6 +482,8 @@ pre code
   dl
     max-height: 200px
 
+.btn-preview
+  float: right
 
 .wh-server-down
   display: none
@@ -503,7 +505,16 @@ pre code
 .wh-table-tabular
   margin-bottom: 0
 
+.wh-embedly-content
+  margin-top: $base-line-height / 2
+
 +media($tablet)
+  .wh-save-info
+    display: none
+  .btn-preview
+    float: none
+    width: 100%
+    margin-bottom: $base-line-height / 2
   .wh-online-users
     display: none
   .wh-save-item
