@@ -322,10 +322,11 @@ pre code
   line-height: 1.5
   margin: $base-line-height / 2 0 0 0
   color: $text-light
-  span
-    color: $text-color
-    display: inline-block
-    margin-right: 10px
+  .wh-item-publish-time-section
+    span
+      color: $text-color
+      display: inline-block
+      margin-right: 10px
 
 .wy-dropdown.wy-dropdown-bubble .wy-dropdown-menu > dd > a:hover
   background: $gray-dark
@@ -518,5 +519,8 @@ pre code
   .wh-save-item
     left: 0
 
++media($mobile)
+  .wh-item-publish-time-section
+    display: block
 
 
