@@ -252,11 +252,26 @@ Ember.Application.initializer({
           } else {
             var items = [];
             Ember.$.each(data.hits, function(index, value) {
+              var highlights = [];
+
+              var name = value.fields.name ? value.fields.name[0] : '';
+
+              if(value.highlight) {
+                for(var key in value.highlight) {
+                  if(key === 'name') {
+                    name = value.highlight[key][0];
+                  } else {
+                    highlights.push({ key: key, highlight: value.highlight[key][0] });
+                  }
+                }
+              }
+
               items.push({
-                name: value.fields.name ? value.fields.name[0] : '',
+                name: name,
                 oneOff: value.fields.__oneOff ? (value.fields.__oneOff[0] === "true" ? true : false ): false,
                 id: value._id,
-                type: value._type
+                type: value._type,
+                highlights: highlights
               });
             });
 
