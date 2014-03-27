@@ -16,27 +16,16 @@
 {{else}}
 
   {{#if model}}
-
-    <table class="wy-table wy-table-bordered full-width">
-      <thead>
-        <tr><th>Name</th><th>Content Type</th></tr>
-      </thead>
-      <tbody>
+      <ul class="wh-search-results">
         {{#each}}
-          <tr>
-            <td>
-              {{#link-to 'wh.content.type.edit' type id }}
-                {{ name }}
-              {{/link-to}}
-            </td>
-            <td>
-              {{ type }}
-            </td>
-          </tr>
+          <li>
+            {{#link-to 'wh.content.type.edit' type id }}
+              {{ name }}
+              <span class="wh-search-results-type">{{ type }}</span>
+            {{/link-to}}
+          </li>
         {{/each}}
-      </tbody>
-    </table>
-
+      </ul>
   {{/if}}
 
 {{/if}}
