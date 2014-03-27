@@ -25,6 +25,7 @@ export default function dataFromControls (controls) {
         });
         value = convertedValue;
         break;
+
       default:
         Ember.$.each(value, function (key, childValue) {
           if (!childValue) {
@@ -36,14 +37,25 @@ export default function dataFromControls (controls) {
 
     }
 
+    switch (control.get('controlType.widget')) {
     // add timezone to datetime values
-    if (control.get('controlType.widget') === 'datetime') {
+    case 'datetime':
       value = moment(value).format();
       // add extra data for sorting
       data['_sort_' + control.get('name')] = moment(value).unix();
+      break;
+
+    // Make sure we don't try to save `undefined` for checkbox values
+    case 'checkbox':
+      value.rejectBy('value').setEach('value', false);
+      break;
     }
 
     data[control.get('name')] = value;
+  });
+
+  controls.filterBy('controlType.widget', 'select').forEach(function (control) {
+    data[control.get('name')] = control.getWithDefault('value', '');
   });
 
   return data;
