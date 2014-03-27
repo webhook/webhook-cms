@@ -1,6 +1,6 @@
 export default Ember.Route.extend({
   notifications: [],
-
+  
   setupController: function (controller) {
     controller.set('notifications', this.get('notifications'));
     this._super.apply(this, arguments);
@@ -18,6 +18,7 @@ export default Ember.Route.extend({
     } else {
       this.transitionTo('index');
     }
+
   }.observes('session.user'),
 
   actions: {

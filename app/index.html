@@ -53,7 +53,7 @@
     <!-- @endif -->
 
     <script src="/vendor/ember-data/ember-data.js"></script>
-    <script src="/vendor/loader.js"></script>
+    <script src="/vendor/loader.js/loader.js"></script>
     <script src="/vendor/ember-resolver/dist/ember-resolver.js"></script>
     <script src="/vendor/ic-ajax/main.js"></script>
 
@@ -61,7 +61,6 @@
     <script src='/vendor/firebase-simple-login/firebase-simple-login.js'></script>
     <script src="/vendor/matchbox/dist/matchbox.js"></script>
 
-    <script src="/vendor/exifreader/js/ExifReader.js"></script>
     <script src="/vendor/webhook-js/dist/jquery.webhook.js"></script>
     <script src="/vendor/embedly-jquery/jquery.embedly.js"></script>
     <script src="/vendor/webhook-redactor/demo/redactor/redactor.js"></script>
@@ -82,8 +81,11 @@
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
   <!-- @if tests=true -->
+  <script src="/vendor/ember-shim.js"></script>
   <link rel="stylesheet" href="/vendor/qunit/qunit/qunit.css">
   <script src="/vendor/qunit/qunit/qunit.js"></script>
+  <script src="/vendor/qunit-shim.js"></script>
+  <script src="/vendor/ember-qunit/dist/named-amd/main.js"></script>
 
   <style>
     #ember-testing-container {
@@ -117,8 +119,8 @@
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script src="/tests/tests.js"></script>
-  <script src="/tests/test_helper.js"></script>
-  <script src="/tests/test_loader.js"></script>
+  <script src="/tests/test-helper.js"></script>
+  <script src="/tests/test-loader.js"></script>
   <script src="/testem.js"></script>
   <!-- @endif -->
 

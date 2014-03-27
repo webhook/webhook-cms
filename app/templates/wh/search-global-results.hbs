@@ -1,0 +1,42 @@
+<h1>Search Results</h1>
+<hr>
+
+{{#if debouncedQuery}}
+  {{#if model}}
+    <p>Search results for {{debouncedQuery}}.</p>
+  {{else}}
+    <p>No results for {{debouncedQuery}}.</p>
+  {{/if}}
+{{else}}
+  <p>Please enter a search query.</p>
+{{/if}}
+
+{{#if isLoading }}
+  <div class="wy-spinner wy-spinner"></div>
+{{else}}
+
+  {{#if model}}
+
+    <table class="wy-table wy-table-bordered full-width">
+      <thead>
+        <tr><th>Name</th><th>Content Type</th></tr>
+      </thead>
+      <tbody>
+        {{#each}}
+          <tr>
+            <td>
+              {{#link-to 'wh.content.type.edit' type id }}
+                {{ name }}
+              {{/link-to}}
+            </td>
+            <td>
+              {{ type }}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  {{/if}}
+
+{{/if}}

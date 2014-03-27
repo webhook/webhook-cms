@@ -128,6 +128,10 @@ module.exports = function(grunt) {
   grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/testem.js for configuration).", [
                      'clean:debug', 'build:debug', 'testem:ci:browsers' ]);
 
+  grunt.registerTask('test:server', "Alias to `testem:run:basic`. Be sure to install testem first using `npm install -g testem`", [
+                     'testem:run:basic' ]);
+
+
   // Worker tasks
   // =================================
 
@@ -194,6 +198,8 @@ module.exports = function(grunt) {
   grunt.registerTask('buildScripts', filterAvailable([
                      'jshint:app',
                      'jshint:tests',
+                     'validate-imports:app',
+                     'validate-imports:tests',
                      'coffee',
                      'emberscript',
                      'copy:javascriptToTmp',

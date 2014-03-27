@@ -25,6 +25,7 @@ Router.map(function() {
       this.route('password-change');
     });
 
+    this.route('search-global-results');
     this.resource('wh.content', { path: '/content/' }, function () {
       this.route('all-types');
       this.route('start');
@@ -37,6 +38,9 @@ Router.map(function() {
 
     });
   });
+
+  this.route('component-test');
+  this.route('helper-test');
 
 });
 

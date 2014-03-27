@@ -18,31 +18,35 @@
       {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
       (<a {{action "logoutUser" on="click"}}>Logout</a>)
     </div>
-    <input type="text" placeholder="search is coming soon">
+
+    {{ input placeholder="search is coming soon" action="searchGlobal" value=searchQuery }}
   </div>
 
   <div class="wy-menu wy-menu-vertical" data-spy="affix">
 
     <div data-menu-wrap="all-content" class="current move-center">
+
       {{#if model}}
         <header>Your content</header>
         {{#collection 'animate-collection' content=model}}
           {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
         {{/collection}}
       {{/if}}
+
       {{# if session.isOwner }}
-      <header>Configuration</header>
-      <ul>
-        {{#if buildEnvironment.local}}
-          <li data-menu-item="customize-forms" {{bind-attr class="model.length::start-here"}}>{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
-        {{/if}}
-        <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
-        <li>{{#link-to 'wh.settings.general'}}General settings{{/link-to}}</li>
-        <li>{{#link-to 'wh.settings.billing'}}Billing{{/link-to}}</li>
-        <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
-        <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
-      </ul>
+        <header>Configuration</header>
+        <ul>
+          {{#if buildEnvironment.local}}
+            <li data-menu-item="customize-forms" {{bind-attr class="model.length::start-here"}}>{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
+          {{/if}}
+          <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
+          <li>{{#link-to 'wh.settings.general'}}General settings{{/link-to}}</li>
+          <li>{{#link-to 'wh.settings.billing'}}Billing{{/link-to}}</li>
+          <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
+          <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
+        </ul>
       {{/if}}
+
     </div>
 
   </div>
