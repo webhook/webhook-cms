@@ -2,7 +2,6 @@ import getItemModelName from 'appkit/utils/model';
 import uuid from 'appkit/utils/uuid';
 
 export default Ember.Route.extend({
-  isDirty: false,
 
   beforeModel: function (transition) {
 
@@ -165,15 +164,15 @@ export default Ember.Route.extend({
 
     controller.set('type', type);
 
+    controller.set('previewUrl', null);
+
+    this._super.apply(this, arguments);
+
     // watch for value changes so we can prevent user from accidentally leaving
     controller.set('isDirty', false);
     controller.addObserver('type.controls.@each.value', function () {
       controller.set('isDirty', true);
     }.bind(this));
-
-    controller.set('previewUrl', null);
-
-    this._super.apply(this, arguments);
   },
 
   fixControlType: function (contentType) {
