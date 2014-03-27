@@ -23,6 +23,11 @@
               {{ name }}
               <span class="wh-search-results-type">{{ type }}</span>
             {{/link-to}}
+            <ul>
+              {{#each highlights}}
+                <li>{{ key }} : {{{ highlight }}}</li>
+              {{/each}}
+            </ul>
           </li>
         {{/each}}
       </ul>
