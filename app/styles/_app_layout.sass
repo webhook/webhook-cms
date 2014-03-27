@@ -510,15 +510,36 @@ pre code
 .wh-search-results
   li
     display: block
+    border-bottom: solid 1px rgba(0,0,0,.05)
+    padding: $base-line-height / 2 0
   a
     display: block
-    padding: $base-line-height / 2 0
     font-size: 125%
-    border-bottom: solid 1px rgba(0,0,0,.05)
-    color: $text-color
     span
       float: right
       color: $text-light
+      font-size: 80%
+    em
+      background: $blue
+  a:visited em
+    background: $purple
+  dt
+    display: inline-block
+    margin-top: $base-line-height / 2
+    line-height: 1.5
+  dl
+    margin-left: $base-line-height
+  dd
+    color: $text-medium
+    font-size: 90%
+    line-height: 1.25
+  em
+    display: inline-block
+    background: $gray
+    color: $white
+    padding: 0 $base-line-height / 4
+
+
 .body-no-scroll
   height: 100%
   overflow-y: hidden
