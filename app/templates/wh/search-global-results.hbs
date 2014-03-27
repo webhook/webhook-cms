@@ -1,4 +1,4 @@
-<h1>Search Results</h1>
+<h1>Search results</h1>
 <hr>
 
 {{#if debouncedQuery}}
@@ -20,9 +20,15 @@
         {{#each}}
           <li>
             {{#link-to 'wh.content.type.edit' type id }}
-              {{ name }}
+              {{{ name }}}
               <span class="wh-search-results-type">{{ type }}</span>
             {{/link-to}}
+            <dl>
+              {{#each highlights}}
+                <dt>{{ key }}</dt>
+                <dd>{{{ highlight }}}</dd>
+              {{/each}}
+            </dl>
           </li>
         {{/each}}
       </ul>
