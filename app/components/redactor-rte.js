@@ -58,6 +58,8 @@ export default Ember.Component.extend({
 
   imageButtonCallback: function () {
 
+    this.set('cursorElement', this.get('whRedactor').getBlock() || this.get('whRedactor').getCurrent());
+
     // maintain undo buffer
     this.get('whRedactor').bufferSet();
 
@@ -137,10 +139,8 @@ export default Ember.Component.extend({
 
       whRedactor.selectionRestore();
 
-      var current = whRedactor.getBlock() || whRedactor.getCurrent();
-
-      if (current) {
-        $(current).after(data);
+      if (this.get('cursorElement')) {
+        $(this.get('cursorElement')).after(data);
       } else {
         whRedactor.insertHtmlAdvanced(data, false);
       }
