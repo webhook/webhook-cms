@@ -4,8 +4,8 @@
   {{/if}}
   <h1>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}</h1>
   <p class="wh-item-publish-time">
-    {{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}
-    {{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}
+  <span class="wh-item-publish-time-section">{{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}</span>
+  <span class="wh-item-publish-time-section">{{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}</span>
   </p>
   <hr>
 

@@ -20,6 +20,7 @@ export default Ember.Component.extend({
   toggleFullscreen: function () {
     this.toggleProperty('whMarkdownEditorFullscreen');
     this.$('.fullscreen-toggle').toggleClass('icon-fullscreen icon-resize-small');
+    Ember.$('body').toggleClass('body-no-scroll');
 
     if (this.get('whMarkdownEditorFullscreen')) {
       this.syncPreview();

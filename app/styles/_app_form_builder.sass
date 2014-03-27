@@ -305,14 +305,20 @@
     max-width: 100%
     width: 100%
     padding: $gutter
+    .wh-markdown-editor-edits
+      +span-columns(6)
+      height: 100%
+      overflow: hidden
+      border-bottom: solid 1px $input-border-color
     textarea
       height: 100%
-      +span-columns(6)
       padding: $gutter
+      padding: $gutter * 2
       font-size: 16px
       box-shadow: none
       border: none
       line-height: 1.5
+      border: solid 1px $input-border-color
     .wh-markdown-preview
       display: block
       height: 100%
@@ -322,22 +328,34 @@
       padding: $gutter
       overflow-x: hidden
       overflow-y: auto
+      border: solid 1px $input-border-color
       pre code
         @extend .hljs
+  .wh-markdown-editor-toolbar
+    background: $background-color
+    padding: $base-line-height / 8
+    border: solid 1px $input-border-color
+    font-size: 14px
+    span
+      display: inline-block
+      padding: $base-line-height / 8 $base-line-height / 4
+    span.icon:hover
+      background: $gray-light
+      color: $white
+  .syntax-help
+    color: $text-medium
+    border-right: solid 1px $input-border-color
   .fullscreen-toggle
-    position: absolute
-    right: 10px
-    top: 10px
     color: $text-color
     cursor: pointer
+    float: right
   .upload-image
-    position: absolute
-    right: 9px
-    top: 34px
     color: $text-color
     cursor: pointer
   .wh-markdown-preview
     display: none
+  textarea
+    box-shadow: none
 
 input[type=color]
   padding: 0
