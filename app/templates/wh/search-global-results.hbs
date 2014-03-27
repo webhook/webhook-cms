@@ -23,11 +23,12 @@
               {{ name }}
               <span class="wh-search-results-type">{{ type }}</span>
             {{/link-to}}
-            <ul>
+            <dl>
               {{#each highlights}}
-                <li>{{ key }} : {{{ highlight }}}</li>
+                <dt>{{ key }}</dt>
+                <dd>{{{ highlight }}}</dd>
               {{/each}}
-            </ul>
+            </dl>
           </li>
         {{/each}}
       </ul>
