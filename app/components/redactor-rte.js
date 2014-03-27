@@ -29,7 +29,7 @@ export default Ember.Component.extend({
         });
 
         // override redactor z-index
-        redactor.$box.css('z-index', 'auto');
+        redactor.$box.css('z-index', '');
       }
     });
 
