@@ -45,13 +45,15 @@ export default Ember.ObjectController.extend({
     return moment(this.get('publishDate')).isAfter();
   }.property('publishDate', 'isDraft', 'showSchedule'),
 
+  handleBeforeUnload: function () {
+    return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
+  },
+
   dirtyStateChanged: function () {
     if (this.get('isDirty')) {
-      Ember.$(window).on('beforeunload', function () {
-        return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
-      });
+      Ember.$(window).one('beforeunload', this.handleBeforeUnload);
     } else {
-      Ember.$(window).off('beforeunload');
+      Ember.$(window).off('beforeunload', this.handleBeforeUnload);
     }
   }.observes('isDirty'),
 
