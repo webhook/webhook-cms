@@ -395,7 +395,7 @@ var setupMessageListener = function(siteName, buildEnv) {
 
       if(!initialIds[id]) {
         if(message.code === 'BUILD') {
-          window.ENV.notify('success', 'Live site built');
+          window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
           buildEnv.set('building', false);
         }
       }
