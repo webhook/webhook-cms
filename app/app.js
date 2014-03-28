@@ -395,7 +395,11 @@ var setupMessageListener = function(siteName, buildEnv) {
 
       if(!initialIds[id]) {
         if(message.code === 'BUILD') {
-          window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
+          if(message.status === 0) {
+            window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
+          } else {
+            window.ENV.notify('danger', 'Site build failed', { icon: 'remove' });
+          }
           buildEnv.set('building', false);
         }
       }
