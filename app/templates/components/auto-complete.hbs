@@ -1,0 +1,24 @@
+{{#each currentSelection}}
+  <span class="wy-tag">{{data.name}}<a href="" class="wy-tag-remove" {{action "removeItem" this}}></a></span>
+{{/each}}
+
+<div class="wy-autocomplete-group">
+  <label class="icon icon-search"></label>
+
+  {{view "auto-complete" placeholder="Search" filter=filter}}
+
+  {{#if isLoading}}
+    <span class="wy-spinner wy-spinner-small"></span>
+  {{/if}}
+
+  {{#if results}}
+    <div class="wy-autocomplete-dropdown">
+      <ul>
+        {{#each results}}
+          <li {{action "addToSelection" this}}>{{{name}}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+
+</div>
