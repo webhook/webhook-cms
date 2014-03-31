@@ -19,6 +19,41 @@
         </div>
         <span class="wy-form-message">Please use full URL like http://www.example.com.</span>
       </div>
+      <div class="wy-control-group">
+        <label>Site Description</label>
+        <div class="wy-control">
+          {{input value=model.siteDescription disabled=model.isSaving}}
+        </div>
+        <span class="wy-form-message">A short description of your site</span>
+      </div>
+      <div class="wy-control-group">
+        <label>Site Keywords</label>
+        <div class="wy-control">
+          {{input value=model.siteKeywords disabled=model.isSaving}}
+        </div>
+        <span class="wy-form-message">Comma seperated list of keywords descibring your site.</span>
+      </div>
+      <div class="wy-control-group">
+        <label>Site Analytics ID</label>
+        <div class="wy-control">
+          {{input value=model.analyticsId disabled=model.isSaving}}
+        </div>
+        <span class="wy-form-message">Analytics Service ID.</span>
+      </div>
+      <div class="wy-control-group">
+        <label>Site Facebook</label>
+        <div class="wy-control">
+          {{input value=model.siteTwitter disabled=model.isSaving}}
+        </div>
+        <span class="wy-form-message">Site twitter account.</span>
+      </div>
+      <div class="wy-control-group">
+        <label>Site Twitter</label>
+        <div class="wy-control">
+          {{input value=model.siteFacebook disabled=model.isSaving}}
+        </div>
+        <span class="wy-form-message">Site facebook account.</span>
+      </div>
       <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled=model.isSaving}}> Save</button>
     </fieldset>
   </form>
