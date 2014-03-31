@@ -13,7 +13,11 @@
   {{/if}}
 
   <div class="wy-side-nav-search">
-    {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
+    {{#if buildEnvironment.building }}
+      {{#link-to 'wh' class="wh-logo wh-logo-spinner"}}{{/link-to}}
+    {{ else }}
+      {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
+    {{/if}}
     <div class="wh-user-dropdown">
       {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
       (<a {{action "logoutUser" on="click"}}>Logout</a>)

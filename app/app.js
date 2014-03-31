@@ -104,6 +104,7 @@ Ember.Application.initializer({
     buildEnv.set('localSocket', localSocket);
     buildEnv.set('siteName', siteName);
     buildEnv.set('siteUrl', 'http://' + siteName + '.webhook.com/');
+    buildEnv.set('building', false);
 
     window.ENV.siteDNS = siteName + '.webhook.org';
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function (snap) {
@@ -143,6 +144,10 @@ Ember.Application.initializer({
         bucket = snapshot.val();
 
         window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
+
+        if (application.get('buildEnvironment').local === false) {
+          setupMessageListener(siteName, application.get('buildEnvironment'));
+        }
 
         // user authenticated with Firebase
         session.set('user', user);
@@ -324,7 +329,17 @@ Ember.Application.initializer({
 
     session.set('auth', firebaseAuth);
 
+    // just passes on args to notify action
+    window.ENV.notify = function() {
+      var route = application.__container__.lookup('route:application');
+      var args = Array.prototype.slice.call(arguments);
+      args.unshift('notify');
+
+      route.send.apply(route, args);
+    };
+
     window.ENV.sendBuildSignal = function (publish_date) {
+
       var user = session.get('user.email');
 
       if (application.get('buildEnvironment').local === false) {
@@ -339,6 +354,7 @@ Ember.Application.initializer({
         }
 
         window.ENV.firebase.root().child('management/commands/build/' + siteName).set(data, function () {});
+        application.get('buildEnvironment').set('building', true);
       } else {
         window.ENV.sendGruntCommand('build');
       }
@@ -355,6 +371,41 @@ Ember.Application.initializer({
     };
   }
 });
+
+var listener = null;
+var setupMessageListener = function(siteName, buildEnv) {  
+  var ref = window.ENV.firebase.root().child('management/sites/' + siteName + '/messages');
+  if(listener) {
+    ref.off('child_added', listener);
+    listener = null;
+  }
+
+  var initialIds = {};
+  ref.once('value', function(totalData) {
+    var val = totalData.val();
+
+    for(var key in val) {
+      initialIds[key] = true;
+    }
+
+    listener = ref.on('child_added', function(snap) {
+      var now = Date.now();
+      var message = snap.val();
+      var id = snap.name();
+
+      if(!initialIds[id]) {
+        if(message.code === 'BUILD') {
+          if(message.status === 0) {
+            window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
+          } else {
+            window.ENV.notify('danger', 'Site build failed', { icon: 'remove' });
+          }
+          buildEnv.set('building', false);
+        }
+      }
+    });
+  });
+};
 
 // Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
