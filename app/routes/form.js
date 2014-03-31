@@ -3,12 +3,17 @@ export default Ember.Route.extend({
     return this.store.find('control-type');
   },
   model: function (params) {
-    return this.store.find('content-type', params.id);
+    return this.store.find('content-type').then(function (contentTypes) {
+      this.set('contentTypes', contentTypes);
+      return this.store.getById('content-type', params.id);
+    }.bind(this));
   },
   setupController: function (controller, model) {
     controller.set('editingControl', null);
     controller.set('isEditing', false);
-    controller.set('controlTypeGroups', this.get('store').find('control-type-group'));
+
+    controller.set('controlTypeGroups', this.store.find('control-type-group'));
+    controller.set('contentTypes', this.get('contentTypes'));
 
     model.get('controls').setEach('widgetIsValid', true);
     model.get('controls').setEach('value', null);
