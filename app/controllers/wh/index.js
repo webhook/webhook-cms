@@ -3,6 +3,10 @@ export default Ember.ArrayController.extend({
 
   serverMessagesPerPage: 10,
 
+  moreServerMessages: function () {
+    return this.get('serverMessages.length') === 10;
+  }.property('serverMessages.@each'),
+
   init: function () {
     // the ref to management/sites/<sitename> should probably be stored somewhere
     var siteName = Ember.$('meta[name="siteName"]').attr('content');
@@ -24,7 +28,7 @@ export default Ember.ArrayController.extend({
           serverMessages = this.get('serverMessages'),
           lastIndex = serverMessages.get('length');
 
-      this.get('messageRef').endAt(null, endAt).limit(this.get('serverMessagesPerPage') + 1).once('value', function (snapshot) {
+      this.get('messageRef').endAt(null, endAt).once('value', function (snapshot) {
         var vals = snapshot.val() || {};
         delete vals[endAt];
         Ember.$.each(vals, function (name, message) {

@@ -1,24 +1,3 @@
-<table class="wy-table wy-table-bordered-rows full-width">
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Message</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each serverMessages}}
-      <tr>
-        <td>{{code}}</td>
-        <td>{{message}}</td>
-        <td>{{format-time timestamp}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
-
-<button type="button" class="btn" {{action "moreServerMessages"}}>Fetch more messages</button>
-
 <article>
   <h1>Welcome alpha testers</h1>
 
@@ -69,3 +48,27 @@
 
 </article>
 
+<section>
+  <h2>Build History</h2>
+
+  <table class="wy-table wy-table-bordered-rows full-width">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Message</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each serverMessages}}
+        <tr>
+          <td>{{code}}</td>
+          <td>{{message}}</td>
+          <td>{{format-time timestamp}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{#if moreServerMessages}}<button type="button" class="btn" {{action "moreServerMessages"}}>Fetch more messages</button>{{/if}}
+</section>
