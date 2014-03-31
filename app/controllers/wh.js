@@ -38,6 +38,7 @@ export default Ember.ArrayController.extend({
     }.bind(this));
 
   },
+
   actions: {
     searchGlobal: function () {
       this.transitionToRoute('wh.search-global-results');
