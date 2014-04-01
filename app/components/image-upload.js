@@ -1,3 +1,5 @@
+/* global Image */
+
 import FileUploadComponent from 'appkit/components/file-upload';
 
 export default FileUploadComponent.extend({
@@ -12,7 +14,7 @@ export default FileUploadComponent.extend({
   }.observes('control.value'),
 
   willInsertElement: function () {
-    this.set('initial', this.get('control.value'));
+    this.set('initial', this.get('control.value.url'));
   },
 
   beforeUpload: function (file) {
@@ -31,6 +33,22 @@ export default FileUploadComponent.extend({
 
     image.prependTo(this.$upload);
 
+  },
+
+  // Add image meta data
+  doneUpload: function (file, url) {
+    this._super.apply(this, arguments);
+
+    var imageComponent = this;
+
+    var image = new Image();
+
+    image.onload = function() {
+      imageComponent.set('control.value.width', this.width);
+      imageComponent.set('control.value.height', this.height);
+    };
+
+    image.src = url;
   },
 
   failUpload: function () {

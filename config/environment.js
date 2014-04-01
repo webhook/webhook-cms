@@ -77,21 +77,24 @@ window.ENV = {
         {
           name     : 'Image',
           widget   : 'image',
+          valueType: 'object',
           iconClass: 'icon-image'
         },
         {
           name     : 'Gallery',
-          iconClass: 'icon-images',
-          widget   : 'gallery'
+          widget   : 'gallery',
+          iconClass: 'icon-images'
         },
         {
           name     : 'Audio file',
           widget   : 'audio',
+          valueType: 'object',
           iconClass: 'icon-music'
         },
         {
           name     : 'Other file',
           widget   : 'file',
+          valueType: 'object',
           iconClass: 'icon-paper-clip'
         }
       ]

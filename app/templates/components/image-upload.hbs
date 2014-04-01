@@ -18,7 +18,7 @@
 
     <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
 
-    {{#if control.value}}
+    {{#if control.value.url}}
       <button type="button" class="btn btn-link btn-small icon wy-text-danger icon-remove-sign" {{action "clear"}}> Remove</button>
     {{/if}}
   </div>

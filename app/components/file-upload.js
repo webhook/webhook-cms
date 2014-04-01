@@ -12,14 +12,14 @@ export default Ember.Component.extend({
   wantUploadButton: true,
 
   showUploadButton: function () {
-    return Ember.isNone(this.get('control.value')) && this.get('wantUploadButton');
-  }.property('control.value', 'wantUploadButton'),
+    return Ember.isNone(this.get('control.value.url')) && this.get('wantUploadButton');
+  }.property('control.value.url', 'wantUploadButton'),
 
   wantUrlInput: false,
 
   showUrlInput: function () {
-    return Ember.isNone(this.get('control.value')) && this.get('wantUrlInput');
-  }.property('control.value', 'wantUrlInput'),
+    return Ember.isNone(this.get('control.value.url')) && this.get('wantUrlInput');
+  }.property('control.value.url', 'wantUrlInput'),
 
   didInsertElement: function () {
 
@@ -125,7 +125,7 @@ export default Ember.Component.extend({
   },
 
   beforeUpload: function (file) {
-    this.set('control.value', null);
+    this.set('control.value', {});
     this.set('wantUploadButton', true);
     this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
@@ -145,7 +145,11 @@ export default Ember.Component.extend({
   },
 
   doneUpload: function (file, url) {
-    this.set('control.value', url);
+    this.set('control.value', {
+      url: url,
+      type: file.type,
+      size: file.size
+    });
     this.sendAction('notify', 'success', this.get('successMsg'));
     this.sendAction('onDoneUpload', url);
   },
@@ -160,7 +164,7 @@ export default Ember.Component.extend({
 
   actions: {
     clear: function () {
-      this.set('control.value', null);
+      this.set('control.value', {});
     },
     toggleMethod: function () {
       this.toggleProperty('wantUrlInput');

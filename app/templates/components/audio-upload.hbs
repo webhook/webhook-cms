@@ -1,11 +1,9 @@
 <div class="wy-control-group-file">
 
-  {{#if control.value}}
-    <a {{ bind-attr href=value }} target="_blank" class="wy-file-location icon icon-paper-clip"> {{ control.value }}</a>
+  {{#if control.value.url}}
+    <a {{ bind-attr href=control.value.url }} target="_blank" class="wy-file-location icon icon-paper-clip"> {{ control.value.url }}</a>
     <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}></span>
-    <audio controls>
-      <source {{bind-attr src="control.value"}}>
-    </audio>
+    {{audio-player src=control.value.url load="audioLoaded"}}
   {{/if}}
 
   <div {{ bind-attr class=":wy-form-upload-container showUploadButton:on" }}>
