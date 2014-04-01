@@ -1,12 +1,15 @@
 export default Ember.Route.extend({
   beforeModel: function () {
-    return this.store.find('control-type');
+    var promises = [this.store.find('control-type')];
+
+    promises.push(this.store.find('content-type').then(function (contentTypes) {
+      this.set('contentTypes', contentTypes);
+    }.bind(this)));
+
+    return Ember.RSVP.all(promises);
   },
   model: function (params) {
-    return this.store.find('content-type').then(function (contentTypes) {
-      this.set('contentTypes', contentTypes);
-      return this.store.getById('content-type', params.id);
-    }.bind(this));
+    return this.store.getById('content-type', params.id);
   },
   setupController: function (controller, model) {
     controller.set('editingControl', null);
