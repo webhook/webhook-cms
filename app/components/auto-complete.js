@@ -9,6 +9,10 @@ export default Ember.Component.extend({
   // map models to position in selection
   selectionMap: Ember.A([]),
 
+  showAutocomplete: function () {
+    return !this.get('isSingle') || (!this.get('value.length') && this.get('isSingle'));
+  }.property('value.@each', 'isSingle'),
+
   currentSelection: Ember.arrayComputed('value', {
     addedItem: function (array, valueItem, changeMeta) {
 
@@ -35,10 +39,17 @@ export default Ember.Component.extend({
 
   actions: {
     addToSelection: function (result) {
+
+      var value = this.getWithDefault('value', Ember.A([]));
+
       var resultKey = result.type + ' ' + result.id;
-      if (this.get('value').indexOf(resultKey) < 0) {
-        this.get('value').pushObject(result.type + ' ' + result.id);
+      if (value.indexOf(resultKey) < 0) {
+        value.pushObject(result.type + ' ' + result.id);
       }
+
+      this.set('value', value);
+
+      this.set('autocompleteValue', null);
 
       this.get('results').clear();
     },

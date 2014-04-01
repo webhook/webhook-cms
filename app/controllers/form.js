@@ -5,6 +5,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   editingControl   : null,
   isEditing        : false,
   contentTypes     : null,
+  relationTypes    : null,
 
   validateControls: function () {
 
