@@ -4,7 +4,10 @@ module.exports = function(grunt) {
       Helpers = require('./helpers'),
       fs = require('fs'),
       path = require('path'),
-      request = require('request');
+      request = require('request'),
+      proxy = require('proxy-middleware'),
+      header =  require('connect-header'),
+      url = require('url');
 
   /**
   Task for serving the static files.
@@ -21,6 +24,13 @@ module.exports = function(grunt) {
 
     app.use(lock);
     app.use(express.compress());
+
+    // Custom Proxy Options, for development
+    var proxyOptions = url.parse('http://test.webhook.org/webhook-uploads');
+    proxyOptions.route = '/webhook-uploads';
+
+    app.use(header({ 'X-Webhook-Local' : true }));
+    app.use(proxy(proxyOptions));
 
     if (proxyMethod === 'stub') {
       grunt.log.writeln('Using API Stub');
