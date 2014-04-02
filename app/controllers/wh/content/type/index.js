@@ -1,11 +1,13 @@
 export default Ember.ArrayController.extend({
-  sortProperties: ['data.publish_date'],
-  sortAscending: false,
+  sortProperties : ['data.publish_date'],
+  sortAscending  : false,
   sortedByPublish: true,
 
   contentType: null,
   cmsControls: null,
   lockedItems: Ember.A([]),
+
+  filterQuery: '',
 
   _updateItemControls: function (item) {
     var cmsControls = Ember.A([]);
@@ -60,12 +62,23 @@ export default Ember.ArrayController.extend({
   }),
 
   sortedCmsItems: function () {
-    var sortedCmsItems = this.get('cmsItems').sortBy.apply(this, this.get('sortProperties'));
+
+    var filterQuery = this.get('filterQuery');
+
+    var sortedCmsItems = this.get('cmsItems').filter(function (item) {
+      if (!filterQuery) {
+        return true;
+      } else {
+        return (new RegExp(filterQuery, 'ig')).test(item.get('data.name'));
+      }
+    }).sortBy(this.get('sortProperties'));
+
     if (!this.get('sortAscending')) {
       sortedCmsItems.reverse();
     }
+
     return sortedCmsItems;
-  }.property('cmsItems.@each', 'sortProperties', 'sortAscending'),
+  }.property('cmsItems.@each', 'sortProperties', 'sortAscending', 'filterQuery'),
 
   locksChanged: function () {
     this.get('cmsItems').setEach('lockedBy', null);
