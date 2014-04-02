@@ -42,12 +42,11 @@ export default Ember.Component.extend({
 
       var value = this.getWithDefault('value', Ember.A([]));
 
-      var resultKey = result.type + ' ' + result.id;
+      var resultKey = result.get('type') + ' ' + result.get('id');
       if (value.indexOf(resultKey) < 0) {
-        value.pushObject(result.type + ' ' + result.id);
+        value.pushObject(resultKey);
+        this.set('value', value);
       }
-
-      this.set('value', value);
 
       this.set('autocompleteValue', null);
 

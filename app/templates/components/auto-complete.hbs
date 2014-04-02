@@ -12,15 +12,9 @@
     <span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>
   {{/if}}
 
-  {{#if results}}
-    <div class="wy-autocomplete-dropdown">
-      <ul>
-        {{#each results}}
-          <li {{action "addToSelection" this}}>{{{name}}}</li>
-        {{/each}}
-      </ul>
-    </div>
-  {{/if}}
+  {{#collection "autocomplete-results" content=results}}
+    {{{name}}}
+  {{/collection}}
 
 </div>
 {{/if}}
