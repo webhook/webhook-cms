@@ -2,7 +2,7 @@
   <h1>General settings</h1>
   <hr>
 
-  <p>These are global values used in your front end templates.</p>
+  <p>These are global values used in your front end templates. To retrieve them into your site, check the <a href="http://www.webhook.com/docsalpha/2.-template-rules-and-filters/#_getsetting" target="_blank">documentation here</a>.</p>
 
   <form {{action "saveSettings" on="submit"}}>
     <fieldset>
@@ -13,46 +13,46 @@
         </div>
       </div>
       <div class="wy-control-group">
-        <label>Site URL</label>
+        <label>Site description</label>
         <div class="wy-control">
-          {{input value=model.siteUrl disabled=model.isSaving}}
+          {{textarea value=model.siteDescription disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Please use full URL like http://www.example.com.</span>
+        <span class="wy-form-message">A short description of your site.</span>
       </div>
       <div class="wy-control-group">
-        <label>Site Description</label>
+        <label>Site keywords</label>
         <div class="wy-control">
-          {{input value=model.siteDescription disabled=model.isSaving}}
-        </div>
-        <span class="wy-form-message">A short description of your site</span>
-      </div>
-      <div class="wy-control-group">
-        <label>Site Keywords</label>
-        <div class="wy-control">
-          {{input value=model.siteKeywords disabled=model.isSaving}}
+          {{textarea value=model.siteKeywords disabled=model.isSaving}}
         </div>
         <span class="wy-form-message">Comma seperated list of keywords descibring your site.</span>
       </div>
       <div class="wy-control-group">
-        <label>Site Analytics ID</label>
+        <label>Site url</label>
+        <div class="wy-control">
+          {{input value=model.siteUrl disabled=model.isSaving placeholder="http://www.example.com"}}
+        </div>
+        <span class="wy-form-message">Please use full URL like http://www.example.com.</span>
+      </div>
+      <div class="wy-control-group">
+        <label>Site analytics id</label>
         <div class="wy-control">
           {{input value=model.analyticsId disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Analytics Service ID.</span>
+        <span class="wy-form-message">Analytics Service ID. Usually something like UA-XX-XXXX</span>
       </div>
       <div class="wy-control-group">
-        <label>Site Facebook</label>
+        <label>Site facebook</label>
         <div class="wy-control">
           {{input value=model.siteTwitter disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Site twitter account.</span>
+        <span class="wy-form-message">Twitter handle, without the @ sign.</span>
       </div>
       <div class="wy-control-group">
-        <label>Site Twitter</label>
+        <label>Site twitter</label>
         <div class="wy-control">
           {{input value=model.siteFacebook disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Site facebook account.</span>
+        <span class="wy-form-message">Facebook name.</span>
       </div>
       <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled=model.isSaving}}> Save</button>
     </fieldset>
