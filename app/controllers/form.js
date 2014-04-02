@@ -4,6 +4,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
   editingControl   : null,
   isEditing        : false,
+  contentTypes     : null,
+  relationTypes    : null,
 
   validateControls: function () {
 
