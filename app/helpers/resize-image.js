@@ -1,6 +1,7 @@
 export default Ember.Handlebars.makeBoundHelper(function(src, options) {
 
-  if (!src) {
+  // Only pass in the image url
+  if (!src || typeof src !== 'string') {
     return '';
   }
 
