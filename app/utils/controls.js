@@ -6,11 +6,10 @@ export default function dataFromControls (controls) {
   controls.filterBy('value').forEach(function (control) {
     var value = control.get('value');
 
-    // hax
-    // firebase doesn't like undefined values and for some reason `_super` is
-    // being added to arrays in ember with undefined value
+    // Convert ember arrays to normal arrays so firebase doesn't throw
+    // a fit on `_super` and `@each` properties
     if (Ember.isArray(value)) {
-      delete value._super;
+      value = value.toArray();
     }
 
     if (control.get('controlType.valueType') === 'object') {
@@ -49,6 +48,13 @@ export default function dataFromControls (controls) {
     case 'checkbox':
       value.rejectBy('value').setEach('value', false);
       break;
+
+    case 'relation':
+      if (control.get('meta.data.isSingle')) {
+        value = value.pop();
+      }
+      break;
+
     }
 
     data[control.get('name')] = value;

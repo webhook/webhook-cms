@@ -158,6 +158,11 @@ window.ENV = {
           name     : 'Color',
           widget   : 'color',
           iconClass: 'icon-droplet'
+        },
+        {
+          name     : 'Relationship',
+          widget   : 'relation',
+          iconClass: 'icon-tags'
         }
       ]
     }

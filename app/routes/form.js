@@ -1,14 +1,22 @@
 export default Ember.Route.extend({
   beforeModel: function () {
-    return this.store.find('control-type');
+    var promises = [this.store.find('control-type')];
+
+    promises.push(this.store.find('content-type').then(function (contentTypes) {
+      this.set('contentTypes', contentTypes);
+    }.bind(this)));
+
+    return Ember.RSVP.all(promises);
   },
   model: function (params) {
-    return this.store.find('content-type', params.id);
+    return this.store.getById('content-type', params.id);
   },
   setupController: function (controller, model) {
     controller.set('editingControl', null);
     controller.set('isEditing', false);
-    controller.set('controlTypeGroups', this.get('store').find('control-type-group'));
+
+    controller.set('controlTypeGroups', this.store.find('control-type-group'));
+    controller.set('contentTypes', this.get('contentTypes'));
 
     model.get('controls').setEach('widgetIsValid', true);
     model.get('controls').setEach('value', null);

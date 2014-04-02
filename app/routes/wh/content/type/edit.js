@@ -144,6 +144,12 @@ export default Ember.Route.extend({
         }
       }
 
+      if (value && control.get('controlType.widget') === 'relation') {
+        if (!Ember.isArray(value)) {
+          value = Ember.A([value]);
+        }
+      }
+
       if (!value && control.get('controlType.valueType') === 'object') {
         value = {};
       }
