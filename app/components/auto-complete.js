@@ -6,9 +6,6 @@ export default Ember.Component.extend({
   // search results
   results: Ember.A([]),
 
-  // map models to position in selection
-  selectionMap: Ember.A([]),
-
   showAutocomplete: function () {
     return !this.get('isSingle') || (!this.get('value.length') && this.get('isSingle'));
   }.property('value.@each', 'isSingle'),
@@ -23,16 +20,13 @@ export default Ember.Component.extend({
         var modelName = getItemModelName(contentType);
         this.get('store').find(modelName, itemId).then(function (model) {
           array.pushObject(model);
-          this.get('selectionMap').pushObject(valueItem);
         }.bind(this));
       }.bind(this));
 
       return array;
     },
     removedItem: function (array, item) {
-      var itemIndex = this.get('selectionMap').indexOf(item);
-      array.removeAt(itemIndex);
-      this.get('selectionMap').removeObject(item);
+      array.removeObject(array.findBy('id', item.split(' ')[1]));
       return array;
     }
   }),
@@ -52,8 +46,22 @@ export default Ember.Component.extend({
 
       this.get('results').clear();
     },
+
     removeItem: function (model) {
       this.get('value').removeObject(model.constructor.typeKey + ' ' + model.get('id'));
+    },
+
+    removeLastSelection: function () {
+      if (this.$('.wy-tag.on').length) {
+        var onIndex = this.$('.wy-tag').index(this.$('.wy-tag.on'));
+        this.get('value').removeAt(onIndex);
+      } else {
+        this.$('.wy-tag:last-of-type').addClass('on');
+      }
+    },
+
+    keyDown: function () {
+      this.$('.wy-tag').removeClass('on');
     }
   }
 });
