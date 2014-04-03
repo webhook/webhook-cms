@@ -6,7 +6,6 @@ export default Ember.Component.extend({
 
   showChange: function () {
     this.$().toggle();
-    this.$mask.insertBefore(this.$());
     this.$mask.css('z-index', parseInt(this.$().css('z-index'), 10) - 1);
     this.$mask.toggleClass('on');
   }.observes('show'),
@@ -16,6 +15,7 @@ export default Ember.Component.extend({
   },
 
   didInsertElement: function () {
+    this.$mask.insertBefore(this.$());
     this.$().hide().css({
       top: '20%',
       marginTop: 0

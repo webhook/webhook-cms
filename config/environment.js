@@ -9,7 +9,7 @@
 
 window.ENV = {
   dbName: 'ianbox',
-  uploadUrl: 'http://23.253.89.18:3000/',
+  uploadUrl: 'http://server.webhook.com:3000/',
   embedlyKey: '13dde81b8137446e89c7933edca679eb',
   displayUrl : 'https://i.embed.ly/1/display/',
 

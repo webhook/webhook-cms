@@ -7,6 +7,10 @@ export default FileUploadComponent.extend({
   defaultClasses: 'icon-picture',
   successMsg    : ' Image upload complete.',
 
+  postParams: {
+    resize_url: true
+  },
+
   valueChanged: function () {
     if (Ember.isNone(this.get('control.value'))) {
       this.$('.wy-form-upload-image').remove();
@@ -36,10 +40,12 @@ export default FileUploadComponent.extend({
   },
 
   // Add image meta data
-  doneUpload: function (file, url) {
+  doneUpload: function (file, response) {
     this._super.apply(this, arguments);
 
     var imageComponent = this;
+
+    imageComponent.set('control.value.resize_url', response.resize_url);
 
     var image = new Image();
 
@@ -48,7 +54,7 @@ export default FileUploadComponent.extend({
       imageComponent.set('control.value.height', this.height);
     };
 
-    image.src = url;
+    image.src = response.url;
   },
 
   failUpload: function () {

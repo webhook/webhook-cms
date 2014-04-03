@@ -11,6 +11,8 @@ export default Ember.Component.extend({
 
   wantUploadButton: true,
 
+  postParams: {},
+
   showUploadButton: function () {
     return Ember.isNone(this.get('control.value.url')) && this.get('wantUploadButton');
   }.property('control.value.url', 'wantUploadButton'),
@@ -34,7 +36,10 @@ export default Ember.Component.extend({
     this.set('defaultText', this.$uploadBtn.text());
 
     // create uploader with required params
-    this.uploader = new Webhook.Uploader(window.ENV.uploadUrl, this.get('session.site.name'), this.get('session.site.token'));
+    var url   = window.ENV.uploadUrl,
+        site  = this.get('session.site.name'),
+        token = this.get('session.site.token');
+    this.uploader = new Webhook.Uploader(url, site, token, { data: this.get('postParams') });
 
     // when a file is selected, upload
     this.$uploadBtn.selectFile({
@@ -102,7 +107,7 @@ export default Ember.Component.extend({
     });
 
     uploading.done(function (response) {
-      self.doneUpload.call(self, file, response.url);
+      self.doneUpload.call(self, file, response);
     });
 
     uploading.always(function () {
@@ -144,14 +149,14 @@ export default Ember.Component.extend({
     }
   },
 
-  doneUpload: function (file, url) {
+  doneUpload: function (file, response) {
     this.set('control.value', {
-      url: url,
+      url: response.url,
       type: file.type,
       size: file.size
     });
     this.sendAction('notify', 'success', this.get('successMsg'));
-    this.sendAction('onDoneUpload', url);
+    this.sendAction('onDoneUpload', response);
   },
 
   afterUpload: function () {

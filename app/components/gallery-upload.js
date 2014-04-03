@@ -10,6 +10,10 @@ export default FileUploadComponent.extend({
 
   items: Ember.A([]),
 
+  postParams: {
+    resize_url: true
+  },
+
   willInsertElement: function () {
     // create initial set of items from control value
     this.set('items', Ember.A(this.get('control.value')).map(function (image) {
@@ -61,7 +65,8 @@ export default FileUploadComponent.extend({
       item.set('image', {
         url: response.url,
         type: file.type,
-        size: file.size
+        size: file.size,
+        resize_url: response.resize_url
       });
 
       var image = new Image();

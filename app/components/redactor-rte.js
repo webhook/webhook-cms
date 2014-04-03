@@ -125,9 +125,9 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    handleUpload: function (url) {
+    handleUpload: function (response) {
 
-      if (!url) {
+      if (!(response && response.url)) {
         return;
       }
 
@@ -135,7 +135,7 @@ export default Ember.Component.extend({
 
       var whRedactor = this.get('whRedactor');
 
-      var data = '<figure data-type="image"><a href="' + url + '"><img src="' + this.embedlyUrl(url, 1200) + '"></a><figcaption></figcaption></figure>';
+      var data = '<figure data-type="image"><a href="' + response.url + '"><img src="' + this.embedlyUrl(response.url, 1200) + '"></a><figcaption></figcaption></figure>';
 
       whRedactor.selectionRestore();
 
