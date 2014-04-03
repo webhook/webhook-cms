@@ -20,6 +20,8 @@ export default Ember.Component.extend({
         var modelName = getItemModelName(contentType);
         this.get('store').find(modelName, itemId).then(function (model) {
           array.pushObject(model);
+        }.bind(this), function (error) {
+          this.get('value').removeObject(valueItem);
         }.bind(this));
       }.bind(this));
 
