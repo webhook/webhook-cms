@@ -20,27 +20,30 @@
 
 </article>
 
-<section>
-  <h2>Build History</h2>
 
-  <table class="wy-table wy-table-bordered-rows full-width">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Message</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each serverMessages}}
+{{#if serverMessages}}
+  <section>
+    <h2>Build History</h2>
+
+    <table class="wy-table wy-table-bordered-rows full-width">
+      <thead>
         <tr>
-          <td>{{code}}</td>
-          <td>{{message}}</td>
-          <td>{{format-time timestamp}}</td>
+          <th>Type</th>
+          <th>Message</th>
+          <th>Date</th>
         </tr>
-      {{/each}}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {{#each serverMessages}}
+          <tr>
+            <td>{{code}}</td>
+            <td>{{message}}</td>
+            <td>{{format-time timestamp}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-  {{#if moreServerMessages}}<button type="button" class="btn btn-link" {{action "moreServerMessages"}}>Fetch more history</button>{{/if}}
-</section>
+    {{#if moreServerMessages}}<button type="button" class="btn btn-link" {{action "moreServerMessages"}}>Fetch more history</button>{{/if}}
+  </section>
+{{/if}}
