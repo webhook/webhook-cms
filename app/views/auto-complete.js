@@ -12,7 +12,7 @@ export default Ember.TextField.extend({
         this.set('parentView.isLoading', false);
       }.bind(this));
     } else {
-      this.get('parentView.results').clear();
+      this.getWithDefault('parentView.results', Ember.A([])).clear();
     }
 
   }, 'value', 500).on('init'),
