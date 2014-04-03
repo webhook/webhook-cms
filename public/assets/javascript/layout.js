@@ -34,6 +34,12 @@ $( document ).ready(function() {
     }
   });
 
+  $(document).on("click", "[data-toggle='wh-save-item-extra-btn']", function(event) {
+    $('[data-toggle="wh-save-item-extra"]').toggleClass("wh-save-item-mobile");
+    $('.wh-save-item-mobile .btn').removeClass(".btn-link");
+    $('.wh-save-item-extra-btn').hide();
+  });
+
   // Fake form builder stuffs
   $(document).on("click", "[fake-toggle*='fake-widget']", function(event) {
     var attr = $(this).attr('fake-toggle');

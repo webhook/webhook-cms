@@ -62,9 +62,12 @@
 
           <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
-          <div class="wy-btn-group">
-            <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
-            <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
+          <div class="wy-btn-group" data-toggle="wh-save-item-extra">
+            <span class="wh-save-item-more-options">
+              <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
+              <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
+            </span>
+            <button class="btn btn-small btn-link wh-save-item-extra-btn" data-toggle="wh-save-item-extra-btn">More options</button>
             <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
           </div>
 
