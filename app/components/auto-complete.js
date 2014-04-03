@@ -50,7 +50,14 @@ export default Ember.Component.extend({
     },
 
     removeItem: function (model) {
-      this.get('value').removeObject(model.constructor.typeKey + ' ' + model.get('id'));
+
+      // if typeKey is `data`, contentType is oneoff.
+      if (model.constructor.typeKey === 'data') {
+        this.get('value').removeObject(model.get('id') + ' ' + model.get('id'));
+      } else {
+        this.get('value').removeObject(model.constructor.typeKey + ' ' + model.get('id'));
+      }
+
     },
 
     removeLastSelection: function () {
