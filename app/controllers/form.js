@@ -120,6 +120,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         value.pushObject(emptyRow);
         control.set('value', value);
         break;
+
+      case 'relation':
+        meta.set('data', {
+          contentTypeId: null
+        });
+        break;
     }
 
     control.set('meta', meta);
