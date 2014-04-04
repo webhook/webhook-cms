@@ -54,7 +54,7 @@ module.exports = function(grunt) {
           form: {
             auth_token: 'da7c90e4dc307a5c4e8a5d277391e2',
             room_id: 'webhook',
-            from: 'Webhook Notifier',
+            from: 'WH-Notifier',
             message: 'A new version of the CMS has been deployed. (' + productionVersion + ')'
           }
         }, function(err ,data, body) {
