@@ -255,6 +255,7 @@ export default Ember.Route.extend({
         this.get('lockRef').remove();
       }
 
+      return true;
     }
   }
 });
