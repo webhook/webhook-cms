@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   var cloudStorage = require('../libs/cloudStorage.js');
   var fs = require('fs');
   var async = require('async');
+  var request = require('request');
 
 
   var productionBucket = 'cms.webhook.com';
@@ -15,6 +16,7 @@ module.exports = function(grunt) {
 
     var uploadFunctions = [];
 
+    
     files.forEach(function(file) {
       var source = distDir + file;
       if(!fs.lstatSync(source).isDirectory())
@@ -46,7 +48,20 @@ module.exports = function(grunt) {
 
     async.series(uploadFunctions, function() {
       grunt.log.success('Done');
-      done();
+
+      request.post('https://api.hipchat.com/v1/rooms/message', 
+        { 
+          form: {
+            auth_token: 'da7c90e4dc307a5c4e8a5d277391e2',
+            room_id: 'webhook',
+            from: 'WH-Notifier',
+            message: 'A new version of the CMS has been deployed. (' + productionVersion + ')',
+            color: 'green'
+          }
+        }, function(err ,data, body) {
+          done();
+        }
+      );
     });
   });
 
