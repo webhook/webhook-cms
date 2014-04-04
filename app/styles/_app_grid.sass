@@ -73,7 +73,7 @@
     @else
       right: -$nav-desktop-width
     &.shift
-      width: 85%
+      width: 50%
       left: 0
   .wy-grid-for-nav
     display: block
@@ -90,10 +90,16 @@
     &.shift
       position: fixed
       min-width: 100%
-      left: 85%
+      left: 50%
       top: 0
       height: 100%
       overflow: hidden
+
++media($mobile)
+  .wy-nav-side.shift
+    width: 85%
+  .wy-nav-content-wrap.shift
+    left: 85%
 
 @media print
   .wy-nav-side
