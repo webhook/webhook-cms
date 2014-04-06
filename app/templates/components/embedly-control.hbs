@@ -15,7 +15,9 @@
   <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
 
   <div class="wh-embedly-content">
-    <div class="preview" {{bind-attr style="previewStyle"}}></div>
+    <div class="wh-video-wrap">
+    <div class="preview wh-video" {{bind-attr style="previewStyle"}}></div>
+    </div>
 
     {{#if showCode}}
       <pre class="hljs">{{dataString}}</pre>
