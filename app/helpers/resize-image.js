@@ -7,9 +7,11 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
     }
   });
 
+  var imageSource = '';
+
   // New image format
   if(typeof src === 'object') {
-    var imageSource = src.resize_url;
+    imageSource = src.resize_url;
 
     imageSource = imageSource + '=s' + (options.hash.size || 100);
 
@@ -29,7 +31,7 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
     params.push('url=' + encodeURIComponent(src));
     params.push('key=' + window.ENV.embedlyKey);
 
-    var imageSource = window.ENV.displayUrl + (options.hash.crop ? 'crop' : 'resize') + '?' + params.join('&');
+    imageSource = window.ENV.displayUrl + (options.hash.crop ? 'crop' : 'resize') + '?' + params.join('&');
     return new Ember.Handlebars.SafeString('<img src="' +  imageSource + '">');
   } else {
     return '';

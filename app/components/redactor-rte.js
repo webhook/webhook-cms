@@ -71,18 +71,9 @@ export default Ember.Component.extend({
 
   },
 
-  embedlyUrl: function (url, width) {
+  resizeImage: function (url, width) {
 
-    if(url.indexOf('http://') === -1) {
-      url = 'http://' + window.ENV.siteDNS + url;
-    }
-
-    var params = [];
-    params.push('width=' + width);
-    params.push('url=' + encodeURIComponent(url));
-    params.push('key=' + window.ENV.embedlyKey);
-
-    return window.ENV.displayUrl + 'resize/?' + params.join('&');
+    return url + '=s' + width;
 
   },
 
@@ -105,8 +96,8 @@ export default Ember.Component.extend({
       }
 
       if (size) {
-        var url = $(this).find('a').attr('href'),
-            resizeUrl = self.embedlyUrl(url, size);
+        var url = $(this).find('img').attr('data-resize-src'),
+            resizeUrl = self.resizeImage(url, size);
         $(this).find('img').attr('src', resizeUrl);
       }
     });
@@ -135,7 +126,7 @@ export default Ember.Component.extend({
 
       var whRedactor = this.get('whRedactor');
 
-      var data = '<figure data-type="image"><a href="' + response.url + '"><img src="' + this.embedlyUrl(response.url, 1200) + '"></a><figcaption></figcaption></figure>';
+      var data = '<figure data-type="image"><a href="' + response.url + '"><img data-resize-src="' + response.resize_url + '" src="' + this.resizeImage(response.resize_url, 1200) + '"></a><figcaption></figcaption></figure>';
 
       whRedactor.selectionRestore();
 
