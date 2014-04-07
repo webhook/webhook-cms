@@ -2,9 +2,9 @@
 
   <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
     <div class="wy-form-upload">
-      {{#if initial}}
+      {{#if initial.url }}
         <div class="wy-form-upload-image">
-          {{resize-image initial width="75" height="75"}}
+          {{resize-image initial size="75" }}
         </div>
       {{/if}}
       <div class="wy-form-upload-content">

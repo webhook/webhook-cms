@@ -18,7 +18,7 @@ export default FileUploadComponent.extend({
   }.observes('control.value'),
 
   willInsertElement: function () {
-    this.set('initial', this.get('control.value.url'));
+    this.set('initial', this.get('control.value'));
   },
 
   beforeUpload: function (file) {
