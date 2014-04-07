@@ -41,6 +41,7 @@ export default Ember.ArrayController.extend({
 
   actions: {
     searchGlobal: function () {
+      Ember.$("[data-toggle='wy-nav-shift']").removeClass("shift");
       this.transitionToRoute('wh.search-global-results');
     },
   }

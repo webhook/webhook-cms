@@ -10,6 +10,9 @@ export default Ember.ArrayController.extend({
         // remove all associated data from Firebase
         window.ENV.firebase.child('data').child(contentType.get('id')).remove();
 
+        // Remove search index info for type
+        window.ENV.deleteTypeIndex(contentType.get('id'));
+
         // remove content type
         contentType.destroyRecord();
       }

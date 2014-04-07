@@ -52,6 +52,8 @@ export default Ember.Route.extend({
   actions: {
     willTransition: function () {
       this.get('lockedRef').off();
+
+      return true;
     }
   }
 });

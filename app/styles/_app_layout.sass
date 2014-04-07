@@ -546,6 +546,23 @@ pre code
   height: 100%
   overflow-y: hidden
 
+.wh-video-wrap
+  max-width: 640px
+  +clearfix
+
+.wh-video
+  position: relative
+  padding-bottom: 56.25%
+  height: 0
+
+.wh-video-wrap
+  iframe
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
 +media($tablet)
   .wh-save-info
     display: none
@@ -559,6 +576,10 @@ pre code
     left: 0
 
 +media($mobile)
+  .wh-login
+    width: 100%
+    height: 100vh
+    margin: 0
   .wh-save-item .wh-save-item-extra-btn
     display: inline-block
   .wh-item-publish-time-section

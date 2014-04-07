@@ -63,17 +63,20 @@
     position: absolute
     top: 0
     left: 0
-    width: $nav-desktop-width
+    width: 50%
+    margin-left: -50%
     min-height: 100%
     background: $menu-background-color
     border-right: solid 1px rgba(0,0,0,.05)
     z-index: $z-index-popover
+    +transition(margin-left .1s ease-in)
     @if $nav-desktop-position == left
       left: -$nav-desktop-width
     @else
       right: -$nav-desktop-width
     &.shift
-      width: 85%
+      width: 50%
+      margin-left: 0
       left: 0
   .wy-grid-for-nav
     display: block
@@ -82,18 +85,32 @@
     height: 100%
   .wy-nav-top
     display: block
+    white-space: nowrap
+    overflow: hidden
   .wy-nav-content-wrap
     margin-left: 0
+    +transition(margin-left .1s ease-in)
     .wy-nav-content
       padding: $gutter
       padding-bottom: $gutter * 4
     &.shift
       position: fixed
       min-width: 100%
-      left: 85%
+      margin-left: 50%
       top: 0
       height: 100%
       overflow: hidden
+      .wh-save-item
+        display: none
+
++media($mobile)
+  .wy-nav-side
+    margin-left: -85%
+    width: 85%
+  .wy-nav-side.shift
+    width: 85%
+  .wy-nav-content-wrap.shift
+    margin-left: 85%
 
 @media print
   .wy-nav-side

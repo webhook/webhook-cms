@@ -327,6 +327,23 @@ Ember.Application.initializer({
       });
     };
 
+    window.ENV.deleteTypeIndex = function(typeName) {
+      var site = siteName;
+      var key = bucket;
+
+      Ember.$.ajax({
+        url: 'http://server.webhook.com:3000/search/delete/type/',
+        type: 'POST',
+        data: {
+          token: key,
+          site: site,
+          typeName: typeName
+        },
+        success: function(data, status, xhr) {
+        }
+      });
+    };
+
     session.set('auth', firebaseAuth);
 
     // just passes on args to notify action
