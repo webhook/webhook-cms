@@ -123,6 +123,10 @@ export default Ember.ArrayController.extend({
 
       window.console.log(this.get('sortAscending'), this.get('sortProperties'));
 
+    },
+
+    gotoEdit: function (contentTypeId, itemId) {
+      this.transitionToRoute('wh.content.type.edit', contentTypeId, itemId);
     }
   }
 
