@@ -25,32 +25,24 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
-        {{#each contentType.controls}}
-          {{#if showInCms}}
-            <th><span class="wh-content-sort" {{action "sortToggle" name}}>{{label}}</span></th>
-          {{/if}}
+        {{#each cmsControls}}
+          <th><span class="wh-content-sort" {{action "sortToggle" name}}>{{label}}</span></th>
         {{/each}}
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      {{#with contentType as contentTypeNav}}
-      {{#each item in sortedCmsItems}}
-        <tr {{action "gotoEdit" contentTypeNav.id item.id}}>
-          {{#each item.cmsControls}}
-          <td {{ bind-attr class=this.controlType.widget }}>{{partial this.controlType.valuePartialPath}}</td>
-          {{/each}}
-          <td class="wy-table-actions">
-            {{#if item.lockedBy}}
-              <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title="item.lockedBy"}}></button>
-            {{else}}
-              <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" item}}></button>
-            {{/if}}
-          </td>
-        </tr>
+    {{#collection 'content-index' content=sortedCmsItems contentType=contentType}}
+      {{#each cmsControls}}
+        <td {{ bind-attr class=controlType.widget }}>{{partial controlType.valuePartialPath}}</td>
       {{/each}}
-      {{/with}}
-    </tbody>
+      <td class="wy-table-actions">
+        {{#if lockedBy}}
+          <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
+        {{else}}
+          <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>
+        {{/if}}
+      </td>
+    {{/collection}}
   </table>
   {{#unless model}}
     <div class="wy-alert wy-alert-warning">

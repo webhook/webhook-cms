@@ -14,12 +14,7 @@ export default Ember.Route.extend({
   },
   setupController: function (controller, model) {
 
-    var contentType = this.modelFor('wh.content.type'),
-        cmsControls = contentType.get('controls');
-
-    controller.set('cmsControls', cmsControls);
-    controller.set('columnChoices', cmsControls.rejectBy('name', 'name').rejectBy('name', 'preview_url'));
-    controller.set('contentType', contentType);
+    controller.set('contentType', this.modelFor('wh.content.type'));
 
     var lockedItems = Ember.A([]),
         lockedRef   = window.ENV.firebase.child('presence/locked').child(this.get('itemModelName'));
