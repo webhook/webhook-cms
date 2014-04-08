@@ -71,7 +71,9 @@ export default Ember.ArrayController.extend({
       } else {
         return (new RegExp(filterQuery, 'ig')).test(item.get('data.name'));
       }
-    }).sortBy(this.get('sortProperties'));
+    });
+
+    sortedCmsItems = sortedCmsItems.sortBy.apply(this, this.get('sortProperties'));
 
     if (!this.get('sortAscending')) {
       sortedCmsItems.reverse();
@@ -96,20 +98,12 @@ export default Ember.ArrayController.extend({
         this.send('notify', 'success', 'Item removed!');
       }.bind(this));
     },
+
     toggleShowInCms: function (control) {
       control.toggleProperty('showInCms');
-
-      this.get('contentType.controls').forEach(function (control) {
-        // hax
-        // firebase doesn't like undefined values and for some reason `_super` is
-        // being added to arrays in ember with undefined value
-        if (Ember.isArray(control.get('meta.data.options'))) {
-          delete control.get('meta.data.options')._super;
-        }
-      });
-
       this.get('contentType').save();
     },
+
     sortToggle: function (field) {
 
       field = 'data.' + field;
@@ -126,6 +120,8 @@ export default Ember.ArrayController.extend({
       sortProperties = sortProperties.uniq();
 
       this.set('sortProperties', sortProperties);
+
+      window.console.log(this.get('sortAscending'), this.get('sortProperties'));
 
     }
   }

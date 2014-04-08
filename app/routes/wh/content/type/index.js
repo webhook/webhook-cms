@@ -18,7 +18,7 @@ export default Ember.Route.extend({
         cmsControls = contentType.get('controls');
 
     controller.set('cmsControls', cmsControls);
-    controller.set('columnChoices', cmsControls.rejectBy('name', 'preview_url'));
+    controller.set('columnChoices', cmsControls.rejectBy('name', 'name').rejectBy('name', 'preview_url'));
     controller.set('contentType', contentType);
 
     var lockedItems = Ember.A([]),
