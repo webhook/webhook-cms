@@ -22,8 +22,5 @@
   },
   "devDependencies": {
     "wyrm": "~0.0.x"
-  },
-  "resolutions": {
-    "ember": "~1.5.0"
   }
 }
