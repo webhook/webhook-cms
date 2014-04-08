@@ -4,14 +4,21 @@ export default Ember.ArrayController.extend({
   sortedByPublish: true,
 
   contentType: null,
-  cmsControls: null,
   lockedItems: Ember.A([]),
 
   filterQuery: '',
 
+  columnChoices: function () {
+    return this.get('contentType.controls').rejectBy('name', 'name').rejectBy('name', 'preview_url');
+  }.property('contentType.controls.@each'),
+
+  cmsControls: function () {
+    return this.get('contentType.controls').filterBy('showInCms');
+  }.property('contentType.controls.@each.showInCms'),
+
   _updateItemControls: function (item) {
     var cmsControls = Ember.A([]);
-    this.get('cmsControls').filterBy('showInCms').forEach(function (control) {
+    this.get('cmsControls').forEach(function (control) {
       cmsControls.pushObject({
         value: item.get('data')[control.get('name')],
         controlType: control.get('controlType')
