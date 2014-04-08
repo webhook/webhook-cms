@@ -45,3 +45,16 @@
     img
       border-radius: 50px
       margin-right: $base-line-height / 4
+
++media($mobile)
+  .wh-content th, .wh-content td
+    display: none
+  .wh-content th:first-of-type, .wh-content td:first-of-type
+    font-size: 125%
+    padding: $base-line-height / 2 0
+    display: block
+  .wy-dropdown.wy-dropdown-display-options
+    display: none
+  .wh-content-list
+    input[type=search]
+      width: 100%

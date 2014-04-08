@@ -150,16 +150,19 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
 
       this.get('model.controls').forEach(function (control) {
-        // hax
-        // firebase doesn't like undefined values and for some reason `_super` is
-        // being added to arrays in ember with undefined value
-        if (Ember.isArray(control.get('meta.data.options'))) {
-          delete control.get('meta.data.options')._super;
-        }
 
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
           control.get('meta.data.options').setEach('value', null);
+        }
+
+        // hax
+        // firebase doesn't like undefined values and for some reason `_super` is
+        // being added to arrays in ember with undefined value
+        if (Ember.isArray(control.get('meta.data.options'))) {
+          control.set('meta.data.options', control.get('meta.data.options').toArray());
+          Ember.run.sync();
+          delete control.get('meta.data.options').__nextSuper;
         }
 
       });
