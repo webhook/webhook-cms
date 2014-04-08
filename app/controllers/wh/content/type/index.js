@@ -65,19 +65,19 @@ export default Ember.ArrayController.extend({
 
     var filterQuery = this.get('filterQuery');
 
-    var sortedCmsItems = this.get('cmsItems').filter(function (item) {
+    var sortedCmsItems = this.get('cmsItems').sortBy.apply(this, this.get('sortProperties'));
+
+    if (!this.get('sortAscending')) {
+      sortedCmsItems.reverse();
+    }
+
+    sortedCmsItems = sortedCmsItems.filter(function (item) {
       if (!filterQuery) {
         return true;
       } else {
         return (new RegExp(filterQuery, 'ig')).test(item.get('data.name'));
       }
     });
-
-    sortedCmsItems = sortedCmsItems.sortBy.apply(this, this.get('sortProperties'));
-
-    if (!this.get('sortAscending')) {
-      sortedCmsItems.reverse();
-    }
 
     return sortedCmsItems;
   }.property('cmsItems.@each', 'sortProperties', 'sortAscending', 'filterQuery'),
@@ -120,8 +120,6 @@ export default Ember.ArrayController.extend({
       sortProperties = sortProperties.uniq();
 
       this.set('sortProperties', sortProperties);
-
-      window.console.log(this.get('sortAscending'), this.get('sortProperties'));
 
     },
 
