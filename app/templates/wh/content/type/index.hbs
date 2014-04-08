@@ -36,7 +36,7 @@
     <tbody>
       {{#with contentType as contentTypeNav}}
       {{#each item in sortedCmsItems}}
-        {{#link-to 'wh.content.type.edit' contentTypeNav.id item.id tagName="tr"}}
+        <tr {{action "gotoEdit" contentTypeNav.id item.id}}>
           {{#each item.cmsControls}}
           <td {{ bind-attr class=this.controlType.widget }}>{{partial this.controlType.valuePartialPath}}</td>
           {{/each}}
@@ -47,7 +47,7 @@
               <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" item}}></button>
             {{/if}}
           </td>
-        {{/link-to}}
+        </tr>
       {{/each}}
       {{/with}}
     </tbody>
