@@ -9,7 +9,7 @@
 
 window.ENV = {
   dbName: 'ianbox',
-  uploadUrl: 'http://23.253.89.18:3000/',
+  uploadUrl: 'http://server.webhook.com:3000/',
   embedlyKey: '13dde81b8137446e89c7933edca679eb',
   displayUrl : 'https://i.embed.ly/1/display/',
 
@@ -77,21 +77,24 @@ window.ENV = {
         {
           name     : 'Image',
           widget   : 'image',
+          valueType: 'object',
           iconClass: 'icon-image'
         },
         {
           name     : 'Gallery',
-          iconClass: 'icon-images',
-          widget   : 'gallery'
+          widget   : 'gallery',
+          iconClass: 'icon-images'
         },
         {
           name     : 'Audio file',
           widget   : 'audio',
+          valueType: 'object',
           iconClass: 'icon-music'
         },
         {
           name     : 'Other file',
           widget   : 'file',
+          valueType: 'object',
           iconClass: 'icon-paper-clip'
         }
       ]

@@ -1,9 +1,15 @@
+/* global Image */
+
 import FileUploadComponent from 'appkit/components/file-upload';
 
 export default FileUploadComponent.extend({
   selectAccept  : 'image/*',
   defaultClasses: 'icon-picture',
   successMsg    : ' Image upload complete.',
+
+  postParams: {
+    resize_url: true
+  },
 
   valueChanged: function () {
     if (Ember.isNone(this.get('control.value'))) {
@@ -31,6 +37,24 @@ export default FileUploadComponent.extend({
 
     image.prependTo(this.$upload);
 
+  },
+
+  // Add image meta data
+  doneUpload: function (file, response) {
+    this._super.apply(this, arguments);
+
+    var imageComponent = this;
+
+    imageComponent.set('control.value.resize_url', response.resize_url);
+
+    var image = new Image();
+
+    image.onload = function() {
+      imageComponent.set('control.value.width', this.width);
+      imageComponent.set('control.value.height', this.height);
+    };
+
+    image.src = response.url;
   },
 
   failUpload: function () {

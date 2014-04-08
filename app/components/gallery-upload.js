@@ -1,3 +1,5 @@
+/* global Image */
+
 import FileUploadComponent from 'appkit/components/file-upload';
 
 export default FileUploadComponent.extend({
@@ -7,6 +9,10 @@ export default FileUploadComponent.extend({
   successMsg    : ' Image upload complete.',
 
   items: Ember.A([]),
+
+  postParams: {
+    resize_url: true
+  },
 
   willInsertElement: function () {
     // create initial set of items from control value
@@ -56,7 +62,22 @@ export default FileUploadComponent.extend({
 
     uploading.done(function (response) {
       item.set('progress', null);
-      item.set('image', { url: response.url });
+      item.set('image', {
+        url: response.url,
+        type: file.type,
+        size: file.size,
+        resize_url: response.resize_url
+      });
+
+      var image = new Image();
+
+      image.onload = function() {
+        item.set('image.width', this.width);
+        item.set('image.height', this.height);
+      };
+
+      image.src = response.url;
+
       this.sendAction('notify', 'success', this.get('successMsg'));
     }.bind(this));
 
