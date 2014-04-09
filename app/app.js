@@ -145,6 +145,11 @@ Ember.Application.initializer({
 
         window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
+        // if you just logged in, we have to set the firebase property
+        DS.FirebaseAdapter.reopen({
+          firebase: window.ENV.firebase
+        });
+
         if (application.get('buildEnvironment').local === false) {
           setupMessageListener(siteName, application.get('buildEnvironment'));
         }
