@@ -344,8 +344,6 @@ Ember.Application.initializer({
       });
     };
 
-    session.set('auth', firebaseAuth);
-
     // just passes on args to notify action
     window.ENV.notify = function() {
       var route = application.__container__.lookup('route:application');
@@ -390,7 +388,7 @@ Ember.Application.initializer({
 });
 
 var listener = null;
-var setupMessageListener = function(siteName, buildEnv) {  
+var setupMessageListener = function(siteName, buildEnv) {
   var ref = window.ENV.firebase.root().child('management/sites/' + siteName + '/messages');
   if(listener) {
     ref.off('child_added', listener);
