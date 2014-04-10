@@ -1,6 +1,8 @@
 <section class="wh-content-edit">
   {{#if fullPreviewUrl }}
+    {{#unless type.oneOff}}
     <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn btn-neutral icon icon-eye-open btn-preview"> Preview</a>
+    {{/unless}}
   {{/if}}
   <h1>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}</h1>
   <p class="wh-item-publish-time">
