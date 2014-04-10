@@ -11,15 +11,17 @@ export default Ember.Component.extend({
 
   wantUploadButton: true,
 
+  postParams: {},
+
   showUploadButton: function () {
-    return Ember.isNone(this.get('control.value')) && this.get('wantUploadButton');
-  }.property('control.value', 'wantUploadButton'),
+    return Ember.isNone(this.get('control.value.url')) && this.get('wantUploadButton');
+  }.property('control.value.url', 'wantUploadButton'),
 
   wantUrlInput: false,
 
   showUrlInput: function () {
-    return Ember.isNone(this.get('control.value')) && this.get('wantUrlInput');
-  }.property('control.value', 'wantUrlInput'),
+    return Ember.isNone(this.get('control.value.url')) && this.get('wantUrlInput');
+  }.property('control.value.url', 'wantUrlInput'),
 
   didInsertElement: function () {
 
@@ -34,7 +36,10 @@ export default Ember.Component.extend({
     this.set('defaultText', this.$uploadBtn.text());
 
     // create uploader with required params
-    this.uploader = new Webhook.Uploader(window.ENV.uploadUrl, this.get('session.site.name'), this.get('session.site.token'));
+    var url   = window.ENV.uploadUrl,
+        site  = this.get('session.site.name'),
+        token = this.get('session.site.token');
+    this.uploader = new Webhook.Uploader(url, site, token, { data: this.get('postParams') });
 
     // when a file is selected, upload
     this.$uploadBtn.selectFile({
@@ -102,7 +107,7 @@ export default Ember.Component.extend({
     });
 
     uploading.done(function (response) {
-      self.doneUpload.call(self, file, response.url);
+      self.doneUpload.call(self, file, response);
     });
 
     uploading.always(function () {
@@ -125,7 +130,7 @@ export default Ember.Component.extend({
   },
 
   beforeUpload: function (file) {
-    this.set('control.value', null);
+    this.set('control.value', {});
     this.set('wantUploadButton', true);
     this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
@@ -144,10 +149,14 @@ export default Ember.Component.extend({
     }
   },
 
-  doneUpload: function (file, url) {
-    this.set('control.value', url);
+  doneUpload: function (file, response) {
+    this.set('control.value', {
+      url: response.url,
+      type: file.type,
+      size: file.size
+    });
     this.sendAction('notify', 'success', this.get('successMsg'));
-    this.sendAction('onDoneUpload', url);
+    this.sendAction('onDoneUpload', response);
   },
 
   afterUpload: function () {
@@ -160,7 +169,7 @@ export default Ember.Component.extend({
 
   actions: {
     clear: function () {
-      this.set('control.value', null);
+      this.set('control.value', {});
     },
     toggleMethod: function () {
       this.toggleProperty('wantUrlInput');

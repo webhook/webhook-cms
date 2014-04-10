@@ -2,9 +2,9 @@
 
   <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
     <div class="wy-form-upload">
-      {{#if initial}}
+      {{#if initial.url }}
         <div class="wy-form-upload-image">
-          {{resize-image initial width="75" height="75"}}
+          {{resize-image initial size="75" }}
         </div>
       {{/if}}
       <div class="wy-form-upload-content">
@@ -18,7 +18,7 @@
 
     <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
 
-    {{#if control.value}}
+    {{#if control.value.url}}
       <button type="button" class="btn btn-link btn-small icon wy-text-danger icon-remove-sign" {{action "clear"}}> Remove</button>
     {{/if}}
   </div>

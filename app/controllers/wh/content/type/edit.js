@@ -129,6 +129,9 @@ export default Ember.ObjectController.extend({
         this.transitionToRoute('wh.content.type.edit', itemModel.get('id'));
       }
 
+    }.bind(this), function (error) {
+      window.trackJs.track(error);
+      this.send('notify', 'danger', 'There was an error while saving.');
     }.bind(this));
 
   },

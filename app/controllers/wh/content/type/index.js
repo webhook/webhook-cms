@@ -4,14 +4,21 @@ export default Ember.ArrayController.extend({
   sortedByPublish: true,
 
   contentType: null,
-  cmsControls: null,
   lockedItems: Ember.A([]),
 
   filterQuery: '',
 
+  columnChoices: function () {
+    return this.get('contentType.controls').rejectBy('name', 'name').rejectBy('name', 'preview_url');
+  }.property('contentType.controls.@each'),
+
+  cmsControls: function () {
+    return this.get('contentType.controls').filterBy('showInCms');
+  }.property('contentType.controls.@each.showInCms'),
+
   _updateItemControls: function (item) {
     var cmsControls = Ember.A([]);
-    this.get('cmsControls').filterBy('showInCms').forEach(function (control) {
+    this.get('cmsControls').forEach(function (control) {
       cmsControls.pushObject({
         value: item.get('data')[control.get('name')],
         controlType: control.get('controlType')
@@ -91,12 +98,14 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      var id = item.get('id');
-      item.destroyRecord().then(function () {
-        window.ENV.sendBuildSignal();
-        window.ENV.deleteIndex(id, this.get('contentType.id'));
-        this.send('notify', 'success', 'Item removed!');
-      }.bind(this));
+      if (window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
+        var id = item.get('id');
+        item.destroyRecord().then(function () {
+          window.ENV.sendBuildSignal();
+          window.ENV.deleteIndex(id, this.get('contentType.id'));
+          this.send('notify', 'success', 'Item removed!');
+        }.bind(this));
+      }
     },
 
     toggleShowInCms: function (control) {

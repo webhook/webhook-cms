@@ -28,7 +28,7 @@
   {{#collection 'gallery' content=items images=control.value}}
     {{#if editing}}
       <div class="wy-form-gallery-edit">
-        <div class="wy-form-gallery-edit-img">{{resize-image image.url width="200" height="200"}}</div>
+        <div class="wy-form-gallery-edit-img">{{resize-image image size="200"}}</div>
         {{textarea value=image.caption placeholder="caption"}}
         <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> Delete</button>
         <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> Save / close</button>
@@ -36,7 +36,7 @@
       </div>
     {{/if}}
     {{#if image.url}}
-      <a {{action 'editImage' this bubbles=false}}>{{resize-image image.url width="30" height="30" crop="true"}}</a>
+      <a {{action 'editImage' this bubbles=false}}>{{resize-image image size="30" crop="true"}}</a>
     {{else}}
       <span class="progress">{{progress}}</span>
     {{/if}}

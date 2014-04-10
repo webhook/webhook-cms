@@ -191,6 +191,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         }
 
+      }.bind(this), function (error) {
+        window.trackJs.log("Attempted to save form.", this.get('model'));
+        window.trackJs.track(error);
+        this.send('notify', 'danger', 'There was an error while saving.');
       }.bind(this));
 
     },

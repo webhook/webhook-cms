@@ -145,6 +145,11 @@ Ember.Application.initializer({
 
         window.ENV.firebase = window.ENV.firebaseRoot.child('buckets/' + siteName + '/' + bucket + '/dev');
 
+        // if you just logged in, we have to set the firebase property
+        DS.FirebaseAdapter.reopen({
+          firebase: window.ENV.firebase
+        });
+
         if (application.get('buildEnvironment').local === false) {
           setupMessageListener(siteName, application.get('buildEnvironment'));
         }
@@ -344,8 +349,6 @@ Ember.Application.initializer({
       });
     };
 
-    session.set('auth', firebaseAuth);
-
     // just passes on args to notify action
     window.ENV.notify = function() {
       var route = application.__container__.lookup('route:application');
@@ -390,7 +393,7 @@ Ember.Application.initializer({
 });
 
 var listener = null;
-var setupMessageListener = function(siteName, buildEnv) {  
+var setupMessageListener = function(siteName, buildEnv) {
   var ref = window.ENV.firebase.root().child('management/sites/' + siteName + '/messages');
   if(listener) {
     ref.off('child_added', listener);
