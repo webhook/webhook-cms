@@ -44,11 +44,13 @@ export default Ember.Component.extend({
       this.set('showImageModal', true);
 
     },
-    handleUpload: function (url) {
+    handleUpload: function (response) {
 
-      if (!url) {
+      if (!response || !response.url) {
         return;
       }
+
+      var url = response.url;
 
       // hide image upload widget
       this.set('showImageModal', false);
