@@ -308,13 +308,9 @@
     .wh-markdown-editor-edits
       +span-columns(6)
       height: 100%
-      overflow: hidden
-      border-bottom: solid 1px $input-border-color
+      position: relative
     textarea
       height: 100%
-      padding: $gutter
-      padding: $gutter * 2
-      font-size: 16px
       box-shadow: none
       border: none
       line-height: 1.5
@@ -336,6 +332,10 @@
     padding: $base-line-height / 8
     border: solid 1px $input-border-color
     font-size: 14px
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
     span
       display: inline-block
       padding: $base-line-height / 8 $base-line-height / 4
@@ -356,6 +356,10 @@
     display: none
   textarea
     box-shadow: none
+    font-size: 16px
+    padding: $gutter
+    line-height: 1.5
+    padding-top: $gutter * 2
 
 input[type=color]
   padding: 0
