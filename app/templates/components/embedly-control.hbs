@@ -1,4 +1,4 @@
-{{input value=url disabled=isFetching action="getEmbed"}}
+{{input type="url" value=url disabled=isFetching action="getEmbed"}}
 
 <button type="button" class="btn btn-neutral btn-small icon icon-cloud-download" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> Fetch {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
 
@@ -10,14 +10,16 @@
   <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
 {{/if}}
 
-{{#if control.value}}
+{{#if hasValue}}
 
   <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
 
   <div class="wh-embedly-content">
-    <div class="wh-video-wrap">
-    <div class="preview wh-video" {{bind-attr style="previewStyle"}}></div>
-    </div>
+    {{#if showPreview}}
+      <div class="wh-video-wrap">
+        <div class="preview wh-video">{{{previewValue}}}</div>
+      </div>
+    {{/if}}
 
     {{#if showCode}}
       <pre class="hljs">{{dataString}}</pre>
