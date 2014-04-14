@@ -1,39 +1,38 @@
 export default Ember.Component.extend({
 
   showPreview: true,
+  showCode   : false,
+
+  hasValue: function () {
+    return this.get('control.value.url');
+  }.property('control.value'),
 
   dataString: function () {
     return JSON.stringify(this.get('control.value'), null, 2);
   }.property('control.value'),
 
-  previewStyle: function () {
-    return this.get('showPreview') ? 'display: block' : 'display: none';
-  }.property('showPreview'),
-
-  didInsertElement: function () {
-    this.previewValue();
-  },
-
   previewValue: function () {
+
+    var preview = '';
 
     switch (this.get('control.value.type')) {
     case 'video':
     case 'rich':
-      this.$('.preview').html(this.get('control.value.html'));
+      preview = this.get('control.value.html');
       break;
     case 'photo':
-      $('<img>').attr('src', this.get('control.value.thumbnail_url')).appendTo(this.$('.preview'));
+      preview = '<img src="' + this.get('control.value.thumbnail_url') + '">';
       break;
     default:
       if (this.get('control.value.title')) {
-        this.$('.preview').text(this.get('control.value.title') + ' (' + this.get('control.value.original_url') + ')');
-      } else {
-        this.$('.preview').empty();
+        preview = this.get('control.value.title') + ' (' + this.get('control.value.original_url') + ')';
       }
       break;
     }
 
-  },
+    return preview;
+
+  }.property('control.value'),
 
   actions: {
     getEmbed: function () {
@@ -42,7 +41,6 @@ export default Ember.Component.extend({
       }
 
       this.set('isFetching', true);
-      this.$('.preview').empty();
       this.set('control.value', {});
       $.embedly.oembed(this.get('url'), {
         key: window.ENV.embedlyKey,
@@ -50,7 +48,6 @@ export default Ember.Component.extend({
       }).progress(function (data) {
         this.set('isFetching', false);
         this.set('control.value', data);
-        this.previewValue();
       }.bind(this));
     },
 
@@ -60,8 +57,7 @@ export default Ember.Component.extend({
     },
 
     clearValue: function () {
-      this.set('control.value', null);
-      this.previewValue();
+      this.set('control.value', {});
     }
   }
 });
