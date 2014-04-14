@@ -4,6 +4,9 @@ export default function dataFromControls (controls) {
 
   // gather and clean data for storage
   controls.filterBy('value').forEach(function (control) {
+
+    Ember.Logger.info('Extracting value from ' + control.get('controlType.widget') + ':' + control.get('name'));
+
     var value = control.get('value');
 
     // Convert ember arrays to normal arrays so firebase doesn't throw
@@ -23,6 +26,16 @@ export default function dataFromControls (controls) {
           }));
         });
         value = convertedValue;
+        break;
+
+      // Help transition to object type for files.
+      // Can remove in future.
+      case 'image':
+      case 'audio':
+      case 'file':
+        if (value === 'string') {
+          value = {};
+        }
         break;
 
       default:
