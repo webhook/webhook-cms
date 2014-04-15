@@ -130,7 +130,11 @@ export default Ember.ObjectController.extend({
       }
 
     }.bind(this), function (error) {
-      window.trackJs.track(error);
+      Ember.Logger.error(error);
+      if (window.trackJs) {
+        window.trackJs.log("Attempted to save item.", itemModel);
+        window.trackJs.track(error);
+      }
       this.send('notify', 'danger', 'There was an error while saving.');
     }.bind(this));
 

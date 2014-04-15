@@ -150,11 +150,18 @@ export default Ember.Component.extend({
   },
 
   doneUpload: function (file, response) {
-    this.set('control.value', {
-      url: response.url,
-      type: file.type,
-      size: file.size
-    });
+
+    var value = { url: response.url };
+
+    if (file && file.type) {
+      value.type = file.type;
+    }
+
+    if (file && file.size) {
+      value.size = file.size;
+    }
+
+    this.set('control.value', value);
     this.sendAction('notify', 'success', this.get('successMsg'));
     this.sendAction('onDoneUpload', response);
   },
