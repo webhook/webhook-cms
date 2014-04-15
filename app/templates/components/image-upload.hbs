@@ -2,11 +2,17 @@
 
   <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
     <div class="wy-form-upload">
-      {{#if initial.url }}
+
+      {{#if hasPreview}}
         <div class="wy-form-upload-image">
-          {{resize-image initial size="75" }}
+          {{#if control.value.resize_url}}
+            {{resize-image control.value size="75"}}
+          {{else}}
+            <img {{ bind-attr src=tempUrl }}>
+          {{/if}}
         </div>
       {{/if}}
+
       <div class="wy-form-upload-content">
         <button type="button" class="btn btn-neutral icon icon-image"> Drag or select image</button>
         <div class="image-loading btn btn-info">
