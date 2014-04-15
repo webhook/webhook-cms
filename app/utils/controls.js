@@ -75,6 +75,8 @@ export default function dataFromControls (controls) {
     }
 
     data[control.get('name')] = value;
+
+    Ember.Logger.info(control.get('controlType.widget') + ':' + control.get('name') + ' value', value);
   });
 
   controls.filterBy('controlType.widget', 'select').forEach(function (control) {
