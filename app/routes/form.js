@@ -38,6 +38,15 @@ export default Ember.Route.extend({
 
     });
 
+    // remember original controls names so we can check against them on save
+    var originalControlNames = model.get('controls').map(function (control) {
+      return Ember.Object.create({
+        id: control.get('id'),
+        name: control.get('name')
+      });
+    });
+    controller.set('originalControlNames', originalControlNames);
+
     this._super.apply(this, arguments);
   }
 });

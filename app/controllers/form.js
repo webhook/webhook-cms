@@ -6,6 +6,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditing        : false,
   contentTypes     : null,
   relationTypes    : null,
+  originalControlNames: null,
 
   validateControls: function () {
 
@@ -169,35 +170,130 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       var wasNew = this.get('model.isNew');
 
-      this.get('model').save().then(function (contentType) {
+      // update relationships
+      // check if we changes relationship widget names
+      Ember.Logger.info('Looking for relationships to update.');
+      var relationUpdates = Ember.A([]);
 
-        if (contentType.get('oneOff')) {
+      this.get('model.controls').filterBy('controlType.widget', 'relation').forEach(function (localControl) {
 
-          this.transitionToRoute('wh.content.type.index', contentType);
-          this.send('notify', 'success', 'Form saved!');
+        Ember.Logger.info('Checking `' + localControl.get('name') + '` relation for changes.');
 
-        } else {
+        var originalControl = this.get('originalControlNames').filterBy('id', localControl.get('id')).get('firstObject');
 
-          if (wasNew) {
-            window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-            }.bind(this));
-            // Acknowledge scaffolding
-            this.toggleProperty('initialScaffoldingPrompt');
+        var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+
+          this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
+
+            var foreignControls = contentType.get('controls');
+            var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
+
+            // New relationship, we must create reverse relationship on other side
+            if (!localControl.get('meta.data.reverseName')) {
+
+              Ember.Logger.info('New `' + this.get('model.name') + '` to `' + contentType.get('name') + '` relationship, adding reverse relationship.');
+
+              this.store.find('control-type', 'relation').then(function (controlType) {
+
+                var control = this.store.createRecord('control', {
+                  label      : this.get('model.name'),
+                  controlType: controlType,
+                  meta: this.store.createRecord('meta-data', {
+                    data: {
+                      contentTypeId: this.get('model.id'),
+                      reverseName: localControl.get('name')
+                    }
+                  })
+                });
+
+                // The new reverse relation control must have a unique name
+                var counter = 1;
+                while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
+                  counter = counter + 1;
+                  control.set('label', this.get('model.name') + ' ' + counter);
+                }
+
+                Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '`');
+
+                // Remember reverse relation name in meta data
+                localControl.set('meta.data.reverseName', control.get('name'));
+
+                // Add new relation control to the stack
+                contentType.get('controls').pushObject(control);
+
+                Ember.Logger.info('Saving reverse relationship on `' + contentType.get('name') + '`');
+
+                contentType.save().then(function (contentType) {
+                  Ember.Logger.info('`' + contentType.get('name') + '` updated.');
+                  Ember.run(null, resolve);
+                });
+
+              }.bind(this));
+
+            }
+
+            // If reverse relation exists and the user changed the name we need to update the other side of the relationship
+            else if (localControl.get('name') !== originalControl.get('name')) {
+              Ember.Logger.info('`' + localControl.get('name') + '` relation name is new, update reverse relation.');
+
+              foreignControls.filterBy('name', localControl.get('meta.data.reverseName')).setEach('meta.data.reverseName', localControl.get('name'));
+
+              contentType.save().then(function (contentType) {
+                Ember.Logger.info('`' + contentType.get('name') + '` updated.');
+                Ember.run(null, resolve);
+              });
+            }
+
+            // Nothing to update.
+            else {
+              Ember.Logger.info('`' + localControl.get('name') + '` is up to date.');
+              Ember.run(null, resolve);
+            }
+
+          }.bind(this));
+
+        }.bind(this));
+
+        relationUpdates.push(relationPromise);
+
+      }.bind(this));
+
+      // When all the relationships are updated, save this contentType.
+      Ember.RSVP.Promise.all(relationUpdates).then(function () {
+
+        Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
+
+        this.get('model').save().then(function (contentType) {
+
+          if (contentType.get('oneOff')) {
+
+            this.transitionToRoute('wh.content.type.index', contentType);
+            this.send('notify', 'success', 'Form saved!');
+
           } else {
-            // ask if they want to rebuild scaffolding
-            this.toggleProperty('scaffoldingPrompt');
+
+            if (wasNew) {
+              window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
+                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+              }.bind(this));
+              // Acknowledge scaffolding
+              this.toggleProperty('initialScaffoldingPrompt');
+            } else {
+              // ask if they want to rebuild scaffolding
+              this.toggleProperty('scaffoldingPrompt');
+            }
+
           }
 
-        }
+        }.bind(this), function (error) {
+          Ember.Logger.error(error);
+          if (window.trackJs) {
+            window.trackJs.log("Attempted to save form.", this.get('model'));
+            window.trackJs.track(error);
+          }
+          this.send('notify', 'danger', 'There was an error while saving.');
+        }.bind(this));
 
-      }.bind(this), function (error) {
-        Ember.Logger.error(error);
-        if (window.trackJs) {
-          window.trackJs.log("Attempted to save form.", this.get('model'));
-          window.trackJs.track(error);
-        }
-        this.send('notify', 'danger', 'There was an error while saving.');
       }.bind(this));
 
     },
