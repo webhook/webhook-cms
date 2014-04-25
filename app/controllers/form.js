@@ -6,7 +6,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditing        : false,
   contentTypes     : null,
   relationTypes    : null,
-  originalControlNames: null,
+  addedControls    : Ember.A([]),
+  removedControls  : Ember.A([]),
+  changedControls  : Ember.A([]),
 
   validateControls: function () {
 
@@ -137,6 +139,135 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       controls.pushObject(control);
     }
 
+    this.get('addedControls').addObject(control);
+
+  },
+
+  controlChanged: function (control) {
+    this.get('changedControls').addObject(control);
+  },
+
+  updateRelations: function () {
+
+    Ember.Logger.info('Looking for relationships to update.');
+
+    // Store relation promises here
+    var relationUpdates = Ember.A([]);
+
+    var removedRelations = this.get('removedControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.info('Need to remove ' + removedRelations.get('length') + ' reverse relationships.');
+
+    removedRelations.forEach(function (control) {
+      Ember.Logger.info('Attempting to remove `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
+      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+        this.get('store').find('contentType', control.get('meta.data.contentTypeId')).then(function (contentType) {
+          var controls = contentType.get('controls');
+          var controlToRemove = controls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
+          controls.removeObject(controlToRemove);
+          contentType.save().then(function () {
+            Ember.Logger.info('Successfully removed `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
+            Ember.run(null, resolve);
+          }, function (error) {
+            Ember.run(null, reject, error);
+          });
+        }, function (error) {
+          Ember.run(null, reject, error);
+        });
+      }.bind(this));
+      relationUpdates.push(relationPromise);
+    }.bind(this));
+
+
+
+    var addedRelations = this.get('addedControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.info('Need to add ' + addedRelations.get('length') + ' reverse relationships.');
+
+    addedRelations.forEach(function (localControl) {
+
+      Ember.Logger.info('Attempting to add reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '`');
+
+      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+
+        this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
+
+          var foreignControls = contentType.get('controls');
+          var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
+
+          this.store.find('control-type', 'relation').then(function (controlType) {
+
+            var control = this.store.createRecord('control', {
+              label      : this.get('model.name'),
+              controlType: controlType,
+              meta: this.store.createRecord('meta-data', {
+                data: {
+                  contentTypeId: this.get('model.id'),
+                  reverseName: localControl.get('name')
+                }
+              })
+            });
+
+            // The new reverse relation control must have a unique name
+            var counter = 1;
+            while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
+              counter = counter + 1;
+              control.set('label', this.get('model.name') + ' ' + counter);
+            }
+
+            Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '` on `' + contentType.get('id') + '`');
+
+            // Remember reverse relation name in meta data
+            localControl.set('meta.data.reverseName', control.get('name'));
+
+            // Add new relation control to the stack
+            contentType.get('controls').pushObject(control);
+
+            contentType.save().then(function (contentType) {
+              Ember.Logger.info('Reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '` successfully added.');
+              Ember.run(null, resolve);
+            }, function (error) {
+              Ember.run(null, reject, error);
+            });
+
+          }.bind(this));
+
+        }.bind(this));
+
+      }.bind(this));
+
+      relationUpdates.push(relationPromise);
+
+    }.bind(this));
+
+
+    var changedRelations = this.get('changedControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.info('Need to update ' + changedRelations.get('length') + ' reverse relationships.');
+
+    changedRelations.forEach(function (localControl) {
+
+      Ember.Logger.info('Attempting to update reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '`');
+
+      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+        this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
+
+          var foreignControls = contentType.get('controls');
+          var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
+
+          foreignControls.filterBy('name', localControl.get('meta.data.reverseName')).setEach('meta.data.reverseName', localControl.get('name'));
+
+          contentType.save().then(function (contentType) {
+            Ember.Logger.info('`' + contentType.get('name') + '` updated.');
+            Ember.run(null, resolve);
+          });
+        }.bind(this));
+
+      }.bind(this));
+
+    }.bind(this));
+
+    return relationUpdates;
   },
 
   actions: {
@@ -172,91 +303,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       // update relationships
       // check if we changes relationship widget names
-      Ember.Logger.info('Looking for relationships to update.');
-      var relationUpdates = Ember.A([]);
-
-      this.get('model.controls').filterBy('controlType.widget', 'relation').forEach(function (localControl) {
-
-        Ember.Logger.info('Checking `' + localControl.get('name') + '` relation for changes.');
-
-        var originalControl = this.get('originalControlNames').filterBy('id', localControl.get('id')).get('firstObject');
-
-        var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-
-          this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
-
-            var foreignControls = contentType.get('controls');
-            var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
-
-            // New relationship, we must create reverse relationship on other side
-            if (!localControl.get('meta.data.reverseName')) {
-
-              Ember.Logger.info('New `' + this.get('model.name') + '` to `' + contentType.get('name') + '` relationship, adding reverse relationship.');
-
-              this.store.find('control-type', 'relation').then(function (controlType) {
-
-                var control = this.store.createRecord('control', {
-                  label      : this.get('model.name'),
-                  controlType: controlType,
-                  meta: this.store.createRecord('meta-data', {
-                    data: {
-                      contentTypeId: this.get('model.id'),
-                      reverseName: localControl.get('name')
-                    }
-                  })
-                });
-
-                // The new reverse relation control must have a unique name
-                var counter = 1;
-                while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
-                  counter = counter + 1;
-                  control.set('label', this.get('model.name') + ' ' + counter);
-                }
-
-                Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '`');
-
-                // Remember reverse relation name in meta data
-                localControl.set('meta.data.reverseName', control.get('name'));
-
-                // Add new relation control to the stack
-                contentType.get('controls').pushObject(control);
-
-                Ember.Logger.info('Saving reverse relationship on `' + contentType.get('name') + '`');
-
-                contentType.save().then(function (contentType) {
-                  Ember.Logger.info('`' + contentType.get('name') + '` updated.');
-                  Ember.run(null, resolve);
-                });
-
-              }.bind(this));
-
-            }
-
-            // If reverse relation exists and the user changed the name we need to update the other side of the relationship
-            else if (localControl.get('name') !== originalControl.get('name')) {
-              Ember.Logger.info('`' + localControl.get('name') + '` relation name is new, update reverse relation.');
-
-              foreignControls.filterBy('name', localControl.get('meta.data.reverseName')).setEach('meta.data.reverseName', localControl.get('name'));
-
-              contentType.save().then(function (contentType) {
-                Ember.Logger.info('`' + contentType.get('name') + '` updated.');
-                Ember.run(null, resolve);
-              });
-            }
-
-            // Nothing to update.
-            else {
-              Ember.Logger.info('`' + localControl.get('name') + '` is up to date.');
-              Ember.run(null, resolve);
-            }
-
-          }.bind(this));
-
-        }.bind(this));
-
-        relationUpdates.push(relationPromise);
-
-      }.bind(this));
+      var relationUpdates = this.updateRelations();
 
       // When all the relationships are updated, save this contentType.
       Ember.RSVP.Promise.all(relationUpdates).then(function () {
@@ -303,6 +350,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     deleteControl: function (control) {
+
+      if (this.get('addedControls').indexOf(control) >= 0) {
+        this.get('addedControls').removeObject(control);
+      } else {
+        this.get('removedControls').addObject(control);
+      }
 
       control.set('justDeleted', true);
 

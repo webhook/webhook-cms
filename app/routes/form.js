@@ -12,6 +12,11 @@ export default Ember.Route.extend({
     return this.store.getById('content-type', params.id);
   },
   setupController: function (controller, model) {
+
+    controller.set('addedControls', Ember.A([]));
+    controller.set('removedControls', Ember.A([]));
+    controller.set('changedControls', Ember.A([]));
+
     controller.set('editingControl', null);
     controller.set('isEditing', false);
 
@@ -38,14 +43,11 @@ export default Ember.Route.extend({
 
     });
 
-    // remember original controls names so we can check against them on save
-    var originalControlNames = model.get('controls').map(function (control) {
-      return Ember.Object.create({
-        id: control.get('id'),
-        name: control.get('name')
+    model.get('controls').forEach(function (control) {
+      control.addObserver('name', function (control) {
+        controller.controlChanged(control);
       });
     });
-    controller.set('originalControlNames', originalControlNames);
 
     this._super.apply(this, arguments);
   }
