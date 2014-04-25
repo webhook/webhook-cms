@@ -137,7 +137,7 @@ export default Ember.Component.extend({
     this.$loading.css('display', 'inline-block');
 
     if (typeof file === 'string') {
-      this.$loading.find('span').text('fetching image...');
+      this.$loading.find('span').text('fetching file...');
     }
   },
 

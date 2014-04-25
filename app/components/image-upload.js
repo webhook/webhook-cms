@@ -6,47 +6,33 @@ export default FileUploadComponent.extend({
   selectAccept  : 'image/*',
   defaultClasses: 'icon-picture',
   successMsg    : ' Image upload complete.',
+  tempUrl       : null,
 
   postParams: {
     resize_url: true
   },
 
-  valueChanged: function () {
-    if (Ember.isNone(this.get('control.value'))) {
-      this.$('.wy-form-upload-image').remove();
-    }
-  }.observes('control.value'),
+  hasPreview: function () {
+    return this.get('control.value.resize_url') || this.get('tempUrl');
+  }.property('control.value.resize_url', 'tempUrl'),
 
-  willInsertElement: function () {
-    this.set('initial', this.get('control.value'));
-  },
-
+  // Show preview of file
   beforeUpload: function (file) {
-
     this._super.apply(this, arguments);
 
-    this.set('initial', null);
-
-    this.$('.wy-form-upload-image').remove();
-
-    var image = Ember.$('<div class="wy-form-upload-image">');
-
-    Ember.$('<img>').attr({
-      src: typeof file === 'string' ? file : (window.URL || window.webkitURL).createObjectURL(file)
-    }).appendTo(image);
-
-    image.prependTo(this.$upload);
-
+    this.set('tempUrl', typeof file === 'string' ? file : (window.URL || window.webkitURL).createObjectURL(file));
   },
 
   // Add image meta data
   doneUpload: function (file, response) {
     this._super.apply(this, arguments);
 
+    this.set('control.value.resize_url', response.resize_url);
+    this.set('tempUrl', null);
+
     var imageComponent = this;
 
-    imageComponent.set('control.value.resize_url', response.resize_url);
-
+    // Load image to get dimensions
     var image = new Image();
 
     image.onload = function() {
