@@ -8,7 +8,7 @@
 <div class="wy-autocomplete-group">
   <label class="icon icon-search"></label>
 
-  {{view "auto-complete" placeholder="Search" filter=filter value=autocompleteValue}}
+  {{view "auto-complete" placeholder="Search" filter=control.meta.data.contentTypeId value=autocompleteValue}}
 
   {{#if isLoading}}
     <span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>

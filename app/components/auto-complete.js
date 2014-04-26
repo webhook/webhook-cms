@@ -7,21 +7,21 @@ export default Ember.Component.extend({
   results: Ember.A([]),
 
   showAutocomplete: function () {
-    return !this.get('isSingle') || (!this.get('value.length') && this.get('isSingle'));
-  }.property('value.@each', 'isSingle'),
+    return !this.get('control.meta.data.isSingle') || (!this.get('control.meta.data.value.length') && this.get('control.meta.data.isSingle'));
+  }.property('control.value.@each', 'control.meta.data.isSingle'),
 
-  currentSelection: Ember.arrayComputed('value', {
+  currentSelection: Ember.arrayComputed('control.value', {
     addedItem: function (array, valueItem, changeMeta) {
 
       var contentTypeId = valueItem.split(' ')[0];
       var itemId = valueItem.split(' ')[1];
 
-      this.get('store').find('contentType', contentTypeId).then(function (contentType) {
+      this.get('targetObject.store').find('contentType', contentTypeId).then(function (contentType) {
         var modelName = getItemModelName(contentType);
-        this.get('store').find(modelName, itemId).then(function (model) {
+        this.get('targetObject.store').find(modelName, itemId).then(function (model) {
           array.pushObject(model);
         }.bind(this), function (error) {
-          this.get('value').removeObject(valueItem);
+          this.get('control.value').removeObject(valueItem);
         }.bind(this));
       }.bind(this));
 
@@ -36,12 +36,12 @@ export default Ember.Component.extend({
   actions: {
     addToSelection: function (result) {
 
-      var value = this.getWithDefault('value', Ember.A([]));
+      var value = this.getWithDefault('control.value', Ember.A([]));
 
       var resultKey = result.get('type') + ' ' + result.get('id');
       if (value.indexOf(resultKey) < 0) {
         value.pushObject(resultKey);
-        this.set('value', value);
+        this.set('control.value', value);
       }
 
       this.set('autocompleteValue', null);
@@ -53,9 +53,9 @@ export default Ember.Component.extend({
 
       // if typeKey is `data`, contentType is oneoff.
       if (model.constructor.typeKey === 'data') {
-        this.get('value').removeObject(model.get('id') + ' ' + model.get('id'));
+        this.get('control.value').removeObject(model.get('id') + ' ' + model.get('id'));
       } else {
-        this.get('value').removeObject(model.constructor.typeKey + ' ' + model.get('id'));
+        this.get('control.value').removeObject(model.constructor.typeKey + ' ' + model.get('id'));
       }
 
     },
@@ -63,7 +63,7 @@ export default Ember.Component.extend({
     removeLastSelection: function () {
       if (this.$('.wy-tag.on').length) {
         var onIndex = this.$('.wy-tag').index(this.$('.wy-tag.on'));
-        this.get('value').removeAt(onIndex);
+        this.get('control.value').removeAt(onIndex);
       } else {
         this.$('.wy-tag:last-of-type').addClass('on');
       }

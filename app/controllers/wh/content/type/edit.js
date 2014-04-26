@@ -13,6 +13,7 @@ export default Ember.ObjectController.extend({
   itemModel   : null,
   isDirty     : false,
   previewUrl  : null,
+  initialRelations: Ember.Object.create(),
 
   fullPreviewUrl: function () {
     if(this.get('previewUrl') === null) {
@@ -61,6 +62,13 @@ export default Ember.ObjectController.extend({
 
     var controls = this.get('type.controls');
 
+    controls.filterBy('controlType.widget', 'relation').forEach(function (control) {
+      var current = control.get('value') || Ember.A([]);
+      var initial = this.get('initialRelations').get(control.get('name')) || Ember.A([]);
+      window.console.log('adding', Ember.$(current).not(initial).get());
+      window.console.log('removing', Ember.$(initial).not(current).get());
+    }.bind(this));
+
     // automatically update `update_date`
     controls.findBy('name', 'last_updated').set('value', moment().format('YYYY-MM-DDTHH:mm'));
 
@@ -78,13 +86,13 @@ export default Ember.ObjectController.extend({
       this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
-    validateControls(this.get('type.controls'));
+    validateControls(controls);
 
-    if (this.get('type.controls').isAny('widgetIsValid', false)) {
+    if (controls.isAny('widgetIsValid', false)) {
       return;
     }
 
-    var data = dataFromControls(this.get('type.controls'));
+    var data = dataFromControls(controls);
 
     data.isDraft = this.getWithDefault('isDraft', null);
 
@@ -127,6 +135,14 @@ export default Ember.ObjectController.extend({
 
       if (!this.get('itemModel')) {
         this.transitionToRoute('wh.content.type.edit', itemModel.get('id'));
+      } else {
+
+        // reset the initialRelations
+        this.set('initialRelations', Ember.Object.create());
+        this.get('type.controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
+          this.get('initialRelations').set(control.get('name'), Ember.copy(control.get('value')));
+        }.bind(this));
+
       }
 
     }.bind(this), function (error) {

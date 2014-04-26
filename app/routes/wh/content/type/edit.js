@@ -99,6 +99,7 @@ export default Ember.Route.extend({
 
     controller.set('showSchedule', false);
     controller.set('itemModel', this.get('itemModel'));
+    controller.set('initialRelations', Ember.Object.create());
 
     var data = this.getWithDefault('itemModel.data', {});
 
@@ -145,9 +146,11 @@ export default Ember.Route.extend({
       }
 
       if (value && control.get('controlType.widget') === 'relation') {
-        if (!Ember.isArray(value)) {
+        if (value && !Ember.isArray(value)) {
           value = Ember.A([value]);
         }
+        // Remember what the initial relations are so we can check for diffs on save.
+        controller.get('initialRelations').set(control.get('name'), Ember.copy(value));
       }
 
       if (!value && control.get('controlType.valueType') === 'object') {
