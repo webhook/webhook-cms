@@ -60,57 +60,123 @@ export default Ember.ObjectController.extend({
 
   updateReverseRelationships: function (itemModel) {
 
+    var editItemController = this;
+
     var controls = this.get('type.controls');
 
     Ember.Logger.info('Updating reverse relationships.');
 
     controls.filterBy('controlType.widget', 'relation').forEach(function (control) {
+
       var currentRelations = control.get('value') || Ember.A([]);
       var initialRelations = this.get('initialRelations').get(control.get('name')) || Ember.A([]);
-      var addedRelations = Ember.$(currentRelations).not(initialRelations).get();
+
+      // added relations is temporarily all values so that
+      // var addedRelations = Ember.$(currentRelations).not(initialRelations).get();
+      var addedRelations = currentRelations;
       var removedRelations = Ember.$(initialRelations).not(currentRelations).get();
 
       Ember.Logger.info('`' + control.get('name') + '` added ' + addedRelations.get('length') + ' and removed ' + removedRelations.get('length') + ' relationships');
 
-      removedRelations.forEach(function (relatedItem) {
+      var updateRelation = function (relatedItem, updateType) {
 
         var contentTypeId = relatedItem.split(' ')[0];
         var itemId = relatedItem.split(' ')[1];
+        var relatedValue = this.get('type.id') + ' ' + itemModel.get('id');
 
         this.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = getItemModelName(contentType);
 
-          this.store.find(modelName, itemId).then(function (item) {
-            var relatedValue = this.get('type.id') + ' ' + itemModel.get('id');
-            var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
-            currentItems.removeObject(relatedValue);
-            item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
-            item.save();
+          // Legacy support
+          // If we don't have a reverse relationship, add it.
+          new Ember.RSVP.Promise(function (resolve, reject) {
+            var foreignControls = contentType.get('controls');
+            var reverseControl = foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
+
+            if (reverseControl) {
+              Ember.Logger.log('Reverse control found for `' + control.get('name') + '`, proceeding.');
+              Ember.run(null, resolve);
+            } else {
+              Ember.Logger.log('Reverse control NOT found for `' + control.get('name') + '`, creating it.');
+              this.store.find('control-type', 'relation').then(function (controlType) {
+
+                var reverseControl = this.store.createRecord('control', {
+                  label      : this.get('type.name'),
+                  controlType: controlType,
+                  meta: this.store.createRecord('meta-data', {
+                    data: {
+                      contentTypeId: this.get('type.id'),
+                      reverseName: control.get('name')
+                    }
+                  })
+                });
+
+                Ember.Logger.log('Setting reverse control label to `' + reverseControl.get('label') + '`');
+
+                // The new reverse relation control must have a unique name
+                var counter = 1, counterName;
+                while (foreignControls.getEach('name').indexOf(reverseControl.get('name')) >= 0) {
+                  counter = counter + 1;
+                  counterName = this.get('type.name') + ' ' + counter;
+                  Ember.Logger.log('Duplicate control name detected, setting to `' + counterName + '`');
+                  reverseControl.set('label', counterName);
+                }
+
+                foreignControls.addObject(reverseControl);
+
+                contentType.save().then(function (contentType) {
+                  Ember.Logger.info('Reverse relationship of `' + reverseControl.get('name') + '` to `' + reverseControl.get('meta.data.contentTypeId') + '` successfully added.');
+                  Ember.run(null, resolve);
+                }, function (error) {
+                  Ember.run(null, reject, error);
+                });
+
+              }.bind(this));
+            }
+          }.bind(this)).then(function () {
+
+            // Find and update reverse item.
+            this.store.find(modelName, itemId).then(function (item) {
+
+              var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
+
+              if (updateType === 'remove') {
+                currentItems.removeObject(relatedValue);
+              } else {
+                currentItems.addObject(relatedValue);
+              }
+
+              // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
+              item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
+              item.save();
+            }.bind(this));
+
+          }.bind(this), function (error) {
+
+            Ember.Logger.error(error);
+            if (window.trackJs) {
+              window.trackJs.log("Attempted to save form.", itemModel);
+              window.trackJs.track(error);
+            }
+            this.send('notify', 'danger', 'Error saving relationship.');
+
           }.bind(this));
 
         }.bind(this));
 
-      }.bind(this));
+      }.bind(this);
 
-      addedRelations.forEach(function (relatedItem) {
+      var removeRelation = function (item) {
+        updateRelation.call(this, item, 'remove');
+      };
 
-        var contentTypeId = relatedItem.split(' ')[0];
-        var itemId = relatedItem.split(' ')[1];
+      var addRelation = function (item) {
+        updateRelation.call(this, item, 'add');
+      };
 
-        this.store.find('contentType', contentTypeId).then(function (contentType) {
-          var modelName = getItemModelName(contentType);
+      removedRelations.forEach(removeRelation);
 
-          this.store.find(modelName, itemId).then(function (item) {
-            var relatedValue = this.get('type.id') + ' ' + itemModel.get('id');
-            var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
-            currentItems.addObject(relatedValue);
-            item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
-            item.save();
-          }.bind(this));
-
-        }.bind(this));
-
-      }.bind(this));
+      addedRelations.forEach(addRelation);
 
     }.bind(this));
 
@@ -216,11 +282,13 @@ export default Ember.ObjectController.extend({
       this.set('showSchedule', null);
       this.saveItem();
     },
+
     publishNow: function () {
       this.set('isDraft', null);
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
       this.saveItem();
     },
+
     publishFuture: function () {
       if (this.get('publishDate')) {
         this.set('isDraft', null);
@@ -229,11 +297,13 @@ export default Ember.ObjectController.extend({
         window.alert('Set a publish date');
       }
     },
+
     changePublishDate: function () {
       this.set('isDraft', null);
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
       this.set('showSchedule', true);
     },
+
     setPublishNow: function () {
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
     },
