@@ -50,6 +50,12 @@ export default function dataFromControls (controls) {
     }
 
     switch (control.get('controlType.widget')) {
+
+    // force numbers to be numbers
+    case 'number':
+      value = parseInt(value, 10);
+      break;
+
     // add timezone to datetime values
     case 'datetime':
       value = moment(value).format();
