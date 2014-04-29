@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
 
   var productionBucket = 'cms.webhook.com';
-  var productionVersion = 'v2';
+  var productionVersion = 'v3';
   var distDir = 'dist/assets/';
 
   grunt.registerTask('push-prod', function() {
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 
     var uploadFunctions = [];
 
-    
+
     files.forEach(function(file) {
       var source = distDir + file;
       if(!fs.lstatSync(source).isDirectory())
@@ -49,8 +49,8 @@ module.exports = function(grunt) {
     async.series(uploadFunctions, function() {
       grunt.log.success('Done');
 
-      request.post('https://api.hipchat.com/v1/rooms/message', 
-        { 
+      request.post('https://api.hipchat.com/v1/rooms/message',
+        {
           form: {
             auth_token: 'da7c90e4dc307a5c4e8a5d277391e2',
             room_id: 'webhook',
