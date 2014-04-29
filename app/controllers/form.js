@@ -32,6 +32,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     this.get('controls').rejectBy('widgetIsValid').setEach('widgetErrors', Ember.A(['Duplicate name.']));
 
+    this.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
+      if (!control.get('meta.data.contentTypeId')) {
+        control.set('widgetIsValid', false);
+        control.get('widgetErrors').addObject('You must select a related content type.');
+      }
+    });
+
   },
 
   updateOrder: function (originalIndex, newIndex) {

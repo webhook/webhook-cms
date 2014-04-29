@@ -1,5 +1,7 @@
 export default function validateControls (controls) {
 
+  Ember.Logger.log('Validating controls.');
+
   controls.setEach('widgetIsValid', true);
 
   var regex = {
@@ -13,6 +15,8 @@ export default function validateControls (controls) {
   };
 
   controls.forEach(function (control) {
+
+    Ember.Logger.log('Validating `' + control.get('name') + '`');
 
     var value = control.get('value'),
         options = control.get('meta.data') || {};
