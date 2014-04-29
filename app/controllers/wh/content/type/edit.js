@@ -84,7 +84,7 @@ export default Ember.ObjectController.extend({
         var itemId = relatedItem.split(' ')[1];
         var relatedValue = this.get('type.id') + ' ' + itemModel.get('id');
 
-        this.store.find('contentType', contentTypeId).then(function (contentType) {
+        return this.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = getItemModelName(contentType);
 
           // Legacy support
@@ -94,10 +94,10 @@ export default Ember.ObjectController.extend({
             var reverseControl = foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
 
             if (reverseControl) {
-              Ember.Logger.log('Reverse control found for `' + control.get('name') + '`, proceeding.');
+              Ember.Logger.log('Reverse control found for `' + control.get('name') + '` on `' + contentType.get('name') + '`, proceeding.');
               Ember.run(null, resolve);
             } else {
-              Ember.Logger.log('Reverse control NOT found for `' + control.get('name') + '`, creating it.');
+              Ember.Logger.log('Reverse control NOT found for `' + control.get('name') + '` on `' + contentType.get('name') + '`, creating it.');
               this.store.find('control-type', 'relation').then(function (controlType) {
 
                 var reverseControl = this.store.createRecord('control', {
@@ -111,7 +111,7 @@ export default Ember.ObjectController.extend({
                   })
                 });
 
-                Ember.Logger.log('Setting reverse control label to `' + reverseControl.get('label') + '`');
+                Ember.Logger.log('Setting new reverse control label to `' + reverseControl.get('label') + '`');
 
                 // The new reverse relation control must have a unique name
                 var counter = 1, counterName;
@@ -125,7 +125,7 @@ export default Ember.ObjectController.extend({
                 foreignControls.addObject(reverseControl);
 
                 contentType.save().then(function (contentType) {
-                  Ember.Logger.info('Reverse relationship of `' + reverseControl.get('name') + '` to `' + reverseControl.get('meta.data.contentTypeId') + '` successfully added.');
+                  Ember.Logger.info('Reverse relationship of `' + control.get('name') + '` to `' + reverseControl.get('name') + '` successfully added.');
                   Ember.run(null, resolve);
                 }, function (error) {
                   Ember.run(null, reject, error);
@@ -133,10 +133,11 @@ export default Ember.ObjectController.extend({
 
               }.bind(this));
             }
+
           }.bind(this)).then(function () {
 
             // Find and update reverse item.
-            this.store.find(modelName, itemId).then(function (item) {
+            return this.store.find(modelName, itemId).then(function (item) {
 
               var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
 
@@ -148,7 +149,9 @@ export default Ember.ObjectController.extend({
 
               // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
               item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
-              item.save();
+              return item.save().then(function () {
+                Ember.Logger.log('`' + item.get('data.name') + '` updated.');
+              });
             }.bind(this));
 
           }.bind(this), function (error) {
@@ -166,17 +169,31 @@ export default Ember.ObjectController.extend({
 
       }.bind(this);
 
+      // Loop through removed relations, wait for each to process
+      var removedRelationsCounter = 0;
       var removeRelation = function (item) {
-        updateRelation.call(this, item, 'remove');
+        if (!item) {
+          return;
+        }
+        updateRelation.call(this, item, 'remove').then(function () {
+          removedRelationsCounter += 1;
+          removeRelation.call(this, removedRelations.objectAt(removedRelationsCounter));
+        });
       };
+      removeRelation(removedRelations.objectAt(removedRelationsCounter));
 
+      // Loop through added relations, wait for each to process
+      var addedRelationsCounter = 0;
       var addRelation = function (item) {
-        updateRelation.call(this, item, 'add');
+        if (!item) {
+          return;
+        }
+        updateRelation.call(this, item, 'add').then(function () {
+          addedRelationsCounter += 1;
+          addRelation.call(this, addedRelations.objectAt(addedRelationsCounter));
+        });
       };
-
-      removedRelations.forEach(removeRelation);
-
-      addedRelations.forEach(addRelation);
+      addRelation(addedRelations.objectAt(addedRelationsCounter));
 
     }.bind(this));
 
