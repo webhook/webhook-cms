@@ -91,13 +91,14 @@ export default Ember.ObjectController.extend({
           // If we don't have a reverse relationship, add it.
           new Ember.RSVP.Promise(function (resolve, reject) {
             var foreignControls = contentType.get('controls');
-            var reverseControl = foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
+            var reverseControl = control.get('meta.data.reverseName') && foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
 
             if (reverseControl) {
               Ember.Logger.log('Reverse control found for `' + control.get('name') + '` on `' + contentType.get('name') + '`, proceeding.');
               Ember.run(null, resolve);
             } else {
               Ember.Logger.log('Reverse control NOT found for `' + control.get('name') + '` on `' + contentType.get('name') + '`, creating it.');
+
               this.store.find('control-type', 'relation').then(function (controlType) {
 
                 var reverseControl = this.store.createRecord('control', {
@@ -124,9 +125,18 @@ export default Ember.ObjectController.extend({
 
                 foreignControls.addObject(reverseControl);
 
-                contentType.save().then(function (contentType) {
-                  Ember.Logger.info('Reverse relationship of `' + control.get('name') + '` to `' + reverseControl.get('name') + '` successfully added.');
-                  Ember.run(null, resolve);
+                // update near side contentType relation control with reverse name.
+                control.set('meta.data.reverseName', reverseControl.get('name'));
+                this.get('type').save().then(function () {
+
+                  // update far side contentType relation control
+                  contentType.save().then(function (contentType) {
+                    Ember.Logger.info('Reverse relationship of `' + control.get('name') + '` to `' + reverseControl.get('name') + '` successfully added.');
+                    Ember.run(null, resolve);
+                  }, function (error) {
+                    Ember.run(null, reject, error);
+                  });
+
                 }, function (error) {
                   Ember.run(null, reject, error);
                 });
