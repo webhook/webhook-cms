@@ -14,7 +14,7 @@ export default Ember.ObjectController.extend({
 
       this.set('isSending', true);
 
-      var escapedEmail = this.get('email').replace('.', ',1');
+      var escapedEmail = this.get('email').replace(/\./g, ',1');
       var root = window.ENV.firebaseRoot.child('management/commands/verification/' + escapedEmail);
 
       root.set({ userid: this.get('email'), siteref: window.location.host }, function(err) {
