@@ -163,6 +163,7 @@ Ember.Application.initializer({
         });
 
         session.set('isOwner', false);
+
         managementSiteRef.on('value', function (snapshot) {
           var siteData = snapshot.val();
           var escapedEmail = user.email.replace(/\./g, ',1');
@@ -172,11 +173,12 @@ Ember.Application.initializer({
           } else if (siteData.users[escapedEmail]) {
             session.set('isOwner', false);
           }
+
+          Ember.Logger.info('Logged in as ' + user.email);
+
+          Ember.run(application, application.advanceReadiness);
+
         });
-
-        Ember.Logger.info('Logged in as ' + user.email);
-
-        Ember.run(application, application.advanceReadiness);
       };
 
       if (error) {
@@ -431,17 +433,23 @@ var setupMessageListener = function(siteName, buildEnv) {
 Ember.Route.reopen({
   beforeModel: function (transition) {
     var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email', 'resend-email'];
+
     if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
+      Ember.Logger.info('Attempting to access protected route when not logged in. Aborting.');
       this.set('session.transition', transition);
       transition.abort();
       this.transitionTo('login');
-    } else { // Only executed if your logged in
+    } else {
+
+      // Only executed if you are logged in
       var ownerRoutes = ['wh.settings.team', 'wh.settings.general', 'wh.settings.billing', 'wh.settings.domain', 'wh.settings.data'];
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
+        Ember.Logger.info('Attempting to access protected route without permission. Aborting.');
         this.set('session.transition', transition);
         transition.abort();
         this.transitionTo('wh.index');
       }
+
     }
 
   }

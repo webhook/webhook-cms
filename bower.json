@@ -18,7 +18,8 @@
     "jquery-ui": "~1.10.x",
     "embedly-jquery": "~3.1.1",
     "matchbox": "*",
-    "FileSaver.js": "eligrey/FileSaver.js"
+    "FileSaver.js": "eligrey/FileSaver.js",
+    "filereader.js": "bgrins/filereader.js"
   },
   "devDependencies": {
     "wyrm": "~0.0.x"
