@@ -1,15 +1,5 @@
 <h1>Backups</h1>
 
-<div class="wy-alert wy-alert-warning">
-  <div class="wy-alert-title">Hey alpha testers!</div>
-  <p>
-    This page is super basic right now. You can download your site's data
-    as a JSON file. We plan on adding automatic historical backups as
-    well. This is alpha software, if you are working on something
-    important, backup your data often.
-  </p>
-</div>
-
 {{# if dataBackup}}
   <p>We found the following data in your file:</p>
 
@@ -43,13 +33,30 @@
 
   <div class="wy-alert wy-alert-danger">
     <div class="wy-alert-title">Warning!</div>
-    <p>Proceeding will <strong>permenantly delete</strong> current data and replace it with your data you uploaded. If you have not created a backup in a while, now would be a good time.</p>
+    <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with your data you uploaded. If you have not created a backup in a while, now would be a good time.</p>
     <div class="wy-btn-group">
       <button class="btn btn-neutral icon icon-download" {{action "reset"}}> This doesn't look right, abort.</button>
       <button class="btn btn-neutral icon icon-download" {{action "confirm"}}> Looks good, proceed.</button>
     </div>
   </div>
 {{else}}
+  {{#if dataError}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">We were unable to parse your file.</div>
+      <p>Please make sure you are uploading a <strong>valid</strong> JSON file and try again.</p>
+      <pre>{{dataError.name}}: {{dataError.message}}</pre>
+    </div>
+  {{else}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">Hey alpha testers!</div>
+      <p>
+        This page is super basic right now. You can download your site's data
+        as a JSON file. We plan on adding automatic historical backups as
+        well. This is alpha software, if you are working on something
+        important, backup your data often.
+      </p>
+    </div>
+  {{/if}}
   <div class="wy-btn-group">
     <button class="btn btn-neutral icon icon-download" {{action "download"}}> Download JSON data</button>
     <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> Upload JSON data</button>

@@ -1,5 +1,7 @@
 export default Ember.Controller.extend({
   dataBackup: null,
+  dataError: null,
+
   dataBreakdown: function () {
 
     var dataBackup = this.get('dataBackup');
@@ -44,6 +46,8 @@ export default Ember.Controller.extend({
 
       var dataController = this;
 
+      dataController.set('dataError', null);
+
       Ember.$('<input type="file">').fileReaderJS({
         accept: "application/json",
         readAsDefault: 'Text',
@@ -54,6 +58,7 @@ export default Ember.Controller.extend({
               rawData = JSON.parse(event.target.result);
             } catch (error) {
               Ember.Logger.error(error);
+              dataController.set('dataError', error);
             }
 
             if (!rawData) {
