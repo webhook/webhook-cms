@@ -41,13 +41,15 @@
       </li>
       {{#each theme in themes}}
       <li>
-        <a href="" {{ action downloadPreset theme }}>
           <h5>{{theme.name}}</h5>
           <img {{bind-attr src="theme.image"}} />
           <p>
             {{theme.description}}
           </p>
-        </a>
+          <p>
+          <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">View demo</a>
+            <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
+          </p>
       </li>
       {{/each}}
     </ul>
