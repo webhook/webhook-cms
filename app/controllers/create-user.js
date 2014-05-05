@@ -31,7 +31,7 @@ export default Ember.ObjectController.extend({
       this.set('isSending', true);
 
       var verifyUser = function(user, key, callback) {
-        var root = window.ENV.firebaseRoot.child('management/users/' + user.email.replace('.', ',1') + '/verification');
+        var root = window.ENV.firebaseRoot.child('management/users/' + user.email.replace(/\./g, ',1') + '/verification');
 
         root.child('verified').once('value', function(snapshot) {
           var val = snapshot.val();
@@ -64,7 +64,7 @@ export default Ember.ObjectController.extend({
         var fireRoot = window.ENV.firebaseRoot;
         fireRoot.auth(token, function() {
 
-          fireRoot.child('management/users/' + user.email.replace('.', ',1') + '/exists').set(true, function(err) {
+          fireRoot.child('management/users/' + user.email.replace(/\./g, ',1') + '/exists').set(true, function(err) {
             verifyUser(user, this.get('verification_key'), function(err) {
               fireRoot.unauth();
               this.set('isSending', false);
