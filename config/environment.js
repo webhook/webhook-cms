@@ -15,9 +15,17 @@ window.ENV = {
 
   themes: [
     {
+      name:  'Podcast + Blog',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-podcast/master/static/images/theme-screenshot.png',
+      url:   'https://github.com/webhook/webhook-theme-podcast/archive/master.zip',
+      demo:  'http://www.dadstrength.tv',
+      description: 'Podcast theme with simple blog. Comes with a persistant audio player and iTunes formatted RSS.'
+    },
+    {
       name:  'Bootstrap Blog',
       image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
       url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
+      demo:  'http://daveblog.webhook.org',
       description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
     }
   ],
