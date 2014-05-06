@@ -1,3 +1,5 @@
+import getItemModelName from 'appkit/utils/model';
+
 export default Ember.ArrayController.extend({
   sortProperties : ['data.publish_date'],
   sortAscending  : false,
@@ -98,14 +100,74 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      if (window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
-        var id = item.get('id');
-        item.destroyRecord().then(function () {
-          window.ENV.sendBuildSignal();
-          window.ENV.deleteIndex(id, this.get('contentType.id'));
-          this.send('notify', 'success', 'Item removed!');
-        }.bind(this));
-      }
+      // if (!window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
+      //   return;
+      // }
+
+      var itemIndexController = this;
+
+      var contentType = this.get('contentType');
+
+      Ember.Logger.info('Attempting to delete `' + contentType.get('id') + ':' + item.get('id') + '`');
+
+      // before we destroy this item, lets remove any reverse relationships pointing to it.
+
+      Ember.Logger.info('Checking for reverse relations to update during item deletion.');
+
+      var relatedKey = contentType.get('id') + ' ' + item.get('id');
+
+      // we need to make sure the relation controlType is in the store so when we filter it happens immediately
+      this.store.find('control-type', 'relation').then(function () {
+
+        var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
+
+        Ember.Logger.info('Found ' + relationControls.get('length') + ' relation control(s)');
+
+        relationControls.forEach(function (control) {
+
+          Ember.Logger.info('Updating reverse relations of `' + control.get('name') + '`');
+
+          var relatedContentTypeId = control.get('meta.data.contentTypeId');
+          var relatedControlName = control.get('meta.data.reverseName');
+          var relatedItemIds = (item.get('data')[control.get('name')] || []).map(function (value) {
+            return value.split(' ')[1];
+          });
+
+          Ember.Logger.info('`' + relatedContentTypeId + '` IDs', relatedItemIds.join(', '), 'need to be updated');
+
+          // We have to get the contentType to get the itemModel.
+          itemIndexController.store.find('content-type', relatedContentTypeId).then(function (relatedContentType) {
+            var relatedItemModelName = getItemModelName(relatedContentType);
+
+            relatedItemIds.forEach(function (relatedItemId) {
+              itemIndexController.store.find(relatedItemModelName, relatedItemId).then(function (relatedItem) {
+                var itemData = relatedItem.get('data');
+                var updatedRelations = Ember.A([]);
+                (relatedItem.get('data')[relatedControlName] || []).forEach(function (value) {
+                  if (value !== relatedKey) {
+                    updatedRelations.addObject(value);
+                  }
+                });
+                itemData[relatedControlName] = updatedRelations.get('length') ? updatedRelations.toArray() : null;
+                relatedItem.set('data', itemData);
+                relatedItem.save().then(function () {
+                  Ember.Logger.info('`' + relatedItemModelName + ':' + relatedItem.get('id') + '` updated.');
+                });
+              });
+            });
+
+          });
+
+        });
+
+      });
+
+      window.ENV.deleteIndex(item.get('id'), this.get('contentType.id'));
+      item.destroyRecord().then(function () {
+        Ember.Logger.info('Item successfully destroyed.');
+        window.ENV.sendBuildSignal();
+        this.send('notify', 'success', 'Item removed!');
+      }.bind(this));
     },
 
     toggleShowInCms: function (control) {
