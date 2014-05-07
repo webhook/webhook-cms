@@ -300,6 +300,8 @@ Ember.Application.initializer({
       var site = siteName;
       var key = bucket;
 
+      Ember.Logger.info('Updating search index for', typeName, id);
+
       Ember.$.ajax({
         url: 'http://server.webhook.com:3000/search/index/',
         type: 'POST',
@@ -310,9 +312,11 @@ Ember.Application.initializer({
           data: JSON.stringify(data),
           typeName: typeName,
           oneOff: oneOff
-        },
-        success: function(data, status, xhr) {
         }
+      }).done(function () {
+        Ember.Logger.info('Search index updated for', typeName, id);
+      }).fail(function (jqXHR, textStatus, error) {
+        Ember.Logger.error(error);
       });
     };
 
