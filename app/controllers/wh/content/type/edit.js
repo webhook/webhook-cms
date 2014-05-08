@@ -249,7 +249,17 @@ export default Ember.ObjectController.extend({
       this.set('isDirty', false);
 
       window.ENV.sendBuildSignal(data.publish_date);
-      window.ENV.indexItem(itemModel.get('id'), data, this.get('type.oneOff'), this.get('type.id'));
+
+      var searchData = {};
+      Ember.$.each(data, function (key, value) {
+        if (typeof value === 'object') {
+          searchData[key] = JSON.stringify(value);
+        } else {
+          searchData[key] = value;
+        }
+      });
+
+      window.ENV.indexItem(itemModel.get('id'), searchData, this.get('type.oneOff'), this.get('type.id'));
 
       // One Off
       if (this.get('type.oneOff')) {
