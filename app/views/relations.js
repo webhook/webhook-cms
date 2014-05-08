@@ -5,6 +5,9 @@ export default Ember.CollectionView.extend({
   limit: 3,
 
   content: function () {
+    if (!this.get('relationKeys')) {
+      return Ember.A([]);
+    }
     return this.get('relationKeys').slice(0, this.get('limit'));
   }.property('relationKeys'),
 
