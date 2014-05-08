@@ -1,1 +1,3 @@
-{{value}}
+{{#collection 'relations' relationKeys=value}}
+{{#link-to 'wh.content.type.edit' contentType.id view.relation.id}}{{view.relation.data.name}}{{/link-to}}{{#unless view.last}},{{/unless}}{{#if view.more}}, and {{view.more}} more{{/if}}
+{{/collection}}
