@@ -176,14 +176,16 @@ Ember.Application.initializer({
             // Owners get billing vars.
             window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
               var billing = snapshot.val();
+              var billingUrl = 'http://billing.webhook.com/site/' + siteName;
               if (!billing.active) {
-                window.location = 'http://billing.webhook.com/site/' + siteName;
+                window.location = billingUrl;
                 return;
               } else {
                 session.set('billing', {
                   status: billing.status,
                   isPaid: billing.status === 'paid',
-                  isTrial: billing.status === 'trialing'
+                  isTrial: billing.status === 'trialing',
+                  url: billingUrl
                 });
                 Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
               }
