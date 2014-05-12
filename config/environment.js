@@ -19,7 +19,7 @@ window.ENV = {
       image: 'https://raw.githubusercontent.com/webhook/webhook-theme-podcast/master/static/images/theme-screenshot.png',
       url:   'https://github.com/webhook/webhook-theme-podcast/archive/master.zip',
       demo:  'http://www.dadstrength.tv',
-      code:  'https://github.com/webhook/webhook-theme-podcast/archive/master.zip',
+      code:  'https://github.com/webhook/webhook-theme-podcast',
       description: 'Podcast theme with simple blog. Comes with a persistant audio player and iTunes formatted RSS.'
     },
     {
