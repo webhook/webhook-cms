@@ -181,8 +181,9 @@ Ember.Application.initializer({
                 return;
               } else {
                 session.set('billing', {
-                  active: billing.active,
-                  status: billing.status
+                  status: billing.status,
+                  isPaid: billing.status === 'paid',
+                  isTrial: billing.status === 'trialing'
                 });
                 Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
               }
