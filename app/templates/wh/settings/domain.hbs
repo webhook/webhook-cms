@@ -10,7 +10,7 @@ CNAME        www            dns.webhook.com
 </pre>
 {{else}}
   {{#if session.billing.isTrial }}
-    <h2>Upgrade to use a custom domain</h2>
+    <h2>Upgrade to use custom domains</h2>
     <p>This site is still on a free trial. Only paid sites allow the use of custom domains.</p>
     <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade at webhook.com</a>
   {{else}}
@@ -28,7 +28,8 @@ CNAME        www            dns.webhook.com
     <h2>Use a previously purchased domain</h2>
 
     <p>
-      Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller, then return here.
+      Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller,
+      then return here.
     </p>
 
     <div class="wy-control-group fluid-input">
