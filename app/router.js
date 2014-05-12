@@ -13,6 +13,8 @@ Router.map(function() {
   this.route('start');
   this.route('theme');
 
+  this.route('expired');
+
   this.route('form', { path: '/form/:id' });
 
   this.resource('wh', function () {

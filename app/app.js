@@ -176,19 +176,16 @@ Ember.Application.initializer({
             // Owners get billing vars.
             window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
               var billing = snapshot.val();
-              var billingUrl = 'http://billing.webhook.com/site/' + siteName;
-              if (!billing.active) {
-                window.location = billingUrl;
-                return;
-              } else {
-                session.set('billing', {
-                  status: billing.status,
-                  isPaid: billing.status === 'paid',
-                  isTrial: billing.status === 'trialing',
-                  url: billingUrl
-                });
-                Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
-              }
+
+              session.set('billing', {
+                active: billing.active,
+                status: billing.status,
+                isPaid: billing.status === 'paid',
+                isTrial: billing.status === 'trialing',
+                url: 'http://billing.webhook.com/site/' + siteName
+              });
+              Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
+
               Ember.run(application, application.advanceReadiness);
             });
           } else if (siteData.users[escapedEmail]) {
@@ -458,14 +455,21 @@ var setupMessageListener = function(siteName, buildEnv) {
 // Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
-    var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email', 'resend-email'];
+    var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email', 'resend-email', 'expired'];
 
-    if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
+    if (this.get('session.user') && !this.get('session.billing.active') && transition.targetName !== 'expired') {
+      transition.abort();
+      this.transitionTo('expired');
+    }
+
+    else if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
       Ember.Logger.info('Attempting to access protected route when not logged in. Aborting.');
       this.set('session.transition', transition);
       transition.abort();
       this.transitionTo('login');
-    } else {
+    }
+
+    else {
 
       // Only executed if you are logged in
       var ownerRoutes = ['wh.settings.team', 'wh.settings.general', 'wh.settings.billing', 'wh.settings.domain', 'wh.settings.data'];
