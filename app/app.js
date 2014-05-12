@@ -164,28 +164,38 @@ Ember.Application.initializer({
 
         session.set('isOwner', false);
 
+        Ember.Logger.info('Logged in as ' + user.email);
+
         managementSiteRef.on('value', function (snapshot) {
           var siteData = snapshot.val();
           var escapedEmail = user.email.replace(/\./g, ',1');
 
           if (siteData.owners[escapedEmail]) {
+            Ember.Logger.info('Logged in user is a site owner.');
             session.set('isOwner', true);
             // Owners get billing vars.
             window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
               var billing = snapshot.val();
-              session.set('billing', {
-                active: billing.active,
-                status: billing.status
-              });
-              Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
+              if (!billing.active) {
+                window.location = 'http://billing.webhook.com/site/' + siteName;
+                return;
+              } else {
+                session.set('billing', {
+                  active: billing.active,
+                  status: billing.status
+                });
+                Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
+              }
+              Ember.run(application, application.advanceReadiness);
             });
           } else if (siteData.users[escapedEmail]) {
+            Ember.Logger.info('Logged in user is a site user.');
             session.set('isOwner', false);
+            Ember.run(application, application.advanceReadiness);
+          } else {
+            Ember.Logger.error('Logged in user is neither a site owner or site user.');
+            Ember.run(application, application.advanceReadiness);
           }
-
-          Ember.Logger.info('Logged in as ' + user.email);
-
-          Ember.run(application, application.advanceReadiness);
 
         });
       };
