@@ -173,8 +173,11 @@ Ember.Application.initializer({
             // Owners get billing vars.
             window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
               var billing = snapshot.val();
-              session.set('active', billing.active);
-              session.set('status', billing.status);
+              session.set('billing', {
+                active: billing.active,
+                status: billing.status
+              });
+              Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
             });
           } else if (siteData.users[escapedEmail]) {
             session.set('isOwner', false);
