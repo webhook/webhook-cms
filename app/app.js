@@ -154,8 +154,6 @@ Ember.Application.initializer({
           setupMessageListener(siteName, application.get('buildEnvironment'));
         }
 
-        // user authenticated with Firebase
-        session.set('user', user);
         session.set('error', null);
         session.set('site', {
           name : siteName,
@@ -186,13 +184,18 @@ Ember.Application.initializer({
               });
               Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
 
+              session.set('user', user);
+
               Ember.run(application, application.advanceReadiness);
             });
           } else if (siteData.users[escapedEmail]) {
             Ember.Logger.info('Logged in user is a site user.');
             session.set('isOwner', false);
+            session.set('user', user);
             Ember.run(application, application.advanceReadiness);
           } else {
+            session.set('isOwner', false);
+            session.set('user', user);
             Ember.Logger.error('Logged in user is neither a site owner or site user.');
             Ember.run(application, application.advanceReadiness);
           }
