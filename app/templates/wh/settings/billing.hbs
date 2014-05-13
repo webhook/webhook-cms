@@ -1,72 +1,12 @@
-  <div class="wy-alert wy-alert-warning">
-    <div class="wy-alert-title">Hey alpha testers!</div>
-    <p>
-      This page is bogardus. We're trying to figure if it'd be even possible to do this locally. More
-      than likely it'll only exist on the live website, and even then, it might have to be somewhere
-      on the webhook.com site. If you have any ideas, let us know.
-    </p>
-  </div>
-
-
-
-<h1>Credit card</h1>
-
-<form class="wy-form-aligned">
-  <div class="wy-control-group wy-control-group-no-input">
-    <label>Card number</label>
-    <div class="wy-control">
-      ************3516
-    </div>
-  </div>
-  <div class="wy-control-group wy-control-group-no-input">
-    <label>Expiration date</label>
-    <div class="wy-control">
-      06/15
-    </div>
-  </div>
-  <div class="wy-btn-group">
-    <button class="btn btn-neutral icon icon-credit-card"> Change card on file</button>
-  </div>
-</form>
-
-<hr/>
-
-<h1>Payment history</h1>
-
-<div class="wy-alert wy-alert-info">
-  <div class="wy-alert-title">Next billing</div>
-  Your next scheduled billing will be on 02/27/2014 for USD $20.00
-</div>
-
-<table class="wy-table wy-table-bordered-rows full-width">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Service</th>
-      <th>Charge</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>January 27 2014</td>
-      <td>Hosting</td>
-      <td>$20.00</td>
-    </tr>
-    <tr>
-      <td>January 27 2014</td>
-      <td>Hosting</td>
-      <td>$20.00</td>
-    </tr>
-    <tr>
-      <td>January 27 2014</td>
-      <td>Hosting</td>
-      <td>$20.00</td>
-    </tr>
-    <tr>
-      <td>January 27 2014</td>
-      <td>Hosting</td>
-      <td>$20.00</td>
-    </tr>
-  </tbody>
-</table>
-
+{{#if session.billing.isTrial }}
+  <h2>This is a trial account</h2>
+  <p>All Webhook sites start as 14-day free trials. To continue service and allow for custom domains you'll need to upgrade to a paid account.</p>
+  <p>You'll be asked to login again.</p>
+  <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade now</a>
+{{/if}}
+{{#if session.billing.isPaid }}
+  <h2>You're all paid up</h2>
+  <p>Your site is active on a paid plan. Manage your account below.</p>
+  <p>You'll be asked to login again.</p>
+  <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade now</a>
+{{/if}}
