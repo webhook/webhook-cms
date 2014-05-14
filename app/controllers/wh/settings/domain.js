@@ -17,9 +17,17 @@ export default Ember.ObjectController.extend({
         domain = domain.replace('http://');
       }
 
+      function uniqueId() {
+        return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        }); 
+      }
+
       window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns").set(domain, function() {
         var commandData = {
           dnsname: domain,
+          id: uniqueId()
         };
 
         window.ENV.firebaseRoot.child("management/commands/dns/" + siteName).set(commandData, function() {
