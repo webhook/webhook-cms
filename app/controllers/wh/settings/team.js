@@ -13,10 +13,19 @@ export default Ember.ObjectController.extend({
     var siteName = this.get('buildEnvironment').siteName;
     var currentEmail = this.get('session.user.email');
 
+
+    function uniqueId() {
+      return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      }); 
+    }
+
     var data = {
       userid: inviteEmail,
       from_userid: currentEmail,
-      siteref: siteName
+      siteref: siteName,
+      id: uniqueId()
     };
 
     window.ENV.firebaseRoot.child('management/commands/invite').push(data, function(err) {

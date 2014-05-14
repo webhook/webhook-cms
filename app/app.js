@@ -386,6 +386,13 @@ Ember.Application.initializer({
       route.send.apply(route, args);
     };
 
+    function uniqueId() {
+      return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      }); 
+    }
+
     window.ENV.sendBuildSignal = function (publish_date) {
 
       var user = session.get('user.email');
@@ -394,7 +401,8 @@ Ember.Application.initializer({
 
         var data = {
           'userid': user,
-          'sitename': siteName
+          'sitename': siteName,
+          'id': uniqueId()
         };
 
         if (publish_date) {
