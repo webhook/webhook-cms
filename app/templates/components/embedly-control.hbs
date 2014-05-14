@@ -2,23 +2,27 @@
 
 <button type="button" class="btn btn-neutral btn-small icon icon-cloud-download" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> Fetch {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
 
-{{#if showPreview}}
-  <button type="button" class="btn btn-small btn-link icon icon-code" {{action "togglePreview"}}> JSON</button>
-{{/if}}
-
-{{#if showCode}}
-  <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
-{{/if}}
-
 {{#if hasValue}}
+
+  {{#if showPreview}}
+    <button type="button" class="btn btn-small btn-link icon icon-code" {{action "togglePreview"}}> JSON</button>
+  {{/if}}
+
+  {{#if showCode}}
+    <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
+  {{/if}}
 
   <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
 
-  <div class="wh-embedly-content">
+  <div {{bind-attr class=":wh-embedly-content control.value.type"}}>
     {{#if showPreview}}
-      <div class="wh-video-wrap">
-        <div class="preview wh-video">{{{previewValue}}}</div>
-      </div>
+      {{#if isVisual}}
+        <div class="wh-video-wrap">
+          <div class="preview wh-video">{{{previewValue}}}</div>
+        </div>
+      {{else}}
+        <div class="preview">{{{previewValue}}}</div>
+      {{/if}}
     {{/if}}
 
     {{#if showCode}}

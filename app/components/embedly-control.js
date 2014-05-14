@@ -4,12 +4,16 @@ export default Ember.Component.extend({
   showCode   : false,
 
   hasValue: function () {
-    return this.get('control.value.url');
+    return Object.keys(this.get('control.value')).length;
   }.property('control.value'),
 
   dataString: function () {
     return JSON.stringify(this.get('control.value'), null, 2);
   }.property('control.value'),
+
+  isVisual: function () {
+    return ['video', 'rich', 'photo'].indexOf(this.get('control.value.type')) >= 0;
+  }.property('control.value.type'),
 
   previewValue: function () {
 
@@ -42,13 +46,16 @@ export default Ember.Component.extend({
 
       this.set('isFetching', true);
       this.set('control.value', {});
+
+      var embedlyControl = this;
+
       $.embedly.oembed(this.get('url'), {
         key: window.ENV.embedlyKey,
         query: this.get('control.meta.data.options')
       }).progress(function (data) {
-        this.set('isFetching', false);
-        this.set('control.value', data);
-      }.bind(this));
+        embedlyControl.set('isFetching', false);
+        embedlyControl.set('control.value', data);
+      });
     },
 
     togglePreview: function () {
