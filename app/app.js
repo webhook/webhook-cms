@@ -175,13 +175,25 @@ Ember.Application.initializer({
             window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
               var billing = snapshot.val();
 
-              session.set('billing', {
-                active: billing.active,
-                status: billing.status,
-                isPaid: billing.status === 'paid',
-                isTrial: billing.status === 'trialing',
-                url: 'http://billing.webhook.com/site/' + siteName
-              });
+              if(billing !== null) {
+                session.set('billing', {
+                  active: billing.active,
+                  status: billing.status,
+                  isPaid: billing.status === 'paid',
+                  isTrial: billing.status === 'trialing',
+                  url: 'http://billing.webhook.com/site/' + siteName
+                });
+              } else {
+                session.set('billing', {
+                  active: true,
+                  status: 'paid',
+                  isPaid: true,
+                  isTrial: false,
+                  url: 'http://billing.webhook.com/site/' + siteName
+                });
+              }
+
+
               Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
 
               session.set('user', user);
