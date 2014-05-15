@@ -23,12 +23,12 @@ window.ENV = {
       description: 'Podcast theme with simple blog. Comes with a persistant audio player and iTunes formatted RSS.'
     },
     {
-      name:  'Video, livestreams & blog',
+      name:  'Video, livestream & blog',
       image: 'https://raw.githubusercontent.com/webhook/webhook-theme-streamer/master/static/images/theme-screenshot.png',
       url:   'https://github.com/webhook/webhook-theme-streamer/archive/master.zip',
       demo:  'http://webhook-theme-streamer.webhook.org',
       code:  'https://github.com/webhook/webhook-theme-streamer',
-      description: 'Theme for video producers who manage multiple shows across YouTube, Vimeo or Twitch livestreamers.'
+      description: 'Theme for video producers who manage multiple shows across YouTube, Vimeo and Twitch.'
     },
     {
       name:  'Bootstrap blog',
@@ -37,6 +37,14 @@ window.ENV = {
       demo:  'http://daveblog.webhook.org',
       code:  'https://github.com/snide/webhook-theme-bootstrap-blog',
       description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
+    },
+    {
+      name:  'Bootstrap',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-bootstrap/master/theme-screenshot.png',
+      url:   'https://github.com/webhook/webhook-theme-bootstrap/archive/master.zip',
+      demo:  'http://getbootstrap.com',
+      code:  'https://github.com/webhook/webhook-theme-bootstrap',
+      description: 'Loads Bootstrap CSS and JS from a CDN so you can start designing immediately. Does not include source files.'
     },
     {
       name:  'Wyrm sass',
