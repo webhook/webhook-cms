@@ -180,7 +180,6 @@ export default Ember.Controller.extend({
 
         // Update the search index with the new data.
         Ember.$.each(dataController.get('dataBackup.data'), function (contentTypeId, items) {
-          Ember.Logger.info('Updating search index for', contentTypeId);
           store.find('content-type', contentTypeId).then(function (contentType) {
             if (contentType.get('oneOff')) {
               dataController.indexItem(items, contentTypeId, contentType);
