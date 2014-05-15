@@ -4,7 +4,7 @@ export default Ember.Component.extend({
   showCode   : false,
 
   hasValue: function () {
-    return Object.keys(this.get('control.value')).length;
+    return Object.keys(this.get('control.value') || {}).length;
   }.property('control.value'),
 
   dataString: function () {
