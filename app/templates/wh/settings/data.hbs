@@ -13,6 +13,10 @@
           <td>{{name}}</td>
           <td>{{itemCount}}</td>
         </tr>
+      {{else}}
+        <tr>
+          <td colspan="100">No content to import.</td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
@@ -27,6 +31,10 @@
           <td>{{name}}</td>
           <td>{{value}}</td>
         </tr>
+      {{else}}
+        <tr>
+          <td colspan="100">No settings to import.</td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
@@ -35,8 +43,8 @@
     <div class="wy-alert-title">Warning!</div>
     <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. If you have not created a backup in a while, now would be a good time.</p>
     <div class="wy-btn-group">
-      <button class="btn btn-neutral icon icon-download" {{action "reset"}}> This doesn't look right, abort.</button>
-      <button class="btn btn-neutral icon icon-download" {{action "confirm"}}> Looks good, proceed.</button>
+      <button class="btn btn-neutral" {{action "reset"}}> This doesn't look right, abort.</button>
+      <button class="btn btn-neutral" {{action "confirm"}}> Looks good, proceed.</button>
     </div>
   </div>
 {{else}}

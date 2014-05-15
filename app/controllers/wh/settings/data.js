@@ -10,8 +10,12 @@ export default Ember.Controller.extend({
       return {};
     }
 
+    var types = Ember.A(Object.keys(dataBackup.contentType || {}));
+
+    types.addObjects(Object.keys(dataBackup.data || {}));
+
     return {
-      content: Ember.$.map(dataBackup.contentType || {}, function (type, typeName) {
+      content: Ember.$.map(types, function (typeName) {
         return {
           name: typeName,
           itemCount: (dataBackup.data || {})[typeName] && Object.keys((dataBackup.data || {})[typeName]).length
@@ -55,7 +59,9 @@ export default Ember.Controller.extend({
         // If we don't have any data just keep on truckin'
         Ember.Logger.info('Not importing data, continue.');
         Ember.run(null, resolve, filteredData);
-      } else if (filteredData.contentType) {
+      }
+
+      else if (filteredData.contentType) {
         // If we're importing contentTypes make sure the data is covered
         Ember.$.each(filteredData.data, function (contentTypeId, items) {
           if (filteredData.contentType[contentTypeId]) {
@@ -67,7 +73,9 @@ export default Ember.Controller.extend({
         });
         filteredData.data = matchedData;
         Ember.run(null, resolve, filteredData);
-      } else {
+      }
+
+      else {
         // If we are not importing contentTypes, make sure data corresponds to content types we already have
         var typePromises = Ember.A([]);
 
@@ -75,8 +83,8 @@ export default Ember.Controller.extend({
           var typePromise = dataController.store.find('content-type', contentTypeId).then(function (contentType) {
             Ember.Logger.info('Content type found for', contentTypeId);
             matchedData[contentTypeId] = items;
-          }, function () {
-            Ember.Logger.info('No content type found for', contentTypeId);
+          }).catch(function (error) {
+            Ember.Logger.info('Ignoring error:', error);
           });
 
           typePromises.addObject(typePromise);
@@ -94,6 +102,21 @@ export default Ember.Controller.extend({
       dataController.set('dataBackup', data);
     });
 
+  },
+
+  indexItem: function (data, id, contentType) {
+
+    Ember.Logger.info('Updating search index:', contentType.get('id'), id);
+
+    var searchData = {};
+    Ember.$.each(data, function (key, value) {
+      if (typeof value === 'object') {
+        searchData[key] = JSON.stringify(value);
+      } else {
+        searchData[key] = value;
+      }
+    });
+    window.ENV.indexItem(id, searchData, contentType.get('oneOff'), contentType.get('id'));
   },
 
   actions: {
@@ -156,15 +179,15 @@ export default Ember.Controller.extend({
           dataController.set('dataBackup', null);
         }.bind(this));
 
+        // Update the search index with the new data.
         Ember.$.each(dataController.get('dataBackup.data'), function (contentTypeId, items) {
           Ember.Logger.info('Updating search index for', contentTypeId);
           store.find('content-type', contentTypeId).then(function (contentType) {
-            Ember.Logger.info(contentTypeId, 'is a oneOff:', contentType.get('oneOff'));
             if (contentType.get('oneOff')) {
-              window.console.log(items);
+              dataController.indexItem(items, contentTypeId, contentType);
             } else {
-              Ember.$.each(items, function () {
-                window.console.log(arguments);
+              Ember.$.each(items, function (id, item) {
+                dataController.indexItem(item, id, contentType);
               });
             }
           }).catch(function (error) {
