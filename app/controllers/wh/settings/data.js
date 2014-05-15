@@ -10,15 +10,28 @@ export default Ember.Controller.extend({
       return {};
     }
 
+    var dataController = this;
+
     var types = Ember.A(Object.keys(dataBackup.contentType || {}));
 
     types.addObjects(Object.keys(dataBackup.data || {}));
 
     var breakdown = {
       content: Ember.$.map(types, function (typeName) {
+
+        var itemCount;
+
+        if ((dataBackup.data || {})[typeName]) {
+          if (dataController.store.getById('content-type', typeName).get('oneOff')) {
+            itemCount = 1;
+          } else {
+            itemCount = Object.keys((dataBackup.data || {})[typeName]).length;
+          }
+        }
+
         return {
           name: typeName,
-          itemCount: (dataBackup.data || {})[typeName] && Object.keys((dataBackup.data || {})[typeName]).length
+          itemCount: itemCount
         };
       }),
       settings: Ember.$.map((dataBackup.settings || {}).general || {}, function (value, name) {
