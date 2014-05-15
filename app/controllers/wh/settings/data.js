@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
 
     types.addObjects(Object.keys(dataBackup.data || {}));
 
-    return {
+    var breakdown = {
       content: Ember.$.map(types, function (typeName) {
         return {
           name: typeName,
@@ -29,7 +29,13 @@ export default Ember.Controller.extend({
       })
     };
 
+    return breakdown;
+
   }.property('dataBackup'),
+
+  validImport: function () {
+    return this.get('dataBreakdown.content.length') || this.get('dataBreakdown.content.length');
+  }.property('dataBreakdown'),
 
   setData: function (rawData) {
     if (!rawData) {
@@ -76,26 +82,19 @@ export default Ember.Controller.extend({
       }
 
       else {
-        // If we are not importing contentTypes, make sure data corresponds to content types we already have
-        var typePromises = Ember.A([]);
 
         Ember.$.each(filteredData.data, function (contentTypeId, items) {
-          var typePromise = dataController.store.find('content-type', contentTypeId).then(function (contentType) {
+
+          // all content types should already be in the store from the 'wh' model
+          if (dataController.store.getById('content-type', contentTypeId)) {
             Ember.Logger.info('Content type found for', contentTypeId);
             matchedData[contentTypeId] = items;
-          }).catch(function (error) {
-            Ember.Logger.info('Ignoring error:', error);
-          });
+          }
 
-          typePromises.addObject(typePromise);
         });
 
-        Ember.Logger.info('Waiting for', typePromises.get('length'), 'content type promises.');
-
-        Ember.RSVP.all(typePromises).then(function () {
-          filteredData.data = matchedData;
-          Ember.run(null, resolve, filteredData);
-        });
+        filteredData.data = matchedData;
+        Ember.run(null, resolve, filteredData);
       }
 
     }).then(function (data) {

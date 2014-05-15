@@ -39,14 +39,24 @@
     </tbody>
   </table>
 
-  <div class="wy-alert wy-alert-danger">
-    <div class="wy-alert-title">Warning!</div>
-    <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. If you have not created a backup in a while, now would be a good time.</p>
-    <div class="wy-btn-group">
-      <button class="btn btn-neutral" {{action "reset"}}> This doesn't look right, abort.</button>
-      <button class="btn btn-neutral" {{action "confirm"}}> Looks good, proceed.</button>
+  {{#if validImport}}
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title">Warning!</div>
+      <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. If you have not created a backup in a while, now would be a good time.</p>
+      <div class="wy-btn-group">
+        <button class="btn btn-neutral" {{action "reset"}}> This doesn't look right, abort.</button>
+        <button class="btn btn-neutral" {{action "confirm"}}> Looks good, proceed.</button>
+      </div>
     </div>
-  </div>
+  {{else}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">No data</div>
+      <p>We could not find any valid data to import from your file.</p>
+      <div class="wy-btn-group">
+        <button class="btn btn-neutral" {{action "reset"}}> Back</button>
+      </div>
+    </div>
+  {{/if}}
 {{else}}
   {{#if dataError}}
     <div class="wy-alert wy-alert-warning">
