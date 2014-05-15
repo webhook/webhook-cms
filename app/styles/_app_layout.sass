@@ -206,26 +206,25 @@
     margin: auto
     margin-bottom: $base-line-height
     display: block
-
 .wh-themes
-  +outer-container
+  display: flex
+  -webkit-flex-flow: row wrap
   li
-    +span-columns(4)
-    +omega-type(3n)
     margin-bottom: $gutter
+    overflow: hidden
     background: $section-background-color
     padding: $base-line-height
-  .wh-themes-custom
-    background: $section-background-color
-    padding: $base-line-height
+  img
+    width: 100%
+    margin-bottom: $base-line-height
+  p
+    margin-bottom: $base-line-height / 2
+    font-size: 80%
+    color: $text-medium
+    line-height: 1.5
   h5
     margin-bottom: $base-line-height / 2
     line-height: 1
-  img
-    width: 100%
-    margin-bottom: $base-line-height / 2
-  p
-    margin: $base-line-height / 2
 
 .wy-table.wh-content
   width: 100%
@@ -566,7 +565,17 @@ pre code
     width: 100%
     height: 100%
 
++media($desktop)
+  .wh-themes
+    li
+      +span-columns(4)
+      +omega-type(3n)
+
 +media($tablet)
+  .wh-themes
+    li
+      +span-columns(4)
+      +omega-type(2n)
   .wh-save-info
     display: none
   .btn-preview
@@ -579,6 +588,10 @@ pre code
     left: 0
 
 +media($mobile)
+  .wh-themes
+    li
+      +span-columns(4)
+      +omega-type
   .wh-login
     width: 100%
     height: 100vh

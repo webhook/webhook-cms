@@ -4,18 +4,8 @@
   <p class="wh-themes-desc">
     Site templates automatically install the forms, static files and templates needed to jump start your project.
     Can't find what you're looking for? You can still {{#link-to 'wh.content'}}Start from scratch{{/link-to}}.
-    Interested in making your own theme, <a href="http://www.webhook.com/docsalpha/3.-creating-a-theme/">read the docs here</a>.
+    Interested in making your own theme, <a href="http://www.webhook.com/docs/creating-a-theme/">read the docs here</a>.
   </p>
-
-  <div class="wy-alert wy-alert-info">
-    <div class="wy-alert-title">Hey alpha testers</div>
-    <p>
-      We don't have many useful themes currently, but they do work and can even be loaded from a URL.
-      Themes are just a sites <code>pages</code>, <code>templates</code> and <code>static</code> directories
-      bundled into a zip file. Check the
-      <a href="http://www.webhook.com/docsalpha/3.-creating-a-theme/" target="_blank">documentation page here</a> for more information.
-    </p>
-  </div>
 
   {{#if isSending}}
     <div class="wy-spinner wy-spinner-large"></div>
@@ -43,14 +33,13 @@
       <li>
           <h5>{{theme.name}}</h5>
           <img {{bind-attr src="theme.image"}} />
-          <p>
+          <p class="wh-theme-desc">
             {{theme.description}}
           </p>
-          <p>
-            <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>
-            <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">Github</a>
-            <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
-          </p>
+
+          <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>
+          <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">Github</a>
+          <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
       </li>
       {{/each}}
     </ul>
