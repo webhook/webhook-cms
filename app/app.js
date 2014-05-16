@@ -160,59 +160,68 @@ Ember.Application.initializer({
           token: bucket
         });
 
-        session.set('isOwner', false);
-
         Ember.Logger.info('Logged in as ' + user.email);
 
-        managementSiteRef.on('value', function (snapshot) {
-          var siteData = snapshot.val();
-          var escapedEmail = user.email.replace(/\./g, ',1');
+        var escapedEmail = user.email.replace(/\./g, ',1');
 
-          if (siteData.owners[escapedEmail]) {
-            Ember.Logger.info('Logged in user is a site owner.');
-            session.set('isOwner', true);
-            // Owners get billing vars.
-            window.ENV.firebaseRoot.child('billing/sites/' + siteName).on('value', function (snapshot) {
-              var billing = snapshot.val();
+        var ownerCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+          session.set('isOwner', false);
+          managementSiteRef.on('value', function (snapshot) {
+            var siteData = snapshot.val();
 
-              if(billing !== null) {
-                session.set('billing', {
-                  active: billing.active,
-                  status: billing.status,
-                  isPaid: billing.status === 'paid',
-                  isTrial: billing.status === 'trialing',
-                  url: 'http://billing.webhook.com/site/' + siteName
-                });
-              } else {
-                session.set('billing', {
-                  active: true,
-                  status: 'paid',
-                  isPaid: true,
-                  isTrial: false,
-                  url: 'http://billing.webhook.com/site/' + siteName
-                });
-              }
+            if (siteData.owners[escapedEmail]) {
+              Ember.Logger.info('Logged in user is a site owner.');
+              session.set('isOwner', true);
+            } else if (siteData.users[escapedEmail]) {
+              Ember.Logger.info('Logged in user is a site user.');
+            } else {
+              Ember.Logger.error('Logged in user is neither a site owner or site user??');
+            }
 
+            Ember.run(null, resolve);
 
-              Ember.Logger.info('Set billing vars on session for owners.', session.get('billing'));
-
-              session.set('user', user);
-
-              Ember.run(application, application.advanceReadiness);
-            });
-          } else if (siteData.users[escapedEmail]) {
-            Ember.Logger.info('Logged in user is a site user.');
-            session.set('isOwner', false);
-            session.set('user', user);
-            Ember.run(application, application.advanceReadiness);
-          } else {
-            session.set('isOwner', false);
-            session.set('user', user);
-            Ember.Logger.error('Logged in user is neither a site owner or site user.');
-            Ember.run(application, application.advanceReadiness);
-          }
-
+          });
         });
+
+        // Default billing values
+        var billing = Ember.Object.create({
+          active: true,
+          status: 'paid',
+          url: 'http://billing.webhook.com/site/' + siteName,
+        });
+        billing.reopen({
+          isPaid: function () {
+            return this.get('status') === 'paid';
+          }.property('status'),
+          isTrial: function () {
+            return this.get('status') === 'trialing';
+          }.property('status')
+        });
+        session.set('billing', billing);
+
+        // Grab actual billing values
+        var billingRef = window.ENV.firebaseRoot.child('billing/sites/' + siteName);
+
+        var activeCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+          billingRef.child('active').on('value', function (snapshot) {
+            session.get('billing.active', snapshot.val());
+            Ember.run(null, resolve);
+          });
+        });
+
+        var statusCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+          billingRef.child('status').on('value', function (snapshot) {
+            session.set('billing.status', snapshot.val());
+            Ember.run(null, resolve);
+          });
+        });
+
+        Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck]).then(function () {
+          session.set('user', user);
+          Ember.Logger.log('Setting billing info to', session.get('billing'));
+          Ember.run(application, application.advanceReadiness);
+        });
+
       };
 
       if (error) {
@@ -402,7 +411,7 @@ Ember.Application.initializer({
       return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
-      }); 
+      });
     }
 
     window.ENV.sendBuildSignal = function (publish_date) {
