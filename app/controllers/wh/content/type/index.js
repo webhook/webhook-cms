@@ -8,6 +8,12 @@ export default Ember.ArrayController.extend({
   contentType: null,
   lockedItems: Ember.A([]),
 
+  recordLimit: 0,
+  originalRecordLimit: 0,
+  limited: function () {
+    return this.get('content.length') >= this.get('recordLimit')
+  }.property('recordLimit'),
+
   filterQuery: '',
 
   columnChoices: function () {
@@ -196,6 +202,11 @@ export default Ember.ArrayController.extend({
 
     gotoEdit: function (contentTypeId, itemId) {
       this.transitionToRoute('wh.content.type.edit', contentTypeId, itemId);
+    },
+
+    moreRecords: function () {
+      this.set('recordLimit', this.get('recordLimit') + this.get('originalRecordLimit'));
+      this.set('content', this.store.find(this.get('itemModelName'), { limit: this.get('recordLimit') }));
     }
   }
 

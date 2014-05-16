@@ -1,6 +1,9 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
+
+  recordLimit: 10,
+
   beforeModel: function (transition) {
     var contentType = this.modelFor('wh.content.type');
     if (contentType.get('oneOff')) {
@@ -10,9 +13,13 @@ export default Ember.Route.extend({
   model: function () {
     var itemModelName = getItemModelName(this.modelFor('wh.content.type'));
     this.set('itemModelName', itemModelName);
-    return this.store.find(itemModelName);
+    return this.store.find(itemModelName, { limit: this.get('recordLimit') });
   },
   setupController: function (controller, model) {
+
+    controller.set('recordLimit', this.get('recordLimit'));
+    controller.set('originalRecordLimit', this.get('recordLimit'));
+    controller.set('itemModelName', this.get('itemModelName'));
 
     controller.set('contentType', this.modelFor('wh.content.type'));
 
@@ -47,7 +54,6 @@ export default Ember.Route.extend({
   actions: {
     willTransition: function () {
       this.get('lockedRef').off();
-
       return true;
     }
   }

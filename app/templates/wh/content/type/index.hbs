@@ -22,6 +22,12 @@
     </dl>
   </div>
 
+  {{#if limited}}
+  <div class="wy-alert wy-alert-warning">
+    <span class="icon icon-exclamation-circle"></span> For better performance, we have limited the number of records shown on this page to the last {{recordLimit}} created.
+  </div>
+  {{/if}}
+
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
@@ -49,4 +55,7 @@
       <span class="icon icon-exclamation-circle"></span> You haven't added any {{contentType.name}} yet.
     </div>
   {{/unless}}
+  {{#if limited}}
+    <button type="button" class="btn" {{action 'moreRecords'}}>Load More Records</button>
+  {{/if}}
 </section>
