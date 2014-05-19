@@ -110,9 +110,9 @@ export default Ember.Route.extend({
 
       var value = data[control.get('name')];
 
-      if (value && control.get('controlType.widget') === 'checkbox') {
+      if (control.get('controlType.widget') === 'checkbox') {
         control.get('meta.data.options').forEach(function (option) {
-          option.value = value.findBy('label', option.label).value;
+          option.value = value ? value.findBy('label', option.label).value : false;
         });
       }
 
