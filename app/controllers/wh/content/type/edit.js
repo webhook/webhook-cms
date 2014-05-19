@@ -263,7 +263,7 @@ export default Ember.ObjectController.extend({
 
       // One Off
       if (this.get('type.oneOff')) {
-        this.send('notify', 'success', 'Saved and viewable live', {
+        this.send('notify', 'info', 'Saved. Initiating build.', {
           icon: 'ok-sign'
         });
       }
@@ -277,7 +277,7 @@ export default Ember.ObjectController.extend({
 
       // Live
       else if (data.publish_date && moment(data.publish_date).isBefore()) {
-        this.send('notify', 'success', 'Saved and viewable live', {
+        this.send('notify', 'info', 'Saved. Initiating build.', {
           icon: 'ok-sign'
         });
       }
