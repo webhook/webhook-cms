@@ -22,7 +22,9 @@ export default Ember.Controller.extend({
         var itemCount;
 
         if ((dataBackup.data || {})[typeName]) {
-          if (dataController.store.getById('content-type', typeName).get('oneOff')) {
+          var contentType = dataController.store.getById('content-type', typeName);
+          var oneOff = contentType ? contentType.get('oneOff') : dataBackup.contentType[typeName].oneOff;
+          if (oneOff) {
             itemCount = 1;
           } else {
             itemCount = Object.keys((dataBackup.data || {})[typeName]).length;
