@@ -10,7 +10,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   relationTypes    : null,
   addedControls    : Ember.A([]),
   removedControls  : Ember.A([]),
-  changedControls  : Ember.A([]),
+  changedNameControls: Ember.A([]),
 
   validateControls: function () {
 
@@ -152,10 +152,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
-  controlChanged: function (control) {
-    this.get('changedControls').addObject(control);
-  },
-
   updateRelations: function () {
 
     Ember.Logger.info('Looking for relationships to update.');
@@ -250,7 +246,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     }.bind(this));
 
 
-    var changedRelations = this.get('changedControls').filterBy('controlType.widget', 'relation');
+    var changedRelations = this.get('changedNameControls').filterBy('controlType.widget', 'relation');
 
     Ember.Logger.info('Need to update ' + changedRelations.get('length') + ' reverse relationships.');
 
@@ -281,23 +277,36 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   updateItems: function () {
 
-    // if we didn't remove any controls or the content type is new, we do not need to do anything
+    // if the content type is new, we do not need to do anything
     if (this.get('model.isNew')) {
       return;
     }
 
+    var changedNameControls = this.get('changedNameControls');
     var removedControls = this.get('removedControls');
     var contentType = this.get('model');
 
+    // if we didn't remove controls or change control names we do not need to update anything
+    if (!removedControls.get('length') && !changedNameControls.get('length')) {
+      Ember.Logger.info('Item updates not needed');
+      return;
+    }
+
+    Ember.Logger.info('Updating item data and search indices for', removedControls.get('length'), 'removed controls and', changedNameControls.get('length'), 'renamed controls.');
     this.store.find(getItemModelName(contentType)).then(function (items) {
       items.forEach(function (item) {
+        var itemData = item.get('data');
+        changedNameControls.forEach(function (control) {
+          itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
+          itemData[control.get('originalName')] = null;
+        });
         removedControls.forEach(function (control) {
-          var itemData = item.get('data');
-          itemData[control.get('name')] = null;
-          item.set('data', itemData);
-          item.save().then(function (savedItem) {
-            SearchIndex.indexItem(savedItem, contentType);
-          });
+          itemData[control.get('originalName')] = null;
+        });
+        item.set('data', itemData);
+        item.save().then(function (savedItem) {
+          Ember.Logger.info('Data updates applied to', savedItem.get('id'));
+          SearchIndex.indexItem(savedItem, contentType);
         });
       });
     });
@@ -307,15 +316,26 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   actions: {
     updateType: function () {
 
+      Ember.Logger.info('Saving content type', this.get('model.id'));
+
       this.set('isEditing', false);
 
       this.validateControls();
 
       if (this.get('model.controls').isAny('widgetIsValid', false)) {
+        Ember.Logger.info('The following controls are invalid:', this.get('model.controls').filterBy('widgetIsValid', false).getEach('name'));
         return;
       }
 
-      this.get('model.controls').forEach(function (control) {
+      var formController = this;
+      var contentType = this.get('model');
+
+      contentType.get('controls').forEach(function (control) {
+
+        // See if we changed any control names
+        if (control.get('originalName') !== control.get('name')) {
+          formController.get('changedNameControls').addObject(control);
+        }
 
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
@@ -338,47 +358,47 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       // If we removed any controls, we need to remove data for those controls and reindex
       this.updateItems();
 
-      // // update relationships
-      // // check if we changes relationship widget names
-      // var relationUpdates = this.updateRelations();
-      //
-      // // When all the relationships are updated, save this contentType.
-      // Ember.RSVP.Promise.all(relationUpdates).then(function () {
-      //
-      //   Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
-      //
-      //   this.get('model').save().then(function (contentType) {
-      //
-      //     if (contentType.get('oneOff')) {
-      //
-      //       this.transitionToRoute('wh.content.type.index', contentType);
-      //       this.send('notify', 'success', 'Form saved!');
-      //
-      //     } else {
-      //
-      //       if (wasNew) {
-      //         window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-      //           this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-      //         }.bind(this));
-      //         // Acknowledge scaffolding
-      //         this.toggleProperty('initialScaffoldingPrompt');
-      //       } else {
-      //         // ask if they want to rebuild scaffolding
-      //         this.toggleProperty('scaffoldingPrompt');
-      //       }
-      //
-      //     }
-      //
-      //   }.bind(this), function (error) {
-      //     Ember.Logger.error(error);
-      //     if (window.trackJs) {
-      //       window.trackJs.log("Attempted to save form.", this.get('model'));
-      //       window.trackJs.track(error);
-      //     }
-      //     this.send('notify', 'danger', 'There was an error while saving.');
-      //   }.bind(this));
-      //
-      // }.bind(this));
+      // update relationships
+      // check if we changes relationship widget names
+      var relationUpdates = this.updateRelations();
+
+      // When all the relationships are updated, save this contentType.
+      Ember.RSVP.Promise.all(relationUpdates).then(function () {
+
+        Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
+
+        this.get('model').save().then(function (contentType) {
+
+          if (contentType.get('oneOff')) {
+
+            this.transitionToRoute('wh.content.type.index', contentType);
+            this.send('notify', 'success', 'Form saved!');
+
+          } else {
+
+            if (wasNew) {
+              window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
+                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+              }.bind(this));
+              // Acknowledge scaffolding
+              this.toggleProperty('initialScaffoldingPrompt');
+            } else {
+              // ask if they want to rebuild scaffolding
+              this.toggleProperty('scaffoldingPrompt');
+            }
+
+          }
+
+        }.bind(this), function (error) {
+          Ember.Logger.error(error);
+          if (window.trackJs) {
+            window.trackJs.log("Attempted to save form.", this.get('model'));
+            window.trackJs.track(error);
+          }
+          this.send('notify', 'danger', 'There was an error while saving.');
+        }.bind(this));
+
+      }.bind(this));
 
     },
 
@@ -406,9 +426,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     editControl: function (control) {
+
       if (!control.get('meta')) {
-        control.set('meta', this.store.createRecord('meta-data', { data: {}}));
+        control.set('meta', this.store.createRecord('meta-data', { data: {} }));
       }
+
       this.set('editingControl', control);
       this.set('isEditing', true);
     },
@@ -418,10 +440,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     startEditing: function () {
-      if (!this.get('editingControl')) {
-        this.set('editingControl', this.get('model.controls.firstObject'));
-      }
-      this.set('isEditing', true);
+      this.send('editControl', this.get('editingControl') || this.get('model.controls.firstObject'));
     },
 
     addOption: function (array) {
