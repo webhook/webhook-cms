@@ -1,4 +1,6 @@
 import validateControl from 'appkit/utils/validators';
+import getItemModelName from 'appkit/utils/model';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
@@ -277,6 +279,31 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     return relationUpdates;
   },
 
+  updateItems: function () {
+
+    // if we didn't remove any controls or the content type is new, we do not need to do anything
+    if (this.get('model.isNew')) {
+      return;
+    }
+
+    var removedControls = this.get('removedControls');
+    var contentType = this.get('model');
+
+    this.store.find(getItemModelName(contentType)).then(function (items) {
+      items.forEach(function (item) {
+        removedControls.forEach(function (control) {
+          var itemData = item.get('data');
+          itemData[control.get('name')] = null;
+          item.set('data', itemData);
+          item.save().then(function (savedItem) {
+            SearchIndex.indexItem(savedItem, contentType);
+          });
+        });
+      });
+    });
+
+  },
+
   actions: {
     updateType: function () {
 
@@ -308,47 +335,50 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       var wasNew = this.get('model.isNew');
 
-      // update relationships
-      // check if we changes relationship widget names
-      var relationUpdates = this.updateRelations();
+      // If we removed any controls, we need to remove data for those controls and reindex
+      this.updateItems();
 
-      // When all the relationships are updated, save this contentType.
-      Ember.RSVP.Promise.all(relationUpdates).then(function () {
-
-        Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
-
-        this.get('model').save().then(function (contentType) {
-
-          if (contentType.get('oneOff')) {
-
-            this.transitionToRoute('wh.content.type.index', contentType);
-            this.send('notify', 'success', 'Form saved!');
-
-          } else {
-
-            if (wasNew) {
-              window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-              }.bind(this));
-              // Acknowledge scaffolding
-              this.toggleProperty('initialScaffoldingPrompt');
-            } else {
-              // ask if they want to rebuild scaffolding
-              this.toggleProperty('scaffoldingPrompt');
-            }
-
-          }
-
-        }.bind(this), function (error) {
-          Ember.Logger.error(error);
-          if (window.trackJs) {
-            window.trackJs.log("Attempted to save form.", this.get('model'));
-            window.trackJs.track(error);
-          }
-          this.send('notify', 'danger', 'There was an error while saving.');
-        }.bind(this));
-
-      }.bind(this));
+      // // update relationships
+      // // check if we changes relationship widget names
+      // var relationUpdates = this.updateRelations();
+      //
+      // // When all the relationships are updated, save this contentType.
+      // Ember.RSVP.Promise.all(relationUpdates).then(function () {
+      //
+      //   Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
+      //
+      //   this.get('model').save().then(function (contentType) {
+      //
+      //     if (contentType.get('oneOff')) {
+      //
+      //       this.transitionToRoute('wh.content.type.index', contentType);
+      //       this.send('notify', 'success', 'Form saved!');
+      //
+      //     } else {
+      //
+      //       if (wasNew) {
+      //         window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
+      //           this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+      //         }.bind(this));
+      //         // Acknowledge scaffolding
+      //         this.toggleProperty('initialScaffoldingPrompt');
+      //       } else {
+      //         // ask if they want to rebuild scaffolding
+      //         this.toggleProperty('scaffoldingPrompt');
+      //       }
+      //
+      //     }
+      //
+      //   }.bind(this), function (error) {
+      //     Ember.Logger.error(error);
+      //     if (window.trackJs) {
+      //       window.trackJs.log("Attempted to save form.", this.get('model'));
+      //       window.trackJs.track(error);
+      //     }
+      //     this.send('notify', 'danger', 'There was an error while saving.');
+      //   }.bind(this));
+      //
+      // }.bind(this));
 
     },
 
