@@ -327,13 +327,17 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         return;
       }
 
+      if (this.get('removedControls.length') && !window.confirm('You are removing controls from this form. Any data associated with these controls will also be removed. If you are unsure, save a backup before continuing. Would you still like to proceed?')) {
+        return;
+      }
+
       var formController = this;
       var contentType = this.get('model');
 
       contentType.get('controls').forEach(function (control) {
 
         // See if we changed any control names
-        if (control.get('originalName') !== control.get('name')) {
+        if (control.get('originalName') && control.get('originalName') !== control.get('name')) {
           formController.get('changedNameControls').addObject(control);
         }
 
@@ -352,6 +356,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
 
       });
+
+      if (this.get('changedNameControls.length') && !window.confirm('You are changing control names. Data will be moved to the new name, but you must update your templates to reflect the change before your next build. Would you still like to proceed?')) {
+        return;
+      }
 
       var wasNew = this.get('model.isNew');
 

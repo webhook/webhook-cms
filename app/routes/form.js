@@ -15,6 +15,7 @@ export default Ember.Route.extend({
 
     controller.set('addedControls', Ember.A([]));
     controller.set('removedControls', Ember.A([]));
+    controller.set('changedNameControls', Ember.A([]));
 
     model.get('controls').forEach(function (control) {
       control.set('originalName', control.get('name'));
