@@ -233,6 +233,7 @@ export default Ember.ObjectController.extend({
     validateControls(controls);
 
     if (controls.isAny('widgetIsValid', false)) {
+      this.send('notify', 'danger', "Didn't save. Errors in form.");
       return;
     }
 
