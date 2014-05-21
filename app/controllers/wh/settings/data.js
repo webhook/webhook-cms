@@ -135,6 +135,9 @@ export default Ember.Controller.extend({
 
   actions: {
     download: function () {
+
+      var fileName = this.get('buildEnvironment.siteName') + '-' + moment().format() + '.json';
+
       window.ENV.firebase.once('value', function (snapshot) {
         var data = snapshot.val();
 
@@ -145,7 +148,7 @@ export default Ember.Controller.extend({
         };
 
         var blob = new window.Blob([JSON.stringify(dataWhiteList, null, 2)], { type: "text/plain;charset=utf-8" });
-        window.saveAs(blob, moment().format() + '.json');
+        window.saveAs(blob, fileName);
       });
     },
 
