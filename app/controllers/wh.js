@@ -1,6 +1,8 @@
 export default Ember.ArrayController.extend({
   sortProperties: ['name'],
-  searchQuery:   '',
+  searchQuery: '',
+  searchLoading: false,
+  debouncedQuery: '',
 
   init: function () {
 
@@ -39,11 +41,24 @@ export default Ember.ArrayController.extend({
 
   },
 
-  actions: {
-    searchGlobal: function () {
-      Ember.$("[data-toggle='wy-nav-shift']").removeClass("shift");
-      this.transitionToRoute('wh.search-global-results');
-    },
-  }
+  debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
+
+    if (!this.get('searchQuery')) {
+      return;
+    }
+    this.set('debouncedQuery', this.get('searchQuery'));
+    this.set('searchLoading', true);
+    window.ENV.search(this.get('searchQuery'), 1, function(err, data) {
+      this.set('searchResults', data);
+      this.set('searchLoading', false);
+    }.bind(this));
+
+  }, 'searchQuery', 200),
+
+  searchQueryObserver: function () {
+    Ember.$("[data-toggle='wy-nav-shift']").removeClass("shift");
+    this.transitionToRoute('wh.search-global-results');
+  }.observes('searchQuery')
+
 
 });
