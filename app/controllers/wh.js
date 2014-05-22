@@ -39,6 +39,14 @@ export default Ember.ArrayController.extend({
       this.get('onlineUsers').removeObject(snapshot.val());
     }.bind(this));
 
+    // Global search hotkey (s)
+    Ember.$(document).on('keyup', function (event) {
+      if (event.keyCode === 83 && event.target.nodeName === 'BODY') {
+        Ember.Logger.info('Search hotkey pressed. Focus on search.');
+        Ember.$('.wy-side-nav-search input').focus();
+      }
+    });
+
   },
 
   debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
