@@ -3,11 +3,11 @@
 </header>
 <section>
   <p>
-    You are making major data changes that could possibly require you to change your template code. As long as you know what you're doing, this is normally safe, but we suggest downloading a backup before making this change.
+    Looks like you're making changes to existing data. This is normally safe, but we suggest downloading a backup before making this change. Also, don't forget to replicate these changes in your templates as well.
   </p>
-  {{download-backup}}
+  {{download-backup classNames="btn btn-small btn-neutral icon icon-download" text=" Download a quick backup first"}}
 </section>
 <footer>
-  <button type="button" class="btn btn-neutral" {{action "confirm"}}>Yes, I understand</button>
-  <button type="button" class="btn btn-neutral" {{action "cancel"}}>Cancel</button>
+  <button type="button" class="btn btn-neutral icon icon-ok-sign" {{action "confirm"}}> Yes, make the changes</button>
+  <button type="button" class="btn btn-neutral icon icon-remove-sign" {{action "cancel"}}> Cancel</button>
 </footer>
