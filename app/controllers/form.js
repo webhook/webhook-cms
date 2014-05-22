@@ -12,6 +12,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   removedControls  : Ember.A([]),
   changedNameControls: Ember.A([]),
 
+  removedControlsApproved: null,
+  changedControlNamessApproved: null,
+
   validateControls: function () {
 
     this.get('controls').setEach('widgetIsValid', true);
@@ -313,6 +316,64 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
+  promptConfirmChanges: function () {
+    if (this.get('removedControls.length') || this.get('changedNameControls.length')) {
+      Ember.Logger.info('Prompt for changed control confirmation.');
+      this.toggleProperty('confirmChangedControlsPrompt');
+    } else {
+      this.saveType();
+    }
+  },
+
+  // we have updated associated items, we're go for type saving.
+  saveType: function () {
+
+    var wasNew = this.get('model.isNew');
+
+    // update relationships
+    // check if we changes relationship widget names
+    var relationUpdates = this.updateRelations();
+
+    // When all the relationships are updated, save this contentType.
+    Ember.RSVP.Promise.all(relationUpdates).then(function () {
+
+      Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
+
+      this.get('model').save().then(function (contentType) {
+
+        if (contentType.get('oneOff')) {
+
+          this.transitionToRoute('wh.content.type.index', contentType);
+          this.send('notify', 'success', 'Form saved!');
+
+        } else {
+
+          if (wasNew) {
+            window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
+              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+            }.bind(this));
+            // Acknowledge scaffolding
+            this.toggleProperty('initialScaffoldingPrompt');
+          } else {
+            // ask if they want to rebuild scaffolding
+            this.toggleProperty('scaffoldingPrompt');
+          }
+
+        }
+
+      }.bind(this), function (error) {
+        Ember.Logger.error(error);
+        if (window.trackJs) {
+          window.trackJs.log("Attempted to save form.", this.get('model'));
+          window.trackJs.track(error);
+        }
+        this.send('notify', 'danger', 'There was an error while saving.');
+      }.bind(this));
+
+    }.bind(this));
+
+  },
+
   actions: {
     updateType: function () {
 
@@ -327,12 +388,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         return;
       }
 
-      if (this.get('removedControls.length') && !window.confirm('You are removing controls from this form. Any data associated with these controls will also be removed. If you are unsure, save a backup before continuing. Would you still like to proceed?')) {
-        return;
-      }
-
       var formController = this;
       var contentType = this.get('model');
+
+      // reset changedNameControls in case they backed out and decided to change the name back.
+      formController.set('changedNameControls', Ember.A([]));
 
       contentType.get('controls').forEach(function (control) {
 
@@ -357,56 +417,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       });
 
-      if (this.get('changedNameControls.length') && !window.confirm('You are changing control names. Data will be moved to the new name, but you must update your templates to reflect the change before your next build. Would you still like to proceed?')) {
-        return;
-      }
-
-      var wasNew = this.get('model.isNew');
-
-      // If we removed any controls, we need to remove data for those controls and reindex
-      this.updateItems();
-
-      // update relationships
-      // check if we changes relationship widget names
-      var relationUpdates = this.updateRelations();
-
-      // When all the relationships are updated, save this contentType.
-      Ember.RSVP.Promise.all(relationUpdates).then(function () {
-
-        Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
-
-        this.get('model').save().then(function (contentType) {
-
-          if (contentType.get('oneOff')) {
-
-            this.transitionToRoute('wh.content.type.index', contentType);
-            this.send('notify', 'success', 'Form saved!');
-
-          } else {
-
-            if (wasNew) {
-              window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-                this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-              }.bind(this));
-              // Acknowledge scaffolding
-              this.toggleProperty('initialScaffoldingPrompt');
-            } else {
-              // ask if they want to rebuild scaffolding
-              this.toggleProperty('scaffoldingPrompt');
-            }
-
-          }
-
-        }.bind(this), function (error) {
-          Ember.Logger.error(error);
-          if (window.trackJs) {
-            window.trackJs.log("Attempted to save form.", this.get('model'));
-            window.trackJs.track(error);
-          }
-          this.send('notify', 'danger', 'There was an error while saving.');
-        }.bind(this));
-
-      }.bind(this));
+      this.promptConfirmChanges();
 
     },
 
@@ -495,6 +506,16 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     abortScaffolding: function () {
       this.transitionToRoute('wh.content.type.index', this.get('model'));
+    },
+
+    confirmChangedControls: function () {
+      this.toggleProperty('confirmChangedControlsPrompt');
+      this.updateItems();
+      this.saveType();
+    },
+
+    rejectRemovedControls: function () {
+      this.toggleProperty('confirmChangedControlsPrompt');
     }
   }
 });

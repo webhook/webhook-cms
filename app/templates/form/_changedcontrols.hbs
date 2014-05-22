@@ -1,0 +1,13 @@
+<header>
+  Are you sure you want to do this?
+</header>
+<section>
+  <p>
+    You are making major data changes that could possibly require you to change your template code. As long as you know what you're doing, this is normally safe, but we suggest downloading a backup before making this change.
+  </p>
+  {{download-backup}}
+</section>
+<footer>
+  <button type="button" class="btn btn-neutral" {{action "confirm"}}>Yes, I understand</button>
+  <button type="button" class="btn btn-neutral" {{action "cancel"}}>Cancel</button>
+</footer>
