@@ -515,17 +515,17 @@ pre code
   li
     display: block
     border-bottom: solid 1px rgba(0,0,0,.05)
-    padding: $base-line-height / 2 0
+    padding: $base-line-height 0
   a
     display: block
     font-size: 125%
+    color: $text-color
     span
       float: right
       color: $text-light
       font-size: 80%
     em
-      background: $blue
-      color: $white
+      background: $table-border-color
   a:visited em
     background: $purple
   dt
@@ -540,7 +540,8 @@ pre code
     line-height: 1.25
   em
     display: inline-block
-    background: #ddd
+    background: $table-border-color
+    font-weight: bold
     padding: 0 $base-line-height / 4
 
 
