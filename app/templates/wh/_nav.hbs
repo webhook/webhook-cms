@@ -18,7 +18,7 @@
     {{ else }}
       {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
     {{/if}}
-    <div class="wh-user-dropdown">
+    <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
       {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
       (<a {{action "logoutUser" on="click"}}>Logout</a>)
     </div>
