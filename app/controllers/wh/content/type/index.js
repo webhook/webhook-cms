@@ -12,7 +12,7 @@ export default Ember.ArrayController.extend({
   originalRecordLimit: 0,
   limited: function () {
     return this.get('content.length') >= this.get('recordLimit');
-  }.property('recordLimit'),
+  }.property('content', 'recordLimit'),
 
   filterQuery: '',
 
