@@ -31,8 +31,13 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
-        {{#each cmsControls}}
-          <th><span class="wh-content-sort" {{action "sortToggle" name}}>{{label}}</span></th>
+        {{#each control in cmsControls}}
+          <th>
+            <span class="wh-content-sort" {{action "sortToggle" control}}>
+              {{control.label}}
+              <span {{bind-attr class=":icon control.isSortDescending:icon-caret-up control.isSortAscending:icon-caret-down"}}></span>
+            </span>
+          </th>
         {{/each}}
         <th></th>
       </tr>

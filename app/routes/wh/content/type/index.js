@@ -2,7 +2,7 @@ import getItemModelName from 'appkit/utils/model';
 
 export default Ember.Route.extend({
 
-  recordLimit: 100,
+  recordLimit: 50,
 
   beforeModel: function (transition) {
     var contentType = this.modelFor('wh.content.type');

@@ -106,9 +106,9 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      // if (!window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
-      //   return;
-      // }
+      if (!window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
+        return;
+      }
 
       var itemIndexController = this;
 
@@ -181,9 +181,12 @@ export default Ember.ArrayController.extend({
       this.get('contentType').save();
     },
 
-    sortToggle: function (field) {
+    sortToggle: function (control) {
 
-      field = 'data.' + field;
+      this.get('cmsControls').setEach('isSortAscending', false);
+      this.get('cmsControls').setEach('isSortDescending', false);
+
+      var field = 'data.' + control.get('name');
 
       var sortProperties = this.get('sortProperties');
 
@@ -193,8 +196,13 @@ export default Ember.ArrayController.extend({
         this.set('sortAscending', true);
       }
 
+      control.set('isSortAscending', this.get('sortAscending'));
+      control.set('isSortDescending', !this.get('sortAscending'));
+
       sortProperties.insertAt(0, field);
       sortProperties = sortProperties.uniq();
+
+      Ember.Logger.info('Sorting by', sortProperties);
 
       this.set('sortProperties', sortProperties);
 
