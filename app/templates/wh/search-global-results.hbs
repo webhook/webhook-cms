@@ -1,23 +1,23 @@
 <h1>Search results</h1>
 <hr>
 
-{{#if debouncedQuery}}
-  {{#if model}}
-    <p>Search results for {{debouncedQuery}}.</p>
-  {{else}}
-    <p>No results for {{debouncedQuery}}.</p>
-  {{/if}}
-{{else}}
-  <p>Please enter a search query.</p>
-{{/if}}
-
-{{#if isLoading }}
+{{#if isLoading}}
   <div class="wy-spinner wy-spinner"></div>
 {{else}}
 
-  {{#if model}}
+  {{#if debouncedQuery}}
+    {{#if searchResults}}
+      <p>Search results for {{debouncedQuery}}.</p>
+    {{else}}
+      <p>No results for {{debouncedQuery}}.</p>
+    {{/if}}
+  {{else}}
+    <p>Please enter a search query.</p>
+  {{/if}}
+
+  {{#if searchResults}}
       <ul class="wh-search-results">
-        {{#each}}
+        {{#each searchResults}}
           <li>
             {{#link-to 'wh.content.type.edit' type id }}
               {{{ name }}}

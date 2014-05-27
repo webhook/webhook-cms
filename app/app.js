@@ -36,7 +36,7 @@ Ember.Application.initializer({
         buildEnv = Ember.Object.create();
 
     application.register('build-environment:environment:current', buildEnv, { instantiate: false, singleton: true });
-    Ember.A(['model', 'controller', 'view', 'route', 'helper']).forEach(function (component) {
+    Ember.A(['model', 'controller', 'view', 'route', 'helper', 'component']).forEach(function (component) {
       application.inject(component, 'buildEnvironment', 'build-environment:environment:current');
     });
 
@@ -132,7 +132,7 @@ Ember.Application.initializer({
 
     // Add `session` to all the things
     application.register('firebase-simple-login:session:current', session, { instantiate: false, singleton: true });
-    Ember.A(['model', 'controller', 'view', 'route']).forEach(function (component) {
+    Ember.A(['model', 'controller', 'view', 'route', 'component']).forEach(function (component) {
       application.inject(component, 'session', 'firebase-simple-login:session:current');
     });
 

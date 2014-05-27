@@ -6,18 +6,6 @@ export default Ember.Select.extend({
     this.set('value', this.get('defaultValue'));
   }.observes('defaultValue'),
 
-  willInsertElement: function () {
-
-    if (this.get('context.value')) {
-      this.set('value', this.get('context.value'));
-    }
-
-    else if (this.get('defaultValue') && this.get('context.value') === undefined && this.get('context.value') !== this.get('defaultValue')) {
-      this.set('value', this.get('defaultValue'));
-    }
-
-  },
-
   didInsertElement: function () {
     this._super.apply(this, arguments);
 
@@ -25,6 +13,21 @@ export default Ember.Select.extend({
     this.addObserver('value', function () {
       this.set('context.value', this.get('value'));
     });
+
+    // if we have a starting value, use that in the select
+    if (this.get('context.value')) {
+      this.set('value', this.get('context.value'));
+    }
+
+    // if we don't have a starting value, use the default
+    else if (this.get('defaultValue') && this.get('context.value') === undefined && this.get('context.value') !== this.get('defaultValue')) {
+      this.set('context.value', this.get('defaultValue'));
+    }
+
+    // if not starting value and no default value, just use the first item
+    else {
+      this.set('context.value', this.get('content.firstObject.value'));
+    }
   }
 
 });

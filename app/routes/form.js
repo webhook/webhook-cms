@@ -15,7 +15,11 @@ export default Ember.Route.extend({
 
     controller.set('addedControls', Ember.A([]));
     controller.set('removedControls', Ember.A([]));
-    controller.set('changedControls', Ember.A([]));
+    controller.set('changedNameControls', Ember.A([]));
+
+    model.get('controls').forEach(function (control) {
+      control.set('originalName', control.get('name'));
+    });
 
     controller.set('editingControl', null);
     controller.set('isEditing', false);
@@ -41,12 +45,6 @@ export default Ember.Route.extend({
 
       control.set('value', value);
 
-    });
-
-    model.get('controls').forEach(function (control) {
-      control.addObserver('name', function (control) {
-        controller.controlChanged(control);
-      });
     });
 
     this._super.apply(this, arguments);
