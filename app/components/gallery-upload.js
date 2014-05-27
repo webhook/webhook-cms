@@ -46,10 +46,19 @@ export default FileUploadComponent.extend({
   // Keep track of progress for each image.
   selectedFile: function (file) {
 
+    var fileName = typeof file === 'string' ? file.split('/').pop() : file.name;
+
+    Ember.Logger.info(fileName, 'selected', (file.size / 1048576), 'MB');
+
+    if (file.size / 1048576 > 50) {
+      this.sendAction('notify', 'danger', 'Error: File is too large (>50MB).');
+      return;
+    }
+
     // have something to start
     var item = Ember.Object.create({
       progress: '...',
-      name: typeof file === 'string' ? file.split('/').pop() : file.name
+      name: fileName
     });
 
     this.get('items').pushObject(item);

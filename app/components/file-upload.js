@@ -97,6 +97,13 @@ export default Ember.Component.extend({
     var self = this,
         fileName = typeof file === 'string' ? file.split('/').pop() : file.name;
 
+    Ember.Logger.info(fileName, 'selected', (file.size / 1048576), 'MB');
+
+    if (file.size / 1048576 > 50) {
+      this.sendAction('notify', 'danger', 'Error: File is too large (>50MB).');
+      return;
+    }
+
     self.beforeUpload.call(self, file);
 
     // upload returns promise
