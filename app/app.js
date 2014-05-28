@@ -187,7 +187,7 @@ Ember.Application.initializer({
         var billing = Ember.Object.create({
           active: true,
           status: 'paid',
-          url: 'http://billing.webhook.com/site/' + siteName,
+          url: 'http://billing.webhook.com/site/' + siteName + '/',
         });
         billing.reopen({
           isPaid: function () {
