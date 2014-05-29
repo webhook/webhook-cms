@@ -122,12 +122,12 @@ export default Ember.Component.extend({
     });
 
     uploading.fail(function (response) {
-      this.sendAction(
+      self.sendAction(
         'notify',
         'danger',
         'Error: ' + response.statusText + '. ' +  fileName + ' failed to upload. ');
       self.failUpload.call(self, response);
-    }.bind(this));
+    });
 
     return uploading;
   },

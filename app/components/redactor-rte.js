@@ -22,8 +22,17 @@ export default Ember.Component.extend({
         if (self.get('value')) {
           redactor.set(self.get('value'));
         }
+
         rte.on('mutate.webhookRedactor', function (event, redactor) {
-          self.set('value', redactor.get());
+          var fragment = Ember.$('<div>').html(redactor.get());
+
+          // remove empty captions
+          fragment.find('figcaption').filter(function() {
+            return $.trim($(this).text()) === '';
+          }).remove();
+
+          self.set('value', fragment.html());
+
           // data isn't being set in time for the save so force it.
           Ember.run.sync();
         });
