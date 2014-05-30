@@ -45,6 +45,7 @@
       content: "{{ item."
     &:after
       content: " }}"
+.wy-control-group:not(.wy-control-group-instruction)
   &:hover .wh-template-var
     display: inline-block
     opacity: 1
@@ -179,7 +180,7 @@
     padding-right: $gutter * 2 + em($base-line-height / 2)
     label, .wy-form-message
       color: $text-color
-    .wh-template-var
+    &:not(.wy-control-group-instruction) .wh-template-var
       opacity: 1
       color: $text-dark
     &:hover

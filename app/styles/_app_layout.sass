@@ -155,7 +155,15 @@
   opacity: 1
   width: 100%
 
-
+.wy-control-group.wy-control-group-instruction
+  @extend .wy-alert
+  label
+    @extend .wy-alert-title
+    color: $white !important
+  .wy-form-message
+    color: $text-color
+    font-size: 90%
+    font-style: normal
 
 .wy-affix
   position: fixed
