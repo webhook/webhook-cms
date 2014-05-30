@@ -204,7 +204,7 @@ Ember.Application.initializer({
 
         var activeCheck = new Ember.RSVP.Promise(function (resolve, reject) {
           billingRef.child('active').on('value', function (snapshot) {
-            session.get('billing.active', snapshot.val());
+            session.set('billing.active', snapshot.val());
             Ember.run(null, resolve);
           });
         });
