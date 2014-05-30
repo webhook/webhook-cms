@@ -216,7 +216,20 @@ Ember.Application.initializer({
           });
         });
 
-        Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck]).then(function () {
+        var endTrialCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+          billingRef.child('endTrial').on('value', function (snapshot) {
+            var endTrial = snapshot.val();
+            if (endTrial) {
+              var endTrialDays = Math.ceil(moment(snapshot.val()).diff(moment(), 'days', true));
+              session.set('billing.endTrial', endTrial);
+              session.set('billing.endTrialDays', endTrialDays);
+              session.set('billing.endTrialIsLastDay', endTrialDays === 1);
+            }
+            Ember.run(null, resolve);
+          });
+        });
+
+        Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck, endTrialCheck]).then(function () {
           session.set('user', user);
           Ember.Logger.log('Setting billing info to', session.get('billing'));
           Ember.run(application, application.advanceReadiness);
