@@ -514,7 +514,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       this.saveType();
     },
 
-    rejectRemovedControls: function () {
+    rejectChangedControls: function () {
       this.toggleProperty('confirmChangedControlsPrompt');
     }
   }
