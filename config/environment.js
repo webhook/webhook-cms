@@ -200,6 +200,11 @@ window.ENV = {
           name     : 'Relationship',
           widget   : 'relation',
           iconClass: 'icon-tags'
+        },
+        {
+          name: 'Instructions',
+          widget: 'instruction',
+          iconClass: 'icon-question-sign'
         }
       ]
     }

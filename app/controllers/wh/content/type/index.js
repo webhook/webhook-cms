@@ -17,7 +17,7 @@ export default Ember.ArrayController.extend({
   filterQuery: '',
 
   columnChoices: function () {
-    return this.get('contentType.controls').rejectBy('name', 'name').rejectBy('name', 'preview_url');
+    return this.get('contentType.controls').rejectBy('name', 'name').rejectBy('name', 'preview_url').rejectBy('name', 'instruction');
   }.property('contentType.controls.@each'),
 
   cmsControls: function () {

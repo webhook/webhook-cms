@@ -16,5 +16,13 @@ export default DS.Model.extend({
     } else {
       this.set('name', this.get('controlType.name').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
     }
-  }.observes('label')
+  }.observes('label'),
+
+  showPlaceholder: function () {
+    return this.get('controlType.widget') !== 'instruction';
+  }.property('controlType.widget'),
+
+  showRequired: function () {
+    return this.get('controlType.widget') !== 'instruction' && !this.get('locked');
+  }.property('controlType.widget')
 });

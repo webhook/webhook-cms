@@ -79,6 +79,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     var meta = this.store.createRecord('meta-data');
 
     switch (controlType.get('widget')) {
+      case 'instruction':
+        control.set('showInCms', false);
+        break;
       case 'radio':
         meta.set('data', {
           options: [

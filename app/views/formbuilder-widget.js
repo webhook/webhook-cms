@@ -6,8 +6,13 @@ export default WidgetView.extend({
   // additional formbuilder classes
   classNameBindings: [
     'isEditing:wy-control-group-edit',
-    'isPlaced:wy-control-group-placed'
+    'isPlaced:wy-control-group-placed',
+    'controlClass'
   ],
+
+  controlClass: function () {
+    return 'wy-control-group-' + this.get('context.controlType.widget');
+  }.property(),
 
   isEditing: function () {
     return this.get('controller.isEditing') && this.get('context') === this.get('controller.editingControl');

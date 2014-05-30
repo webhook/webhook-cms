@@ -9,6 +9,7 @@
     <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
   </ul>
   <form class="wy-form-stacked">
+
     <div class="wy-control-group">
       {{#unless editingControl.locked}}
         <div class="wy-form-halves">
@@ -16,15 +17,17 @@
           {{input valueBinding="editingControl.label" viewName="label"}}
         </div>
       {{/unless}}
-      <div class="wy-form-halves">
-        <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign" data-toggle="tooltip" title="This will show within the input until it has a value. It does not save as a default."></i></label>
-        {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
-      </div>
+      {{#if editingControl.showPlaceholder}}
+        <div class="wy-form-halves">
+          <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign" data-toggle="tooltip" title="This will show within the input until it has a value. It does not save as a default."></i></label>
+          {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
+        </div>
+      {{/if}}
       <div class="wy-form-full">
         <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign" data-toggle="tooltip" title="Instructions to the user on what they should enter into this field."></i></label>
         {{textarea valueBinding="editingControl.help" viewName="help"}}
       </div>
-      {{#unless editingControl.locked}}
+      {{#if editingControl.showRequired}}
         <div class="wy-form-full">
           <label for="check-example">Required <i class="icon icon-question-sign" data-toggle="tooltip" title="The form can't be saved unless this field has a value."></i></label>
           <div class="wy-control">
@@ -34,7 +37,7 @@
             </label>
           </div>
         </div>
-      {{/unless}}
+      {{/if}}
     </div>
 
     {{partial editingControl.controlType.infoPartialPath}}
