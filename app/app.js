@@ -502,7 +502,7 @@ Ember.Route.reopen({
   beforeModel: function (transition) {
     var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email', 'resend-email', 'expired'];
 
-    if (this.get('session.user') && !this.get('session.billing.active') && transition.targetName !== 'expired') {
+    if (this.get('session.user') && this.get('session.billing.active') === false && transition.targetName !== 'expired') {
       transition.abort();
       this.transitionTo('expired');
     }
