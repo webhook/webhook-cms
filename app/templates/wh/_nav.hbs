@@ -47,7 +47,7 @@
           <li>{{#link-to 'wh.settings.general'}}General settings{{/link-to}}</li>
           <li>
             {{#link-to 'wh.settings.billing'}}
-              {{#if isTrial}}
+              {{#if session.billing.isTrial}}
                 Upgrade
                 <span class="wh-trial-notice">
                   {{#if session.billing.endTrialIsLastDay}}
