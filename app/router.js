@@ -46,4 +46,10 @@ Router.map(function() {
 
 });
 
+Router.reopen({
+  notifyAnalytics: function() {
+    this.get('analytics')('send', 'pageview');
+  }.on('didTransition')
+});
+
 export default Router;
