@@ -1,29 +1,23 @@
 <article>
-  <h1>Welcome alpha testers</h1>
+  <h1>Welcome Kickstarter backers!</h1>
 
   <p>
-    Thanks for helping Mike, Ian and Dave test Webhook. We know you guys are
-    super busy so we're appreciative of your feedback. Reach us anytime
-    by emailing <a href="mailto:alpha@webhook.com">alpha@webhook.com</a>.
+    Thank you for supporting Webhook and backing the project.
   </p>
 
-  <h3>Documentation</h3>
-
-  <p><a href="http://www.webhook.com/docs/">Documentation is here</a>.</p>
-
-  <h3>Reporting bugs</h3>
-
-  <p>
-    You can create issues on
-    <a href="https://github.com/webhook/webhook/issues?state=open">Github here</a>.
-  </p>
+  <ul>
+    <li><a href="http://www.webhook.com/docs/">Documentation</a></li>
+    <li><a href="http://www.webhook.com/help/">Support</a></li>
+    <li><a href="https://github.com/webhook/webhook/issues?state=open">Issues on Github</a></li>
+    <li><a href="http://forums.webhook.com/">Forums</a></li>
+  </ul>
 
 </article>
 
 
 {{#if serverMessages}}
   <section>
-    <h2>Build History</h2>
+    <h2>Build history</h2>
 
     <table class="wy-table wy-table-bordered-rows full-width">
       <thead>
@@ -44,6 +38,6 @@
       </tbody>
     </table>
 
-    {{#if moreServerMessages}}<button type="button" class="btn btn-link" {{action "moreServerMessages"}}>Fetch more history</button>{{/if}}
+    {{#if moreServerMessages}}<a {{action "moreServerMessages"}}>Fetch more history</a>{{/if}}
   </section>
 {{/if}}
