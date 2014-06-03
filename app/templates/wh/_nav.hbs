@@ -1,73 +1,73 @@
 <!-- SIDE NAV, TOGGLES ON MOBILE -->
 <nav data-toggle="wy-nav-shift" class="wy-nav-side">
 
-  {{#if onlineUsers.length}}
-    <div class="wh-online-users" data-toggle="wh-online-users">
-      <dl>
-        {{#each onlineUsers}}
-          <dd>{{this}}</dd>
-        {{/each}}
-      </dl>
-      <div class="icon icon-user"> {{onlineUsers.length}}</div>
-    </div>
-  {{/if}}
-
-  <div class="wy-side-nav-search">
-    {{#if buildEnvironment.building }}
-      {{#link-to 'wh' class="wh-logo wh-logo-spinner"}}{{/link-to}}
-    {{ else }}
-      {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
+  <div data-spy="affix">
+    {{#if onlineUsers.length}}
+      <div class="wh-online-users" data-toggle="wh-online-users">
+        <dl>
+          {{#each onlineUsers}}
+            <dd>{{this}}</dd>
+          {{/each}}
+        </dl>
+        <div class="icon icon-user"> {{onlineUsers.length}}</div>
+      </div>
     {{/if}}
-    <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
-      {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
-      (<a {{action "logoutUser" on="click"}}>Logout</a>)
+    <div class="wy-side-nav-search">
+      {{#if buildEnvironment.building }}
+        {{#link-to 'wh' class="wh-logo wh-logo-spinner"}}{{/link-to}}
+      {{ else }}
+        {{#link-to 'wh' class="wh-logo"}}{{/link-to}}
+      {{/if}}
+      <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
+        {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
+        (<a {{action "logoutUser" on="click"}}>Logout</a>)
+      </div>
+
+      {{input placeholder="Press S to search" value=searchQuery}}
     </div>
 
-    {{input placeholder="Press S to search" value=searchQuery}}
-  </div>
+    <div class="wy-menu wy-menu-vertical">
 
-  <div class="wy-menu wy-menu-vertical" data-spy="affix">
+      <div data-menu-wrap="all-content" class="current move-center">
 
-    <div data-menu-wrap="all-content" class="current move-center">
+        {{#if model}}
+          <header>Your content</header>
+          {{#collection 'animate-collection' content=model}}
+            {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
+          {{/collection}}
+        {{/if}}
 
-      {{#if model}}
-        <header>Your content</header>
-        {{#collection 'animate-collection' content=model}}
-          {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
-        {{/collection}}
-      {{/if}}
+        {{# if session.isOwner }}
+          <header>Configuration</header>
+          <ul>
+            {{#if buildEnvironment.local}}
+              <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
+            {{/if}}
+            <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.general'}}Settings{{/link-to}}</li>
+            <li>
+              {{#link-to 'wh.settings.billing'}}
+                {{#if session.billing.isTrial}}
+                  Upgrade
+                  <span class="wh-trial-notice">
+                    {{#if session.billing.endTrialIsLastDay}}
+                     Last day of trial
+                    {{else}}
+                      {{session.billing.endTrialDays}} trial days left
+                    {{/if}}
+                  </span>
+                {{else}}
+                    Billing
+                {{/if}}
+              {{/link-to}}
+            </li>
+            <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
+          </ul>
+        {{/if}}
 
-      {{# if session.isOwner }}
-        <header>Configuration</header>
-        <ul>
-          {{#if buildEnvironment.local}}
-            <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
-          {{/if}}
-          <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.general'}}Settings{{/link-to}}</li>
-          <li>
-            {{#link-to 'wh.settings.billing'}}
-              {{#if session.billing.isTrial}}
-                Upgrade
-                <span class="wh-trial-notice">
-                  {{#if session.billing.endTrialIsLastDay}}
-                   Last day of trial
-                  {{else}}
-                    {{session.billing.endTrialDays}} trial days left
-                  {{/if}}
-                </span>
-              {{else}}
-                  Billing
-              {{/if}}
-            {{/link-to}}
-          </li>
-          <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
-          <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
-        </ul>
-      {{/if}}
+      </div>
 
     </div>
-
   </div>
-  &nbsp;
 </nav>
