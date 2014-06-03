@@ -16,6 +16,7 @@ export default Ember.Route.extend({
     controller.set('addedControls', Ember.A([]));
     controller.set('removedControls', Ember.A([]));
     controller.set('changedNameControls', Ember.A([]));
+    controller.set('changedRadioControls', Ember.A([]));
 
     model.get('controls').forEach(function (control) {
       control.set('originalName', control.get('name'));
@@ -32,6 +33,10 @@ export default Ember.Route.extend({
 
     model.get('controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
       control.get('meta.data.options').setEach('value', undefined);
+    });
+
+    model.get('controls').filterBy('controlType.widget', 'radio').forEach(function (control) {
+      control.set('originalOptions', control.get('meta.data.options').getEach('value'));
     });
 
     model.get('controls').filterBy('controlType.widget', 'tabular').forEach(function (control) {

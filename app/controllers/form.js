@@ -11,6 +11,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   addedControls    : Ember.A([]),
   removedControls  : Ember.A([]),
   changedNameControls: Ember.A([]),
+  changedRadioControls: Ember.A([]),
 
   removedControlsApproved: null,
   changedControlNamessApproved: null,
@@ -290,25 +291,35 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var changedNameControls = this.get('changedNameControls');
     var removedControls = this.get('removedControls');
+    var changedRadioControls = this.get('changedRadioControls');
     var contentType = this.get('model');
 
     // if we didn't remove controls or change control names we do not need to update anything
-    if (!removedControls.get('length') && !changedNameControls.get('length')) {
+    if (!removedControls.get('length') && !changedNameControls.get('length') && !changedRadioControls.get('length')) {
       Ember.Logger.info('Item updates not needed');
       return;
     }
 
-    Ember.Logger.info('Updating item data and search indices for', removedControls.get('length'), 'removed controls and', changedNameControls.get('length'), 'renamed controls.');
+    Ember.Logger.info('Updating item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
     this.store.find(getItemModelName(contentType)).then(function (items) {
       items.forEach(function (item) {
         var itemData = item.get('data');
+
         changedNameControls.forEach(function (control) {
           itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
           itemData[control.get('originalName')] = null;
         });
+
         removedControls.forEach(function (control) {
           itemData[control.get('originalName')] = null;
         });
+
+        changedRadioControls.forEach(function (control) {
+          if (itemData[control.get('name')]) {
+            itemData[control.get('name')] = control.get('values').get(itemData[control.get('name')]) ? control.get('values').get(itemData[control.get('name')]) : itemData[control.get('name')];
+          }
+        });
+
         item.set('data', itemData);
         item.save().then(function (savedItem) {
           Ember.Logger.info('Data updates applied to', savedItem.get('id'));
@@ -320,7 +331,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   promptConfirmChanges: function () {
-    if (this.get('removedControls.length') || this.get('changedNameControls.length')) {
+    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length')) {
       Ember.Logger.info('Prompt for changed control confirmation.');
       this.toggleProperty('confirmChangedControlsPrompt');
     } else {
@@ -397,11 +408,34 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       // reset changedNameControls in case they backed out and decided to change the name back.
       formController.set('changedNameControls', Ember.A([]));
 
+      // reset changedRadioControls in case they backed out and decided to change the values back
+      formController.set('changedRadioControls', Ember.A([]));
+
       contentType.get('controls').forEach(function (control) {
 
         // See if we changed any control names
         if (control.get('originalName') && control.get('originalName') !== control.get('name')) {
           formController.get('changedNameControls').addObject(control);
+        }
+
+        // See if we changed any radio values
+        if (control.get('controlType.widget') === 'radio') {
+          var changedRadioControls = null;
+          control.get('meta.data.options').getEach('value').forEach(function (value, index) {
+            var originalValue = control.get('originalOptions').objectAt(index);
+            if (originalValue && originalValue !== value) {
+              if (!changedRadioControls) {
+                changedRadioControls = Ember.Object.create({
+                  name: control.get('name'),
+                  values: Ember.Object.create()
+                });
+              }
+              changedRadioControls.get('values').set(originalValue, value);
+            }
+          });
+          if (changedRadioControls) {
+            formController.get('changedRadioControls').addObject(changedRadioControls);
+          }
         }
 
         // we don't want to store checkbox values to the db when we save
