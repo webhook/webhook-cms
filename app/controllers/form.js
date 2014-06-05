@@ -24,6 +24,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     var names = this.get('controls').mapBy('name').sort(),
         dupes = [];
 
+    console.log(names);
     for (var i = 0; i < names.length - 1; i++) {
       if (names[i + 1] === names[i]) {
         dupes.push(names[i]);
@@ -32,9 +33,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     dupes = dupes.uniq();
 
-    this.get('controls').filter(function (control, index) {
+    /*this.get('controls').filter(function (control, index) {
       return dupes.indexOf(control.get('name')) >= 0;
-    }).setEach('widgetIsValid', false);
+    }).setEach('widgetIsValid', false);*/
 
     this.get('controls').rejectBy('widgetIsValid').setEach('widgetErrors', Ember.A(['Duplicate name.']));
 
