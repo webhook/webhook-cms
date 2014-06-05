@@ -11,7 +11,8 @@ export default DS.Model.extend({
   meta       : DS.belongsTo('meta-data', { embedded: 'always' }),
 
   setName: function () {
-    if (!this.get('locked') && this.get('label')) {
+    //if (!this.get('locked') && this.get('label')) {
+    if (this.get('label')) {
       this.set('name', this.get('label').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
     } else {
       this.set('name', this.get('controlType.name').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));

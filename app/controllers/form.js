@@ -33,9 +33,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     dupes = dupes.uniq();
 
-    /*this.get('controls').filter(function (control, index) {
+    this.get('controls').filter(function (control, index) {
       return dupes.indexOf(control.get('name')) >= 0;
-    }).setEach('widgetIsValid', false);*/
+    }).setEach('widgetIsValid', false);
 
     this.get('controls').rejectBy('widgetIsValid').setEach('widgetErrors', Ember.A(['Duplicate name.']));
 
