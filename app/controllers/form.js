@@ -24,6 +24,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     var names = this.get('controls').mapBy('name').sort(),
         dupes = [];
 
+    console.log(names);
     for (var i = 0; i < names.length - 1; i++) {
       if (names[i + 1] === names[i]) {
         dupes.push(names[i]);
