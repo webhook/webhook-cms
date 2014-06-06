@@ -1,68 +1,66 @@
 {{#if isEditing}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" style="display:block">
-  <div class="wh-form-builder-note">
-    <div class="wh-logo"></div>
-  </div>
-
   <div data-spy="affix">
+    <div class="wh-form-builder-note">
+      <div class="wh-logo"></div>
+    </div>
+      <ul class="wh-form-builder-tabs">
+        <li {{action "stopEditing"}}>Add field</li>
+        <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
+      </ul>
+      <form class="wy-form-stacked">
 
-    <ul class="wh-form-builder-tabs">
-      <li {{action "stopEditing"}}>Add field</li>
-      <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
-    </ul>
-    <form class="wy-form-stacked">
-
-      <div class="wy-control-group">
-        {{#unless editingControl.locked}}
-          <div class="wy-form-halves">
-            <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign" data-toggle="tooltip" title="Short phase to describe the content in this field."></i></label>
-            {{input valueBinding="editingControl.label" viewName="label"}}
-          </div>
-        {{/unless}}
-        {{#if editingControl.showPlaceholder}}
-          <div class="wy-form-halves">
-            <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign" data-toggle="tooltip" title="This will show within the input until it has a value. It does not save as a default."></i></label>
-            {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
-          </div>
-        {{/if}}
-        <div class="wy-form-full">
-          <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign" data-toggle="tooltip" title="Instructions to the user on what they should enter into this field."></i></label>
-          {{textarea valueBinding="editingControl.help" viewName="help"}}
-        </div>
-        {{#if editingControl.showRequired}}
-          <div class="wy-form-full">
-            <label for="check-example">Required <i class="icon icon-question-sign" data-toggle="tooltip" title="The form can't be saved unless this field has a value."></i></label>
-            <div class="wy-control">
-              <label class="wy-checkbox">
-                {{view Ember.Checkbox checkedBinding="editingControl.required"}}
-                Make this field required.
-              </label>
+        <div class="wy-control-group">
+          {{#unless editingControl.locked}}
+            <div class="wy-form-halves">
+              <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign" data-toggle="tooltip" title="Short phase to describe the content in this field."></i></label>
+              {{input valueBinding="editingControl.label" viewName="label"}}
             </div>
+          {{/unless}}
+          {{#if editingControl.showPlaceholder}}
+            <div class="wy-form-halves">
+              <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign" data-toggle="tooltip" title="This will show within the input until it has a value. It does not save as a default."></i></label>
+              {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
+            </div>
+          {{/if}}
+          <div class="wy-form-full">
+            <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign" data-toggle="tooltip" title="Instructions to the user on what they should enter into this field."></i></label>
+            {{textarea valueBinding="editingControl.help" viewName="help"}}
           </div>
-        {{/if}}
-      </div>
+          {{#if editingControl.showRequired}}
+            <div class="wy-form-full">
+              <label for="check-example">Required <i class="icon icon-question-sign" data-toggle="tooltip" title="The form can't be saved unless this field has a value."></i></label>
+              <div class="wy-control">
+                <label class="wy-checkbox">
+                  {{view Ember.Checkbox checkedBinding="editingControl.required"}}
+                  Make this field required.
+                </label>
+              </div>
+            </div>
+          {{/if}}
 
-      {{partial editingControl.controlType.infoPartialPath}}
+        {{partial editingControl.controlType.infoPartialPath}}
 
-      <hr>
+        <hr>
 
-      <div class="wy-btn-group">
-        {{#unless editingControl.locked}}
-          <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> Delete this field</button>
-        {{/unless}}
-      </div>
-    </form>
+        <div class="wy-btn-group">
+          {{#unless editingControl.locked}}
+            <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> Delete this field</button>
+          {{/unless}}
+        </div>
+      </form>
+    </div>
   </div>
 </nav>
 
 {{else}}
 
 <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-  <div class="wh-form-builder-note">
-    <div class="wh-logo"></div>
-  </div>
   <div data-spy="affix">
+    <div class="wh-form-builder-note">
+      <div class="wh-logo"></div>
+    </div>
     <ul class="wh-form-builder-tabs">
       <li class="active">Add field <span class="icon icon-arrow-down"></span></li>
       <li {{action "startEditing"}}>Edit details</li>
