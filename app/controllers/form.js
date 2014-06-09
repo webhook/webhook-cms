@@ -300,8 +300,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       return;
     }
 
-    Ember.Logger.info('Updating item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
-    this.store.find(getItemModelName(contentType)).then(function (items) {
+    var itemModelName = getItemModelName(contentType);
+
+    Ember.Logger.info('Updating `' + itemModelName + '` item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
+    this.store.find(itemModelName).then(function (items) {
       items.forEach(function (item) {
         var itemData = item.get('data');
 
