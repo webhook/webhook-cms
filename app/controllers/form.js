@@ -300,33 +300,46 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       return;
     }
 
-    Ember.Logger.info('Updating item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
-    this.store.find(getItemModelName(contentType)).then(function (items) {
-      items.forEach(function (item) {
-        var itemData = item.get('data');
+    var itemModelName = getItemModelName(contentType);
 
-        changedNameControls.forEach(function (control) {
-          itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
-          itemData[control.get('originalName')] = null;
-        });
+    Ember.Logger.info('Updating `' + itemModelName + '` item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
 
-        removedControls.forEach(function (control) {
-          itemData[control.get('originalName')] = null;
-        });
+    var updateData = function (item) {
+      var itemData = item.get('data');
 
-        changedRadioControls.forEach(function (control) {
-          if (itemData[control.get('name')]) {
-            itemData[control.get('name')] = control.get('values').get(itemData[control.get('name')]) ? control.get('values').get(itemData[control.get('name')]) : itemData[control.get('name')];
-          }
-        });
+      changedNameControls.forEach(function (control) {
+        itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
+        itemData[control.get('originalName')] = null;
+      });
 
-        item.set('data', itemData);
-        item.save().then(function (savedItem) {
-          Ember.Logger.info('Data updates applied to', savedItem.get('id'));
-          SearchIndex.indexItem(savedItem, contentType);
+      removedControls.forEach(function (control) {
+        itemData[control.get('originalName')] = null;
+      });
+
+      changedRadioControls.forEach(function (control) {
+        if (itemData[control.get('name')]) {
+          itemData[control.get('name')] = control.get('values').get(itemData[control.get('name')]) ? control.get('values').get(itemData[control.get('name')]) : itemData[control.get('name')];
+        }
+      });
+
+      item.set('data', itemData);
+      item.save().then(function (savedItem) {
+        Ember.Logger.info('Data updates applied to', savedItem.get('id'));
+        SearchIndex.indexItem(savedItem, contentType);
+      });
+    };
+
+    if (contentType.get('oneOff')) {
+      this.store.find(itemModelName, contentType.get('id')).then(function (item) {
+        updateData(item);
+      });
+    } else {
+      this.store.find(itemModelName).then(function (items) {
+        items.forEach(function (item) {
+          updateData(item);
         });
       });
-    });
+    }
 
   },
 
