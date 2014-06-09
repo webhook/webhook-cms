@@ -2,7 +2,8 @@ export default DS.JSONSerializer.extend({
   normalize: function (type, hash) {
     var newHash;
 
-    if (Ember.isArray(hash)) {
+    // Was using Ember.isArray, but user had `length` as a field name.
+    if (Ember.$.isArray(hash)) {
       newHash = Ember.$.map(hash, this._normalizeSingle);
     } else {
       newHash = this._normalizeSingle(hash);
