@@ -435,7 +435,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         if (control.get('controlType.widget') === 'radio') {
           var changedRadioControls = null;
           control.get('meta.data.options').getEach('value').forEach(function (value, index) {
-            var originalValue = control.get('originalOptions').objectAt(index);
+            var originalValue = control.getWithDefault('originalOptions', Ember.A([])).objectAt(index);
             if (originalValue && originalValue !== value) {
               if (!changedRadioControls) {
                 changedRadioControls = Ember.Object.create({
