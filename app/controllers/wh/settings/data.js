@@ -216,6 +216,30 @@ export default Ember.Controller.extend({
 
     reset: function () {
       this.set('dataBackup', null);
+    },
+
+    deleteData: function () {
+
+      var dataController = this;
+
+      if (!window.confirm('You are about to delete all of your site data. This cannot be undone. Would you like to proceed?')) {
+        return;
+      }
+
+      this.store.find('content-type').then(function (contentTypes) {
+        contentTypes.forEach(function (contentType) {
+          window.ENV.deleteTypeIndex(contentType.get('id'));
+        });
+      }).then(function () {
+        window.ENV.firebase.update({
+          data: null,
+          contentType: null,
+          settings: null
+        }, function () {
+          dataController.transitionToRoute('start');
+        });
+      });
+
     }
   }
 });
