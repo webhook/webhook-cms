@@ -475,6 +475,8 @@ Ember.Application.initializer({
 
     window.ENV.sendBuildSignal = function (publish_date) {
 
+      Ember.Logger.info('Sending build signal:', publish_date || 'No publish date.');
+
       var user = session.get('user.email');
 
       if (application.get('buildEnvironment').local === false) {

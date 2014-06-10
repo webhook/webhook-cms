@@ -42,7 +42,7 @@
   {{#if validImport}}
     <div class="wy-alert wy-alert-danger">
       <div class="wy-alert-title">Warning!</div>
-      <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. If you have not created a backup in a while, now would be a good time.</p>
+      <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. It will also rebuild your site with the imported data. If you have not created a backup in a while, now would be a good time.</p>
       <div class="wy-btn-group">
         <button class="btn btn-neutral" {{action "reset"}}> This doesn't look right, abort.</button>
         <button class="btn btn-neutral" {{action "confirm"}}> Looks good, proceed.</button>
@@ -87,6 +87,6 @@
 
 <h2>Delete Data</h2>
 
-<p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data before taking such drastic measures.</p>
+<p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data before taking such drastic measures. Deleting site data will also rebuild your site.</p>
 
 <button class="btn btn-danger" {{action "deleteData"}}>Delete all data</button>
