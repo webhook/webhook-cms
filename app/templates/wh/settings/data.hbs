@@ -1,4 +1,4 @@
-<h2>Backups</h2>
+<h2>Import / export data</h2>
 
 {{# if dataBackup}}
   <p>We found the following data in your file:</p>
@@ -65,19 +65,7 @@
       <pre>{{dataError.name}}: {{dataError.message}}</pre>
     </div>
   {{else}}
-    <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">Hey alpha testers!</div>
-      <p>
-        This page is super basic right now. You can download your site's data
-        as a JSON file. We plan on adding automatic historical backups as
-        well. This is alpha software, if you are working on something
-        important, backup your data often.
-      </p>
-    </div>
-    <div class="wy-alert wy-alert-info">
-      <div class="wy-alert-title">Importing custom data</div>
       <p>You are not restricted to just uploading backups. You can upload any data you want but it must conform to the expected format. See the <a href="http://www.webhook.com/docs/importing-custom-data/">documentation</a> for more information.</p>
-    </div>
   {{/if}}
   <div class="wy-btn-group">
     {{download-backup classNames="btn btn-neutral icon icon-download" text=" Download JSON data"}}
@@ -85,8 +73,8 @@
   </div>
 {{/if}}
 
-<h2>Delete Data</h2>
+<h2>Delete data</h2>
 
-<p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data before taking such drastic measures.</p>
+<p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data above before taking such drastic measures.</p>
 
-<button class="btn btn-danger" {{action "deleteData"}}>Delete all data</button>
+<button class="btn btn-neutral icon icon-remove-sign" {{action "deleteData"}}> Delete all data</button>
