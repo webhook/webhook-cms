@@ -1,3 +1,16 @@
+// ------------------------------------------------------------
+// WEBHOOK FORM-BUILDER
+// ------------------------------------------------------------
+// The form builder creates new forms in the CMS. It lives
+// outside of the main grid, but still uses some of its
+// naming conventions.
+// ------------------------------------------------------------
+
+.wh-grid-form-builder
+  +outer-container
+  width: 100%
+  max-width: 100%
+
 .wh-form-builder-list
   +outer-container
   > li
@@ -21,11 +34,7 @@
       h4
         color: $green
 
-.wh-grid-form-builder
-  +outer-container
-  width: 100%
-  max-width: 100%
-
+// THE FB DOESN'T WORK IN MOBILE.
 .wh-form-builder-mobile
   display: none
   text-align: center
@@ -35,20 +44,14 @@
     height: 200px
     margin-bottom: $base-line-height
 
-.wy-control-group
-  .wh-template-var
-    opacity: 0
-    float: right
-    color: $text-light
-    +transition(all 0.5s ease-in)
-    &:before
-      content: "{{ item."
-    &:after
-      content: " }}"
-.wy-control-group:not(.wy-control-group-instruction)
-  &:hover .wh-template-var
-    display: inline-block
-    opacity: 1
+// STICKY LEFT MENU
+
+.wh-form-builder .wy-affix
+  top: 0
+  .wh-logo
+    margin-top: $base-line-height / 2
+
+// LEFT MENU FOR FORM BUILDER
 
 .wh-form-builder .wy-nav-side
   background: $gray-dark
@@ -125,6 +128,46 @@
       color: $text-invert
     .fa
       color: lighten($blue, 20%)
+
+// LEFT SIDE EDIT MODE
+// When you click an individual field on the right
+// this stuff shows up.
+
+.wy-nav-side.wy-nav-side-widget-edit
+  background: $gray-dark
+  display: none
+  form
+    padding: $base-line-height / 2
+  .wy-control-group
+    margin-bottom: 0
+  legend
+    padding: $base-line-height / 4
+    margin: 0
+  label
+    color: $text-lighter
+  label.wy-checkbox, label.wy-radio
+    color: $text-medium
+  hr
+    border-color: $gray
+    margin: 0
+    margin-bottom: $base-line-height / 2
+  .icon-question-sign
+    color: $text-dark
+  .icon:hover
+    color: $white
+  label .icon-plus-sign:hover
+    color: $green
+  label .icon-remove-sign:hover
+    color: $red
+  input[type=text], textarea, input[type=number],
+    background: darken($gray-dark,5%)
+    border-color: $gray-darker
+    color: $text-light
+    box-shadow: none
+
+// RIGHT SIDE OF FORM BUILDER
+// This is the actual form you're building
+
 .wh-form-builder .wy-nav-content-wrap
   .wy-nav-content
     padding-bottom: 100px
@@ -172,6 +215,8 @@
     height: 100%
     background: transparent
     z-index: $z-index-popover - 1
+
+  // Clicked state for individual fields
   .wy-control-group.wy-control-group-edit
     background: $menu-background-color
     margin-left: -$gutter * 2
@@ -197,42 +242,9 @@
       margin-top: -15px
       z-index: $z-index-popover + 1
 
-.wy-nav-side.wy-nav-side-widget-edit
-  background: $gray-dark
-  display: none
-  form
-    padding: $base-line-height / 2
-  .wy-control-group
-    margin-bottom: 0
-  legend
-    padding: $base-line-height / 4
-    margin: 0
-  label
-    color: $text-lighter
-  label.wy-checkbox, label.wy-radio
-    color: $text-medium
-  hr
-    border-color: $gray
-    margin: 0
-    margin-bottom: $base-line-height / 2
-  .icon-question-sign
-    color: $text-dark
-  .icon:hover
-    color: $white
-  label .icon-plus-sign:hover
-    color: $green
-  label .icon-remove-sign:hover
-    color: $red
-  input[type=text], textarea, input[type=number],
-    background: darken($gray-dark,5%)
-    border-color: $gray-darker
-    color: $text-light
-    box-shadow: none
-
-.wy-form-upload-url
-  display: none
-  &.on
-    display: block
+// DRAG AND DROP CONTROLS
+// Various classes needed for the drag and drop bits
+// of the form builder.
 
 .ui-sortable-helper .wy-control-group
   background: rgba(255,255,255,.7)
@@ -254,6 +266,7 @@
     line-height : 75px
 .wy-control-group-placed
   background: lighten($green, 30%) !important
+
 .wy-control-group-removed
   height: 0px
   padding-top: 0px !important
@@ -271,9 +284,7 @@
     color: $gray-dark
     float: right
 
-
-[fake-toggle*=fake-widget-form]
-  display: none
+// RESPONSIVE STYLES
 
 +media($tablet)
   .wh-form-builder-list > li
@@ -292,75 +303,3 @@
     display: none
   .wh-form-builder-mobile
     display: block
-
-.wh-markdown-editor
-  position: relative
-  &.wh-markdown-editor-fullscreen
-    z-index: $z-index-tray - 1
-    top: 0
-    left: 0
-    position: fixed
-    height: 100%
-    background: #eee
-    +outer-container
-    max-width: 100%
-    width: 100%
-    padding: $gutter
-    .wh-markdown-editor-edits
-      +span-columns(6)
-      height: 100%
-      position: relative
-    textarea
-      height: 100%
-      box-shadow: none
-      border: none
-      line-height: 1.5
-      border: solid 1px $input-border-color
-    .wh-markdown-preview
-      display: block
-      height: 100%
-      +span-columns(6)
-      +omega-type()
-      background: $white
-      padding: $gutter
-      overflow-x: hidden
-      overflow-y: auto
-      border: solid 1px $input-border-color
-      pre code
-        @extend .hljs
-  .wh-markdown-editor-toolbar
-    background: $background-color
-    padding: $base-line-height / 8
-    border: solid 1px $input-border-color
-    font-size: 14px
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    span
-      display: inline-block
-      padding: $base-line-height / 8 $base-line-height / 4
-    span.icon:hover
-      background: $gray-light
-      color: $white
-  .syntax-help
-    color: $text-medium
-    border-right: solid 1px $input-border-color
-  .fullscreen-toggle
-    color: $text-color
-    cursor: pointer
-    float: right
-  .upload-image
-    color: $text-color
-    cursor: pointer
-  .wh-markdown-preview
-    display: none
-  textarea
-    box-shadow: none
-    font-size: 16px
-    padding: $gutter
-    line-height: 1.5
-    padding-top: $gutter * 2
-
-input[type=color]
-  padding: 0

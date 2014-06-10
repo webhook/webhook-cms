@@ -1,24 +1,29 @@
+// ------------------------------------------------------------
+// WEBHOOK VARIABLES
+// ------------------------------------------------------------
+// This is an overwrite / addition of wyrm/core/_variables.sass
+// ------------------------------------------------------------
+
+// These are new variables defined for Webhook.
+
 $wh-logo:                             url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTQ1Ljk5NnB4IiBoZWlnaHQ9IjExNi44NDVweCIgdmlld0JveD0iMCAwIDE0NS45OTYgMTE2Ljg0NSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTQ1Ljk5NiAxMTYuODQ1Ig0KCSB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0xMDAuNTU1LDkwLjUyYy0xLjE3NywwLTIuMjk0LTAuNjk3LTIuNzcyLTEuODUzTDc3LjExOCwzOC43NzZjLTAuNjM0LTEuNTMxLDAuMDkzLTMuMjg1LDEuNjIzLTMuOTE5DQoJCWM3LjY0MS0zLjE2NiwxMS4yODItMTEuOTU3LDguMTE3LTE5LjU5OEM4My42OTQsNy42MTksNzQuOTAxLDMuOTc5LDY3LjI2LDcuMTQyYy0zLjcwMiwxLjUzMy02LjU4NCw0LjQxNS04LjExNyw4LjExNw0KCQljLTEuNTMzLDMuNzAyLTEuNTMzLDcuNzc5LDAsMTEuNDgyYzAuNjM0LDEuNTMxLTAuMDkzLDMuMjg2LTEuNjIzLDMuOTE5Yy0xLjUzMSwwLjYzNC0zLjI4Ni0wLjA5My0zLjkyLTEuNjIzDQoJCWMtMi4xNDctNS4xODMtMi4xNDctMTAuODkxLTAuMDAxLTE2LjA3M2MyLjE0Ni01LjE4Myw2LjE4My05LjIxOCwxMS4zNjUtMTEuMzY0YzEwLjY5OC00LjQzLDIzLjAwNywwLjY2NywyNy40MzcsMTEuMzY0DQoJCWM0LjA0MSw5Ljc1NiwwLjE1NiwyMC44NTMtOC42NzQsMjYuMDkybDE5LjU5OCw0Ny4zMTZjMC42MzQsMS41MzEtMC4wOTMsMy4yODYtMS42MjMsMy45Mg0KCQlDMTAxLjMyNiw5MC40NDYsMTAwLjkzOCw5MC41MiwxMDAuNTU1LDkwLjUyeiIvPg0KCTxjaXJjbGUgZmlsbD0iI0ZGRkZGRiIgY3g9IjEwMy45OTgiIGN5PSI5NS44MzMiIHI9IjkiLz4NCgk8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNNDEuOTc2LDExNi44MzRjLTIuNjc0LDAuMDAxLTUuMzg5LTAuNTEzLTguMDA5LTEuNTk5Yy01LjE4My0yLjE0Ni05LjIxOS02LjE4My0xMS4zNjUtMTEuMzY1DQoJCWMtMi4xNDYtNS4xODMtMi4xNDYtMTAuODksMC4wMDEtMTYuMDcyYzAuNjM0LTEuNTMxLDIuMzg5LTIuMjU3LDMuOTItMS42MjNjMS41MywwLjYzNCwyLjI1NywyLjM4OSwxLjYyMywzLjkyDQoJCWMtMS41MzMsMy43MDEtMS41MzMsNy43NzgsMCwxMS40NzljMS41MzMsMy43MDEsNC40MTYsNi41ODUsOC4xMTgsOC4xMThjMy43MDMsMS41MzQsNy43NzksMS41MzIsMTEuNDgxLDANCgkJYzMuNzAyLTEuNTMzLDYuNTg0LTQuNDE2LDguMTE4LTguMTE4YzEuNTMzLTMuNzAxLDEuNTMzLTcuNzc4LDAtMTEuNDhjLTEuNTMzLTMuNzAxLTQuNDE3LTYuNTg1LTguMTE5LTguMTE4DQoJCWMtMC43MzUtMC4zMDUtMS4zMTktMC44ODktMS42MjQtMS42MjNjLTAuMzA1LTAuNzM1LTAuMzA1LTEuNTYyLDAtMi4yOTdsMjAuNjY2LTQ5Ljg4OWMwLjYzNC0xLjUzMiwyLjM4OC0yLjI1OSwzLjkxOS0xLjYyMw0KCQljMS41MzEsMC42MzQsMi4yNTgsMi4zODksMS42MjQsMy45MTlMNTIuNzMsNzcuNzc2YzMuODg4LDIuMjk5LDYuOTE2LDUuNzc1LDguNjc1LDEwLjAyMmMyLjE0Niw1LjE4MywyLjE0NiwxMC44OTEsMCwxNi4wNzMNCgkJQzU4LjA1OCwxMTEuOTQ4LDUwLjIxOSwxMTYuODM0LDQxLjk3NiwxMTYuODM0eiIvPg0KCTxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0xMDMuOTk5LDExNi44NDVjLTIuNzI0LDAtNS40NDUtMC41MzctOC4wMzctMS42MWMtNS4xODMtMi4xNDYtOS4yMTktNi4xODMtMTEuMzY1LTExLjM2NQ0KCQljLTIuMTQ3LTUuMTgyLTIuMTQ2LTEwLjg5LDAtMTYuMDcyYzAuNjM0LTEuNTMxLDIuMzg5LTIuMjU2LDMuOTItMS42MjNjMS41MywwLjYzNCwyLjI1NywyLjM4OSwxLjYyMywzLjkyDQoJCWMtMS41MzMsMy43MDEtMS41MzMsNy43NzgsMCwxMS40NzljMS41MzMsMy43MDEsNC40MTcsNi41ODUsOC4xMTksOC4xMThjMy43LDEuNTMzLDcuNzc3LDEuNTMzLDExLjQ3OSwwDQoJCWMzLjcwMS0xLjUzMyw2LjU4NS00LjQxNiw4LjExOC04LjExOGMxLjUzMy0zLjcwMSwxLjUzMy03Ljc3OCwwLTExLjQ4Yy0xLjUzMy0zLjcwMS00LjQxNy02LjU4NS04LjExOS04LjExOA0KCQljLTAuNzM0LTAuMzA1LTEuMzE4LTAuODg5LTEuNjIzLTEuNjIzYy0wLjMwNS0wLjczNS0wLjMwNS0xLjU2MiwwLTIuMjk3bDIwLjY2Ni00OS44ODljMC42MzQtMS41MzEsMi4zODgtMi4yNTgsMy45Mi0xLjYyNA0KCQljMS41MywwLjYzNCwyLjI1NywyLjM4OSwxLjYyMywzLjkxOWwtMTkuNTk5LDQ3LjMxM2MzLjg4OCwyLjI5OSw2LjkxNiw1Ljc3NSw4LjY3NSwxMC4wMjJjMi4xNDcsNS4xODMsMi4xNDYsMTAuODkxLDAsMTYuMDczDQoJCWMtMi4xNDYsNS4xODItNi4xODMsOS4yMTgtMTEuMzY1LDExLjM2NUMxMDkuNDQzLDExNi4zMDgsMTA2LjcyMSwxMTYuODQ1LDEwMy45OTksMTE2Ljg0NXoiLz4NCgk8Zz4NCgkJPGNpcmNsZSBmaWxsPSIjRkZGRkZGIiBjeD0iMTM0Ljk5NiIgY3k9IjIwLjk5OSIgcj0iOS4wMDEiLz4NCgkJPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTEzNC45OTIsMzIuMDAxYy0xLjQ0NSwwLTIuODYtMC4yODMtNC4yMDYtMC44NGMtMi43MTQtMS4xMjUtNC44MjgtMy4yMzktNS45NTMtNS45NTMNCgkJCWMtMS4xMjQtMi43MTQtMS4xMjUtNS43MDUsMC04LjQxOWMxLjcwOS00LjEyNiw1LjY5OS02Ljc5MywxMC4xNjYtNi43OTNjMS40NDUsMCwyLjg2MSwwLjI4Myw0LjIwNywwLjg0DQoJCQljNS42MDIsMi4zMjEsOC4yNzIsOC43NjgsNS45NTMsMTQuMzcyQzE0My40NSwyOS4zMzUsMTM5LjQ1OSwzMi4wMDEsMTM0Ljk5MiwzMi4wMDF6IE0xMzQuOTk5LDEzLjk5Ng0KCQkJYy0yLjg0MywwLTUuMzgzLDEuNjk3LTYuNDcxLDQuMzI0Yy0wLjcxNiwxLjcyOC0wLjcxNiwzLjYzLDAsNS4zNTdjMC43MTYsMS43MjcsMi4wNjEsMy4wNzMsMy43ODksMy43ODkNCgkJCWMwLjg1NywwLjM1NSwxLjc1NywwLjUzNSwyLjY3NSwwLjUzNWMyLjg0NCwwLDUuMzg0LTEuNjk3LDYuNDcyLTQuMzIzYzEuNDc2LTMuNTY2LTAuMjI0LTcuNjctMy43ODktOS4xNDcNCgkJCUMxMzYuODE3LDE0LjE3NiwxMzUuOTE3LDEzLjk5NiwxMzQuOTk5LDEzLjk5NnoiLz4NCgk8L2c+DQoJPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTQyLjAwNCw5OC44MzVjLTEuMTc3LDAtMi4yOTQtMC42OTctMi43NzItMS44NTNMMTEuNjc4LDMwLjQ2NGMtMC42MzQtMS41MzEsMC4wOTMtMy4yODYsMS42MjQtMy45MTkNCgkJYzEuNTI4LTAuNjM1LDMuMjg1LDAuMDkyLDMuOTE5LDEuNjI0bDI3LjU1Myw2Ni41MThjMC42MzQsMS41MzEtMC4wOTMsMy4yODYtMS42MjQsMy45Mg0KCQlDNDIuNzc1LDk4Ljc2MSw0Mi4zODcsOTguODM1LDQyLjAwNCw5OC44MzV6Ii8+DQoJPGc+DQoJCTxjaXJjbGUgZmlsbD0iI0ZGRkZGRiIgY3g9IjExLjAwNiIgY3k9IjIxIiByPSI5Ii8+DQoJCTxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0xMS4wMSwzMi4wMDNjLTQuNDY2LDAtOC40NTctMi42NjctMTAuMTY2LTYuNzkzYy0xLjEyNC0yLjcxNS0xLjEyNC01LjcwNSwwLTguNDE5DQoJCQljMS4xMjUtMi43MTUsMy4yMzktNC44MjksNS45NTQtNS45NTNjMS4zNDUtMC41NTcsMi43Ni0wLjg0LDQuMjA2LTAuODRjNC40NjYsMCw4LjQ1NiwyLjY2NiwxMC4xNjYsNi43OTINCgkJCWMxLjEyNCwyLjcxNSwxLjEyNCw1LjcwNSwwLDguNDJjLTEuMTI0LDIuNzE0LTMuMjM5LDQuODI5LTUuOTU0LDUuOTUzQzEzLjg3LDMxLjcyLDEyLjQ1NiwzMi4wMDMsMTEuMDEsMzIuMDAzeiBNMTEuMDAzLDEzLjk5OA0KCQkJYy0wLjkxOCwwLTEuODE3LDAuMTgtMi42NzUsMC41MzVjLTEuNzI4LDAuNzE1LTMuMDc0LDIuMDYxLTMuNzg5LDMuNzg4Yy0wLjcxNiwxLjcyOC0wLjcxNSwzLjYzLDAsNS4zNTgNCgkJCWMxLjA4OCwyLjYyNywzLjYyOCw0LjMyNCw2LjQ3MSw0LjMyNGMwLjkxOCwwLDEuODE3LTAuMTgsMi42NzQtMC41MzVjMS43MjgtMC43MTYsMy4wNzQtMi4wNjEsMy43ODktMy43ODkNCgkJCWMwLjcxNS0xLjcyOCwwLjcxNS0zLjYzLDAtNS4zNThDMTYuMzg1LDE1LjY5NSwxMy44NDUsMTMuOTk4LDExLjAwMywxMy45OTh6Ii8+DQoJPC9nPg0KCTxjaXJjbGUgZmlsbD0iI0ZGRkZGRiIgY3g9IjQyLjAwMyIgY3k9Ijk1LjgzNCIgcj0iOS4wMDEiLz4NCgk8Y2lyY2xlIGZpbGw9IiNGRkZGRkYiIGN4PSI3My4wMDEiIGN5PSIyMC45OTkiIHI9IjguOTk5Ii8+DQo8L2c+DQo8L3N2Zz4NCg==)
+
+// These are variables that ovwerite wyrm.
 
 $base-font-family:                    "museo-sans-1", "museo-sans-2", "Helvetica Neue", "HelveticaNeue", Arial, sans-serif
 $custom-font-family:                  "ff-tisa-web-pro-1","ff-tisa-web-pro-2", "Helvetica Neue", "HelveticaNeue", Arial, sans-serif
 
 $background-color:                    hsl(0,0%,95%)
+$menu-background-color:               hsl(0,0%,94%)
+$menu-logo-color:                     $gray-dark
+$section-background-color:            hsl(0,0%,99%)
+
 $link-color:                          $blue
 $link-color-alt:                      hsl(33, 100%, 51%)
 $link-color-hover:                    lighten($link-color, 6%)
 
-$menu-background-color:               hsl(0,0%,94%)
-$section-background-color:            hsl(0,0%,99%)
-$menu-logo-color:                     $gray-dark
-
-$font-path:                           "../assets/fonts" !default
-$font-version:                       "001" !default
-
 $button-background-color:             $gray-dark
 $button-neutral-background-color:     hsl(0,0%,95%)
-
-
 
 $table-stripe-color:                  $menu-background-color
 $table-font-size:                     80%
@@ -27,6 +32,12 @@ $table-bg-hover-color:                $menu-background-color
 
 $spinner-color:                       $gray
 $text-code-color:                     $gray-light
+
+// Webhook uses a custom font "hook" built from icomoon. The loader json
+// is in the public/fonts directory.
+
+$font-path:                           "../assets/fonts" !default
+$font-version:                       "001" !default
 
 $icon-font-family:                    "hook"
 $icon-prefix:                         "icon"

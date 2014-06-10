@@ -3,6 +3,10 @@
 // ------------------------------------------------------------
 // This file imports lots of stuff from wyrm, which is loaded
 // into this project through bower in the vendor/wyrm dir.
+// Wyrm documentation is at http://www.wyrmsass.org
+// ------------------------------------------------------------
+// NAMING: Anything from wyrm should be .wy-*, anything new to
+// webhook should be named .wh-*
 // ------------------------------------------------------------
 
 // Variable defaults set by Wyrm
@@ -45,7 +49,6 @@
 // Addons
 @import wyrm_addons/forms/form_upload
 @import wyrm_addons/forms/form_autocomplete
-@import wyrm_addons/forms/form_gallery
 @import wyrm_addons/forms/form_tag
 @import wyrm_addons/elements/tooltip
 @import wyrm_addons/elements/stars
@@ -55,9 +58,11 @@
 
 @import wyrm_docs/highlight
 
-
 // App specific styles. These are likely the files you want to edit.
 @import app_grid
 @import app_layout
 @import app_form_builder
+@import app_form_gallery
+@import app_form_markdown
+@import app_form_controls
 @import app_content_list

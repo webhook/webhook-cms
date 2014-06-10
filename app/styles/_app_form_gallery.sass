@@ -1,0 +1,99 @@
+// ------------------------------------------------------------
+// WEBHOOK GALLERY CONTROLS
+// ------------------------------------------------------------
+// Gallery widget and form controls
+// ------------------------------------------------------------
+
+.wy-form-gallery-instructions
+  font-size: 90%
+  margin: $base-line-height / 4 0 0 0
+  color: $text-light
+  padding-left: $base-line-height / 4
+
+.wy-form-gallery-edit
+  position: absolute
+  bottom: 100%
+  width: 212px
+  text-align: center
+  background: $gray-dark
+  left: -84px
+  padding: $base-line-height / 4
+  z-index: $z-index-popover
+  textarea
+    background: $gray-darker
+    border: none
+    box-shadow: none
+    color: $text-invert
+    margin: $base-line-height / 4 0
+    max-height: 100px
+  .triangle
+    +triangle(10px, $gray-dark, down)
+    position: absolute
+    bottom: -10px
+    left: 100px
+  .icon-remove-sign
+    color: $text-invert
+.wy-form-gallery .wy-form-gallery-edit-img
+  width: 200px
+  img
+    max-width: 200px
+    max-height: 200px
+.wy-form-gallery-save
+  background: $blue
+  padding: $base-line-height / 4
+  display: block
+  color: $white
+  font-size: 90%
+
+.wy-form-gallery
+  +outer-container
+  li
+    padding: $base-line-height / 4
+    margin-bottom: $base-line-height / 4
+    display: inline-block
+    position: relative
+    border-radius: 50px
+    cursor: pointer
+    border: solid 1px transparent
+  li.captioned
+    border-color: $gray-light
+  li.loading:after
+    content: ""
+    height: 34px
+    width: 34px
+    border: 4px solid lighten($spinner-color, 55%)
+    border-top: 4px solid $gray-darker
+    position: absolute
+    border-radius: 100%
+    left: 0px
+    top: 0px
+    +animation(rotation .9s infinite linear)
+  .progress
+    color: $text-color
+    font-size: 80%
+    line-height: 30px
+    width: 30px
+    height: 30px
+    display: inline-block
+    text-align: center
+
+  a img
+    width: 30px
+    height: 30px
+    vertical-align: middle
+    border-radius: 50px
+  li:hover
+    border-color: $gray
+    .icon
+      opacity: 1
+
+.wh-form-gallery-placeholder
+  background: $gray-dark
+  @extend %icon
+  @extend .icon-arrow-down
+  line-height: 18px
+  color: $white
+  font-size: 80%
+  &:after
+    content: " Position here."
+
