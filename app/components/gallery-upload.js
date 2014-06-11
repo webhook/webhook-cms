@@ -73,8 +73,8 @@ export default FileUploadComponent.extend({
       item.set('progress', null);
       item.set('image', {
         url: response.url,
-        type: file.type,
-        size: file.size,
+        type: file.type || response.mimeType,
+        size: file.size || response.size,
         resize_url: response.resize_url
       });
 
