@@ -159,7 +159,6 @@ export default Ember.Controller.extend({
       dataController.set('dataError', null);
 
       Ember.$('<input type="file">').fileReaderJS({
-        accept: "application/json",
         readAsDefault: 'Text',
         on: {
           load: function (event, file) {
