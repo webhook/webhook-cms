@@ -21,6 +21,8 @@ export default Ember.Route.extend({
     controller.set('originalRecordLimit', this.get('recordLimit'));
     controller.set('itemModelName', this.get('itemModelName'));
 
+    controller.set('filterQuery', '');
+
     controller.set('contentType', this.modelFor('wh.content.type'));
 
     var lockedItems = Ember.A([]),
