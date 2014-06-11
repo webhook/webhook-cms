@@ -73,6 +73,23 @@
   </div>
 {{/if}}
 
+<hr/>
+
+<h2>Backups</h2>
+
+<p>
+  Webhook automatically exports a JSON backup every night at 3AM PST. We keep these files around for seven days.
+  For new sites, the backups will only work for the days after your site was created.
+</p>
+
+<ul class="wy-plain-list-disc">
+  {{#each backup in model}}
+    <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
+  {{/each}}
+</ul>
+
+<hr/>
+
 <h2>Delete data</h2>
 
 <p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data above before taking such drastic measures.</p>

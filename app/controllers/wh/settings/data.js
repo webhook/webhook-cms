@@ -159,7 +159,6 @@ export default Ember.Controller.extend({
       dataController.set('dataError', null);
 
       Ember.$('<input type="file">').fileReaderJS({
-        accept: "application/json",
         readAsDefault: 'Text',
         on: {
           load: function (event, file) {
@@ -242,6 +241,20 @@ export default Ember.Controller.extend({
         });
       });
 
+    },
+
+    getBackup: function (backup) {
+
+      var dataController = this;
+
+      Ember.$.get(backup.url).done(function (data) {
+        if (!data) {
+          dataController.send('notify', 'danger', 'Backup has no data.');
+          return;
+        }
+        var blob = new window.Blob([data, { type: "text/plain;charset=utf-8" }]);
+        window.saveAs(blob, backup.fileName);
+      });
     }
   }
 });
