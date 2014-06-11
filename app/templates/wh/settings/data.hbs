@@ -73,6 +73,14 @@
   </div>
 {{/if}}
 
+<h2>Automatic Backups</h2>
+
+<ul>
+{{#each backup in model}}
+<li><a {{bind-attr href=backup.url}}>{{format-time backup.timestamp}}</a></li>
+{{/each}}
+</ul>
+
 <h2>Delete data</h2>
 
 <p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data above before taking such drastic measures.</p>
