@@ -62,14 +62,8 @@ Ember.Application.initializer({
       a.src = g;
       m.parentNode.insertBefore(a, m);
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-47335625-2', 'none');
+    ga('create', 'UA-47335625-2', {'cookieDomain': 'none'});
     ga('set', 'site', Ember.$('meta[name="siteName"]').attr('content'));
-
-    // Add `analytics` to all the things
-    application.register('analytics:session:current', ga, { instantiate: false, singleton: true });
-    Ember.A(['router', 'model', 'controller', 'view', 'route', 'component']).forEach(function (component) {
-      application.inject(component, 'analytics', 'analytics:session:current');
-    });
   }
 });
 
