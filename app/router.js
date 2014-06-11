@@ -48,7 +48,7 @@ Router.map(function() {
 
 Router.reopen({
   notifyAnalytics: function() {
-    this.get('analytics')('send', 'pageview');
+    ga('send', 'pageview');
   }.on('didTransition')
 });
 
