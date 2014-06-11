@@ -84,7 +84,7 @@
 
 <ul class="wy-plain-list-disc">
   {{#each backup in model}}
-    <li><a {{bind-attr href=backup.url}}>{{format-time backup.timestamp}}</a></li>
+    <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
   {{/each}}
 </ul>
 

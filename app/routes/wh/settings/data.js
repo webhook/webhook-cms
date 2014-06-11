@@ -9,8 +9,7 @@ export default Ember.Route.extend({
       backupsRef.once('value', function (backups) {
         var backupsArray = Ember.$.map(backups.val(), function (timestamp) {
           return {
-            // when the download attribute is better supported we can use this.
-            // fileName: siteName + '-' + moment(timestamp).format() + '.json,
+            fileName: siteName + '-' + moment(timestamp).format() + '.json',
             url: 'http://server.webhook.com:3000/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
             timestamp: timestamp
           };
