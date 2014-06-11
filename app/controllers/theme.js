@@ -18,6 +18,7 @@ export default Ember.ObjectController.extend({
         window.ENV.firebase.child('contentType').set(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
+            this.send('notify', 'success', 'Theme installation complete.');
             this.transitionToRoute('wh');
           }.bind(this));
         }.bind(this));
