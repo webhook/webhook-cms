@@ -1,0 +1,83 @@
+// ------------------------------------------------------------
+// WEBHOOK FORM CONTROLS
+// ------------------------------------------------------------
+// Some extra form elements that Webhook needs beyond Wyrm.
+// ------------------------------------------------------------
+
+.wy-control-group
+  .wh-template-var
+    opacity: 0
+    float: right
+    color: $text-light
+    +transition(all 0.5s ease-in)
+    &:before
+      content: "{{ item."
+    &:after
+      content: " }}"
+
+.wy-control-group:not(.wy-control-group-instruction)
+  &:hover .wh-template-var
+    display: inline-block
+    opacity: 1
+
+.wy-control-group.wy-control-group-instruction
+  @extend .wy-alert
+  label
+    @extend .wy-alert-title
+    color: $white !important
+  .wy-form-message
+    color: $text-color
+    font-size: 90%
+    font-style: normal
+
+.wy-control-group-file
+  audio
+    margin-bottom: $base-line-height / 4
+    display: block
+  .wy-file-remove
+    color: $text-light
+    font-size: 80%
+    cursor: pointer
+    &:hover
+      color: $red
+  .wy-file-location
+    font-size: 80%
+    display: inline-block
+    margin-bottom: $base-line-height / 4
+  .wy-form-upload-container
+    display: none
+    &.on
+      display: block
+
+.wy-form-upload-url
+  display: none
+  &.on
+    display: block
+
+.wh-table-tabular
+  margin-bottom: 0
+
+.wh-embedly-content
+  margin-top: $base-line-height / 2
+
+.wh-video
+  position: relative
+  padding-bottom: 56.25%
+  height: 0
+
+.wh-video-wrap
+  max-width: 640px
+  +clearfix
+  iframe
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+input[type=color]
+  padding: 0
+
+.btn-preview
+  float: right
+

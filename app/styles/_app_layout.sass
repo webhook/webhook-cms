@@ -1,31 +1,25 @@
+// ------------------------------------------------------------
+// WEBHOOK LAYOUT SASS
+// ------------------------------------------------------------
+// Layout styles in webhook.
+// ------------------------------------------------------------
+
 .wh-logo
   +wh-logo(40px,$gray-dark)
   position: relative
+
+// Sticky class applied on scroll
 
 .wy-affix
   position: fixed
   top: $gutter
 
+// LEFT SIDE MENU
+// TODO: no longer a wyrm thing, should be .wh now
+
 .wy-menu
   a:hover
     text-decoration: none
-
-.wy-menu-horiz
-  +clearfix
-  ul, li
-    display: inline-block
-  li:hover
-    background: rgba(255,255,255,.1)
-  li
-    &.divide-left
-      border-left: solid 1px hsl(0, 0%, 25%)
-    &.divide-right
-      border-right: solid 1px hsl(0, 0%, 25%)
-  a
-    height: $base-font-size * 2
-    display: inline-block
-    line-height: $base-font-size * 2
-    padding: 0 $base-font-size
 
 .wy-menu-vertical
   header
@@ -85,34 +79,6 @@
       content: "\f05a  Start here!"
       opacity: 1
       background: $green
-
-  // On state for the first level
-  a.active
-    color: $section-background-color
-    padding: $gutter / 4 $gutter
-    font-weight: bold
-    position: relative
-    background: $gray-dark
-    border-right: solid 10px $gray-darker
-    +font-smooth
-    &:hover
-      background: $gray-dark
-  // This is the on state for pages beyond second level
-  li.toctree-l2.current > a
-    background: darken($section-background-color, 20%)
-    padding: $gutter / 4 $gutter * 1.5
-  li.current ul
-    display: block
-  li ul
-    margin-bottom: 0
-    display: none
-  .local-toc
-    li ul
-      display: block
-  li ul li a
-    margin-bottom: 0
-    color: $text-light
-    font-weight: normal
   a
     display: inline-block
     line-height: $base-line-height
@@ -128,6 +94,30 @@
     &:active
       background-color: darken($menu-background-color, 10%)
       cursor: pointer
+  a.active
+    color: $section-background-color
+    padding: $gutter / 4 $gutter
+    font-weight: bold
+    position: relative
+    background: $gray-dark
+    border-right: solid 10px $gray-darker
+    +font-smooth
+    &:hover
+      background: $gray-dark
+
+  // If they're on a trial, this lets them know
+  .wh-trial-notice
+    font-size: 80%
+    background: lighten($orange,30%)
+    color: $orange
+    padding: 0 $base-line-height / 4
+    border-radius: 2px
+    display: inline-block
+    float: right
+    text-transform: initial
+
+
+// LEFT SIDE SEARCH
 
 .wy-side-nav-search
   z-index: $z-index-popover
@@ -142,34 +132,7 @@
   .wh-logo
     margin: 0 auto $base-line-height / 2 auto
 
-.wy-nav .wy-menu-vertical
-  header
-    color: $link-color
-  a
-    color: $text-light
-    &:hover
-      background-color: $link-color
-      color: $white
-
-[data-menu-wrap]
-  opacity: 1
-  width: 100%
-
-.wy-control-group.wy-control-group-instruction
-  @extend .wy-alert
-  label
-    @extend .wy-alert-title
-    color: $white !important
-  .wy-form-message
-    color: $text-color
-    font-size: 90%
-    font-style: normal
-
-.wy-affix
-  position: fixed
-  top: 0
-.wh-form-builder .wy-affix .wh-logo
-  margin-top: $base-line-height / 2
+// LOGIN
 
 .wh-login
   width: 400px
@@ -186,6 +149,8 @@
     margin: auto
     display: block
     margin-bottom: $gutter
+
+// INITIAL PAGE FOR A FRESH CMS
 
 .wh-start
   +outer-container
@@ -216,6 +181,9 @@
     margin: auto
     margin-bottom: $base-line-height
     display: block
+
+// THEME SELECTOR
+
 .wh-themes
   display: flex
   -webkit-flex-flow: row wrap
@@ -236,22 +204,7 @@
     margin-bottom: $base-line-height / 2
     line-height: 1
 
-.wy-table.wh-content
-  width: 100%
-  th
-    text-transform: capitalize
-  .wh-content-sort
-    color: $link-color
-    cursor: pointer
-  .wy-table-actions
-    width: 1px
-    .icon-remove-sign
-      opacity: 0
-  tbody tr:hover
-    cursor: pointer
-    background: $table-bg-hover-color
-    .wy-table-actions .icon-remove-sign
-      opacity: 1
+// CREAT CONTENT TYPE
 
 .wh-select-type
   label
@@ -276,11 +229,77 @@
     padding-right: $base-line-height
   .icon-remove-sign
     color: $red !important
+
+// TABLES
+// Webhook's tables are a little different than wyrm's defaults
+
+.wy-table.wh-content
+  width: 100%
+  th
+    text-transform: capitalize
+  .wh-content-sort
+    color: $link-color
+    cursor: pointer
+  .wy-table-actions
+    width: 1px
+    .icon-remove-sign
+      opacity: 0
+  tbody tr:hover
+    cursor: pointer
+    background: $table-bg-hover-color
+    .wy-table-actions .icon-remove-sign
+      opacity: 1
+
+// CODE STYLING FOR MARKDOWN PREVIEW
+// extends highlight class from wyrm
+
 code
   font-size: 90%
 
 pre code
   @extend .hljs
+
+// ONLINE USERS
+
+.wh-online-users
+  position: absolute
+  top: 0px
+  left: 0px
+  z-index: $z-index-tray
+  width: $nav-desktop-width
+  font-size: 90%
+  cursor: pointer
+  > .icon
+    background: hsla(0,0%,84%,1)
+    border-bottom-right-radius: 4px
+    border-bottom-left-radius: 4px
+    display: inline-block
+    padding: 4px 10px 4px 10px
+    margin-left: $base-line-height / 2
+    &:before
+      color: $text-light
+  dl
+    max-height: 0
+    overflow: hidden
+    background: $gray-dark
+  dd
+    padding: $base-line-height / 4 $base-line-height / 2
+    padding-left: $base-line-height
+    color: $gray-light
+.wh-online-users.on
+  position: relative
+  > .icon
+    background: $gray-darker
+    color: $white
+  > .icon:before
+    color: $gray
+  > .icon:after
+    content: " online now."
+  dl
+    max-height: 200px
+
+// TEAM MEMBERS
+// Dropdown is a little different than wyrms
 
 .wh-user-dropdown
   margin: $base-line-height / 2 0
@@ -289,6 +308,9 @@ pre code
   font-size: 80%
   a
     cursor: pointer
+
+
+// SPINNER
 
 .wh-logo-spinner:after
   content: ""
@@ -301,6 +323,9 @@ pre code
   left: -7px
   top: -7px
   +animation(rotation .9s infinite linear)
+
+// SAVE BAR
+// This shows at the bottom of most forms.
 
 .wh-save-item
   position: fixed
@@ -344,159 +369,9 @@ pre code
 .wy-dropdown.wy-dropdown-bubble .wy-dropdown-menu > dd > a:hover
   background: $gray-dark
 
-.wh-form-markdown
-  min-height: 200px
 
-.wy-form-gallery-instructions
-  font-size: 90%
-  margin: $base-line-height / 4 0 0 0
-  color: $text-light
-  padding-left: $base-line-height / 4
-
-.wy-form-gallery-edit
-  position: absolute
-  bottom: 100%
-  width: 212px
-  text-align: center
-  background: $gray-dark
-  left: -84px
-  padding: $base-line-height / 4
-  z-index: $z-index-popover
-  textarea
-    background: $gray-darker
-    border: none
-    box-shadow: none
-    color: $text-invert
-    margin: $base-line-height / 4 0
-    max-height: 100px
-  .triangle
-    +triangle(10px, $gray-dark, down)
-    position: absolute
-    bottom: -10px
-    left: 100px
-  .icon-remove-sign
-    color: $text-invert
-.wy-form-gallery .wy-form-gallery-edit-img
-  width: 200px
-  img
-    max-width: 200px
-    max-height: 200px
-.wy-form-gallery-save
-  background: $blue
-  padding: $base-line-height / 4
-  display: block
-  color: $white
-  font-size: 90%
-.wy-form-gallery
-  +outer-container
-  li
-    padding: $base-line-height / 4
-    margin-bottom: $base-line-height / 4
-    display: inline-block
-    position: relative
-    border-radius: 50px
-    cursor: pointer
-    border: solid 1px transparent
-  li.captioned
-    border-color: $gray-light
-  li.loading:after
-    content: ""
-    height: 34px
-    width: 34px
-    border: 4px solid lighten($spinner-color, 55%)
-    border-top: 4px solid $gray-darker
-    position: absolute
-    border-radius: 100%
-    left: 0px
-    top: 0px
-    +animation(rotation .9s infinite linear)
-  .progress
-    color: $text-color
-    font-size: 80%
-    line-height: 30px
-    width: 30px
-    height: 30px
-    display: inline-block
-    text-align: center
-
-  a img
-    width: 30px
-    height: 30px
-    vertical-align: middle
-    border-radius: 50px
-  li:hover
-    border-color: $gray
-    .icon
-      opacity: 1
-
-.wh-form-gallery-placeholder
-  background: $gray-dark
-  @extend %icon
-  @extend .icon-arrow-down
-  line-height: 18px
-  color: $white
-  font-size: 80%
-  &:after
-    content: " Position here."
-
-.wy-control-group-file
-  audio
-    margin-bottom: $base-line-height / 4
-    display: block
-  .wy-file-remove
-    color: $text-light
-    font-size: 80%
-    cursor: pointer
-    &:hover
-      color: $red
-  .wy-file-location
-    font-size: 80%
-    display: inline-block
-    margin-bottom: $base-line-height / 4
-  .wy-form-upload-container
-    display: none
-    &.on
-      display: block
-
-.wh-online-users
-  position: absolute
-  top: 0px
-  left: 0px
-  z-index: $z-index-tray
-  width: $nav-desktop-width
-  font-size: 90%
-  cursor: pointer
-  > .icon
-    background: hsla(0,0%,84%,1)
-    border-bottom-right-radius: 4px
-    border-bottom-left-radius: 4px
-    display: inline-block
-    padding: 4px 10px 4px 10px
-    margin-left: $base-line-height / 2
-    &:before
-      color: $text-light
-  dl
-    max-height: 0
-    overflow: hidden
-    background: $gray-dark
-  dd
-    padding: $base-line-height / 4 $base-line-height / 2
-    padding-left: $base-line-height
-    color: $gray-light
-.wh-online-users.on
-  position: relative
-  > .icon
-    background: $gray-darker
-    color: $white
-  > .icon:before
-    color: $gray
-  > .icon:after
-    content: " online now."
-  dl
-    max-height: 200px
-
-.btn-preview
-  float: right
+// LOCALHOST DOWN
+// This shows when the local runserver isn't running.
 
 .wh-server-down
   display: none
@@ -515,11 +390,7 @@ pre code
     max-width: 600px
     margin: auto
 
-.wh-table-tabular
-  margin-bottom: 0
-
-.wh-embedly-content
-  margin-top: $base-line-height / 2
+// SEARCH RESULTS
 
 .wh-search-results
   li
@@ -552,37 +423,12 @@ pre code
     font-weight: bold
     padding: 0 $base-line-height / 4
 
-
 .body-no-scroll
   height: 100%
   overflow-y: hidden
 
-.wh-video-wrap
-  max-width: 640px
-  +clearfix
 
-.wh-video
-  position: relative
-  padding-bottom: 56.25%
-  height: 0
-
-.wh-video-wrap
-  iframe
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-
-.wh-trial-notice
-  font-size: 80%
-  background: lighten($orange,30%)
-  color: $orange
-  padding: 0 $base-line-height / 4
-  border-radius: 2px
-  display: inline-block
-  float: right
-  text-transform: initial
+// RESPONSIVE STYLES HERE
 
 +media($desktop)
   .wh-themes
