@@ -63,7 +63,7 @@ Ember.Application.initializer({
       m.parentNode.insertBefore(a, m);
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     ga('create', 'UA-47335625-2', {'cookieDomain': 'none'});
-    ga('set', 'site', Ember.$('meta[name="siteName"]').attr('content'));
+    ga('set', 'dimension1', Ember.$('meta[name="siteName"]').attr('content'));
   }
 });
 
