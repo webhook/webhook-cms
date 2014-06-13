@@ -10,7 +10,7 @@ export default Ember.Route.extend({
         var backups = Ember.$.map(snapshot.val(), function (timestamp) {
           return {
             fileName: siteName + '-' + moment(timestamp).format() + '.json',
-            url: 'http://server.webhook.com:3000/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
+            url: 'http://server.webhook.com/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
             timestamp: timestamp
           };
         });

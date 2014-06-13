@@ -342,7 +342,7 @@ Ember.Application.initializer({
       }
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com:3000/search/',
+        url: 'http://server.webhook.com/search/',
         type: 'POST',
         data: {
           token: key,
@@ -399,7 +399,7 @@ Ember.Application.initializer({
       Ember.Logger.info('Updating search index for', typeName, id);
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com:3000/search/index/',
+        url: 'http://server.webhook.com/search/index/',
         type: 'POST',
         data: {
           id: id,
@@ -421,7 +421,7 @@ Ember.Application.initializer({
       var key = bucket;
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com:3000/search/delete/',
+        url: 'http://server.webhook.com/search/delete/',
         type: 'POST',
         data: {
           id: id,
@@ -439,7 +439,7 @@ Ember.Application.initializer({
       var key = bucket;
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com:3000/search/delete/type/',
+        url: 'http://server.webhook.com/search/delete/type/',
         type: 'POST',
         data: {
           token: key,
