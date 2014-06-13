@@ -128,9 +128,12 @@ export default Ember.ObjectController.extend({
             return;
           }
 
-          if(this.get('session.user.email') === email) {
-            this.transitionToRoute('wh');
-          }
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/' + siteName).set(null, function(err) {
+            if(this.get('session.user.email') === email) {
+              this.transitionToRoute('wh');
+            }
+          });
+
         }.bind(this));
 
       }.bind(this));
@@ -187,7 +190,9 @@ export default Ember.ObjectController.extend({
               this.set('error', err);
               return;
             }
-            this.sendInviteSignal(email);
+            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/' + siteName).set(true, function(err) {
+              this.sendInviteSignal(email);
+            });
           }.bind(this));
         }
         

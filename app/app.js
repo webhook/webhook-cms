@@ -294,22 +294,24 @@ Ember.Application.initializer({
                 session.set('error', error);
                 Ember.run(application, application.advanceReadiness);
               } else {
-                // Try to delete self from potential user list
-                managementSiteRef.child('potential_users').child(escapedEmail).remove(function (error) {
-                  if (error) {
-                    session.get('auth').logout();
-                    session.set('error', error);
-                    Ember.run(application, application.advanceReadiness);
-                  } else {
-                    // Redo original authorization call
-                    managementSiteRef.child('key').once('value', initializeUser, function (error) {
-                      if (error) {
-                        session.get('auth').logout();
-                        session.set('error', error);
-                      }
+                managementSiteRef.root().child('management/users').child(escapedEmail).child('sites').child(siteName).set(true, function (error) {
+                  // Try to delete self from potential user list
+                  managementSiteRef.child('potential_users').child(escapedEmail).remove(function (error) {
+                    if (error) {
+                      session.get('auth').logout();
+                      session.set('error', error);
                       Ember.run(application, application.advanceReadiness);
-                    });
-                  }
+                    } else {
+                      // Redo original authorization call
+                      managementSiteRef.child('key').once('value', initializeUser, function (error) {
+                        if (error) {
+                          session.get('auth').logout();
+                          session.set('error', error);
+                        }
+                        Ember.run(application, application.advanceReadiness);
+                      });
+                    }
+                  });
                 });
               }
             });
