@@ -39,6 +39,7 @@ export default Ember.Component.extend({
     var url   = window.ENV.uploadUrl,
         site  = this.get('session.site.name'),
         token = this.get('session.site.token');
+    
     this.uploader = new Webhook.Uploader(url, site, token, { data: this.get('postParams') });
 
     // when a file is selected, upload

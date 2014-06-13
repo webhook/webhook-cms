@@ -6,15 +6,15 @@ export default Ember.Route.extend({
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
       var backupsRef = window.ENV.firebaseRoot.child('management/backups');
-      backupsRef.once('value', function (backups) {
-        var backupsArray = Ember.$.map(backups.val(), function (timestamp) {
+      backupsRef.once('value', function (snapshot) {
+        var backups = Ember.$.map(snapshot.val(), function (timestamp) {
           return {
             fileName: siteName + '-' + moment(timestamp).format() + '.json',
-            url: 'http://server.webhook.com:3000/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
+            url: 'http://server.webhook.com/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
             timestamp: timestamp
           };
         });
-        Ember.run(null, resolve, backupsArray);
+        Ember.run(null, resolve, backups.reverse());
       });
     });
   }
