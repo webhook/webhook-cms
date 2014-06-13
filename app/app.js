@@ -294,7 +294,7 @@ Ember.Application.initializer({
                 session.set('error', error);
                 Ember.run(application, application.advanceReadiness);
               } else {
-                managementSiteRef.root().child('management/users').child(escapedEmail).child('sites').child(siteName).set(true, function (error) {
+                managementSiteRef.root().child('management/users').child(escapedEmail).child('sites/user').child(siteName).set(true, function (error) {
                   // Try to delete self from potential user list
                   managementSiteRef.child('potential_users').child(escapedEmail).remove(function (error) {
                     if (error) {

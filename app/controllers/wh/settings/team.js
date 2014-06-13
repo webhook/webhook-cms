@@ -79,10 +79,14 @@ export default Ember.ObjectController.extend({
             return;
           }
 
-          // Hey if this was you.. kick you out of this page now
-          if(this.get('session.user.email') === email) {
-            this.transitionToRoute('wh');
-          }
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true, function(err) {
+            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
+              // Hey if this was you.. kick you out of this page now
+              if(this.get('session.user.email') === email) {
+                this.transitionToRoute('wh');
+              }
+            }.bind(this));
+          }.bind(this));
         }.bind(this));
 
       }.bind(this));
@@ -107,6 +111,11 @@ export default Ember.ObjectController.extend({
             return;
           }
 
+          // Update your user list
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function(err) {
+            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(true, function(err) {
+            }.bind(this));
+          }.bind(this));
         }.bind(this));
       }.bind(this));
     },
@@ -128,11 +137,13 @@ export default Ember.ObjectController.extend({
             return;
           }
 
-          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/' + siteName).set(null, function(err) {
-            if(this.get('session.user.email') === email) {
-              this.transitionToRoute('wh');
-            }
-          });
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
+            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function(err) {
+              if(this.get('session.user.email') === email) {
+                this.transitionToRoute('wh');
+              }
+            }.bind(this));
+          }.bind(this));
 
         }.bind(this));
 
@@ -190,9 +201,9 @@ export default Ember.ObjectController.extend({
               this.set('error', err);
               return;
             }
-            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/' + siteName).set(true, function(err) {
+            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true, function(err) {
               this.sendInviteSignal(email);
-            });
+            }.bind(this));
           }.bind(this));
         }
         
