@@ -31,6 +31,14 @@ window.ENV = {
       description: 'Theme for video producers who manage multiple shows across YouTube, Vimeo and Twitch.'
     },
     {
+      name:  'Simple personality site',
+      image: 'http://webhook-theme-internet-presence.webhook.org/static/images/theme.jpg',
+      url:   'https://github.com/webhook/webhook-theme-internet-presence/archive/master.zip',
+      demo:  'http://webhook-theme-internet-presence.webhook.org',
+      code:  'https://github.com/webhook/webhook-theme-internet-presence',
+      description: 'Theme for individuals that need a simple site to manage their online presence, previous work, upcoming events and blog.'
+    },
+    {
       name:  'Bootstrap blog',
       image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
       url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
