@@ -175,13 +175,10 @@ export default Ember.Route.extend({
 
     controller.set('previewUrl', null);
 
-    this._super.apply(this, arguments);
-
     // watch for value changes so we can prevent user from accidentally leaving
-    controller.set('isDirty', false);
-    controller.addObserver('type.controls.@each.value', function () {
-      controller.set('isDirty', true);
-    }.bind(this));
+    controller.set('initialValues', type.get('controls').getEach('value'));
+
+    this._super.apply(this, arguments);
   },
 
   fixControlType: function (contentType) {

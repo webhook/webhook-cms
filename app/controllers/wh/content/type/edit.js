@@ -11,9 +11,9 @@ export default Ember.ObjectController.extend({
   publishDate : null,
   showSchedule: false,
   itemModel   : null,
-  isDirty     : false,
   previewUrl  : null,
   initialRelations: Ember.Object.create(),
+  initialValues: Ember.A([]),
 
   fullPreviewUrl: function () {
     if(this.get('previewUrl') === null) {
@@ -46,14 +46,33 @@ export default Ember.ObjectController.extend({
     return moment(this.get('publishDate')).isAfter();
   }.property('publishDate', 'isDraft', 'showSchedule'),
 
+  isDirty: function () {
+
+    var isDirty = false;
+
+    this.get('controls').getEach('value').forEach(function (value, index) {
+      if (!isDirty) {
+        var initialValue = this.get('initialValues').objectAt(index);
+        if ((value !== "" || initialValue !== undefined) && (value !== initialValue)) {
+          isDirty = true;
+        }
+      }
+    }.bind(this));
+
+    return isDirty;
+
+  }.property('controls.@each.value'),
+
   handleBeforeUnload: function () {
     return 'It looks like you have been editing something -- if you leave before submitting your changes will be lost.';
   },
 
-  dirtyStateChanged: function () {
+  watchForUnload: function () {
     if (this.get('isDirty')) {
+      Ember.Logger.info('Item is dirty, prevent navigation.');
       Ember.$(window).one('beforeunload', this.handleBeforeUnload);
     } else {
+      Ember.Logger.info('Item is clean.');
       Ember.$(window).off('beforeunload', this.handleBeforeUnload);
     }
   }.observes('isDirty'),
@@ -247,7 +266,7 @@ export default Ember.ObjectController.extend({
 
     itemModel.set('data', data).save().then(function (item) {
 
-      this.set('isDirty', false);
+      this.set('initialValues', controls.getEach('value'));
 
       window.ENV.sendBuildSignal(data.publish_date);
 

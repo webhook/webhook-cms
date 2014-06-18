@@ -126,7 +126,7 @@ export default Ember.Component.extend({
       self.sendAction(
         'notify',
         'danger',
-        'Error: ' + response.statusText + '. ' +  fileName + ' failed to upload. ');
+        'Error: ' + response.statusText + '. ' +  fileName + ' failed to upload.');
       self.failUpload.call(self, response);
     });
 
