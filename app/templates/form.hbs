@@ -29,7 +29,7 @@
 
         <form class="wy-form-stacked" {{action "updateType" on="submit"}}>
           <fieldset>
-            <h2 class="wh-form-builder-title" data-toggle="tooltip" data-placement="left" title="Click to edit object title.">{{name}}</h2>
+            <h2 class="wh-form-builder-title">{{name}}</h2>
 
             {{#each errors.fields}}
               <span class="wy-form-message">{{this}}</span>
@@ -39,7 +39,7 @@
           </fieldset>
 
           <div class="wh-form-builder-save wy-btn-group">
-            <button type="button" class="btn btn-link icon icon-question-sign"> Help</button>
+            <a href="https://vimeo.com/98492453" target="_blank" class="btn btn-link icon icon-question-sign" data-toggle="tooltip" title="Watch a tutorial video about the form builder."> Help</a>
             <button type="submit" class="btn btn-success icon icon-ok-sign float-right"> Save form</button>
             <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action "quitForm"}}> Cancel my edits</button>
           </div>
