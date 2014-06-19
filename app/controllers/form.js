@@ -209,8 +209,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           this.store.find('control-type', 'relation').then(function (controlType) {
 
+            var capitalizedModelName = this.get('model.name').charAt(0).toUpperCase() + this.get('model.name').slice(1);
+            var controlLabel = capitalizedModelName + ' (' + localControl.get('label') + ')';
+
             var control = this.store.createRecord('control', {
-              label      : this.get('model.name'),
+              label      : controlLabel,
               controlType: controlType,
               meta: this.store.createRecord('meta-data', {
                 data: {
@@ -224,7 +227,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             var counter = 1;
             while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
               counter = counter + 1;
-              control.set('label', this.get('model.name') + ' ' + counter);
+              control.set('label', controlLabel + ' ' + counter);
             }
 
             Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '` on `' + contentType.get('id') + '`');
