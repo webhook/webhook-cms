@@ -105,12 +105,12 @@ export default Ember.ObjectController.extend({
 
         return this.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = getItemModelName(contentType);
+          var foreignControls = contentType.get('controls');
+          var reverseControl = control.get('meta.data.reverseName') && foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
 
           // Legacy support
           // If we don't have a reverse relationship, add it.
           new Ember.RSVP.Promise(function (resolve, reject) {
-            var foreignControls = contentType.get('controls');
-            var reverseControl = control.get('meta.data.reverseName') && foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
 
             if (reverseControl) {
               Ember.Logger.log('Reverse control found for `' + control.get('name') + '` on `' + contentType.get('name') + '`, proceeding.');
@@ -168,16 +168,28 @@ export default Ember.ObjectController.extend({
             // Find and update reverse item.
             return this.store.find(modelName, itemId).then(function (item) {
 
-              var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
+              if (reverseControl.get('meta.data.isSingle')) {
 
-              if (updateType === 'remove') {
-                currentItems.removeObject(relatedValue);
+                if (updateType === 'remove') {
+                  item.get('data')[control.get('meta.data.reverseName')] = null;
+                } else {
+                  item.get('data')[control.get('meta.data.reverseName')] = relatedValue;
+                }
+
               } else {
-                currentItems.addObject(relatedValue);
-              }
 
-              // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
-              item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
+                var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
+
+                if (updateType === 'remove') {
+                  currentItems.removeObject(relatedValue);
+                } else {
+                  currentItems.addObject(relatedValue);
+                }
+
+                // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
+                item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
+
+              }
               return item.save().then(function () {
                 Ember.Logger.log('`' + item.get('data.name') + '` updated.');
               });
