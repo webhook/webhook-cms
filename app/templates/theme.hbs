@@ -37,7 +37,7 @@
             {{theme.description}}
           </p>
 
-          <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>
+          {{#if theme.demo}}<a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>{{/if}}
           <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">Github</a>
           <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
       </li>

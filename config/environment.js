@@ -39,12 +39,11 @@ window.ENV = {
       description: 'Theme for individuals that need a simple site to manage their online presence, previous work, upcoming events and blog.'
     },
     {
-      name:  'Bootstrap blog',
-      image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
-      url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
-      demo:  'http://daveblog.webhook.org',
-      code:  'https://github.com/snide/webhook-theme-bootstrap-blog',
-      description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
+      name:  'Preprocessors built in',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-preprocessor/master/theme.png',
+      url:   'https://github.com/webhook/webhook-theme-preprocessor/archive/master.zip',
+      code:  'https://github.com/webhook/webhook-theme-preprocessor',
+      description: 'This theme will automatically add popular CSS and JS preprocessors to your site. Once installed, you\'ll need to restart your runserver.'
     },
     {
       name:  'Bootstrap',
@@ -61,6 +60,14 @@ window.ENV = {
       demo:  'http://www.wyrmsass.org',
       code:  'https://github.com/webhook/webhook-theme-wyrm',
       description: 'Installs boilerplate templates for the Wyrm Sass framework. Requires bower.js and Sass to use. Check github for installation instructions.'
+    },
+    {
+      name:  'Bootstrap blog',
+      image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
+      url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
+      demo:  'http://daveblog.webhook.org',
+      code:  'https://github.com/snide/webhook-theme-bootstrap-blog',
+      description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
     }
   ],
   controlTypeGroups: [
