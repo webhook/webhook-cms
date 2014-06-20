@@ -1,3 +1,5 @@
+import downcode from 'appkit/utils/downcode';
+
 export default DS.Model.extend({
   name       : DS.attr('string'),
   label      : DS.attr('string'),
@@ -13,11 +15,8 @@ export default DS.Model.extend({
   setName: function () {
     // you cannot change the name of locked controls
     if (!this.get('locked')) {
-      if (this.get('label')) {
-        this.set('name', this.get('label').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
-      } else {
-        this.set('name', this.get('controlType.name').toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
-      }
+      var label = this.get('label') || this.get('controlType.name');
+      this.set('name', downcode(label).toLowerCase().replace(/\s+/g, '_').replace(/(\W|[A-Z])/g, ''));
     }
   }.observes('label'),
 

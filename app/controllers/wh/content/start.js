@@ -1,3 +1,5 @@
+import downcode from 'appkit/utils/downcode';
+
 export default Ember.ArrayController.extend({
   newTypeName     : null,
   newTypeType     : null,
@@ -18,8 +20,7 @@ export default Ember.ArrayController.extend({
   }.property('newTypeId'),
 
   newTypeId: function () {
-    var name = this.get('newTypeName');
-    return name ? name.replace(/\s+|\W/g, '').toLowerCase() : '';
+    return downcode(this.get('newTypeName')).replace(/\s+|\W/g, '').toLowerCase();
   }.property('newTypeName'),
 
   actions: {
