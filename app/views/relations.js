@@ -8,6 +8,9 @@ export default Ember.CollectionView.extend({
     if (!this.get('relationKeys')) {
       return Ember.A([]);
     }
+    if (typeof this.get('relationKeys') === 'string') {
+      return Ember.A([this.get('relationKeys')]);
+    }
     return this.get('relationKeys').slice(0, this.get('limit'));
   }.property('relationKeys'),
 
@@ -38,8 +41,8 @@ export default Ember.CollectionView.extend({
           Ember.Logger.info('Found item for relation', relation.get('data.name'));
           if (content === collectionView.get('content.lastObject')) {
             relationNameItem.set('last', true);
-            if (collectionView.get('relationKeys.length') > collectionView.get('limit')) {
-              relationNameItem.set('more', collectionView.get('relationKeys.length') - collectionView.get('limit'));
+            if (collectionView.get('content.length') > collectionView.get('limit')) {
+              relationNameItem.set('more', collectionView.get('content.length') - collectionView.get('limit'));
             }
           }
           relationNameItem.set('relation', relation);
