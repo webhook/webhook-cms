@@ -74,7 +74,7 @@ export default Ember.ObjectController.extend({
         }
 
         if (error) {
-          this.set('error', error);
+          this.set('errors', Ember.A([error]));
         }
       }.bind(this));
 
