@@ -6,15 +6,21 @@ export default Ember.View.extend({
 
   letterSpacing: 3,
 
+  options: function () {
+
+    var options = this.get('control.meta.data');
+
+    return Ember.Object.create({
+      min: parseInt(options.min || 0, 10),
+      max: parseInt(options.max || 0, 10),
+      step: parseFloat(options.step || 0)
+    });
+
+  }.property('control.meta.data.max'),
+
   didInsertElement: function () {
 
     var rating = this;
-    var options = this.get('control.meta.data');
-    this.set('options', Ember.Object.create({
-      min: parseInt(options.min, 10),
-      max: parseInt(options.max, 10),
-      step: parseFloat(options.step)
-    }));
 
     this.$().css({
       display: 'inline-block',
@@ -27,14 +33,16 @@ export default Ember.View.extend({
       cursor: 'pointer'
     });
 
-    rating.$().html(new Array(this.get('options.max') + 1).join(rating.get('emptyStar')));
+    rating.set('empties', rating.$('<span>'));
+    rating.get('empties').appendTo(rating.$());
+    rating.setEmpties();
 
-    rating.set('stars', this.$('<span>').css({
+    rating.set('stars', rating.$('<span>').css({
       position: 'absolute',
       top: 0,
       left: 0,
       overflow: 'hidden'
-    }).html(new Array(this.get('options.max') + 1).join(rating.get('fullStar'))));
+    }).html(new Array(rating.get('options.max') + 1).join(rating.get('fullStar'))));
 
     rating.get('stars').appendTo(rating.$());
 
@@ -57,6 +65,14 @@ export default Ember.View.extend({
     rating.set('value', rating.getWithDefault('control.value', rating.get('options.min')));
 
   },
+
+  setEmpties: function () {
+    this.get('empties').html(new Array(this.getWithDefault('options.max', 0) + 1).join(this.get('emptyStar')));
+  },
+
+  maxChanged: function () {
+    this.setEmpties();
+  }.observes('control.meta.data.max'),
 
   updateStars: function () {
 
