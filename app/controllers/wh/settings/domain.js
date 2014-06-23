@@ -3,19 +3,31 @@ export default Ember.ObjectController.extend({
 
   isSending: false,
   success  : false,
-  errors   : Ember.A([]),
+  errors    :  Ember.A([]),
 
 
   actions: {
     updateDns: function() {
-      this.set('isSending', true);
-
       var domain = this.get('domain');
       var siteName = this.get('buildEnvironment').siteName;
 
       if(domain.indexOf('http://') === 0) {
         domain = domain.replace('http://');
       }
+      
+      this.get('errors').clear();
+
+      if(this.get('domain').replace(' ', '') === '') {
+        this.get('errors').pushObject('Domain name can not be empty.');
+        return;
+      }
+
+      if(this.get('domain').indexOf('*') !== -1) {
+        this.get('errors').pushObject('Domain name can not contain wildcard (*).');
+        return;
+      }
+
+      this.set('isSending', true);
 
       function uniqueId() {
         return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

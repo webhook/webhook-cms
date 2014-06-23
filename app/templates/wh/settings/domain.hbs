@@ -14,6 +14,14 @@ CNAME        www            dns.webhook.com
     <p>This site is still on a free trial. Only paid sites allow the use of custom domains.</p>
     <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade at webhook.com</a>
   {{else}}
+
+  {{#if errors}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">Please fix the following errors.</div>
+      <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
+    </div>
+  {{/if}}
+
   <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
 
     <h1>Domains</h1>

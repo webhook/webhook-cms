@@ -17,5 +17,9 @@ export default Ember.Route.extend({
         Ember.run(null, resolve, backups.reverse());
       });
     });
+  },
+
+  setupController: function (controller) {
+    controller.set('deleteOption', 'data');
   }
 });

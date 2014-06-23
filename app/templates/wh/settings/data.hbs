@@ -73,7 +73,7 @@
   </div>
 {{/if}}
 
-<hr/>
+<hr>
 
 <h2>Backups</h2>
 
@@ -88,10 +88,37 @@
   {{/each}}
 </ul>
 
-<hr/>
+<hr>
 
-<h2>Delete data</h2>
+<h2>Reset your website</h2>
 
-<p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data above before taking such drastic measures.</p>
+{{#if buildEnvironment.local}}
+  <p>This will allow you to reset your site so you can start over. Please make a backup before performing this action.</p>
 
-<button class="btn btn-neutral icon icon-remove-sign" {{action "deleteData"}}> Delete all data</button>
+  <div class="wy-control-group">
+    <label>These changes are irreversible</label>
+    <div class="wy-control">
+      <label class="wy-radio">
+        {{view "radio-button"
+          name="deleteOptions"
+          selection=deleteOption
+          value="data"
+        }}
+        <strong>Delete my data.</strong> (This will delete your forms, but your templates will remain.)
+      </label>
+
+      <label class="wy-radio">
+        {{view "radio-button"
+          name="deleteOptions"
+          selection=deleteOption
+          value="everything"
+        }}
+        <strong>Delete my templates and my data.</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
+      </label>
+    </div>
+  </div>
+  <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
+{{else}}
+  <p>You can only reset your website when running it locally.</p>
+{{/if}}
+

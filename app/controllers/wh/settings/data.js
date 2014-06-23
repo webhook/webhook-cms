@@ -2,6 +2,9 @@ export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
 
+  deleteOption: 'data',
+  isDeleting: false,
+
   dataBreakdown: function () {
 
     var dataBackup = this.get('dataBackup');
@@ -222,23 +225,48 @@ export default Ember.Controller.extend({
 
       var dataController = this;
 
-      if (!window.confirm('You are about to delete all of your site data. This cannot be undone. Would you like to proceed?')) {
+      var warning = 'You are about to delete all of your site data';
+
+      if (dataController.get('deleteOption') === 'everything') {
+        warning = warning + ', templates, and static files';
+      }
+
+      warning = warning + '. This cannot be undone. Would you like to proceed?';
+
+      if (!window.confirm(warning)) {
         return;
       }
 
+      dataController.set('isDeleting', true);
+
+      // first delete all search indexes
       this.store.find('content-type').then(function (contentTypes) {
         contentTypes.forEach(function (contentType) {
           window.ENV.deleteTypeIndex(contentType.get('id'));
         });
       }).then(function () {
+
+        // delete all site data
         window.ENV.firebase.update({
           data: null,
           contentType: null,
           settings: null
         }, function () {
-          window.ENV.sendBuildSignal();
-          dataController.transitionToRoute('start');
+
+          if (dataController.get('deleteOption') === 'everything') {
+            window.ENV.sendGruntCommand('reset_files', function () {
+              window.ENV.sendBuildSignal();
+              dataController.set('isDeleting', true);
+              dataController.transitionToRoute('start');
+            });
+          } else {
+            window.ENV.sendBuildSignal();
+            dataController.set('isDeleting', true);
+            dataController.transitionToRoute('start');
+          }
+
         });
+
       });
 
     },

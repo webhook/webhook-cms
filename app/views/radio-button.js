@@ -14,7 +14,7 @@ export default Ember.View.extend({
     this.set("selection", this.$().attr('value') || "");
   },
 
-  checked : function() {
+  checked: function() {
     return this.get("value") === this.get("selection");
   }.property('selection'),
 
