@@ -256,12 +256,12 @@ export default Ember.Controller.extend({
           if (dataController.get('deleteOption') === 'everything') {
             window.ENV.sendGruntCommand('reset_files', function () {
               window.ENV.sendBuildSignal();
-              dataController.set('isDeleting', true);
+              dataController.set('isDeleting', false);
               dataController.transitionToRoute('start');
             });
           } else {
             window.ENV.sendBuildSignal();
-            dataController.set('isDeleting', true);
+            dataController.set('isDeleting', false);
             dataController.transitionToRoute('start');
           }
 
