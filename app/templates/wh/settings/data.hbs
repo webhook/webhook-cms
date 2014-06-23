@@ -73,7 +73,7 @@
   </div>
 {{/if}}
 
-<hr/>
+<hr>
 
 <h2>Backups</h2>
 
@@ -88,10 +88,28 @@
   {{/each}}
 </ul>
 
-<hr/>
+<hr>
 
 <h2>Delete data</h2>
 
 <p>Sometimes it's faster to delete all of your data and start from scratch. We recommend downloading a backup of your data above before taking such drastic measures.</p>
 
-<button class="btn btn-neutral icon icon-remove-sign" {{action "deleteData"}}> Delete all data</button>
+<label>
+  {{view "radio-button"
+    name="deleteOptions"
+    selection=deleteOption
+    value="data"
+  }}
+  just delete my data
+</label>
+
+<label>
+  {{view "radio-button"
+    name="deleteOptions"
+    selection=deleteOption
+    value="everything"
+  }}
+  delete my templates and data
+</label>
+
+<button class="btn btn-neutral icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
