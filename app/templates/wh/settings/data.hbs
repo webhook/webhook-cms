@@ -113,12 +113,12 @@
           selection=deleteOption
           value="everything"
         }}
-        <strong>Delete my templates and my data</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
+        <strong>Delete my templates and my data.</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
       </label>
     </div>
   </div>
+  <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
 {{else}}
   <p>You can only reset your website when running it locally.</p>
 {{/if}}
 
-<button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
