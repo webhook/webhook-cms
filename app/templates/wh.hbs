@@ -10,6 +10,9 @@
       <a href="">Webhook</a>
     </nav>
 
+    {{#if buildEnvironment.local}}
+      <div class="wh-local-notice"><span class="icon icon-code"> Local development</span> Saves here will only trigger builds locally, not on your live website.</div>
+    {{/if}}
 
     <!-- PAGE CONTENT -->
     <div class="wy-nav-content">
