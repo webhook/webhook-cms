@@ -136,6 +136,31 @@ export default Ember.Controller.extend({
     window.ENV.indexItem(id, searchData, contentType.get('oneOff'), contentType.get('id'));
   },
 
+  deleteData: function () {
+
+    var dataController = this;
+
+    // first delete all search indexes
+    dataController.store.find('content-type').then(function (contentTypes) {
+      contentTypes.forEach(function (contentType) {
+        window.ENV.deleteTypeIndex(contentType.get('id'));
+      });
+    }).then(function () {
+
+      // delete all site data
+      window.ENV.firebase.update({
+        data: null,
+        contentType: null,
+        settings: null
+      }, function () {
+        window.ENV.sendBuildSignal();
+        dataController.set('isDeleting', false);
+        dataController.transitionToRoute('start');
+      });
+
+    });
+  },
+
   actions: {
     download: function () {
 
@@ -239,35 +264,21 @@ export default Ember.Controller.extend({
 
       dataController.set('isDeleting', true);
 
-      // first delete all search indexes
-      this.store.find('content-type').then(function (contentTypes) {
-        contentTypes.forEach(function (contentType) {
-          window.ENV.deleteTypeIndex(contentType.get('id'));
-        });
-      }).then(function () {
+      if (dataController.get('deleteOption') === 'everything') {
+        // delete files first
+        window.ENV.sendGruntCommand('reset_files', function (error) {
 
-        // delete all site data
-        window.ENV.firebase.update({
-          data: null,
-          contentType: null,
-          settings: null
-        }, function () {
-
-          if (dataController.get('deleteOption') === 'everything') {
-            window.ENV.sendGruntCommand('reset_files', function () {
-              window.ENV.sendBuildSignal();
-              dataController.set('isDeleting', false);
-              dataController.transitionToRoute('start');
-            });
-          } else {
-            window.ENV.sendBuildSignal();
+          if (error) {
             dataController.set('isDeleting', false);
-            dataController.transitionToRoute('start');
+            window.alert("Not all files could be deleted. Please close any open project files and directories and try again.");
+          } else {
+            dataController.deleteData();
           }
 
         });
-
-      });
+      } else {
+        dataController.deleteData();
+      }
 
     },
 
