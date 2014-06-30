@@ -9,6 +9,9 @@
   {{#if isDuplicate}}
     <span class="wy-input-context"> There is already an content type with that name</span>
   {{/if}}
+  {{#if isIdTooLong}}
+    <span class="wy-input-context"> The content type ID must be 250 characters or shorter. The ID created from the name entered is {{newTypeId.length}} characters long.</span>
+  {{/if}}
   <p>This will be the CMS menu name (on <span class="icon icon-circle-arrow-left"></span> left) and also define the URL pattern on your front-facing site, so choose wisey.</p>
   {{#if newTypeName}}
     <h2>So... how many {{newTypeName}} are there?</h2>

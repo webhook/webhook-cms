@@ -12,11 +12,15 @@ export default Ember.ArrayController.extend({
   },
 
   isDisabled: function () {
-    return this.get('isDuplicate') || this.get('newTypeType') === null;
-  }.property('isDuplicate', 'newTypeType'),
+    return this.get('isIdTooLong') || this.get('isDuplicate') || this.get('newTypeType') === null;
+  }.property('isDuplicate', 'isIdTooLong', 'newTypeType'),
 
   isDuplicate: function () {
     return this.get('model').isAny('id', this.get('newTypeId'));
+  }.property('newTypeId'),
+
+  isIdTooLong: function () {
+    return this.get('newTypeId.length') > 250;
   }.property('newTypeId'),
 
   newTypeId: function () {
