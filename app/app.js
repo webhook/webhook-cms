@@ -103,16 +103,21 @@ Ember.Application.initializer({
 
       localSocket.socket.onmessage = function (event) {
         if (event.data === 'done') {
-          if (localSocket.get('doneCallback')) {
-            localSocket.get('doneCallback')();
+          var storedCallback = localSocket.get('doneCallback');
+          localSocket.set('doneCallback', null); 
+
+          if (storedCallback) {
+            storedCallback();
           }
-          localSocket.set('doneCallback', null); //Reset so done doesn't get called twice
         } else if (event.data.indexOf('done:') === 0) {
           var data = JSON.parse(event.data.replace('done:', ''));
-          if (localSocket.get('doneCallback')) {
-            localSocket.get('doneCallback')(data);
+
+          var storedCallback = localSocket.get('doneCallback');
+          localSocket.set('doneCallback', null); 
+
+          if (storedCallback) {
+            storedCallback(data);
           }
-          localSocket.set('doneCallback', null); //Reset so done doesn't get called twice
         } else if (event.data.indexOf('message:') === 0) {
           var message = JSON.parse(event.data.replce('message:', ''));
           localSocket.set('message', message);
