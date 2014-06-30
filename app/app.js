@@ -102,9 +102,10 @@ Ember.Application.initializer({
       });
 
       localSocket.socket.onmessage = function (event) {
+        var storedCallback;
         if (event.data === 'done') {
-          var storedCallback = localSocket.get('doneCallback');
-          localSocket.set('doneCallback', null); 
+          storedCallback = localSocket.get('doneCallback');
+          localSocket.set('doneCallback', null);
 
           if (storedCallback) {
             storedCallback();
@@ -112,8 +113,8 @@ Ember.Application.initializer({
         } else if (event.data.indexOf('done:') === 0) {
           var data = JSON.parse(event.data.replace('done:', ''));
 
-          var storedCallback = localSocket.get('doneCallback');
-          localSocket.set('doneCallback', null); 
+          storedCallback = localSocket.get('doneCallback');
+          localSocket.set('doneCallback', null);
 
           if (storedCallback) {
             storedCallback(data);
@@ -500,6 +501,7 @@ Ember.Application.initializer({
     };
 
     window.ENV.sendGruntCommand = function (command, callback) {
+      Ember.Logger.log('%csendGruntCommand -> ' + command, 'color: purple; font-weight: bold');
       var localSocket = application.get('buildEnvironment').localSocket;
       if (localSocket && localSocket.connected) {
         localSocket.socket.send(command);

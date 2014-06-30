@@ -358,6 +358,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   // we have updated associated items, we're go for type saving.
   saveType: function () {
 
+    var formController = this;
+
     var wasNew = this.get('model.isNew');
 
     // update relationships
@@ -376,19 +378,46 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           this.transitionToRoute('wh.content.type.index', contentType);
           this.send('notify', 'success', 'Form saved!');
 
-        } else {
+        } else if (this.get('session.supportedMessages.scaffolding')) {
 
           if (wasNew) {
-            window.ENV.sendGruntCommand('scaffolding:' + contentType.get('id'), function () {
-              this.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
-            }.bind(this));
+
+            this.scaffoldType();
+
             // Acknowledge scaffolding
             this.toggleProperty('initialScaffoldingPrompt');
+
           } else {
-            // ask if they want to rebuild scaffolding
-            this.toggleProperty('scaffoldingPrompt');
+
+            if (this.get('session.supportedMessages.check_scaffolding') && contentType.get('individualMD5') && contentType.get('listMD5')) {
+
+              window.ENV.sendGruntCommand('check_scaffolding:' + contentType.get('id'), function (data) {
+
+                if (data && typeof data === 'object' && contentType.get('individualMD5') === data.individualMD5 && contentType.get('listMD5') === data.listMD5) {
+
+                  formController.scaffoldType().then(function () {
+                    formController.transitionToRoute('wh.content.type.index', contentType);
+                  });
+
+                } else {
+
+                  formController.toggleProperty('scaffoldingPrompt');
+
+                }
+
+              });
+
+            } else {
+
+              // ask if they want to rebuild scaffolding
+              this.toggleProperty('scaffoldingPrompt');
+
+            }
+
           }
 
+        } else {
+          this.transitionToRoute('wh.content.type.index', contentType);
         }
 
       }.bind(this), function (error) {
@@ -402,6 +431,32 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     }.bind(this));
 
+  },
+
+  scaffoldType: function () {
+
+    var formController = this;
+    var contentType = this.get('model');
+
+    Ember.Logger.info('Building scaffolding for', contentType.get('id'));
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+
+      window.ENV.sendGruntCommand('scaffolding_force:' + contentType.get('id'), function (data) {
+
+        Ember.Logger.info('Scaffolding built for', contentType.get('id'));
+
+        if (data && typeof data === 'object') {
+          contentType.set('individualMD5', data.individualMD5);
+          contentType.set('listMD5', data.listMD5);
+          contentType.set('oneOffMD5', data.oneOffMD5);
+          contentType.save();
+        }
+        formController.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
+        Ember.run(null, resolve);
+      });
+
+    });
   },
 
   actions: {
@@ -551,10 +606,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     forceScaffolding: function () {
-      window.ENV.sendGruntCommand('scaffolding_force:' + this.get('model.id'), function () {
-        this.send('notify', 'success', 'Scaffolding for ' + this.get('model.name') + ' built.');
-      }.bind(this));
-      this.transitionToRoute('wh.content.type.index', this.get('model'));
+
+      var formController = this;
+
+      formController.scaffoldType().then(function () {
+        formController.transitionToRoute('wh.content.type.index', formController.get('model'));
+      });
+
     },
 
     abortScaffolding: function () {
