@@ -11,7 +11,16 @@
     </nav>
 
     {{#if buildEnvironment.local}}
-      <div class="wh-local-notice"><span class="icon icon-code"> Local development</span> Saves here will only trigger builds locally, not on your live website.</div>
+      <div class="wh-local-notice">
+        <span class="wh-local-notice-text"><span class="wh-local-notice-environment icon icon-code"> Local development</span> Saves here will only trigger builds locally, not on your live website.</span>
+        {{#if session.supportedMessages.push}}
+          <span class="wh-local-notice-text">You can manually deploy at any time.</span>
+          <button type="button" class="btn btn-small btn-success" {{action 'deploy'}} {{bind-attr disabled=buildEnvironment.deploying}}>
+            {{#if buildEnvironment.deploying}}<span class="wy-spinner wy-spinner-small"></span>{{/if}}
+            Deploy
+          </button>
+        {{/if}}
+      </div>
     {{/if}}
 
     <!-- PAGE CONTENT -->

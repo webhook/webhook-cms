@@ -75,6 +75,25 @@ export default Ember.Route.extend({
         notifications.removeObject(notification);
       }, 5000);
 
+    },
+
+    deploy: function () {
+
+      var route = this;
+
+      this.set('buildEnvironment.deploying', true);
+
+      window.ENV.sendGruntCommand('push', function (error) {
+        route.set('buildEnvironment.deploying', false);
+
+        if (error) {
+          Ember.Logger.error(error);
+          route.send('notify', 'danger', error.err);
+        } else {
+          route.send('notify', 'success', 'Site deployed!');
+        }
+      });
+
     }
   }
 });
