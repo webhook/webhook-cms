@@ -7,6 +7,7 @@ export default Ember.Route.extend({
     return new Ember.RSVP.Promise(function (resolve, reject) {
       var backupsRef = window.ENV.firebaseRoot.child('management/backups');
       backupsRef.once('value', function (snapshot) {
+
         var backups = Ember.$.map(snapshot.val(), function (timestamp) {
           return {
             fileName: siteName + '-' + moment(timestamp).format() + '.json',
@@ -14,6 +15,7 @@ export default Ember.Route.extend({
             timestamp: timestamp
           };
         });
+
         Ember.run(null, resolve, backups.reverse());
       });
     });
@@ -21,5 +23,7 @@ export default Ember.Route.extend({
 
   setupController: function (controller) {
     controller.set('deleteOption', 'data');
+
+    return this._super.apply(this, arguments);
   }
 });
