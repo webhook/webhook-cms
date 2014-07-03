@@ -29,7 +29,19 @@
 
         <form class="wy-form-stacked" {{action "updateType" on="submit"}}>
           <fieldset>
-            <h2 class="wh-form-builder-title">{{name}}</h2>
+
+            <h2 class="wh-form-builder-title">{{input value=name}}</h2>
+
+            {{#unless isValidTypeId}}
+              <div class="wy-alert wy-alert-danger">
+                <div class="wy-alert-title">Type name is invalid.</div>
+                <ul>
+                  {{#each newTypeIdErrors}}
+                    <li>{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            {{/unless}}
 
             {{#each errors.fields}}
               <span class="wy-form-message">{{this}}</span>

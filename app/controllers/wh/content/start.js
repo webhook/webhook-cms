@@ -1,8 +1,8 @@
 import downcode from 'appkit/utils/downcode';
 
 export default Ember.ArrayController.extend({
-  newTypeName     : null,
-  newTypeType     : null,
+  newTypeName: null,
+  newTypeType: null,
 
   reset: function () {
     this.setProperties({

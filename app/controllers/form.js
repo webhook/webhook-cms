@@ -1,6 +1,7 @@
 import validateControl from 'appkit/utils/validators';
 import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
+import downcode from 'appkit/utils/downcode';
 
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
@@ -8,13 +9,44 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditing        : false,
   contentTypes     : null,
   relationTypes    : null,
-  addedControls    : Ember.A([]),
-  removedControls  : Ember.A([]),
-  changedNameControls: Ember.A([]),
+
+  addedControls       : Ember.A([]),
+  removedControls     : Ember.A([]),
+  changedNameControls : Ember.A([]),
   changedRadioControls: Ember.A([]),
 
-  removedControlsApproved: null,
+  removedControlsApproved     : null,
   changedControlNamessApproved: null,
+
+  originalTypeId : null,
+  newTypeIdErrors: Ember.A([]),
+
+  isValidTypeId: function () {
+
+    var valid = true;
+    this.set('newTypeIdErrors', Ember.A([]));
+
+    if (Ember.isEmpty(this.get('newTypeId'))) {
+      this.get('newTypeIdErrors').push('Content type name cannot be empty.');
+      return false;
+    }
+
+    if (this.get('id') !== this.get('newTypeId') && this.get('contentTypes').isAny('id', this.get('newTypeId'))) {
+      valid = false;
+      this.get('newTypeIdErrors').push('There is already a content type with this generated ID (' + this.get('newTypeId') + ').');
+    }
+
+    if (this.get('newTypeId.length') > 250) {
+      valid = false;
+      this.get('newTypeIdErrors').push('The generated ID is too long. It must be 250 characters or shorter.');
+    }
+
+    return valid;
+  }.property('newTypeId'),
+
+  newTypeId: function () {
+    return downcode(this.get('model.name')).replace(/\s+|\W/g, '').toLowerCase();
+  }.property('model.name'),
 
   validateControls: function () {
 
@@ -190,8 +222,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       relationUpdates.push(relationPromise);
     }.bind(this));
 
-
-
     var addedRelations = this.get('addedControls').filterBy('controlType.widget', 'relation');
 
     Ember.Logger.info('Need to add ' + addedRelations.get('length') + ' reverse relationships.');
@@ -254,7 +284,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       relationUpdates.push(relationPromise);
 
     }.bind(this));
-
 
     var changedRelations = this.get('changedNameControls').filterBy('controlType.widget', 'relation');
 
@@ -373,6 +402,147 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       this.get('model').save().then(function (contentType) {
 
+        // If the user changes the content type name, we must do the following
+        // - move content type in firebase
+        // - move data (items) in firebase
+        // - update related items to point to new content type
+        // - delete old search index
+        // - add new search index
+        if (formController.get('newTypeId') !== this.get('model.id')) {
+          Ember.Logger.log('Creating new content type `%@` from `%@`.'.fmt(formController.get('newTypeId'), contentType.get('id')));
+
+          var oldId = this.get('model.id');
+          var newId = formController.get('newTypeId');
+
+          var contentTypeRef = window.ENV.firebase.child('contentType');
+
+          var contentTypePromise = new Ember.RSVP.Promise(function (resolve, reject) {
+            contentTypeRef.child(oldId).once('value', function (snapshot) {
+              contentTypeRef.child(newId).set(snapshot.val(), function () {
+                Ember.Logger.log('Copied content type to `%@` from `%@`.'.fmt(newId, oldId));
+
+                // delete old search index
+                window.ENV.deleteTypeIndex(oldId);
+
+                // kill old content type
+                contentTypeRef.child(oldId).remove(function () {
+                  Ember.Logger.log('Old content type `%@` destroyed.'.fmt(oldId));
+                  Ember.run(null, resolve);
+                });
+              });
+            });
+          });
+
+          var dataRef = window.ENV.firebase.child('data');
+
+          var dataPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+            // copy data in firebase
+            dataRef.child(oldId).once('value', function (snapshot) {
+              dataRef.child(newId).set(snapshot.val(), function () {
+                Ember.Logger.log('Copied data to `%@` from `%@`.'.fmt(newId, oldId));
+
+                // update search index
+                snapshot.forEach(function (childSnapshot) {
+                  SearchIndex.indexItem(Ember.Object.create({
+                    id: childSnapshot.name(),
+                    data: childSnapshot.val()
+                  }), Ember.Object.create({
+                    oneOff: contentType.get('oneOff'),
+                    id: newId
+                  }));
+                });
+
+                // kill old data
+                dataRef.child(oldId).remove(function () {
+                  Ember.Logger.log('Old data for `%@` destroyed.'.fmt(oldId));
+                  Ember.run(null, resolve);
+                });
+              });
+            });
+          });
+
+          // Update relationships
+
+          var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
+          var relatedTypes = relationControls.getEach('meta.data.contentTypeId').uniq();
+
+          relatedTypes.forEach(function (relatedTypeId) {
+
+            var relationControlsForType = relationControls.filterBy('meta.data.contentTypeId', relatedTypeId);
+
+            formController.store.find('content-type', relatedTypeId).then(function (relatedType) {
+
+              relationControlsForType.forEach(function (control) {
+                relatedType.get('controls').filterBy('name', control.get('meta.data.reverseName')).setEach('meta.data.contentTypeId', newId);
+              });
+
+              relatedType.save().then(function () {
+                Ember.Logger.log('`%@` relation controls updated with new contentTypeId'.fmt(relatedTypeId));
+              });
+
+              var relatedItemModelName = getItemModelName(relatedType);
+              formController.store.find(relatedItemModelName).then(function (items) {
+                items.forEach(function (item) {
+
+                  var changed = false;
+                  var itemData = item.get('data');
+
+                  relationControlsForType.forEach(function (control) {
+
+                    Ember.Logger.log('Checking `%@` for `%@` data to update.'.fmt(item.get('data.name'), control.get('meta.data.reverseName')));
+
+                    var targetData = itemData[control.get('meta.data.reverseName')]
+
+                    if (!Ember.isEmpty(targetData)) {
+
+                      Ember.Logger.log('Found data, updating.');
+
+                      if (Ember.isArray(targetData)) {
+
+                        targetData.forEach(function (value, index) {
+                          targetData[index] = value.replace(oldId, newId);
+                        });
+
+                      } else {
+
+                        targetData = targetData.replace(oldId, newId);
+
+                      }
+
+                      itemData[control.get('meta.data.reverseName')] = targetData;
+                      changed = true;
+                    } else {
+
+                      Ember.Logger.log('No data found, skipping.');
+
+                    }
+
+                  });
+
+                  if (changed) {
+                    item.set('data', itemData);
+                    item.save().then(function (savedItem) {
+                      Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('data.name')));
+                      SearchIndex.indexItem(savedItem, contentType);
+                    });
+                  } else {
+                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('data.name')))
+                  }
+                });
+              });
+
+            });
+
+          });
+
+          Ember.RSVP.Promise.all([contentTypePromise, dataPromise]).then(function () {
+            formController.transitionToRoute('wh.content.type.index', newId);
+          });
+
+          return;
+
+        }
+
         if (contentType.get('oneOff')) {
 
           this.transitionToRoute('wh.content.type.index', contentType);
@@ -469,7 +639,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       this.validateControls();
 
       if (this.get('model.controls').isAny('widgetIsValid', false)) {
-        Ember.Logger.info('The following controls are invalid:', this.get('model.controls').filterBy('widgetIsValid', false).getEach('name'));
+        Ember.Logger.warn('The following controls are invalid:', this.get('model.controls').filterBy('widgetIsValid', false).getEach('name'));
+        return;
+      }
+
+      if (!this.get('isValidTypeId')) {
+        Ember.Logger.warn('New type id would be invalid for the following reasons:', this.get('newTypeIdErrors').join(', '));
         return;
       }
 
