@@ -22,7 +22,7 @@ export default Ember.Route.extend({
       control.set('originalName', control.get('name'));
     });
 
-    controller.set('originalTypeId', model.get('id'));
+    controller.set('isEditingTypeId', false);
 
     controller.set('editingControl', null);
     controller.set('isEditing', false);

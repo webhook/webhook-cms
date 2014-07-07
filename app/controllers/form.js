@@ -19,7 +19,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   changedControlNamessApproved: null,
 
   isEditingTypeId: false,
-  originalTypeId : null,
   newTypeIdErrors: Ember.A([]),
 
   isValidTypeId: function () {
@@ -381,7 +380,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   promptConfirmChanges: function () {
-    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length') || this.get('isNewTypeId')) {
+    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length')) {
       Ember.Logger.log('Prompt for changed control or type id confirmation.');
       this.toggleProperty('confirmChangedControlsPrompt');
     } else {
@@ -813,7 +812,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     editTypeId: function () {
-      this.set('isEditingTypeId', true);
+      this.toggleProperty('isEditingTypeId');
     }
   }
 });

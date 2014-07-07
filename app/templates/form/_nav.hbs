@@ -57,26 +57,57 @@
 
 {{else}}
 
-<nav data-toggle="wy-nav-shift" class="wy-nav-side">
-  <div data-spy="affix">
-    <div class="wh-form-builder-note">
-      <div class="wh-logo"></div>
-    </div>
-    <ul class="wh-form-builder-tabs">
-      <li class="active">Add field <span class="icon icon-arrow-down"></span></li>
-      <li {{action "startEditing"}}>Edit details</li>
-    </ul>
-    {{#view "draggable"}}
-      {{#each controlTypeGroups}}
-        <dl>
-          <dt>{{name}}</dt>
-          {{#each controlTypes}}
-            <dd data-id="{{unbound id}}"><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action "addControl" this}}> {{name}}</a></dd>
+  {{#if isEditingTypeId}}
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div data-spy="affix">
+        <div class="wh-form-builder-note">
+          <div class="wh-logo"></div>
+        </div>
+
+        {{input value=name}}
+
+        {{#unless isValidTypeId}}
+          <div class="wy-alert wy-alert-danger">
+            <div class="wy-alert-title">Type name is invalid.</div>
+            <ul>
+              {{#each newTypeIdErrors}}
+                <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/unless}}
+
+        <p>If you do this, nothing will ever be the same.</p>
+
+        <div>
+          <button type="button" class="btn btn-success" {{action "editTypeId"}}>Okay</button>
+        </div>
+      </div>
+    </nav>
+
+  {{else}}
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div data-spy="affix">
+        <div class="wh-form-builder-note">
+          <div class="wh-logo"></div>
+        </div>
+        <ul class="wh-form-builder-tabs">
+          <li class="active">Add field <span class="icon icon-arrow-down"></span></li>
+          <li {{action "startEditing"}}>Edit details</li>
+        </ul>
+        {{#view "draggable"}}
+          {{#each controlTypeGroups}}
+            <dl>
+              <dt>{{name}}</dt>
+              {{#each controlTypes}}
+                <dd data-id="{{unbound id}}"><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action "addControl" this}}> {{name}}</a></dd>
+              {{/each}}
+            </dl>
           {{/each}}
-        </dl>
-      {{/each}}
-    {{/view}}
-  </div>
-</nav>
+        {{/view}}
+      </div>
+    </nav>
+  {{/if}}
 
 {{/if}}
