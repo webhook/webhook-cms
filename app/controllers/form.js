@@ -18,6 +18,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   removedControlsApproved     : null,
   changedControlNamessApproved: null,
 
+  isEditingTypeId: false,
   originalTypeId : null,
   newTypeIdErrors: Ember.A([]),
 
@@ -42,6 +43,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     }
 
     return valid;
+  }.property('newTypeId'),
+
+  isNewTypeId: function () {
+    return this.get('newTypeId') !== this.get('model.id');
   }.property('newTypeId'),
 
   newTypeId: function () {
@@ -376,8 +381,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   promptConfirmChanges: function () {
-    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length')) {
-      Ember.Logger.info('Prompt for changed control confirmation.');
+    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length') || this.get('isNewTypeId')) {
+      Ember.Logger.log('Prompt for changed control or type id confirmation.');
       this.toggleProperty('confirmChangedControlsPrompt');
     } else {
       this.saveType();
@@ -408,7 +413,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         // - update related items to point to new content type
         // - delete old search index
         // - add new search index
-        if (formController.get('newTypeId') !== this.get('model.id')) {
+        if (formController.get('isNewTypeId')) {
           Ember.Logger.log('Creating new content type `%@` from `%@`.'.fmt(formController.get('newTypeId'), contentType.get('id')));
 
           var oldId = this.get('model.id');
@@ -805,6 +810,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     rejectChangedControls: function () {
       this.toggleProperty('confirmChangedControlsPrompt');
+    },
+
+    editTypeId: function () {
+      this.set('isEditingTypeId', true);
     }
   }
 });

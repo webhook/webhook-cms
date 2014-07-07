@@ -30,7 +30,11 @@
         <form class="wy-form-stacked" {{action "updateType" on="submit"}}>
           <fieldset>
 
-            <h2 class="wh-form-builder-title">{{input value=name}}</h2>
+            {{#if isEditingTypeId}}
+              <h2 class="wh-form-builder-title">{{input value=name}}</h2>
+            {{else}}
+              <h2 class="wh-form-builder-title wh-form-builder-title-set" data-toggle="tooltip" data-placement="left" title="Click to edit object title." {{action 'editTypeId'}}>{{name}}</h2>
+            {{/if}}
 
             {{#unless isValidTypeId}}
               <div class="wy-alert wy-alert-danger">
