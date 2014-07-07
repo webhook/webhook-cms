@@ -491,26 +491,30 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
                     Ember.Logger.log('Checking `%@` for `%@` data to update.'.fmt(item.get('data.name'), control.get('meta.data.reverseName')));
 
-                    var targetData = itemData[control.get('meta.data.reverseName')]
+                    var targetData = itemData[control.get('meta.data.reverseName')];
 
                     if (!Ember.isEmpty(targetData)) {
 
                       Ember.Logger.log('Found data, updating.');
 
+                      // relationships are saved as '{{contentTypeId}} {{itemId}}'
+                      // match the {{contentTypeId}} + space and replace it with new
+
                       if (Ember.isArray(targetData)) {
 
                         targetData.forEach(function (value, index) {
-                          targetData[index] = value.replace(oldId, newId);
+                          targetData[index] = value.replace(oldId + ' ', newId + ' ');
                         });
 
                       } else {
 
-                        targetData = targetData.replace(oldId, newId);
+                        targetData = targetData.replace(oldId + ' ', newId + ' ');
 
                       }
 
                       itemData[control.get('meta.data.reverseName')] = targetData;
                       changed = true;
+
                     } else {
 
                       Ember.Logger.log('No data found, skipping.');
@@ -523,10 +527,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                     item.set('data', itemData);
                     item.save().then(function (savedItem) {
                       Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('data.name')));
-                      SearchIndex.indexItem(savedItem, contentType);
                     });
                   } else {
-                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('data.name')))
+                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('data.name')));
                   }
                 });
               });
