@@ -1,50 +1,57 @@
 <div class="wh-start">
   <div class="wh-logo"></div>
-  <h1>Start from a theme</h1>
-  <p class="wh-themes-desc">
-    Site templates automatically install the forms, static files and templates needed to jump start your project.
-    Can't find what you're looking for? You can still {{#link-to 'wh.content'}}Start from scratch{{/link-to}}.
-    Interested in making your own theme, <a href="http://www.webhook.com/docs/creating-a-theme/">read the docs here</a>.
-  </p>
 
-  {{#if isSending}}
-    <div class="wy-spinner wy-spinner-large"></div>
+  {{#if buildEnvironment.local}}
+    <p class="wh-themes-desc">
+      You can only set a theme when working on the local (on your computer) version of this site.
+      Please make your changes there and then remember to deploy your site afterworks. For more
+      help on changing or setting your theme, check the <a href="">documentation here</a>.
+    </p>
   {{else}}
+    <h1>Start from a theme</h1>
+    <p class="wh-themes-desc">
+      Site templates automatically install the forms, static files and templates needed to jump start your project.
+      Can't find what you're looking for? You can still {{#link-to 'wh.content'}}Start from scratch{{/link-to}}.
+      Interested in making your own theme, <a href="http://www.webhook.com/docs/creating-a-theme/">read the docs here</a>.
+    </p>
 
-    <ul class="wh-themes">
-      <li class="wh-themes-custom">
-        <h5>Custom theme</h5>
-        {{#if error}}
-          <div class="wy-alert wy-alert-warning">
-            <div class="wy-alert-title">Whoops</div>
-            {{error.message}}
+    {{#if isSending}}
+      <div class="wy-spinner wy-spinner-large"></div>
+    {{else}}
+
+      <ul class="wh-themes">
+        <li class="wh-themes-custom">
+          <h5>Custom theme</h5>
+          {{#if error}}
+            <div class="wy-alert wy-alert-warning">
+              <div class="wy-alert-title">Whoops</div>
+              {{error.message}}
+            </div>
+          {{/if}}
+          <div class="wy-control-group">
+            <label>Location of theme's zip file</label>
+            <div class="wy-control">
+              {{input type="text" placeholder="http://site.com/theme.zip" class="full-width" value=customUrl}}
+            </div>
           </div>
-        {{/if}}
-        <div class="wy-control-group">
-          <label>Location of theme's zip file</label>
-          <div class="wy-control">
-            {{input type="text" placeholder="http://site.com/theme.zip" class="full-width" value=customUrl}}
-          </div>
-        </div>
-        <button class="btn btn-neutral icon icon-rocket" {{ action downloadCustom }}> Load this custom theme</button>
+          <button class="btn btn-neutral icon icon-rocket" {{ action downloadCustom }}> Load this custom theme</button>
 
-      </li>
-      {{#each theme in themes}}
-      <li>
-          <h5>{{theme.name}}</h5>
-          <img {{bind-attr src="theme.image"}} />
-          <p class="wh-theme-desc">
-            {{theme.description}}
-          </p>
+        </li>
+        {{#each theme in themes}}
+        <li>
+            <h5>{{theme.name}}</h5>
+            <img {{bind-attr src="theme.image"}} />
+            <p class="wh-theme-desc">
+              {{theme.description}}
+            </p>
 
-          {{#if theme.demo}}<a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>{{/if}}
-          <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">Github</a>
-          <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
-      </li>
-      {{/each}}
-    </ul>
+            {{#if theme.demo}}<a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">Demo</a>{{/if}}
+            <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">Github</a>
+            <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>Install</button>
+        </li>
+        {{/each}}
+      </ul>
 
-
-  {{/if}}
+    {{/if}}
 </div>
 

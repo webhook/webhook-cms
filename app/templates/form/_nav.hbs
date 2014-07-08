@@ -11,6 +11,11 @@
       </ul>
       <form class="wy-form-stacked">
 
+        {{#unless model.isNew}}
+          <p class="warning"><strong>Warning</strong>Changes to these details may require changes in your templates as well.</p>
+          <hr>
+        {{/unless}}
+
         <div class="wy-control-group">
           {{#unless editingControl.locked}}
             <div class="wy-form-halves">
@@ -59,30 +64,43 @@
 
   {{#if isEditingTypeId}}
 
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side wy-nav-side-widget-edit" style="display:block">
       <div data-spy="affix">
         <div class="wh-form-builder-note">
           <div class="wh-logo"></div>
         </div>
 
-        {{input value=name}}
+        <ul class="wh-form-builder-tabs">
+          <li {{action "stopEditing"}}>Add field</li>
+          <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
+        </ul>
 
-        {{#unless isValidTypeId}}
-          <div class="wy-alert wy-alert-danger">
-            <div class="wy-alert-title">Type name is invalid.</div>
-            <ul>
-              {{#each newTypeIdErrors}}
-                <li>{{this}}</li>
-              {{/each}}
-            </ul>
+        <form class="wy-form-stacked">
+          {{#unless model.isNew}}
+            <p class="warning"><strong>Warning</strong>If you change your content-type's name make sure to change its name in your templates as well.</p>
+            <hr>
+          {{/unless}}
+
+          <div class="wy-control-group">
+            <label>Content type name</label>
+            <div class="wy-form-full">
+              {{input value=name}}
+            </div>
           </div>
-        {{/unless}}
 
-        <p>If you do this, nothing will ever be the same.</p>
+          {{#unless isValidTypeId}}
+            <div class="wy-alert wy-alert-danger">
+              <div class="wy-alert-title">Type name is invalid.</div>
+              <ul>
+                {{#each newTypeIdErrors}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          {{/unless}}
 
-        <div>
-          <button type="button" class="btn btn-success" {{action "editTypeId"}}>Okay</button>
-        </div>
+          <button type="button" class="btn btn-success icon icon-ok-sign" {{action "editTypeId"}}> Okay</button>
+        </form>
       </div>
     </nav>
 
