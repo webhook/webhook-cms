@@ -747,6 +747,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     stopEditing: function () {
       this.set('isEditing', false);
+      this.set('isEditingTypeId', false);
     },
 
     startEditing: function () {
