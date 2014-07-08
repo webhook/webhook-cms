@@ -742,6 +742,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       this.set('editingControl', control);
       this.set('isEditing', true);
+      this.set('isEditingTypeId', false);
     },
 
     stopEditing: function () {
@@ -812,7 +813,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     editTypeId: function () {
-      this.toggleProperty('isEditingTypeId');
+      this.set('isEditing', false);
+      this.set('isEditingTypeId', true);
     }
   }
 });
