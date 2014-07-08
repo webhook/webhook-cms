@@ -132,7 +132,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           defaultValue: '',
           options: [
             { label: 'None', value: '' },
-            { label: 'Layout', value: 'layout.hbs' }
+            { label: 'Layout', value: 'layout.html' }
           ]
         });
         break;
