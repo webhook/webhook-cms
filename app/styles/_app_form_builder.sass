@@ -164,14 +164,23 @@
     border-color: $gray-darker
     color: $text-light
     box-shadow: none
-  .warning
-    color: lighten($red,20%)
-    font-size: 90%
+  ::-webkit-input-placeholder
+    color: $gray
+  .edit-instruction, .warning
+    font-size: 80%
     line-height: 1.5
     margin-bottom: $base-line-height / 2
+    background: rgba(255,255,255,.1)
+    padding: $base-line-height / 2
+    margin-bottom: $base-line-height / 2
     strong
-      color: $red
+      color: lighten($blue, 20%)
       display: block
+  .warning strong
+    color: lighten($red, 20%)
+  code
+    background: $gray-dark
+    border: none
 
 
 // RIGHT SIDE OF FORM BUILDER

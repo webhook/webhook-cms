@@ -210,6 +210,15 @@ window.ENV = {
           name     : 'Color',
           widget   : 'color',
           iconClass: 'icon-droplet'
+        }
+      ]
+    }, {
+      name: 'Advanced',
+      controlTypes: [
+        {
+          name: 'Instructions',
+          widget: 'instruction',
+          iconClass: 'icon-question-sign'
         },
         {
           name     : 'Relationship',
@@ -217,14 +226,9 @@ window.ENV = {
           iconClass: 'icon-tags'
         },
         {
-          name: 'Instructions',
-          widget: 'instruction',
-          iconClass: 'icon-question-sign'
-        },
-        {
-          name: 'Layout',
+          name: 'Page Layout',
           widget: 'layout',
-          iconClass: 'icon-question-sign'
+          iconClass: 'icon-file-xml'
         }
       ]
     }
