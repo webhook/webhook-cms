@@ -134,7 +134,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             { label: 'None', value: '' },
             { label: 'Layout', value: 'layout.hbs' }
           ]
-        })
+        });
         break;
       case 'select':
         meta.set('data', {
@@ -201,6 +201,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     }
 
     this.get('addedControls').addObject(control);
+
+    if (controlType.get('id') === 'layout') {
+      controlType.set('isHidden', true);
+    }
 
   },
 
@@ -725,6 +729,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     deleteControl: function (control) {
+
+      if (control.get('controlType.id') === 'layout') {
+        this.store.getById('control-type', 'layout').set('isHidden', false);
+      }
 
       if (this.get('addedControls').indexOf(control) >= 0) {
         this.get('addedControls').removeObject(control);

@@ -1,5 +1,6 @@
 export default Ember.Route.extend({
-  beforeModel: function () {
+  beforeModel: function (transition) {
+
     var promises = [this.store.find('control-type')];
 
     promises.push(this.store.find('content-type').then(function (contentTypes) {
@@ -28,6 +29,11 @@ export default Ember.Route.extend({
     controller.set('isEditing', false);
 
     controller.set('controlTypeGroups', this.store.find('control-type-group'));
+
+    if (model.get('oneOff') || model.get('controls').isAny('controlType.widget', 'layout')) {
+      this.store.getById('control-type', 'layout').set('isHidden', true);
+    }
+
     controller.set('contentTypes', this.get('contentTypes'));
 
     model.get('controls').setEach('widgetIsValid', true);
