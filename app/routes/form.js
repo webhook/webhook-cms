@@ -30,10 +30,18 @@ export default Ember.Route.extend({
 
     controller.set('controlTypeGroups', this.store.find('control-type-group'));
 
-    if (model.get('oneOff') || model.get('controls').isAny('controlType.widget', 'layout')) {
-      this.store.getById('control-type', 'layout').set('isHidden', true);
+    if (this.get('session.supportedMessages.layouts')) {
+
+      if (model.get('oneOff') || model.get('controls').isAny('controlType.widget', 'layout')) {
+        this.store.getById('control-type', 'layout').set('isHidden', true);
+      } else {
+        this.store.getById('control-type', 'layout').set('isHidden', false);
+      }
+
     } else {
-      this.store.getById('control-type', 'layout').set('isHidden', false);
+
+      this.store.getById('control-type', 'layout').set('isHidden', true);
+
     }
 
     controller.set('contentTypes', this.get('contentTypes'));
