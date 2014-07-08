@@ -220,6 +220,11 @@ window.ENV = {
           name: 'Instructions',
           widget: 'instruction',
           iconClass: 'icon-question-sign'
+        },
+        {
+          name: 'Template',
+          widget: 'template',
+          iconClass: 'icon-question-sign'
         }
       ]
     }

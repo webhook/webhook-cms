@@ -127,6 +127,15 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           ]
         });
         break;
+      case 'template':
+        meta.set('data', {
+          defaultValue: '',
+          options: [
+            { label: 'None', value: '' },
+            { label: 'Template', value: 'template.hbs' }
+          ]
+        })
+        break;
       case 'select':
         meta.set('data', {
           defaultValue: '',
