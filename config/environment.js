@@ -222,8 +222,8 @@ window.ENV = {
           iconClass: 'icon-question-sign'
         },
         {
-          name: 'Template',
-          widget: 'template',
+          name: 'Layout',
+          widget: 'layout',
           iconClass: 'icon-question-sign'
         }
       ]

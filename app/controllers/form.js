@@ -127,12 +127,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           ]
         });
         break;
-      case 'template':
+      case 'layout':
         meta.set('data', {
           defaultValue: '',
           options: [
             { label: 'None', value: '' },
-            { label: 'Template', value: 'template.hbs' }
+            { label: 'Layout', value: 'layout.hbs' }
           ]
         })
         break;
