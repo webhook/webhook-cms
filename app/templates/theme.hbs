@@ -2,12 +2,6 @@
   <div class="wh-logo"></div>
 
   {{#if buildEnvironment.local}}
-    <p class="wh-themes-desc">
-      You can only set a theme when working on the local (on your computer) version of this site.
-      Please make your changes there and then remember to deploy your site afterworks. For more
-      help on changing or setting your theme, check the <a href="">documentation here</a>.
-    </p>
-  {{else}}
     <h1>Start from a theme</h1>
     <p class="wh-themes-desc">
       Site templates automatically install the forms, static files and templates needed to jump start your project.
@@ -53,6 +47,12 @@
       </ul>
 
     {{/if}}
+  {{else}}
+    <p class="wh-themes-desc">
+      You can only set a theme when working on the local (on your computer) version of this site.
+      Please make your changes there and then remember to deploy your site afterworks. For more
+      help on changing or setting your theme, check the <a href="">documentation here</a>.
+    </p>
   {{/if}}
 </div>
 
