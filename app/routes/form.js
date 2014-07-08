@@ -32,6 +32,8 @@ export default Ember.Route.extend({
 
     if (model.get('oneOff') || model.get('controls').isAny('controlType.widget', 'layout')) {
       this.store.getById('control-type', 'layout').set('isHidden', true);
+    } else {
+      this.store.getById('control-type', 'layout').set('isHidden', false);
     }
 
     controller.set('contentTypes', this.get('contentTypes'));
