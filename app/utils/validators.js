@@ -14,11 +14,12 @@ export default function validateControls (contentType, item) {
   };
 
   var invalidate = function (control, message) {
+    Ember.Logger.warn('VadlidateControls::invalide', control.get('name'));
     control.set('widgetIsValid', false);
     control.get('widgetErrors').pushObject(message);
   };
 
-  var itemName = '';
+  var nameControl;
 
   controls.forEach(function (control) {
 
@@ -37,7 +38,7 @@ export default function validateControls (contentType, item) {
     }
 
     if (control.get('name') === 'name') {
-      itemName = value;
+      nameControl = control;
     }
 
     switch (control.get('controlType.widget')) {
@@ -83,13 +84,15 @@ export default function validateControls (contentType, item) {
 
   return new Ember.RSVP.Promise(function (resolve, reject) {
 
+    var itemName = nameControl.get('value');
+
     SearchIndex.search(itemName, 1, contentType.get('name')).then(function (results) {
-      var duplicateName = false;
       results.forEach(function (result) {
-        if (item && item.get('id') !== result.id) {
-          window.console.log(itemName, Ember.$(result.name).text());
+        if (item && item.get('id') !== result.id && itemName === Ember.$(result.name).text()) {
+          invalidate(nameControl, 'Name must be unique among ' + contentType.get('name') + ' entries.');
         }
       });
+      resolve();
     }, function (error) {
       reject(error);
     });
