@@ -244,6 +244,12 @@ export default Ember.ObjectController.extend({
 
     var controls = this.get('type.controls');
 
+    // name field is special. it is validated as it changes.
+    if (controls.findBy('name', 'name').get('widgetErrors.length')) {
+      this.send('notify', 'danger', "Didn't save. Errors in form.");
+      return;
+    }
+
     // automatically update `update_date`
     controls.findBy('name', 'last_updated').set('value', moment().format('YYYY-MM-DDTHH:mm'));
 

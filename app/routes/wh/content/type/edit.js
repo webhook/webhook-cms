@@ -1,5 +1,6 @@
 import getItemModelName from 'appkit/utils/model';
 import uuid from 'appkit/utils/uuid';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({
 
@@ -109,6 +110,42 @@ export default Ember.Route.extend({
       control.set('widgetErrors', Ember.A([]));
 
       var value = data[control.get('name')];
+
+      // Use search to check for duplicate names
+      if (control.get('name') === 'name') {
+        var dupeNameError = 'Name must be unique among ' + type.get('name') + ' entries.';
+        var initialized = false;
+        control.reopen({
+          nameClear: function () {
+            if (initialized) {
+              this.get('widgetErrors').removeObject(dupeNameError);
+              if (!this.get('widgetErrors.length')) {
+                this.set('widgetIsValid', true);
+              }
+            } else {
+              initialized = true;
+              this.reopen({
+                nameObserver: Ember.debouncedObserver(function () {
+
+                  var control = this;
+                  var itemName = this.get('value');
+                  var item = controller.get('itemModel');
+
+                  SearchIndex.search(itemName, 1, type.get('name')).then(function (results) {
+                    results.forEach(function (result) {
+                      if ((Ember.isNone(item) || (item && item.get('id') !== result.id)) && itemName === Ember.$(result.name).text()) {
+                        control.set('widgetIsValid', false);
+                        control.get('widgetErrors').pushObject(dupeNameError);
+                      }
+                    });
+                  });
+
+                }, 'value', 1000)
+              });
+            }
+          }.observes('value'),
+        });
+      }
 
       if (control.get('controlType.widget') === 'checkbox') {
         control.get('meta.data.options').forEach(function (option) {

@@ -1,5 +1,3 @@
-import SearchIndex from 'appkit/utils/search-index';
-
 export default function validateControls (contentType, item) {
 
   Ember.Logger.log('Validating controls.');
@@ -35,10 +33,6 @@ export default function validateControls (contentType, item) {
         invalidate(control, 'This field is required');
       }
       return;
-    }
-
-    if (control.get('name') === 'name') {
-      nameControl = control;
     }
 
     switch (control.get('controlType.widget')) {
@@ -81,22 +75,6 @@ export default function validateControls (contentType, item) {
 
   });
 
-
-  return new Ember.RSVP.Promise(function (resolve, reject) {
-
-    var itemName = nameControl.get('value');
-
-    SearchIndex.search(itemName, 1, contentType.get('name')).then(function (results) {
-      results.forEach(function (result) {
-        if (item && item.get('id') !== result.id && itemName === Ember.$(result.name).text()) {
-          invalidate(nameControl, 'Name must be unique among ' + contentType.get('name') + ' entries.');
-        }
-      });
-      resolve();
-    }, function (error) {
-      reject(error);
-    });
-
-  });
+  return Ember.RSVP.Promise.resolve();
 
 }
