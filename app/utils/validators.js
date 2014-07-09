@@ -1,6 +1,10 @@
-export default function validateControls (controls) {
+import SearchIndex from 'appkit/utils/search-index';
+
+export default function validateControls (contentType, item) {
 
   Ember.Logger.log('Validating controls.');
+
+  var controls = contentType.get('controls');
 
   controls.setEach('widgetIsValid', true);
 
@@ -13,6 +17,8 @@ export default function validateControls (controls) {
     control.set('widgetIsValid', false);
     control.get('widgetErrors').pushObject(message);
   };
+
+  var itemName = '';
 
   controls.forEach(function (control) {
 
@@ -28,6 +34,10 @@ export default function validateControls (controls) {
         invalidate(control, 'This field is required');
       }
       return;
+    }
+
+    if (control.get('name') === 'name') {
+      itemName = value;
     }
 
     switch (control.get('controlType.widget')) {
@@ -67,6 +77,22 @@ export default function validateControls (controls) {
       }
       break;
     }
+
+  });
+
+
+  return new Ember.RSVP.Promise(function (resolve, reject) {
+
+    SearchIndex.search(itemName, 1, contentType.get('name')).then(function (results) {
+      var duplicateName = false;
+      results.forEach(function (result) {
+        if (item && item.get('id') !== result.id) {
+          window.console.log(itemName, Ember.$(result.name).text());
+        }
+      });
+    }, function (error) {
+      reject(error);
+    });
 
   });
 

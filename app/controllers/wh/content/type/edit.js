@@ -261,7 +261,13 @@ export default Ember.ObjectController.extend({
       this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
-    validateControls(controls);
+    validateControls(this.get('type'), this.get('itemModel')).then(this.commitItem.bind(this));
+
+  },
+
+  commitItem: function () {
+
+    var controls = this.get('type.controls');
 
     if (controls.isAny('widgetIsValid', false)) {
       this.send('notify', 'danger', "Didn't save. Errors in form.");
