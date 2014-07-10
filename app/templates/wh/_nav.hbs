@@ -1,7 +1,6 @@
 <!-- SIDE NAV, TOGGLES ON MOBILE -->
 <nav data-toggle="wy-nav-shift" class="wy-nav-side">
 
-  <div data-spy="affix">
     {{#if onlineUsers.length}}
       <div class="wh-online-users" data-toggle="wh-online-users">
         <dl>
@@ -34,6 +33,7 @@
         {{/if}}
 
         {{# if session.isOwner }}
+          <hr>
           <header>Configuration</header>
           <ul>
             {{#if buildEnvironment.local}}
@@ -65,5 +65,4 @@
       </div>
 
     </div>
-  </div>
 </nav>

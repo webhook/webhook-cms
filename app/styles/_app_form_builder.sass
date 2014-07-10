@@ -11,6 +11,9 @@
   width: 100%
   max-width: 100%
 
+.wh-form-builder
+  background: $gray-dark
+
 .wh-form-builder-list
   +outer-container
   > li
@@ -46,9 +49,8 @@
 
 // STICKY LEFT MENU
 
-.wh-form-builder .wy-affix
-  top: 0
-  .wh-logo
+.wh-form-builder
+  .wy-affix .wh-logo
     margin-top: $base-line-height / 2
 
 // LEFT MENU FOR FORM BUILDER
@@ -57,7 +59,13 @@
   background: $gray-dark
   color: $text-lighter
   width: 400px
+  position: static
+  min-height: 100%
+  height: auto
   padding: $base-line-height / 2 $base-line-height / 4
+  overflow: auto
+  &:hover
+    overflow: auto
   .wh-logo-spinner:after
     border: 4px solid darken($gray,5%)
     border-top: 4px solid $gray-dark
@@ -187,6 +195,7 @@
 // This is the actual form you're building
 
 .wh-form-builder .wy-nav-content-wrap
+  margin-left: 0
   .wy-nav-content
     padding-bottom: 100px
   .wh-logo
