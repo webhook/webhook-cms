@@ -7,12 +7,7 @@ var Router = Ember.Router.extend({
 Router.map(function() {
 
   this.route('login');
-  this.route('password-reset');
-  this.route('create-user');
-  this.route('confirm-email');
-  this.route('resend-email');
   this.route('start');
-  this.route('theme');
 
   this.route('expired');
 
@@ -20,12 +15,10 @@ Router.map(function() {
 
   this.resource('wh', function () {
     this.resource('wh.settings', { path: '/settings/' }, function () {
-      this.route('billing');
       this.route('data');
       this.route('domain');
       this.route('general');
       this.route('team');
-      this.route('password-change');
     });
 
     this.route('search-global-results');

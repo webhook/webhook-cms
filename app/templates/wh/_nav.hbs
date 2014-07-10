@@ -15,7 +15,7 @@
     <div class="wy-side-nav-search">
       {{#link-to 'wh' classNameBindings=":wh-logo buildEnvironment.building:wh-logo-spinner buildEnvironment.local:wh-logo-local"}}{{/link-to}}
       <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
-        {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
+        <a href="#">{{session.user.email}}</a>
         (<a {{action "logoutUser" on="click"}}>Logout</a>)
       </div>
 
