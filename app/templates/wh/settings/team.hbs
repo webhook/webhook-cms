@@ -1,13 +1,14 @@
 <h1>Invite a new team member.</h1>
 
-<form class="wy-aligned">
+
+<form class="wy-aligned" data-toggle="tooltip"  data-placement="left bottom"  title="Inviting users is disabled in the demo.">
   <div class="wy-control-group">
     <label>Invite a new collaborator by email</label>
     {{input type="email" required="required" value=inviteEmail }}
     <div class="wy-form-message">The person will not be active until they verify their email address.</div>
   </div>
-  <div class="wy-btn-group">
-    <button class="btn btn-neutral icon icon-user" {{ action "sendInvite" }}> Send invite</button>
+  <div class="wy-btn-group" >
+    <button class="btn btn-neutral icon icon-user" disabled > Send invite</button>
   </div>
 
   {{#if error}}
@@ -41,13 +42,13 @@
     {{#each user in allUsers }}
       <tr>
         <td>{{ user.email }}</td>
-        <td>
+        <td data-toggle="tooltip"  data-placement="left"  title="Changing permissions is disabled in the demo.">
           {{#if user.owner }}
           <div class="wy-dropdown wy-dropdown-bubble">
-            <span class="btn btn-neutral icon icon-lock"> Owner <span class="caret"></span</span>
+            <span class="btn btn-neutral btn-disabled icon icon-lock"> Owner <span class="caret"></span</span>
             <dl class="wy-dropdown-menu">
-              <dd><a href="" {{ action "makeUser" user }}>Change to contributor</a></dd>
-              <dd><a href="" {{ action "removeUser" user }}>Remove access entirely</a></dd>
+              <dd><a href="" >Change to contributor</a></dd>
+              <dd><a href="" >Remove access entirely</a></dd>
             </dl>
           </div>
           {{/if}}
@@ -55,13 +56,13 @@
             <div class="wy-dropdown wy-dropdown-bubble">
               <span class="btn btn-neutral icon icon-lock"> Contributor <span class="caret"></span</span>
               <dl class="wy-dropdown-menu">
-                <dd><a href="" {{ action "makeOwner" user }}>Change to owner</a></dd>
-                <dd><a href="" {{ action "removeUser" user }}>Remove access entirely</a></dd>
+                <dd><a href="">Change to owner</a></dd>
+                <dd><a href="">Remove access entirely</a></dd>
               </dl>
             </div>
           {{/if}}
           {{#if user.potential }}
-            Waiting on verification (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> Cancel invite</a>)
+            Waiting on verification (<a href="" class="icon icon-remove-sign"> Cancel invite</a>)
           {{/if}}
         </td>
       </tr>

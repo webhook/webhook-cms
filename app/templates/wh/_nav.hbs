@@ -41,22 +41,6 @@
             {{/if}}
             <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
             <li>{{#link-to 'wh.settings.general'}}Settings{{/link-to}}</li>
-            <li>
-              {{#link-to 'wh.settings.billing'}}
-                {{#if session.billing.isTrial}}
-                  Upgrade
-                  <span class="wh-trial-notice">
-                    {{#if session.billing.endTrialIsLastDay}}
-                     Last day of trial
-                    {{else}}
-                      {{session.billing.endTrialDays}} trial days left
-                    {{/if}}
-                  </span>
-                {{else}}
-                    Billing
-                {{/if}}
-              {{/link-to}}
-            </li>
             <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
             <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
           </ul>

@@ -84,7 +84,7 @@
 
 <ul class="wy-plain-list-disc">
   {{#each backup in model}}
-    <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
+    <li  data-toggle="tooltip"  data-placement="left"  title="Automatic backups are disabled in the demo."><a href="#" >{{format-time backup.timestamp}}</a></li>
   {{/each}}
 </ul>
 

@@ -27,8 +27,7 @@ CNAME        www            dns.webhook.com
     <h1>Domains</h1>
 
     <p>
-      Your site is currently available at
-      {{buildEnvironment.siteName}}.webhook.org {{#if domain}}and {{ domain }}{{/if}}
+      Your site is currently available at secretdemo.webhook.com
     </p>
 
     <hr/>
@@ -43,12 +42,12 @@ CNAME        www            dns.webhook.com
     <div class="wy-control-group fluid-input">
       <label>Enter your domain name</label>
       <div class="wy-control">
-        {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
+        {{input type="text" value="secretdemo.webhook.com" disabled=true class="wy-input-large" placeholder="example.com"}}
       </div>
     </div>
 
     <div class="wy-btn-group">
-      <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Use this domain</button>
+      <button class="btn btn-neutral icon icon-ok-sign btn-disabled" {{bind-attr disabled="isSending"}} > Use this domain</button>
     </div>
 
   </form>

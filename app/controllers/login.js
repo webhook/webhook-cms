@@ -1,6 +1,6 @@
 export default Ember.ObjectController.extend({
-  email    : null,
-  password : null,
+  email    : 'demo@webhook.com',
+  password : 'demo',
   isLoading: false,
 
   userChanged: function () {
