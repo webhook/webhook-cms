@@ -20,7 +20,7 @@ export default Ember.ObjectController.extend({
           data = { contentType: data };
         }
 
-        window.ENV.firebase.set(data, function(err) {
+        window.ENV.firebase.update(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
             this.send('notify', 'success', 'Theme installation complete.');
@@ -49,7 +49,7 @@ export default Ember.ObjectController.extend({
           data = { contentType: data };
         }
 
-        window.ENV.firebase.set(data, function(err) {
+        window.ENV.firebase.update(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
             this.transitionToRoute('wh');
