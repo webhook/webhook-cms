@@ -15,7 +15,12 @@ export default Ember.ObjectController.extend({
 
       this.set('isSending', true);
       window.ENV.sendGruntCommand('preset:' + theme.url, function(data) {
-        window.ENV.firebase.child('contentType').set(data, function(err) {
+
+        if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
+          data = { contentType: data };
+        }
+
+        window.ENV.firebase.update(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
             this.send('notify', 'success', 'Theme installation complete.');
@@ -39,7 +44,12 @@ export default Ember.ObjectController.extend({
 
       this.set('isSending', true);
       window.ENV.sendGruntCommand('preset:' + this.get('customUrl'), function(data) {
-        window.ENV.firebase.child('contentType').set(data, function(err) {
+
+        if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
+          data = { contentType: data };
+        }
+
+        window.ENV.firebase.update(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
             this.transitionToRoute('wh');

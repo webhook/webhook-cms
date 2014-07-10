@@ -1,7 +1,10 @@
 export default Ember.Component.extend({
+
+  tagName: 'span',
+
   date: function () {
 
-    if (this.get('value')) {
+    if (this.get('value') && moment(this.get('value')).isValid()) {
       return moment(this.get('value')).format('YYYY-MM-DD');
     } else {
       return null;
@@ -11,7 +14,7 @@ export default Ember.Component.extend({
 
   time: function () {
 
-    if (!this.get('value')) {
+    if (!this.get('value') || !moment(this.get('value')).isValid()) {
       return null;
     }
 
@@ -26,8 +29,13 @@ export default Ember.Component.extend({
 
     var date = this.get('date');
     var time = this.get('time');
+    var value = time ? (date + ' ' + time) : date;
 
-    this.set('value', time ? (date + 'T' + time) : date);
+    if (moment(value).isValid()) {
+      this.set('value', moment(value).format());
+    } else {
+      this.set('value', null);
+    }
 
   }.observes('date', 'time')
 });
