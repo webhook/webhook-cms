@@ -1,4 +1,3 @@
-import validateControl from 'appkit/utils/validators';
 import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 import downcode from 'appkit/utils/downcode';
@@ -79,6 +78,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         control.set('widgetIsValid', false);
         control.get('widgetErrors').addObject('You must select a related content type.');
       }
+    });
+
+    this.get('controls').filterBy('name', 'slug').forEach(function (control) {
+      control.set('widgetIsValid', false);
+      control.get('widgetErrors').addObject('Slug is a reserved name. Please choose another label.');
     });
 
   },

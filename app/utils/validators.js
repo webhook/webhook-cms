@@ -1,6 +1,8 @@
-export default function validateControls (controls) {
+export default function validateControls (contentType, item) {
 
   Ember.Logger.log('Validating controls.');
+
+  var controls = contentType.get('controls');
 
   controls.setEach('widgetIsValid', true);
 
@@ -10,9 +12,12 @@ export default function validateControls (controls) {
   };
 
   var invalidate = function (control, message) {
+    Ember.Logger.warn('VadlidateControls::invalide', control.get('name'));
     control.set('widgetIsValid', false);
     control.get('widgetErrors').pushObject(message);
   };
+
+  var nameControl;
 
   controls.forEach(function (control) {
 
@@ -69,5 +74,7 @@ export default function validateControls (controls) {
     }
 
   });
+
+  return Ember.RSVP.Promise.resolve();
 
 }

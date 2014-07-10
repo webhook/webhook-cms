@@ -35,19 +35,16 @@
 
 .wy-menu-vertical
   header
-    height: $base-font-size * 2
-    display: inline-block
-    line-height: $base-font-size * 2
-    padding: 0 $gutter
-    display: block
-    font-weight: bold
+    color: $gray-lighter
     text-transform: uppercase
     font-size: 80%
-    color: $text-light
+    padding: $base-line-height / 4 $base-line-height
+    margin-top: $base-line-height / 2
     white-space: nowrap
 
   ul
     margin-bottom: $base-line-height
+    font-size: 80%
   li
     position: relative
     &.divide-top
@@ -59,7 +56,6 @@
       a
         color: $text-medium
         border-right: solid 1px darken($section-background-color, 20%)
-        padding: $gutter / 4 $gutter * 1.5
         &:hover
           background: darken($section-background-color, 15%)
     &:after
@@ -92,30 +88,18 @@
       opacity: 1
       background: $green
   a
-    display: inline-block
-    line-height: $base-line-height
-    padding: $gutter / 4 $gutter
+    padding: $base-line-height / 4 $base-line-height
     display: block
     position: relative
-    font-size: 90%
     text-transform: capitalize
     color: $text-color
     &:hover
-      background-color: darken($menu-background-color, 5%)
       cursor: pointer
     &:active
-      background-color: darken($menu-background-color, 10%)
       cursor: pointer
   a.active
-    color: $section-background-color
-    padding: $gutter / 4 $gutter
-    font-weight: bold
-    position: relative
-    background: $gray-dark
-    border-right: solid 10px $gray-darker
-    +font-smooth
-    &:hover
-      background: $gray-dark
+    background: $table-border-color
+    color: $blue
 
   // If they're on a trial, this lets them know
   .wh-trial-notice
@@ -134,7 +118,7 @@
 .wy-side-nav-search
   z-index: $z-index-popover
   text-align: center
-  padding: $gutter / 2
+  padding: $base-line-height
   display: block
   color: $section-background-color
   input[type=text]
