@@ -26,6 +26,7 @@
       <div data-menu-wrap="all-content" class="current move-center">
 
         {{#if model}}
+          <hr>
           <header>Your content</header>
           {{#collection 'animate-collection' content=model}}
             {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}

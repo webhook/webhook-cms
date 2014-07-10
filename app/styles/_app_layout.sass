@@ -37,13 +37,13 @@
   header
     color: $gray-lighter
     text-transform: uppercase
-    font-size: 80%
+    font-size: 75%
     padding: $base-line-height / 4 $base-line-height
-    margin-top: $base-line-height / 2
     white-space: nowrap
-
+  hr
+    margin: $base-line-height / 2 0
   ul
-    margin-bottom: $base-line-height
+    margin-bottom: $base-line-height / 2
     font-size: 80%
   li
     position: relative
@@ -103,7 +103,6 @@
 
   // If they're on a trial, this lets them know
   .wh-trial-notice
-    font-size: 80%
     background: lighten($orange,30%)
     color: $orange
     padding: 0 $base-line-height / 4
@@ -119,6 +118,7 @@
   z-index: $z-index-popover
   text-align: center
   padding: $base-line-height
+  padding-bottom: $base-line-height / 2
   display: block
   color: $section-background-color
   input[type=text]

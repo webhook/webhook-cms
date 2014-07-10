@@ -48,6 +48,9 @@
   max-width: 1000px
   margin: auto
 
+.wy-nav-content .wy-spinner-absolute
+  left: $nav-desktop-width
+
 .wy-nav-side
   height: 100vh
   background: $white
@@ -100,6 +103,8 @@
     display: block
     white-space: nowrap
     overflow: hidden
+  .wy-nav-content .wy-spinner-absolute
+    left: 0
   .wy-nav-content-wrap
     margin-left: 0
     +transition(margin-left .1s ease-in)
