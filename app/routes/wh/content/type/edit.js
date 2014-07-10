@@ -131,7 +131,7 @@ export default Ember.Route.extend({
                   var itemName = this.get('value');
                   var item = controller.get('itemModel');
 
-                  SearchIndex.search(itemName, 1, type.get('name')).then(function (results) {
+                  SearchIndex.search(itemName, 1, type.get('id')).then(function (results) {
                     results.forEach(function (result) {
                       if ((Ember.isNone(item) || (item && item.get('id') !== result.id)) && itemName === Ember.$(result.name).text()) {
                         control.set('widgetIsValid', false);
