@@ -9,6 +9,12 @@ export default Ember.ObjectController.extend({
   success  : false,
   error    : null,
 
+  emailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+
+  isInvalidEmail: function () {
+    return !this.get('emailRegex').test(this.get('inviteEmail'));
+  }.property('inviteEmail'),
+
   sendInviteSignal: function(inviteEmail) {
     var siteName = this.get('buildEnvironment').siteName;
     var currentEmail = this.get('session.user.email');
@@ -18,7 +24,7 @@ export default Ember.ObjectController.extend({
       return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
-      }); 
+      });
     }
 
     var data = {
@@ -165,6 +171,14 @@ export default Ember.ObjectController.extend({
 
     sendInvite: function() {
       var email = this.get('inviteEmail');
+
+      this.set('error', null);
+
+      if (this.get('isInvalidEmail')) {
+        this.set('error', { message: 'This is an invalid email address.', code: 'Error' });
+        return;
+      }
+
       var escapedEmail = email.replace(/\./g, ',1');
       var siteName = this.get('buildEnvironment').siteName;
 
@@ -206,7 +220,7 @@ export default Ember.ObjectController.extend({
             }.bind(this));
           }.bind(this));
         }
-        
+
       }.bind(this), function(err) {
         if(err) {
           this.set('error', err);

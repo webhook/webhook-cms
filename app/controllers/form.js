@@ -54,7 +54,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   validateControls: function () {
 
     this.get('controls').setEach('widgetIsValid', true);
-    this.get('controls').setEach('widgetErrors', Ember.A([]));
+    this.get('controls').forEach(function (control) {
+      control.set('widgetErrors', Ember.A([]));
+    });
 
     var names = this.get('controls').mapBy('name').sort(),
         dupes = [];
@@ -69,12 +71,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     this.get('controls').filter(function (control, index) {
       return dupes.indexOf(control.get('name')) >= 0;
-    }).setEach('widgetIsValid', false);
-
-    this.get('controls').rejectBy('widgetIsValid').setEach('widgetErrors', Ember.A(['Duplicate name.']));
+    }).forEach(function (control) {
+      control.set('widgetIsValid', false);
+      control.get('widgetErrors').addObject('Duplicate name.');
+    });
 
     this.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
-      if (!control.get('meta.data.contentTypeId')) {
+      window.console.log(control.get('label'));
+      if (Ember.isNone(control.get('meta.data.contentTypeId'))) {
         control.set('widgetIsValid', false);
         control.get('widgetErrors').addObject('You must select a related content type.');
       }

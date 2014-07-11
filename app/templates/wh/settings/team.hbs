@@ -1,7 +1,7 @@
 <h1>Invite a new team member.</h1>
 
-
 <form class="wy-aligned" data-toggle="tooltip"  data-placement="left bottom"  title="Inviting users is disabled in the demo.">
+
   <div class="wy-control-group">
     <label>Invite a new collaborator by email</label>
     {{input type="email" required="required" value=inviteEmail }}
@@ -14,7 +14,7 @@
   {{#if error}}
     <div class="wy-alert wy-alert-warning">
       <div class="wy-alert-title">{{ error.code }}</div>
-      {{error.essage}}
+      {{error.message}}
     </div>
   {{/if}}
 

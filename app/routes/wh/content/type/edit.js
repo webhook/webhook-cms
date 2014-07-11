@@ -98,10 +98,6 @@ export default Ember.Route.extend({
     return this.modelFor('wh.content.type');
   },
 
-  dupeNameError: function () {
-    return 'Name must be unique among ' + this.get('context.name') + ' entries.';
-  }.property('context'),
-
   searchName: function () {
 
     var route = this;
@@ -117,7 +113,7 @@ export default Ember.Route.extend({
 
     SearchIndex.search(itemName, 1, type.get('id')).then(function (results) {
       results.forEach(function (result) {
-        if ((Ember.isNone(item) || (item && item.get('id') !== result.id)) && itemName === Ember.$(result.name).text()) {
+        if ((Ember.isNone(item) || (item && item.get('id') !== result.id)) && itemName.toLowerCase() === Ember.$('<span>').html(result.name).text().toLowerCase()) {
           control.set('widgetIsValid', false);
           control.get('widgetErrors').pushObject(route.get('dupeNameError'));
         }
@@ -152,6 +148,8 @@ export default Ember.Route.extend({
     this._super.apply(this, arguments);
 
     var route = this;
+
+    this.set('dupeNameError', 'Name must be unique among ' + type.get('name') + ' entries.');
 
     controller.set('showSchedule', false);
     controller.set('itemModel', this.get('itemModel'));
