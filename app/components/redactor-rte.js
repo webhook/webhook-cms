@@ -67,10 +67,11 @@ export default Ember.Component.extend({
 
   imageButtonCallback: function () {
 
-    this.set('cursorElement', this.get('whRedactor').getBlock() || this.get('whRedactor').getCurrent());
-
     // maintain undo buffer
     this.get('whRedactor').bufferSet();
+
+    // figure out where the cursor is
+    this.set('cursorElement', this.get('whRedactor').getBlock() || this.get('whRedactor').getCurrent());
 
     // fake a control
     this.set('fakeImageControl', Ember.Object.create());
@@ -144,6 +145,8 @@ export default Ember.Component.extend({
       } else {
         whRedactor.insertHtmlAdvanced(data, false);
       }
+
+      whRedactor.selectionRestore();
 
       whRedactor.sync();
 
