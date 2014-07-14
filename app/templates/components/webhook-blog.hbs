@@ -1,0 +1,6 @@
+<h2>Webhook Blog</h2>
+
+{{#each post in posts}}
+  <h3>{{post.name}} - {{format-time post.publish_date}}</h3>
+  <p>{{post.short_version}}</p>
+{{/each}}
