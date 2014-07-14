@@ -1,6 +1,7 @@
 <h2>Webhook Blog</h2>
 
 {{#each post in posts}}
-  <h3>{{post.name}} - {{format-time post.publish_date}}</h3>
+  <h3><a href="http://www.webhook.com/blog/{{unbound post.slug}}">{{post.name}}</a></h3>
+  <span>{{format-time post.publish_date}}</span>
   <p>{{post.short_version}}</p>
 {{/each}}
