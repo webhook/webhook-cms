@@ -1,6 +1,12 @@
-<h2>Webhook Blog</h2>
-
-{{#each post in posts}}
-  <h3>{{post.name}} - {{format-time post.publish_date}}</h3>
-  <p>{{post.short_version}}</p>
-{{/each}}
+<div class="wh-updates">
+  <h2>Webhook updates</h2>
+  <ul>
+  {{#each post in posts}}
+    <li>
+      <h4>{{post.name}}</h4>
+      <p>{{post.short_version}}</p>
+      <p class="date">{{format-time post.publish_date}}</p>
+    </li>
+  {{/each}}
+  </ul>
+</div>
