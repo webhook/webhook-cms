@@ -571,51 +571,28 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         }
 
-        if (contentType.get('oneOff')) {
+        if (wasNew) {
 
-          this.transitionToRoute('wh.content.type.index', contentType);
-          this.send('notify', 'success', 'Form saved!');
+          this.scaffoldType();
+
+          // Acknowledge scaffolding
+          this.toggleProperty('initialScaffoldingPrompt');
 
         } else if (this.get('session.supportedMessages.scaffolding')) {
 
-          if (wasNew) {
-
-            this.scaffoldType();
-
-            // Acknowledge scaffolding
-            this.toggleProperty('initialScaffoldingPrompt');
-
-          } else {
-
-            if (this.get('session.supportedMessages.check_scaffolding') && contentType.get('individualMD5') && contentType.get('listMD5')) {
-
-              window.ENV.sendGruntCommand('check_scaffolding:' + contentType.get('id'), function (data) {
-
-                if (data && typeof data === 'object' && contentType.get('individualMD5') === data.individualMD5 && contentType.get('listMD5') === data.listMD5) {
-
-                  formController.scaffoldType().then(function () {
-                    formController.transitionToRoute('wh.content.type.index', contentType);
-                  });
-
-                } else {
-
-                  formController.toggleProperty('scaffoldingPrompt');
-
-                }
-
-              });
-
-            } else {
-
-              // ask if they want to rebuild scaffolding
-              this.toggleProperty('scaffoldingPrompt');
-
-            }
-
-          }
+          this.isScaffoldingUnchanged().then(function () {
+            formController.scaffoldType().then(function () {
+              formController.transitionToRoute('wh.content.type.index', contentType);
+            });
+          }, function (error) {
+            Ember.Logger.warn('Scaffolding changed', error);
+            formController.toggleProperty('scaffoldingPrompt');
+          });
 
         } else {
+
           this.transitionToRoute('wh.content.type.index', contentType);
+
         }
 
       }.bind(this), function (error) {
@@ -628,6 +605,93 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }.bind(this));
 
     }.bind(this));
+
+  },
+
+  isScaffoldingUnchanged: function () {
+
+    var controller = this;
+    var contentType = this.get('model');
+
+    var isMD5Equal = function (contentType, data) {
+
+      if (data && typeof data === 'object') {
+
+        if (contentType.get('oneOff')) {
+
+          if (contentType.get('oneOffMD5') !== data.oneOffMD5) {
+            return false;
+          }
+
+          return true;
+
+        } else {
+
+          if (contentType.get('individualMD5') !== data.individualMD5) {
+            return false;
+          }
+
+          if (contentType.get('listMD5') !== data.listMD5) {
+            return false;
+          }
+
+          return true;
+
+        }
+
+      }
+
+      return false;
+
+    };
+
+    var hasMD5 = function (contentType) {
+
+      if (contentType.get('oneOff')) {
+        if (Ember.isNone(contentType.get('oneOffMD5'))) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+
+      if (Ember.isNone(contentType.get('individualMD5'))) {
+        return false;
+      }
+
+      if (Ember.isNone(contentType.get('listMD5'))) {
+        return false;
+      }
+
+      return true;
+
+    };
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+
+      if (controller.get('session.supportedMessages.check_scaffolding')) {
+        if (hasMD5(contentType)) {
+
+          Ember.Logger.log('Checking scaffolding MD5s.');
+
+          window.ENV.sendGruntCommand('check_scaffolding:' + contentType.get('id'), function (data) {
+
+            if (isMD5Equal(contentType, data)) {
+              resolve();
+            } else {
+              reject('MD5 does not match');
+            }
+
+          });
+
+        } else {
+          reject('missing scaffolding MD5');
+        }
+      } else {
+        reject('check_scaffolding not supported');
+      }
+
+    });
 
   },
 
