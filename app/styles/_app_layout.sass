@@ -15,8 +15,8 @@
   font-size: 80%
   span
     font-weight: bold
-    background: lighten($blue, 50%)
-    color: $blue
+    background: $red
+    color: $white
     display: inline-block
     padding: $base-line-height / 4
   &.wh-local-notice-demo span
@@ -426,6 +426,26 @@ pre code
 .body-no-scroll
   height: 100%
   overflow-y: hidden
+
+.wh-updates
+  ul
+    margin-bottom: $base-line-height
+  li
+    line-height: 1.5
+    padding: $base-line-height / 2 0
+    border-bottom: solid 1px $table-border-color
+    a
+      h4
+        font-family: $base-font-family
+        font-size: 100%
+        margin-bottom: $base-line-height / 4
+      p
+        font-size: 90%
+        margin-bottom: 0
+        color: $text-color
+      .date
+        color: $text-lighter
+        font-size: 80%
 
 
 // RESPONSIVE STYLES HERE

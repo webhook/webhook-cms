@@ -1,0 +1,14 @@
+<div class="wh-updates">
+  <h2>Webhook updates</h2>
+  <ul>
+  {{#each post in posts}}
+    <li>
+      <a href="http://www.webhook.com/blog/{{unbound post.slug}}">
+        <h4>{{post.name}}</h4>
+        <p>{{post.short_version}}</p>
+        <p class="date">{{format-time post.publish_date}}</p>
+      </a>
+    </li>
+  {{/each}}
+  </ul>
+</div>
