@@ -5,6 +5,22 @@ export default Ember.ObjectController.extend({
   error    : null,
   customUrl: '',
 
+  presetReady: function (data) {
+    data = data || {};
+
+    if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
+      data = { contentType: data };
+    }
+
+    window.ENV.firebase.update(data, function(err) {
+      window.ENV.sendGruntCommand('build', function() {
+        this.set('isSending', false);
+        this.send('notify', 'success', 'Theme installation complete.');
+        this.transitionToRoute('wh');
+      }.bind(this));
+    }.bind(this));
+  },
+
   actions: {
     downloadPreset: function (theme) {
 
@@ -13,21 +29,13 @@ export default Ember.ObjectController.extend({
         error: null
       });
 
+      if (Ember.isNone(theme)) {
+        this.set('error', { message: 'Please choose a theme.' });
+        return;
+      }
+
       this.set('isSending', true);
-      window.ENV.sendGruntCommand('preset:' + theme.url, function(data) {
-
-        if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
-          data = { contentType: data };
-        }
-
-        window.ENV.firebase.update(data, function(err) {
-          window.ENV.sendGruntCommand('build', function() {
-            this.set('isSending', false);
-            this.send('notify', 'success', 'Theme installation complete.');
-            this.transitionToRoute('wh');
-          }.bind(this));
-        }.bind(this));
-      }.bind(this));
+      window.ENV.sendGruntCommand('preset:' + theme.url, this.presetReady.bind(this));
     },
 
     downloadCustom: function () {
@@ -37,26 +45,13 @@ export default Ember.ObjectController.extend({
         error: null
       });
 
-      if(!this.get('customUrl')) {
+      if (Ember.isNone(this.get('customUrl'))) {
         this.set('error', { message: 'Please provide a custom URL.' });
         return;
       }
 
       this.set('isSending', true);
-      window.ENV.sendGruntCommand('preset:' + this.get('customUrl'), function(data) {
-
-        if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
-          data = { contentType: data };
-        }
-
-        window.ENV.firebase.update(data, function(err) {
-          window.ENV.sendGruntCommand('build', function() {
-            this.set('isSending', false);
-            this.send('notify', 'success', 'Theme installation complete.');
-            this.transitionToRoute('wh');
-          }.bind(this));
-        }.bind(this));
-      }.bind(this));
+      window.ENV.sendGruntCommand('preset:' + this.get('customUrl'), this.presetReady.bind(this));
     },
 
     localThemeSelected: function (file) {
@@ -66,7 +61,7 @@ export default Ember.ObjectController.extend({
         error: null
       });
 
-      if(!file) {
+      if (Ember.isNone(file)) {
         this.set('error', { message: 'Please select a zip file.' });
         return;
       }
@@ -80,21 +75,9 @@ export default Ember.ObjectController.extend({
         // strip off 'data:application/zip;base64,'
         var base64Data = e.target.result.split(',').slice(1).join(',');
 
-        window.ENV.sendGruntCommand('preset_local:' + base64Data, function(data) {
+        window.ENV.sendGruntCommand('preset_local:' + base64Data, this.presetReady.bind(this));
 
-          if (Ember.isNone(data.data) && Ember.isNone(data.contentType)) {
-            data = { contentType: data };
-          }
-
-          window.ENV.firebase.update(data, function(err) {
-            window.ENV.sendGruntCommand('build', function() {
-              this.set('isSending', false);
-              this.send('notify', 'success', 'Theme installation complete.');
-              this.transitionToRoute('wh');
-            }.bind(this));
-          }.bind(this));
-        }.bind(this));
-      };
+      }.bind(this);
 
       reader.readAsDataURL(file);
 
