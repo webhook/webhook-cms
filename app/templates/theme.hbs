@@ -16,20 +16,30 @@
       <ul class="wh-themes">
         <li class="wh-themes-custom">
           <h5>Custom theme</h5>
+
           {{#if error}}
             <div class="wy-alert wy-alert-warning">
               <div class="wy-alert-title">Whoops</div>
               {{error.message}}
             </div>
           {{/if}}
+
           <div class="wy-control-group">
             <label>Location of theme's zip file</label>
             <div class="wy-control">
               {{input type="text" placeholder="http://site.com/theme.zip" class="full-width" value=customUrl}}
-              {{#select-file action='localThemeSelected'}}Choose Local File{{/select-file}}
             </div>
           </div>
+
           <button class="btn btn-neutral icon icon-rocket" {{ action downloadCustom }}> Load this custom theme</button>
+
+          {{#if session.supportedMessages.preset_localv2}}
+            <div class="wy-control-group">
+              <div class="wy-control">
+                {{#select-file action='localThemeSelected' accept="application/zip"}}Choose local zip file{{/select-file}}
+              </div>
+            </div>
+          {{/if}}
 
         </li>
         {{#each theme in themes}}

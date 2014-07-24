@@ -1,6 +1,8 @@
+// Simple component for selecting files
+// usage: {{#select-file action='handleFile'}}Button Text{{/select-file}}
 export default Ember.Component.extend({
   tagName: 'button',
-  classNames: 'btn',
+  classNames: 'btn btn-neutral',
 
   accept: '*',
   multiple: false,
@@ -13,16 +15,7 @@ export default Ember.Component.extend({
       accept  : this.get('accept'),
       multiple: this.get('multiple')
     }).on('selectedFile', function (event, file) {
-      // window.console.log(file);
-
-      // window.console.log(component.get('action'));
-
       component.sendAction('action', file);
-
-
-      // window.ENV.sendGruntCommand('preset_local:' + dataString);
-
-      // self.selectedFile.call(self, file);
     });
   }
 
