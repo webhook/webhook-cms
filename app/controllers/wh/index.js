@@ -14,10 +14,18 @@ export default Ember.ArrayController.extend({
 
     var messagePage = this.get('messageRef').limit(this.get('serverMessagesPerPage'));
 
+    var controller = this;
+
     messagePage.on('child_added', function (snapshot) {
       var message = Ember.$.extend({}, snapshot.val(), { id: snapshot.name() });
-      this.get('serverMessages').insertAt(0, message);
-    }.bind(this));
+
+      // We want to see if the website has ever been deployed
+      if (typeof message.status !== 'undefined' && message.status === 0) {
+        controller.set('session.isDeployed', true);
+      }
+
+      controller.get('serverMessages').insertAt(0, message);
+    });
 
   },
 
