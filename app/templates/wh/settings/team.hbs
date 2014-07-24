@@ -1,16 +1,22 @@
 <h1>Invite a new team member.</h1>
 
 <form class="wy-aligned">
+  {{#if session.isDeployed}}
+    <div class="wy-control-group">
+      <label>Invite a new collaborator by email</label>
+      {{input type="email" required="required" value=inviteEmail }}
+      <div class="wy-form-message">The person will not be active until they verify their email address.</div>
+    </div>
+    <div class="wy-btn-group">
+      <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> Send invite</button>
+    </div>
+  {{else}}
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title">You need to deploy first</div>
+      <p>Before you can add new members to your team you need to deploy the site onto the Internet. You can do this by running <code>wh deploy</code> in your local site directory. Then return to this page.</p>
+    </div>
+  {{/if}}
 
-  <div class="wy-control-group">
-    <label>Invite a new collaborator by email</label>
-    {{input type="email" required="required" value=inviteEmail }}
-    <div class="wy-form-message">The person will not be active until they verify their email address.</div>
-  </div>
-
-  <div class="wy-btn-group">
-    <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> Send invite</button>
-  </div>
 
   {{#if error}}
     <div class="wy-alert wy-alert-warning">
