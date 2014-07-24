@@ -61,15 +61,19 @@ export default Ember.ObjectController.extend({
 
     localThemeSelected: function (file) {
 
-      var reader = new FileReader();
+      var reader = new window.FileReader();
 
       reader.onload = function(e) {
-        window.ENV.sendGruntCommand('preset_local:' + e.target.result, function () {
+
+        // strip off 'data:application/zip;base64,'
+        var base64Data = e.target.result.split(',').slice(1).join(',');
+
+        window.ENV.sendGruntCommand('preset_local:' + base64Data, function () {
           window.console.log(arguments);
         });
       };
 
-      reader.readAsText(file);
+      reader.readAsDataURL(file);
 
     }
   }
