@@ -13,7 +13,6 @@ export default Ember.Component.extend({
     }).success(function (data) {
 
       data.forEach(function (post) {
-        window.console.log(post);
         component.get('posts').addObject(post);
       });
     });

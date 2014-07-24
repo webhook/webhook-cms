@@ -77,7 +77,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     });
 
     this.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
-      window.console.log(control.get('label'));
       if (Ember.isNone(control.get('meta.data.contentTypeId'))) {
         control.set('widgetIsValid', false);
         control.get('widgetErrors').addObject('You must select a related content type.');
