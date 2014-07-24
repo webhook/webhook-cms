@@ -26,6 +26,7 @@
             <label>Location of theme's zip file</label>
             <div class="wy-control">
               {{input type="text" placeholder="http://site.com/theme.zip" class="full-width" value=customUrl}}
+              {{#select-file action='localThemeSelected'}}Choose Local File{{/select-file}}
             </div>
           </div>
           <button class="btn btn-neutral icon icon-rocket" {{ action downloadCustom }}> Load this custom theme</button>
@@ -55,4 +56,3 @@
     </p>
   {{/if}}
 </div>
-

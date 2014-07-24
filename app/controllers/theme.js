@@ -52,10 +52,25 @@ export default Ember.ObjectController.extend({
         window.ENV.firebase.update(data, function(err) {
           window.ENV.sendGruntCommand('build', function() {
             this.set('isSending', false);
+            this.send('notify', 'success', 'Theme installation complete.');
             this.transitionToRoute('wh');
           }.bind(this));
         }.bind(this));
       }.bind(this));
+    },
+
+    localThemeSelected: function (file) {
+
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        window.ENV.sendGruntCommand('preset_local:' + e.target.result, function () {
+          window.console.log(arguments);
+        });
+      };
+
+      reader.readAsText(file);
+
     }
   }
 });
