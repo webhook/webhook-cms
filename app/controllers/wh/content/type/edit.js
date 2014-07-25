@@ -242,6 +242,8 @@ export default Ember.ObjectController.extend({
 
   saveItem: function () {
 
+    ga('send', 'event', 'item', 'save');
+
     var controls = this.get('type.controls');
 
     // name field is special. it is validated as it changes.

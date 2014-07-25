@@ -725,6 +725,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       Ember.Logger.info('Saving content type', this.get('model.id'));
 
+      ga('send', 'event', 'contentType', 'save');
+
       this.set('isEditing', false);
 
       this.validateControls();

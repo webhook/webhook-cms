@@ -31,7 +31,7 @@ Ember.Application.initializer({
   name: "Analytics",
   initialize: function (container, application) {
     /**
-     * Creates a temporary global ga object and loads analy  tics.js.
+     * Creates a temporary global ga object and loads analytics.js.
      * Paramenters o, a, and m are all used internally.  They could have been declared using 'var',
      * instead they are declared as parameters to save 4 bytes ('var ').
      *
@@ -63,7 +63,6 @@ Ember.Application.initializer({
       m.parentNode.insertBefore(a, m);
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     ga('create', 'UA-47335625-2', {'cookieDomain': 'none'});
-    ga('set', 'dimension1', Ember.$('meta[name="siteName"]').attr('content'));
   }
 });
 
@@ -79,7 +78,6 @@ Ember.Application.initializer({
     Ember.A(['model', 'controller', 'view', 'route', 'helper', 'component']).forEach(function (component) {
       application.inject(component, 'buildEnvironment', 'build-environment:environment:current');
     });
-
 
     var isLocal     = false;
     var localSocket = null;

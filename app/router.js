@@ -49,6 +49,10 @@ Router.map(function() {
 
 Router.reopen({
   notifyAnalytics: function() {
+    var dim1 = Ember.$('meta[name="siteName"]').attr('content');
+    Ember.Logger.log('Sending pageview to analytics.', dim1);
+
+    ga('set', 'dimension1', dim1);
     ga('send', 'pageview');
   }.on('didTransition')
 });
