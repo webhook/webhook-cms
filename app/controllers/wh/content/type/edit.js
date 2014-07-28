@@ -1,3 +1,4 @@
+/*globals ga*/
 import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';

@@ -1,3 +1,4 @@
+/*globals ga*/
 import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 import downcode from 'appkit/utils/downcode';
