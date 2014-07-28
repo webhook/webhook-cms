@@ -4,8 +4,8 @@ export default Ember.ArrayController.extend({
   serverMessagesPerPage: 10,
 
   moreServerMessages: function () {
-    return this.get('serverMessages.length') === 10;
-  }.property('serverMessages.@each'),
+    return this.get('session.serverMessages.length') === 10;
+  }.property('session.serverMessages.@each'),
 
   init: function () {
     // the ref to management/sites/<sitename> should probably be stored somewhere
@@ -24,7 +24,7 @@ export default Ember.ArrayController.extend({
         controller.set('session.isDeployed', true);
       }
 
-      controller.get('serverMessages').insertAt(0, message);
+      controller.get('session.serverMessages').insertAt(0, message);
     });
 
   },
@@ -32,8 +32,8 @@ export default Ember.ArrayController.extend({
   actions: {
     moreServerMessages: function () {
 
-      var endAt = this.get('serverMessages.lastObject.id'),
-          serverMessages = this.get('serverMessages'),
+      var endAt = this.get('session.serverMessages.lastObject.id'),
+          serverMessages = this.get('session.serverMessages'),
           lastIndex = serverMessages.get('length');
 
       this.get('messageRef').endAt(null, endAt).once('value', function (snapshot) {

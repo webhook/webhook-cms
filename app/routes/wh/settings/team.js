@@ -28,8 +28,24 @@ export default Ember.Route.extend({
 
     this.set('potentialListener', window.ENV.firebaseRoot.child("management/sites/" + siteName + "/potential_users").on('value', function(snapshot) {
       controller.set('potentialUsers', Ember.$.map(snapshot.val() || [], function(value, key) { return { email: value, key: key, potential: true }; } ));
-
     }));
+
+
+    // Check to see if site has been deployed
+    if (!this.get('session.serverMessages.length')) {
+
+      window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/messages/').limit(10).once('value', function (snapshot) {
+
+        snapshot.forEach(function (childSnapshot) {
+          var message = Ember.$.extend({}, childSnapshot.val(), { id: childSnapshot.name() });
+          if (typeof message.status !== 'undefined' && message.status === 0) {
+            controller.set('session.isDeployed', true);
+          }
+        });
+
+      });
+
+    }
 
     this._super.apply(this, arguments);
   },

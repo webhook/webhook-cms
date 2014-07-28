@@ -16,7 +16,7 @@
 
 {{webhook-blog}}
 
-{{#if serverMessages}}
+{{#if session.serverMessages}}
   <section>
     <h2>Build history</h2>
 
@@ -29,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each serverMessages}}
+        {{#each session.serverMessages}}
           <tr>
             <td>{{code}}</td>
             <td>{{message}}</td>

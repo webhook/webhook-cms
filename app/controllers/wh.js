@@ -47,6 +47,8 @@ export default Ember.ArrayController.extend({
       }
     });
 
+    this.set('session.serverMessages', Ember.A([]));
+
   },
 
   debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
