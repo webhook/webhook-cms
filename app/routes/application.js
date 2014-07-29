@@ -1,24 +1,6 @@
 export default Ember.Route.extend({
   notifications: [],
 
-  init: function () {
-
-    var supportedMessages = Ember.Object.create();
-
-    window.ENV.sendGruntCommand('supported_messages', function (messages) {
-      if (messages && Ember.isArray(messages)) {
-        messages.forEach(function (message) {
-          supportedMessages.set(message, true);
-        });
-        Ember.Logger.info('Messages Supported:', messages.join(', '));
-      }
-    });
-
-    this.set('session.supportedMessages', supportedMessages);
-
-    return this._super.apply(this, arguments);
-  },
-
   setupController: function (controller) {
     controller.set('notifications', this.get('notifications'));
     this._super.apply(this, arguments);

@@ -273,7 +273,29 @@ Ember.Application.initializer({
           });
         });
 
-        Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck, endTrialCheck]).then(function () {
+        var serverMessagesCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+
+          session.set('supportedMessages', Ember.Object.create());
+
+          // Skip if we're not connected to generate server (ie: developing cms)
+          var localSocket = application.get('buildEnvironment').localSocket;
+          if (!localSocket || !localSocket.connected) {
+            return resolve();
+          }
+
+          window.ENV.sendGruntCommand('supported_messages', function (messages) {
+            if (messages && Ember.isArray(messages)) {
+              messages.forEach(function (message) {
+                session.get('supportedMessages').set(message, true);
+              });
+              Ember.Logger.info('Server Messages Supported:', messages.join(', '));
+            }
+            resolve();
+          });
+
+        });
+
+        Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck, endTrialCheck, serverMessagesCheck]).then(function () {
           session.set('user', user);
           Ember.Logger.log('Setting billing info to', session.get('billing'));
           Ember.run(application, application.advanceReadiness);
