@@ -1,8 +1,12 @@
 <h2>Wordpress Import</h2>
 {{#if wxmlDone}}
-
+  Finished
 {{else}}
-{{#select-file action='wordpressFileSelected'}} Select a wordpress xml file{{/select-file}}
+  {{#if wxmlStatus }}
+    {{wxmlStatus.msg}}
+  {{else}}
+    {{#select-file action='wordpressFileSelected'}} Select a wordpress xml file{{/select-file}}
+  {{/if}}
 {{/if}}
 
 <h2>Import / export data</h2>

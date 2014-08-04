@@ -9,8 +9,13 @@ var WXMLConverter = (function() {
     pages: {}, 
   };
 
+  var onConverterUpdated = function() {
+
+  };
 
   var parseWXML = function(data, callback) {
+    this.onConverterUpdated({ msg: 'Parsing XML into JSON' });
+
     // Post meta sometimes contain invalid XML, we wont need it so destroy it, not a great regex but it works
     data = data.replace(/<wp:postmeta\>((?!<\/wp:postmeta>)[\s\S])*<\/wp:postmeta>/g, '');
 
@@ -41,10 +46,18 @@ var WXMLConverter = (function() {
     wordpressData.image = convertEmpty(getNodeValue(channel['image']));
 
     for(var key in channel['wp:author']) {
+      if(!channel['wp:author'].hasOwnProperty(key)) {
+        continue;
+      }
+
       var author = channel['wp:author'][key];
       var newAuthor = {};
 
       for(var okey in author) {
+        if(!author.hasOwnProperty(okey)) {
+          continue;
+        }
+
         newAuthor[okey.replace('wp:', '')] = getNodeValue(author[okey]);
       }
 
@@ -62,10 +75,18 @@ var WXMLConverter = (function() {
     }
 
     for(var key in channel['wp:category']) {
+        if(!channel['wp:category'].hasOwnProperty(key)) {
+          continue;
+        }
+
       var category = channel['wp:category'][key];
       var newCategory = {};
 
       for(var okey in category) {
+        if(!category.hasOwnProperty(okey)) {
+          continue;
+        }
+
         newCategory[okey.replace('wp:', '')] = getNodeValue(category[okey]);
       }
 
@@ -79,10 +100,18 @@ var WXMLConverter = (function() {
     }
 
     for(var key in channel['wp:tag']) {
+      if(!channel['wp:tag'].hasOwnProperty(key)) {
+        continue;
+      }
+
       var tag = channel['wp:tag'][key];
       var newTag = {};
 
       for(var okey in tag) {
+        if(!tag.hasOwnProperty(okey)) {
+          continue;
+        }
+
         newTag[okey.replace('wp:', '')] = getNodeValue(tag[okey]);
       }
 
@@ -93,14 +122,21 @@ var WXMLConverter = (function() {
       wordpressData.tags[fixedTag.slug] = fixedTag;
     }
 
-
     for(var key in channel['item']) {
+      if(!channel['item'].hasOwnProperty(key)) {
+        continue;
+      }
+
       var items = channel['item'][key];
       var newItem = {};
 
       var categoryAndTags = {};
 
       for(var okey in items) {
+        if(!items.hasOwnProperty(okey)) {
+          continue;
+        }
+
         if(okey === 'category') {
           categoryAndTags = getCategoryValue(items[okey]);
         } else {
@@ -149,6 +185,7 @@ var WXMLConverter = (function() {
       }
     }
 
+    this.onConverterUpdated({ msg: 'Done Parsing XML into JSON' });
     callback(wordpressData);
   }
 
@@ -265,6 +302,7 @@ var WXMLConverter = (function() {
   }
 
   return {
-    convert: parseWXML
+    convert: parseWXML,
+    onConverterUpdated: onConverterUpdated
   }
 })();

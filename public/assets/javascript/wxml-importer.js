@@ -326,7 +326,12 @@ var WXMLImporter = (function() {
   var siteKey = '';
   var site = '';
   var downcode = function(str) { return str; };
+  var onImporterUpdated = function() {
 
+  };
+
+
+  var self = null;
   var wxmlToFirebase = function(data, downcodeFunc, firebaseRef, siteName, key, callback) {
     firebase = firebaseRef;
     siteKey = key;
@@ -334,6 +339,8 @@ var WXMLImporter = (function() {
 
     downcode = downcodeFunc;
     
+    self = this;
+    self.onImporterUpdated({ msg: 'Converting JSON into Webhook Format' });
     jsonToFirebase(data, callback);
   }
 
@@ -405,8 +412,14 @@ var WXMLImporter = (function() {
   var tagsToId = {};
 
   var parseTags = function() {
+    self.onImporterUpdated({ msg: 'Converting Tags' });
     var tagsToParse = [];
     for(var key in parsingData.tags) {
+      if(!parsingData.tags.hasOwnProperty(key)) {
+        continue;
+      }
+
+      console.log(key);
       tagsToParse.push({ key: key, data: parsingData.tags[key] });
     }
 
@@ -439,9 +452,14 @@ var WXMLImporter = (function() {
   var authorsToIds = {};
 
   var parseAuthors = function() {
+    self.onImporterUpdated({ msg: 'Converting Authors' });
 
     var authorsToParse = [];
     for(var key in parsingData.authors) {
+      if(!parsingData.authors.hasOwnProperty(key)) {
+        continue;
+      }
+
       authorsToParse.push({ key: key, data: parsingData.authors[key] });
     }
 
@@ -479,9 +497,14 @@ var WXMLImporter = (function() {
   var postsToIds = {};
 
   var parsePosts = function() {
+    self.onImporterUpdated({ msg: 'Converting Posts' });
 
     var postsToParse = [];
     for(var key in parsingData.posts) {
+      if(!parsingData.posts.hasOwnProperty(key)) {
+        continue;
+      }
+
       postsToParse.push({ key: key, data: parsingData.posts[key] });
     }
 
@@ -521,6 +544,9 @@ var WXMLImporter = (function() {
       structuredData.authors[authorId].articles.push("articles " + pushId);
 
       for(var tag in postData.data.tags) {
+        if(!postData.data.tags.hasOwnProperty(key)) {
+          continue;
+        }
         var tagId = tagsToId[tag];
         var tagObj = structuredData.tags[tagId];
 
@@ -539,9 +565,13 @@ var WXMLImporter = (function() {
   var pagesToIds = {};
 
   var parsePages = function() {
+    self.onImporterUpdated({ msg: 'Converting Pages' });
 
     var pagesToParse = [];
     for(var key in parsingData.pages) {
+      if(!parsingData.pages.hasOwnProperty(key)) {
+        continue;
+      }
       pagesToParse.push({ key: key, data: parsingData.pages[key] });
     }
 
@@ -650,16 +680,23 @@ var WXMLImporter = (function() {
 
     var attachementsToParse = [];
     for(var key in parsingData.attachements) {
+      if(!parsingData.attachements.hasOwnProperty(key)) {
+        continue;
+      }
       attachementsToParse.push({ key: key, data: parsingData.attachements[key] });
     }
 
+    self.onImporterUpdated({ msg: 'Uploading Images 0/' + attachementsToParse.length });
     var uploadFunctions = [];
 
+    var imageNo = 0;
     attachementsToParse.forEach(function(attData) {
       var att = attData.data;
       var url = att.attachment_url;
 
       uploadFunctions.push(function(step) {
+        imageNo = imageNo + 1;
+        self.onImporterUpdated({ msg: 'Uploading Images ' + imageNo + '/' + attachementsToParse.length });
         uploadImage(url, function(data) {
           urlsToNewUrls.push({ oldUrl: url, newUrl: data.resize_url || data.url });
           step();
@@ -730,6 +767,8 @@ var WXMLImporter = (function() {
   };
 
   function uploadData() {
+    console.log(structuredData);
+    self.onImporterUpdated({ msg: 'Uploading Data To Firebase' });
     firebase.child("contentType").set(structuredTypes, function() {
       firebase.child("data").set(structuredData, function() {
         if(finalCallback) {
@@ -781,6 +820,7 @@ var WXMLImporter = (function() {
   }
   
   return {
-    import: wxmlToFirebase
+    import: wxmlToFirebase,
+    onImporterUpdated: onImporterUpdated
   }
 })();

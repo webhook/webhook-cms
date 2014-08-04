@@ -5,6 +5,7 @@ export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
   wxmlDone: false,
+  wxmlStatus: null,
 
   deleteOption: 'data',
   isDeleting: false,
@@ -172,9 +173,18 @@ export default Ember.Controller.extend({
       reader.onload = function(e) {
         var data = reader.result;
 
+        WXMLConverter.onConverterUpdated = function(updateEvent) {
+          this.set('wxmlStatus', updateEvent);
+        }.bind(this);
+
+        WXMLImporter.onImporterUpdated = function(updateEvent) {
+          this.set('wxmlStatus', updateEvent);
+        }.bind(this);
+
         WXMLConverter.convert(data, function(parsedData) {
           WXMLImporter.import(parsedData, downcode, window.ENV.firebase, this.get('session.site.name'), this.get('session.site.token'), function() {
             this.set('wxmlDone', true);
+            this.set('wxmlStatus', null);
           }.bind(this));
         }.bind(this));
       }.bind(this);
