@@ -38,6 +38,10 @@
      {{#if wxmlStatus.firebase.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
      Uploading data to Firebase.
     </li>
+    <li {{bind-attr class="wxmlStatus.search.class"}}>
+     {{#if wxmlStatus.search.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Re-indexing search.
+    </li>
     <li {{bind-attr class="wxmlDoneClass"}}> Done.</li>
   </ul>
 {{else}}
