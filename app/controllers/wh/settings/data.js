@@ -1,5 +1,6 @@
 /*global WXMLConverter,WXMLImporter*/
 import downcode from 'appkit/utils/downcode';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Controller.extend({
   dataBackup: null,
@@ -324,6 +325,14 @@ export default Ember.Controller.extend({
         var blob = new window.Blob([data, { type: "text/plain;charset=utf-8" }]);
         window.saveAs(blob, backup.fileName);
       });
+    },
+
+    reindexSite: function () {
+
+      SearchIndex.reindex().then(function () {
+        window.console.log('reindexed');
+      });
+
     }
   }
 });
