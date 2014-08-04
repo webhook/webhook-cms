@@ -1,6 +1,10 @@
+/*global WXMLConverter,WXMLImporter*/
+import downcode from 'appkit/utils/downcode';
+
 export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
+  wxmlDone: false,
 
   deleteOption: 'data',
   isDeleting: false,
@@ -162,6 +166,22 @@ export default Ember.Controller.extend({
   },
 
   actions: {
+    wordpressFileSelected: function(file) {
+      var reader = new window.FileReader();
+
+      reader.onload = function(e) {
+        var data = reader.result;
+
+        WXMLConverter.convert(data, function(parsedData) {
+          WXMLImporter.import(parsedData, downcode, window.ENV.firebase, this.get('session.site.name'), this.get('session.site.token'), function() {
+            this.set('wxmlDone', true);
+          }.bind(this));
+        }.bind(this));
+      }.bind(this);
+
+      reader.readAsText(file);
+    },
+
     download: function () {
 
       var fileName = this.get('buildEnvironment.siteName') + '-' + moment().format() + '.json';

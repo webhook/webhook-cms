@@ -325,11 +325,14 @@ var WXMLImporter = (function() {
   var firebase = null;
   var siteKey = '';
   var site = '';
+  var downcode = function(str) { return str; };
 
-  var wxmlToFirebase = function(data, firebaseRef, siteName, key, callback) {
+  var wxmlToFirebase = function(data, downcodeFunc, firebaseRef, siteName, key, callback) {
     firebase = firebaseRef;
     siteKey = key;
     site = siteName;
+
+    downcode = downcodeFunc;
     
     jsonToFirebase(data, callback);
   }
@@ -348,7 +351,7 @@ var WXMLImporter = (function() {
   var getKey = function() {
     var keyref = firebase.push();
 
-    var key = keyref.toString().replace(firebase.toString(), '');
+    var key = keyref.toString().replace(firebase.toString() + '/', '');
 
     return key;
   }
@@ -357,7 +360,7 @@ var WXMLImporter = (function() {
     var dateObj = new Date(date);
 
     // Change this to use moment
-    return dateObj.toISOString();
+    return moment(dateObj.getTime()).format();
   }
 
   var structuredData = {};
@@ -718,24 +721,6 @@ var WXMLImporter = (function() {
           figureTag.find('figcaption').text(figureTag.find('img').attr('data-caption'));
           figureTag.find('img').removeAttr('data-caption');
         }
-
-        var classList =  $(val).attr('class') || "";
-        classList =  classList.split(/\s+/);
-
-        classList.forEach(function(cl) {
-          if(cl.indexOf('align') !== -1) {
-            console.log(cl);
-          }
-        });
-
-        var classList =  $(val).parent().attr('class') || "";
-        classList =  classList.split(/\s+/);
-
-        classList.forEach(function(cl) {
-          if(cl.indexOf('align') !== -1) {
-            console.log(cl);
-          }
-        });
 
         $(val).replaceWith(figureTag);
       }
