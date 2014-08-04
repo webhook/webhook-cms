@@ -1,25 +1,47 @@
 <h2>Import Wordpress blog</h2>
 <p>
   Wordpress allows you to <a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">export your blog data into an XML document</a>.
-  Once dowloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
+  Once downloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
   size them properly.
 </p>
 
-<ul class="wh-wp-import">
-  <li class="complete"> This is a completed step.</li>
-  <li class="error"> This step has some sort of error.</li>
-  <li class="active"><span class="wy-spinner wy-spinner-small wy-spinner-inline"></span> This is a active step.</li>
-  <li class="pending"> This is a pending step.</li>
-</ul>
-
-{{#if wxmlDone}}
-  Finished
+{{#if wxmlStatus.messages }}
+  <ul class="wh-wp-import">
+    <li {{bind-attr class="wxmlStatus.parsingXML.class"}}>
+      {{#if wxmlStatus.parsingXML.running}}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+      Parsing Wordpress XML.
+    </li>
+    <li {{bind-attr class="wxmlStatus.siteInfo.class"}}>
+     {{#if wxmlStatus.siteInfo.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Converting site information.</li>
+    <li {{bind-attr class="wxmlStatus.tags.class"}}>
+     {{#if wxmlStatus.tags.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Converting tags.
+    </li>
+    <li {{bind-attr class="wxmlStatus.authors.class"}}>
+     {{#if wxmlStatus.authors.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Converting authors.
+    </li>
+    <li {{bind-attr class="wxmlStatus.images.class"}}>
+     {{#if wxmlStatus.images.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Uploading Images. {{#if wxmlStatus.images.imgCount}}({{wxmlStatus.images.imgCount}}/{{wxmlStatus.images.total}}){{/if}}
+    </li>
+    <li {{bind-attr class="wxmlStatus.posts.class"}}>
+     {{#if wxmlStatus.posts.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Converting Posts.
+    </li>
+    <li {{bind-attr class="wxmlStatus.pages.class"}}>
+     {{#if wxmlStatus.pages.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Converting Pages.
+    </li>
+    <li {{bind-attr class="wxmlStatus.firebase.class"}}>
+     {{#if wxmlStatus.firebase.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+     Uploading data to Firebase.
+    </li>
+    <li {{bind-attr class="wxmlDoneClass"}}> Done.</li>
+  </ul>
 {{else}}
-  {{#if wxmlStatus }}
-    {{wxmlStatus.msg}}
-  {{else}}
-    {{#select-file action='wordpressFileSelected' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
-  {{/if}}
+  {{#select-file action='wordpressFileSelected' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
 {{/if}}
 <hr/>
 

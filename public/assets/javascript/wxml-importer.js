@@ -340,7 +340,6 @@ var WXMLImporter = (function() {
     downcode = downcodeFunc;
     
     self = this;
-    self.onImporterUpdated({ msg: 'Converting JSON into Webhook Format' });
     jsonToFirebase(data, callback);
   }
 
@@ -379,6 +378,7 @@ var WXMLImporter = (function() {
     // Handle the one off
     parsingData = data;
 
+    self.onImporterUpdated({ event: 'siteInfo', class: 'active', running: true });
     finalCallback = finishedCallback;
 
     var time = new Date(data.pubDate);
@@ -394,6 +394,7 @@ var WXMLImporter = (function() {
     };
 
 
+    self.onImporterUpdated({ event: 'siteInfo', class: 'complete', running: false });
     if(data.image) {
       uploadImage(data.image, function(data) {
         sitedata.image = data;
@@ -412,7 +413,7 @@ var WXMLImporter = (function() {
   var tagsToId = {};
 
   var parseTags = function() {
-    self.onImporterUpdated({ msg: 'Converting Tags' });
+    self.onImporterUpdated({ event: 'tags', class: 'active', running: true });
     var tagsToParse = [];
     for(var key in parsingData.tags) {
       if(!parsingData.tags.hasOwnProperty(key)) {
@@ -446,13 +447,14 @@ var WXMLImporter = (function() {
 
     structuredData.tags = tags;
 
+    self.onImporterUpdated({ event: 'tags', class: 'complete', running: false});
     parseAuthors();
   }
 
   var authorsToIds = {};
 
   var parseAuthors = function() {
-    self.onImporterUpdated({ msg: 'Converting Authors' });
+    self.onImporterUpdated({ event: 'authors', class: 'active', running: true});
 
     var authorsToParse = [];
     for(var key in parsingData.authors) {
@@ -491,13 +493,14 @@ var WXMLImporter = (function() {
 
     structuredData.authors = authors;
 
+    self.onImporterUpdated({ event: 'authors', class: 'complete', running: false });
     parseAttachments();
   }
 
   var postsToIds = {};
 
   var parsePosts = function() {
-    self.onImporterUpdated({ msg: 'Converting Posts' });
+    self.onImporterUpdated({ event: 'posts', class: 'active', running: true });
 
     var postsToParse = [];
     for(var key in parsingData.posts) {
@@ -559,13 +562,14 @@ var WXMLImporter = (function() {
 
     structuredData.articles = articles;
 
+    self.onImporterUpdated({ event: 'posts', class: 'complete', running: false });
     parsePages();
   }
 
   var pagesToIds = {};
 
   var parsePages = function() {
-    self.onImporterUpdated({ msg: 'Converting Pages' });
+    self.onImporterUpdated({ event: 'pages', class: 'active', running: true });
 
     var pagesToParse = [];
     for(var key in parsingData.pages) {
@@ -671,6 +675,7 @@ var WXMLImporter = (function() {
       structuredData[newTypeName] = newPage;
     });
 
+    self.onImporterUpdated({ event: 'pages', class: 'complete', running: false });
     uploadData();
   }
 
@@ -686,7 +691,7 @@ var WXMLImporter = (function() {
       attachementsToParse.push({ key: key, data: parsingData.attachements[key] });
     }
 
-    self.onImporterUpdated({ msg: 'Uploading Images 0/' + attachementsToParse.length });
+    self.onImporterUpdated({ event: 'images', class: 'active', running: true, imgCount: 0, total: attachementsToParse.length });
     var uploadFunctions = [];
 
     var imageNo = 0;
@@ -696,7 +701,7 @@ var WXMLImporter = (function() {
 
       uploadFunctions.push(function(step) {
         imageNo = imageNo + 1;
-        self.onImporterUpdated({ msg: 'Uploading Images ' + imageNo + '/' + attachementsToParse.length });
+        self.onImporterUpdated({ event: 'images', class: 'active', running: true, imgCount: imageNo, total: attachementsToParse.length });
         uploadImage(url, function(data) {
           urlsToNewUrls.push({ oldUrl: url, newUrl: data.resize_url || data.url });
           step();
@@ -706,6 +711,7 @@ var WXMLImporter = (function() {
     });
 
     async.series(uploadFunctions, function() {
+      self.onImporterUpdated({ event: 'images', class: 'complete', running: false, imgCount: attachementsToParse.length, total: attachementsToParse.length });
       parsePosts();
     });
   }
@@ -768,9 +774,10 @@ var WXMLImporter = (function() {
 
   function uploadData() {
     console.log(structuredData);
-    self.onImporterUpdated({ msg: 'Uploading Data To Firebase' });
+    self.onImporterUpdated({ event: 'firebase', class: 'active', running: true });
     firebase.child("contentType").set(structuredTypes, function() {
       firebase.child("data").set(structuredData, function() {
+        self.onImporterUpdated({ event: 'firebase', class: 'complete', running: false});
         if(finalCallback) {
           finalCallback();
         }

@@ -14,7 +14,7 @@ var WXMLConverter = (function() {
   };
 
   var parseWXML = function(data, callback) {
-    this.onConverterUpdated({ msg: 'Parsing XML into JSON' });
+    this.onConverterUpdated({ event: 'parsingXML', class: 'active', running: true});
 
     // Post meta sometimes contain invalid XML, we wont need it so destroy it, not a great regex but it works
     data = data.replace(/<wp:postmeta\>((?!<\/wp:postmeta>)[\s\S])*<\/wp:postmeta>/g, '');
@@ -185,7 +185,7 @@ var WXMLConverter = (function() {
       }
     }
 
-    this.onConverterUpdated({ msg: 'Done Parsing XML into JSON' });
+    this.onConverterUpdated({ event: 'parsingXML', class: 'complete', running: false});
     callback(wordpressData);
   }
 

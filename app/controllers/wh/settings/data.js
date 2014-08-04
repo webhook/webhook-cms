@@ -5,8 +5,19 @@ import SearchIndex from 'appkit/utils/search-index';
 export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
-  wxmlDone: false,
-  wxmlStatus: null,
+  wxmlDoneClass: 'pending',
+  wxmlStatus: { 
+    messages: false,
+    parsingXML: { running: false, class: 'pending' },
+    siteInfo: { running: false, class: 'pending' },
+    tags: { running: false, class: 'pending' },
+    authors: { running: false, class: 'pending' },
+    images: { running: false, class: 'pending' },
+    posts: { running: false, class: 'pending' },
+    pages: { running: false, class: 'pending' },
+    firebase: { running: false, class: 'pending' },
+    search: { running: false, class: 'pending' },
+  },
 
   deleteOption: 'data',
   isDeleting: false,
@@ -175,22 +186,22 @@ export default Ember.Controller.extend({
         var data = reader.result;
 
         WXMLConverter.onConverterUpdated = function(updateEvent) {
-          this.set('wxmlStatus', updateEvent);
+          this.set('wxmlStatus.messages', true);
+          this.set('wxmlStatus.' + updateEvent.event, updateEvent);
         }.bind(this);
 
         WXMLImporter.onImporterUpdated = function(updateEvent) {
-          this.set('wxmlStatus', updateEvent);
+          this.set('wxmlStatus.messages', true);
+          this.set('wxmlStatus.' + updateEvent.event, updateEvent);
         }.bind(this);
 
         WXMLConverter.convert(data, function(parsedData) {
           WXMLImporter.import(parsedData, downcode, window.ENV.firebase, this.get('session.site.name'), this.get('session.site.token'), function() {
-            this.set('wxmlDone', true);
-            this.set('wxmlStatus', null);
-
+            this.set('wxmlStatus.search', { running: true, class: 'active'});
             SearchIndex.reindex().then(function () {
-              // reindex is done
+              this.set('wxmlStatus.search', { running: false, class: 'complete'});
+              this.set('wxmlDoneClass', 'complete');
             });
-
           }.bind(this));
         }.bind(this));
       }.bind(this);
