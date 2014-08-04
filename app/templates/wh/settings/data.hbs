@@ -1,13 +1,25 @@
-<h2>Wordpress Import</h2>
+<h2>Import Wordpress blog</h2>
+<p>
+  Wordpress allows you to <a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">export your blog data into an XML document</a>.
+  Once dowloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
+  size them properly.
+</p>
+
+<ul class="wh-wp-import">
+  <li class="complete"> This is a completed step.</li>
+  <li class="error"> This step has some sort of error.</li>
+  <li class="pending"> This is a pending step.</li>
+</ul>
 {{#if wxmlDone}}
   Finished
 {{else}}
   {{#if wxmlStatus }}
     {{wxmlStatus.msg}}
   {{else}}
-    {{#select-file action='wordpressFileSelected'}} Select a wordpress xml file{{/select-file}}
+    {{#select-file action='wordpressFileSelected' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
   {{/if}}
 {{/if}}
+<hr/>
 
 <h2>Import / export data</h2>
 

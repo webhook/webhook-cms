@@ -443,6 +443,27 @@ pre code
         color: $text-lighter
         font-size: 80%
 
+// WORDPRESS IMPORT
+
+.wh-wp-import
+  margin: 0 0 $base-line-height $base-line-height
+  li
+    @extend .icon
+    margin-bottom: $base-line-height / 4
+  li.pending
+    color: $text-light
+  li.pending:before
+    @extend .icon-circle-blank
+  li.complete
+    color: $green
+  li.complete:before
+    @extend .icon-ok-sign
+  li.error
+    color: $red
+  li.error:before
+    @extend .icon-remove-sign
+
+
 
 // RESPONSIVE STYLES HERE
 
