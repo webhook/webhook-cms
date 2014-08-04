@@ -186,6 +186,11 @@ export default Ember.Controller.extend({
           WXMLImporter.import(parsedData, downcode, window.ENV.firebase, this.get('session.site.name'), this.get('session.site.token'), function() {
             this.set('wxmlDone', true);
             this.set('wxmlStatus', null);
+
+            SearchIndex.reindex().then(function () {
+              // reindex is done
+            });
+
           }.bind(this));
         }.bind(this));
       }.bind(this);
@@ -325,14 +330,6 @@ export default Ember.Controller.extend({
         var blob = new window.Blob([data, { type: "text/plain;charset=utf-8" }]);
         window.saveAs(blob, backup.fileName);
       });
-    },
-
-    reindexSite: function () {
-
-      SearchIndex.reindex().then(function () {
-        window.console.log('reindexed');
-      });
-
     }
   }
 });
