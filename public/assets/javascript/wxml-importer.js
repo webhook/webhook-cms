@@ -496,6 +496,7 @@ var WXMLImporter = (function() {
   var postsToIds = {};
 
   var lastOffset = 0;
+  var emptyTitle = 1;
 
   var parsePosts = function() {
     self.onImporterUpdated({ event: 'posts', class: 'active', running: true });
@@ -533,10 +534,19 @@ var WXMLImporter = (function() {
 
       if(!(postData.data.post_date_gmt === "0000-00-00 00:00:00")) {
         lastOffset =  postDate.diff(postDateGmt, 'minutes') * -1;
+        newDate = postDateGmt.zone(lastOffset)
+      } else {
+        newDate = postDate.add(lastOffset, 'm').zone(lastOffset)
       }
 
-      var newDate = postDateGmt.zone(lastOffset);
+      var title = postData.data.title;
 
+      if(!title) {
+        title = 'Empty Title ' + emptyTitle;
+        emptyTitle++;
+      }
+
+      console.log(newDate.format());
       var newArticle = {
        "_sort_create_date": newDate.unix(),
        "_sort_last_updated": newDate.unix(),
@@ -546,7 +556,7 @@ var WXMLImporter = (function() {
        "body":  fixBody(body),
        "authors": [ "authors " + authorId  ],
        "tags": [],
-       "name": postData.data.title,
+       "name": title,
        "preview_url": guid(),
        "publish_date": newDate.format()
       };
@@ -576,6 +586,7 @@ var WXMLImporter = (function() {
   var pagesToIds = {};
 
   var parsePages = function() {
+    emptyTitle = 0;
     self.onImporterUpdated({ event: 'pages', class: 'active', running: true });
 
     var pagesToParse = [];
@@ -599,14 +610,22 @@ var WXMLImporter = (function() {
         body = body.replace(map.oldUrl, map.newUrl);
       });
 
-      var postDate = moment.utc(postData.data.post_date);
-      var postDateGmt = moment.utc(postData.data.post_date_gmt);
+      var postDate = moment.utc(pageData.data.post_date);
+      var postDateGmt = moment.utc(pageData.data.post_date_gmt);
 
-      if(!(postData.data.post_date_gmt === "0000-00-00 00:00:00")) {
+      if(!(pageData.data.post_date_gmt === "0000-00-00 00:00:00")) {
         lastOffset =  postDate.diff(postDateGmt, 'minutes') * -1;
+        newDate = postDateGmt.zone(lastOffset)
+      } else {
+        newDate = postDate.add(lastOffset, 'm').zone(lastOffset)
       }
 
-      var newDate = postDateGmt.zone(lastOffset);
+      var title = pageData.data.title;
+
+      if(!title) {
+        title = 'Empty Title ' + emptyTitle;
+        emptyTitle++;
+      }
 
       var newPage = {
        "_sort_create_date": newDate.unix(),
