@@ -161,9 +161,12 @@ export default Ember.Controller.extend({
     });
   },
 
+  wordpressXml: null,
+
   actions: {
     wordpressFileSelected: function(file) {
-      this.transitionToRoute('wh.settings.wordpress');
+      this.set('wordpressXml', file);
+      this.transitionToRoute('wordpress');
     },
 
     download: function () {

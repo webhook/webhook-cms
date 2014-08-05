@@ -17,6 +17,8 @@ export default Ember.Route.extend({
 
     controller.set('isComplete', false);
 
+    controller.convertXml(this.controllerFor('wh.settings.data').get('wordpressXml'));
+
     return this._super.apply(this, arguments);
   }
 });

@@ -23,6 +23,7 @@ export default Ember.Route.extend({
 
   setupController: function (controller) {
     controller.set('deleteOption', 'data');
+    controller.set('wordpressFile', null);
 
     return this._super.apply(this, arguments);
   }
