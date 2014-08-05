@@ -338,7 +338,7 @@ var WXMLImporter = (function() {
     site = siteName;
 
     downcode = downcodeFunc;
-    
+
     self = this;
     jsonToFirebase(data, callback);
   }
@@ -430,7 +430,7 @@ var WXMLImporter = (function() {
        "_sort_create_date": Math.floor(now / 1000),
        "_sort_last_updated": Math.floor(now / 1000),
        "_sort_publish_date": Math.floor(now / 1000),
-       "create_date": formattedDate(now), 
+       "create_date": formattedDate(now),
        "last_updated": formattedDate(now),
        "name": tagData.data.name,
        "preview_url": guid(),
@@ -471,11 +471,11 @@ var WXMLImporter = (function() {
        "_sort_create_date": Math.floor(now / 1000),
        "_sort_last_updated": Math.floor(now / 1000),
        "_sort_publish_date": Math.floor(now / 1000),
-       "create_date": formattedDate(now), 
+       "create_date": formattedDate(now),
        "last_updated": formattedDate(now),
        "email":  authorData.data.email,
        "full_name": {
-         "first": authorData.data.first_name, 
+         "first": authorData.data.first_name,
          "last": authorData.data.last_name,
        },
        "articles": [],
@@ -546,12 +546,11 @@ var WXMLImporter = (function() {
         emptyTitle++;
       }
 
-      console.log(newDate.format());
       var newArticle = {
        "_sort_create_date": newDate.unix(),
        "_sort_last_updated": newDate.unix(),
        "_sort_publish_date": newDate.unix(),
-       "create_date": newDate.format(), 
+       "create_date": newDate.format(),
        "last_updated": newDate.format(),
        "body":  fixBody(body),
        "authors": [ "authors " + authorId  ],
@@ -842,7 +841,7 @@ var WXMLImporter = (function() {
           img.onload = function() {
             var formattedData = {
              height: this.height,
-             resize_url: data.resize_url, 
+             resize_url: data.resize_url,
              size: data.size,
              type: data.mimeType,
              url: data.url,
@@ -858,7 +857,7 @@ var WXMLImporter = (function() {
       }
     });
   }
-  
+
   return {
     import: wxmlToFirebase,
     onImporterUpdated: onImporterUpdated

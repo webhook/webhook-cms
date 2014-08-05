@@ -55,17 +55,26 @@ export default {
 
     var indexItem = this.indexItem.bind(this);
     var modelName = getItemModelName(contentType);
+    var store = window.App.__container__.lookup('store:main');
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      window.App.__container__.lookup('store:main').find(modelName).then(function (items) {
+      store.find(modelName).then(function (items) {
 
-        var itemPromises = [];
+        var idsToDelete = [1,2,3];
 
-        items.forEach(function (item) {
-          itemPromises.push(indexItem(item, contentType));
-        });
+        return items.reduce(function (cur, next) {
+          return cur.then(function () {
+            return indexItem(next, contentType);
+          });
+        }, Ember.RSVP.resolve());
 
-        Ember.RSVP.Promise.all(itemPromises).then(resolve).catch(reject);
+        // var itemPromises = [];
+        //
+        // items.forEach(function (item) {
+        //   itemPromises.push(indexItem(item, contentType));
+        // });
+        //
+        // Ember.RSVP.Promise.all(itemPromises).then(resolve).catch(reject);
 
       });
 

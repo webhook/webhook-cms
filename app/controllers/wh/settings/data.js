@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
   wxmlDoneClass: 'pending',
-  wxmlStatus: { 
+  wxmlStatus: {
     messages: false,
     parsingXML: { running: false, class: 'pending' },
     siteInfo: { running: false, class: 'pending' },
@@ -180,31 +180,36 @@ export default Ember.Controller.extend({
 
   actions: {
     wordpressFileSelected: function(file) {
+
+      var controller = this;
       var reader = new window.FileReader();
 
       reader.onload = function(e) {
         var data = reader.result;
 
         WXMLConverter.onConverterUpdated = function(updateEvent) {
-          this.set('wxmlStatus.messages', true);
-          this.set('wxmlStatus.' + updateEvent.event, updateEvent);
-        }.bind(this);
+          controller.set('wxmlStatus.messages', true);
+          controller.set('wxmlStatus.' + updateEvent.event, updateEvent);
+        };
 
         WXMLImporter.onImporterUpdated = function(updateEvent) {
-          this.set('wxmlStatus.messages', true);
-          this.set('wxmlStatus.' + updateEvent.event, updateEvent);
-        }.bind(this);
+          controller.set('wxmlStatus.messages', true);
+          controller.set('wxmlStatus.' + updateEvent.event, updateEvent);
+        };
 
         WXMLConverter.convert(data, function(parsedData) {
-          WXMLImporter.import(parsedData, downcode, window.ENV.firebase, this.get('session.site.name'), this.get('session.site.token'), function() {
-            this.set('wxmlStatus.search', { running: true, class: 'active'});
+          WXMLImporter.import(parsedData, downcode, window.ENV.firebase, controller.get('session.site.name'), controller.get('session.site.token'), function() {
+            controller.set('wxmlStatus.search', { running: true, class: 'active'});
             SearchIndex.reindex().then(function () {
-              this.set('wxmlStatus.search', { running: false, class: 'complete'});
-              this.set('wxmlDoneClass', 'complete');
+              controller.set('wxmlStatus.search', { running: false, class: 'complete'});
+              controller.set('wxmlDoneClass', 'complete');
+            }, function (error) {
+              controller.set('wxmlStatus.search', { running: false, class: 'danger'});
+              controller.set('wxmlDoneClass', 'complete');
             });
-          }.bind(this));
-        }.bind(this));
-      }.bind(this);
+          });
+        });
+      };
 
       reader.readAsText(file);
     },
