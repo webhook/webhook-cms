@@ -574,9 +574,10 @@ var WXMLImporter = (function() {
       structuredData.authors[authorId].articles.push("articles " + pushId);
 
       for(var tag in postData.data.tags) {
-        if(!postData.data.tags.hasOwnProperty(key)) {
+        if(!postData.data.tags.hasOwnProperty(tag)) {
           continue;
         }
+
         var tagId = tagsToId[tag];
         var tagObj = structuredData.tags[tagId];
 
@@ -623,11 +624,22 @@ var WXMLImporter = (function() {
       var postDate = moment.utc(pageData.data.post_date);
       var postDateGmt = moment.utc(pageData.data.post_date_gmt);
 
+      var publishDate = null;
+      var isDraft = null;
+
       if(!(pageData.data.post_date_gmt === "0000-00-00 00:00:00")) {
         lastOffset =  postDate.diff(postDateGmt, 'minutes') * -1;
-        newDate = postDateGmt.zone(lastOffset)
+        newDate = postDateGmt.zone(lastOffset);
+        publishDate = newDate;
       } else {
         newDate = postDate.add(lastOffset, 'm').zone(lastOffset)
+        publishDate = newDate;
+      }
+
+      if((pageData.data.post_date_gmt === "0000-00-00 00:00:00") && (pageData.data.post_date === "0000-00-00 00:00:00")) {
+        isDraft = true;
+        publishDate = null;
+        newDate = moment(new Date(0));
       }
 
       var title = pageData.data.title;
@@ -640,14 +652,15 @@ var WXMLImporter = (function() {
       var newPage = {
        "_sort_create_date": newDate.unix(),
        "_sort_last_updated": newDate.unix(),
-       "_sort_publish_date": newDate.unix(),
+       "_sort_publish_date": publishDate ? publishDate.unix() : null,
        "create_date": newDate.format(),
        "last_updated": newDate.format(),
        // Todo format the body
        "body":  fixBody(body),
        "name": pageData.data.title,
        "preview_url": guid(),
-       "publish_date": newDate.format()
+       "publish_date": publishDate ? publishDate.format() : null,
+       "isDraft" : isDraft
       };
 
       var newType = {
