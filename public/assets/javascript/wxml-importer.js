@@ -534,14 +534,14 @@ var WXMLImporter = (function() {
        "_sort_create_date": now,
        "_sort_last_updated": now,
        "_sort_publish_date": now,
-       "create_date": formattedDate(now), 
-       "last_updated": formattedDate(now),
+       "create_date": formattedDate(postData.data.pubDate), 
+       "last_updated": formattedDate(postData.data.pubDate),
        "body":  fixBody(body),
        "authors": [ "authors " + authorId  ],
        "tags": [],
        "name": postData.data.title,
        "preview_url": guid(),
-       "publish_date": formattedDate(now)
+       "publish_date": formattedDate(postData.data.pubDate)
       };
 
       structuredData.authors[authorId].articles.push("articles " + pushId);
@@ -596,13 +596,13 @@ var WXMLImporter = (function() {
        "_sort_create_date": now,
        "_sort_last_updated": now,
        "_sort_publish_date": now,
-       "create_date": formattedDate(now), 
-       "last_updated": formattedDate(now),
+       "create_date": formattedDate(pageData.data.pubDate), 
+       "last_updated": formattedDate(pageData.data.pubDate),
        // Todo format the body
        "body":  fixBody(body),
        "name": pageData.data.title,
        "preview_url": guid(),
-       "publish_date": formattedDate(now)
+       "publish_date": formattedDate(pageData.data.pubDate)
       };
 
       var newType = {
