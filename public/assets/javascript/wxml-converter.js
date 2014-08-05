@@ -159,7 +159,6 @@ var WXMLConverter = (function() {
       newPost.post_date = convertEmpty(newItem.post_date);
       newPost.post_date_gmt = convertEmpty(newItem.post_date_gmt);
 
-
       newPost.status = convertEmpty(newItem.status); // Can be 'publish', 'draft', 'pending', 'private', 'trash', ... 'inherit?'
 
       newPost.parent = convertEmpty(newItem.post_parent); // You can have nested posts, assume inherit = parent post
@@ -186,6 +185,7 @@ var WXMLConverter = (function() {
     }
 
     this.onConverterUpdated({ event: 'parsingXML', class: 'complete', running: false});
+
     callback(wordpressData);
   }
 

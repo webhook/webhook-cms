@@ -417,7 +417,6 @@ var WXMLImporter = (function() {
         continue;
       }
 
-      console.log(key);
       tagsToParse.push({ key: key, data: parsingData.tags[key] });
     }
 
@@ -428,9 +427,9 @@ var WXMLImporter = (function() {
 
       var now = Date.now();
       var newTag = {
-       "_sort_create_date": now,
-       "_sort_last_updated": now,
-       "_sort_publish_date": now,
+       "_sort_create_date": Math.floor(now / 1000),
+       "_sort_last_updated": Math.floor(now / 1000),
+       "_sort_publish_date": Math.floor(now / 1000),
        "create_date": formattedDate(now), 
        "last_updated": formattedDate(now),
        "name": tagData.data.name,
@@ -469,9 +468,9 @@ var WXMLImporter = (function() {
 
       var now = Date.now();
       var newAuthor = {
-       "_sort_create_date": now,
-       "_sort_last_updated": now,
-       "_sort_publish_date": now,
+       "_sort_create_date": Math.floor(now / 1000),
+       "_sort_last_updated": Math.floor(now / 1000),
+       "_sort_publish_date": Math.floor(now / 1000),
        "create_date": formattedDate(now), 
        "last_updated": formattedDate(now),
        "email":  authorData.data.email,
@@ -495,6 +494,8 @@ var WXMLImporter = (function() {
   }
 
   var postsToIds = {};
+
+  var lastOffset = 0;
 
   var parsePosts = function() {
     self.onImporterUpdated({ event: 'posts', class: 'active', running: true });
@@ -527,18 +528,27 @@ var WXMLImporter = (function() {
         body = body.replace(map.oldUrl, map.newUrl);
       });
 
+      var postDate = moment.utc(postData.data.post_date);
+      var postDateGmt = moment.utc(postData.data.post_date_gmt);
+
+      if(!(postData.data.post_date_gmt === "0000-00-00 00:00:00")) {
+        lastOffset =  postDate.diff(postDateGmt, 'minutes') * -1;
+      }
+
+      var newDate = postDateGmt.zone(lastOffset);
+
       var newArticle = {
-       "_sort_create_date": now,
-       "_sort_last_updated": now,
-       "_sort_publish_date": now,
-       "create_date": formattedDate(postData.data.pubDate), 
-       "last_updated": formattedDate(postData.data.pubDate),
+       "_sort_create_date": newDate.unix(),
+       "_sort_last_updated": newDate.unix(),
+       "_sort_publish_date": newDate.unix(),
+       "create_date": newDate.format(), 
+       "last_updated": newDate.format(),
        "body":  fixBody(body),
        "authors": [ "authors " + authorId  ],
        "tags": [],
        "name": postData.data.title,
        "preview_url": guid(),
-       "publish_date": formattedDate(postData.data.pubDate)
+       "publish_date": newDate.format()
       };
 
       structuredData.authors[authorId].articles.push("articles " + pushId);
@@ -589,17 +599,26 @@ var WXMLImporter = (function() {
         body = body.replace(map.oldUrl, map.newUrl);
       });
 
+      var postDate = moment.utc(postData.data.post_date);
+      var postDateGmt = moment.utc(postData.data.post_date_gmt);
+
+      if(!(postData.data.post_date_gmt === "0000-00-00 00:00:00")) {
+        lastOffset =  postDate.diff(postDateGmt, 'minutes') * -1;
+      }
+
+      var newDate = postDateGmt.zone(lastOffset);
+
       var newPage = {
-       "_sort_create_date": now,
-       "_sort_last_updated": now,
-       "_sort_publish_date": now,
-       "create_date": formattedDate(pageData.data.pubDate), 
-       "last_updated": formattedDate(pageData.data.pubDate),
+       "_sort_create_date": newDate.unix(),
+       "_sort_last_updated": newDate.unix(),
+       "_sort_publish_date": newDate.unix(),
+       "create_date": newDate.format(),
+       "last_updated": newDate.format(),
        // Todo format the body
        "body":  fixBody(body),
        "name": pageData.data.title,
        "preview_url": guid(),
-       "publish_date": formattedDate(pageData.data.pubDate)
+       "publish_date": newDate.format()
       };
 
       var newType = {
@@ -679,7 +698,6 @@ var WXMLImporter = (function() {
   var urlsToNewUrls = [];
 
   function parseAttachments() {
-
     var attachementsToParse = [];
     for(var key in parsingData.attachements) {
       if(!parsingData.attachements.hasOwnProperty(key)) {
@@ -770,7 +788,6 @@ var WXMLImporter = (function() {
   };
 
   function uploadData() {
-    console.log(structuredData);
     self.onImporterUpdated({ event: 'firebase', class: 'active', running: true });
     firebase.child("contentType").set(structuredTypes, function() {
       firebase.child("data").set(structuredData, function() {
