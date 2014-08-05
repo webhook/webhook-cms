@@ -53,7 +53,7 @@ export default function dataFromControls (controls) {
 
     // force numbers to be numbers
     case 'number':
-      value = parseInt(value, 10);
+      value = parseFloat(value);
       break;
 
     // add timezone to datetime values
