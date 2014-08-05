@@ -39,15 +39,19 @@ export default {
       }
     });
 
+    var ajaxData = Ember.$.extend(this.siteAndToken(), {
+      id: item.get('id'),
+      data: JSON.stringify(searchData),
+      typeName: contentType.get('id'),
+      oneOff: contentType.get('oneOff')
+    });
+
+    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('data.name')), ajaxData);
+
     return Ember.$.ajax({
       url: this.baseUrl + 'index/',
       type: 'POST',
-      data: Ember.$.extend(this.siteAndToken(), {
-        id: item.get('id'),
-        data: JSON.stringify(searchData),
-        typeName: contentType.get('id'),
-        oneOff: contentType.get('oneOff')
-      })
+      data: ajaxData
     });
   },
 
@@ -60,21 +64,11 @@ export default {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       store.find(modelName).then(function (items) {
 
-        var idsToDelete = [1,2,3];
-
         return items.reduce(function (cur, next) {
           return cur.then(function () {
             return indexItem(next, contentType);
           });
         }, Ember.RSVP.resolve());
-
-        // var itemPromises = [];
-        //
-        // items.forEach(function (item) {
-        //   itemPromises.push(indexItem(item, contentType));
-        // });
-        //
-        // Ember.RSVP.Promise.all(itemPromises).then(resolve).catch(reject);
 
       });
 
