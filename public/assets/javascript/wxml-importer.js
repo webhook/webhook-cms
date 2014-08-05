@@ -363,10 +363,7 @@ var WXMLImporter = (function() {
   }
 
   function formattedDate(date) {
-    var dateObj = new Date(date);
-
-    // Change this to use moment
-    return moment(dateObj.getTime()).format();
+    return moment(date).format();
   }
 
   var structuredData = {};
