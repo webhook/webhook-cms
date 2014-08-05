@@ -1,23 +1,6 @@
-/*global WXMLConverter,WXMLImporter*/
-import downcode from 'appkit/utils/downcode';
-import SearchIndex from 'appkit/utils/search-index';
-
 export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
-  wxmlDoneClass: 'pending',
-  wxmlStatus: {
-    messages: false,
-    parsingXML: { running: false, class: 'pending' },
-    siteInfo: { running: false, class: 'pending' },
-    tags: { running: false, class: 'pending' },
-    authors: { running: false, class: 'pending' },
-    images: { running: false, class: 'pending' },
-    posts: { running: false, class: 'pending' },
-    pages: { running: false, class: 'pending' },
-    firebase: { running: false, class: 'pending' },
-    search: { running: false, class: 'pending' },
-  },
 
   deleteOption: 'data',
   isDeleting: false,
@@ -180,38 +163,7 @@ export default Ember.Controller.extend({
 
   actions: {
     wordpressFileSelected: function(file) {
-
-      var controller = this;
-      var reader = new window.FileReader();
-
-      reader.onload = function(e) {
-        var data = reader.result;
-
-        WXMLConverter.onConverterUpdated = function(updateEvent) {
-          controller.set('wxmlStatus.messages', true);
-          controller.set('wxmlStatus.' + updateEvent.event, updateEvent);
-        };
-
-        WXMLImporter.onImporterUpdated = function(updateEvent) {
-          controller.set('wxmlStatus.messages', true);
-          controller.set('wxmlStatus.' + updateEvent.event, updateEvent);
-        };
-
-        WXMLConverter.convert(data, function(parsedData) {
-          WXMLImporter.import(parsedData, downcode, window.ENV.firebase, controller.get('session.site.name'), controller.get('session.site.token'), function() {
-            controller.set('wxmlStatus.search', { running: true, class: 'active'});
-            SearchIndex.reindex().then(function () {
-              controller.set('wxmlStatus.search', { running: false, class: 'complete'});
-              controller.set('wxmlDoneClass', 'complete');
-            }, function (error) {
-              controller.set('wxmlStatus.search', { running: false, class: 'danger'});
-              controller.set('wxmlDoneClass', 'complete');
-            });
-          });
-        });
-      };
-
-      reader.readAsText(file);
+      this.transitionToRoute('wh.settings.wordpress');
     },
 
     download: function () {
