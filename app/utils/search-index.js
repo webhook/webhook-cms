@@ -46,7 +46,7 @@ export default {
       oneOff: contentType.get('oneOff')
     });
 
-    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('data.name')), ajaxData);
+    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('id')), searchData);
 
     return Ember.$.ajax({
       url: this.baseUrl + 'index/',
@@ -57,20 +57,26 @@ export default {
 
   indexType: function (contentType) {
 
+    Ember.Logger.log("SearchIndex::indexType::%@".fmt(contentType.get('id')));
+
     var indexItem = this.indexItem.bind(this);
     var modelName = getItemModelName(contentType);
     var store = window.App.__container__.lookup('store:main');
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
-      store.find(modelName).then(function (items) {
-
-        return items.reduce(function (cur, next) {
-          return cur.then(function () {
-            return indexItem(next, contentType);
-          });
-        }, Ember.RSVP.resolve());
-
-      });
+      if (contentType.get('oneOff')) {
+        store.find(modelName, contentType.get('id')).then(function (item) {
+          return indexItem(item, contentType);
+        });
+      } else {
+        store.find(modelName).then(function (items) {
+          return items.reduce(function (cur, next) {
+            return cur.then(function () {
+              return indexItem(next, contentType);
+            });
+          }, Ember.RSVP.resolve());
+        });
+      }
 
     });
   },

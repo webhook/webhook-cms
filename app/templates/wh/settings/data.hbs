@@ -132,3 +132,11 @@
 {{else}}
   <p>You can only reset your website when running it locally.</p>
 {{/if}}
+
+<hr>
+
+<h2>Reindex your website</h2>
+
+<p>This will reset your search index within your CMS.</p>
+
+<button class="btn btn-neutral" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}}Indexing data <span class="wy-spinner"></span>{{else}}Reindex Site{{/if}}</button>

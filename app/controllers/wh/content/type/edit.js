@@ -3,6 +3,7 @@ import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 import uuid from 'appkit/utils/uuid';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ObjectController.extend({
   type        : null,
@@ -297,16 +298,7 @@ export default Ember.ObjectController.extend({
 
       window.ENV.sendBuildSignal(data.publish_date);
 
-      var searchData = {};
-      Ember.$.each(data, function (key, value) {
-        if (typeof value === 'object') {
-          searchData[key] = JSON.stringify(value);
-        } else {
-          searchData[key] = value;
-        }
-      });
-
-      window.ENV.indexItem(itemModel.get('id'), searchData, this.get('type.oneOff'), this.get('type.id'));
+      SearchIndex.indexItem(item, this.get('type'));
 
       // One Off
       if (this.get('type.oneOff')) {

@@ -1,9 +1,13 @@
+import SearchIndex from 'appkit/utils/search-index';
+
 export default Ember.Controller.extend({
   dataBackup: null,
   dataError: null,
 
   deleteOption: 'data',
   isDeleting: false,
+
+  isIndexing: false,
 
   dataBreakdown: function () {
 
@@ -301,6 +305,14 @@ export default Ember.Controller.extend({
         var blob = new window.Blob([data, { type: "text/plain;charset=utf-8" }]);
         window.saveAs(blob, backup.fileName);
       });
+    },
+
+    reindex: function () {
+
+      this.set('isIndexing', true);
+      SearchIndex.reindex().then(function () {
+        this.set('isIndexing', false);
+      }.bind(this));
     }
   }
 });
