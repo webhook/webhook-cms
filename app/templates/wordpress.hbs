@@ -1,40 +1,43 @@
-<ul class="wh-wp-import">
-  <li {{bind-attr class="wxmlStatus.parsingXML.class"}}>
-    {{#if wxmlStatus.parsingXML.running}}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-    Parsing Wordpress XML.
-  </li>
-  <li {{bind-attr class="wxmlStatus.siteInfo.class"}}>
-   {{#if wxmlStatus.siteInfo.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Converting site information.</li>
-  <li {{bind-attr class="wxmlStatus.tags.class"}}>
-   {{#if wxmlStatus.tags.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Converting tags.
-  </li>
-  <li {{bind-attr class="wxmlStatus.authors.class"}}>
-   {{#if wxmlStatus.authors.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Converting authors.
-  </li>
-  <li {{bind-attr class="wxmlStatus.images.class"}}>
-   {{#if wxmlStatus.images.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Uploading Images. {{#if wxmlStatus.images.imgCount}}({{wxmlStatus.images.imgCount}}/{{wxmlStatus.images.total}}){{/if}}
-  </li>
-  <li {{bind-attr class="wxmlStatus.posts.class"}}>
-   {{#if wxmlStatus.posts.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Converting Posts.
-  </li>
-  <li {{bind-attr class="wxmlStatus.pages.class"}}>
-   {{#if wxmlStatus.pages.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Converting Pages.
-  </li>
-  <li {{bind-attr class="wxmlStatus.firebase.class"}}>
-   {{#if wxmlStatus.firebase.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Uploading data to Firebase.
-  </li>
-  <li {{bind-attr class="wxmlStatus.search.class"}}>
-   {{#if wxmlStatus.search.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-   Re-indexing search.
-  </li>
-  <li {{bind-attr class="wxmlDoneClass"}}> Done.</li>
-</ul>
-
-{{#if isComplete}}{{#link-to 'wh' class="btn btn-success"}} Done{{/link-to}}{{/if}}
+<div class="wh-login">
+  <div {{bind-attr class=":wh-logo isComplete::wh-logo-spinner"}}></div>
+  <p>Imports can take several minutes. Please do not close your browser until complete.</p>
+    <ul class="wh-wp-import">
+      <li {{bind-attr class="wxmlStatus.parsingXML.class"}}>
+        {{#if wxmlStatus.parsingXML.running}}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+        Parsing Wordpress XML.
+      </li>
+      <li {{bind-attr class="wxmlStatus.siteInfo.class"}}>
+       {{#if wxmlStatus.siteInfo.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Converting site information.</li>
+      <li {{bind-attr class="wxmlStatus.tags.class"}}>
+       {{#if wxmlStatus.tags.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Converting tags.
+      </li>
+      <li {{bind-attr class="wxmlStatus.authors.class"}}>
+       {{#if wxmlStatus.authors.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Converting authors.
+      </li>
+      <li {{bind-attr class="wxmlStatus.images.class"}}>
+       {{#if wxmlStatus.images.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Uploading Images. {{#if wxmlStatus.images.imgCount}}({{wxmlStatus.images.imgCount}}/{{wxmlStatus.images.total}}){{/if}}
+      </li>
+      <li {{bind-attr class="wxmlStatus.posts.class"}}>
+       {{#if wxmlStatus.posts.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Converting Posts.
+      </li>
+      <li {{bind-attr class="wxmlStatus.pages.class"}}>
+       {{#if wxmlStatus.pages.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Converting Pages.
+      </li>
+      <li {{bind-attr class="wxmlStatus.firebase.class"}}>
+       {{#if wxmlStatus.firebase.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Uploading data to Firebase.
+      </li>
+      <li {{bind-attr class="wxmlStatus.search.class"}}>
+       {{#if wxmlStatus.search.running }}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+       Re-indexing search.
+      </li>
+      <li {{bind-attr class="wxmlDoneClass"}}> Done.</li>
+    </ul>
+    {{#if isComplete}}{{#link-to 'wh' class="btn btn-success icon icon-ok-sign"}} Complete. Return to CMS.{{/link-to}}{{/if}}
+</div>
