@@ -571,7 +571,11 @@ var WXMLImporter = (function() {
        "isDraft" : isDraft
       };
 
-      structuredData.authors[authorId].articles.push("articles " + pushId);
+    //  if(structuredData.authors[authorId]) {
+        structuredData.authors[authorId].articles.push("articles " + pushId);
+     // } else {
+       // newArticle.authors = [];
+      //}
 
       for(var tag in postData.data.tags) {
         if(!postData.data.tags.hasOwnProperty(tag)) {
@@ -581,8 +585,10 @@ var WXMLImporter = (function() {
         var tagId = tagsToId[tag];
         var tagObj = structuredData.tags[tagId];
 
-        newArticle.tags.push("tags " + tagId);
-        structuredData.tags[tagId].articles.push("articles " + pushId);
+        //if(structuredData.tags[tagId]) {
+          newArticle.tags.push("tags " + tagId);
+          structuredData.tags[tagId].articles.push("articles " + pushId);
+        //}
       }
 
       articles[pushId] = newArticle;

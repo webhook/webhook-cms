@@ -221,7 +221,7 @@ var WXMLConverter = (function() {
 
         if(extracted.domain === 'category') {
           categories[extracted.nicename] = extracted.val;
-        } else {
+        } else if (extracted.domain === 'post_tag') {
           tags[extracted.nicename] = extracted.val;
         }
 
@@ -232,7 +232,7 @@ var WXMLConverter = (function() {
 
       if(extracted.domain === 'category') {
         categories[extracted.nicename] = extracted.val;
-      } else {
+      } else if (extracted.domain === 'post_tag') {
         tags[extracted.nicename] = extracted.val;
       }
     }
