@@ -153,18 +153,6 @@ var WXMLImporter = (function() {
         "required" : false,
         "showInCms" : false
       }, {
-        "controlType" : "relation",
-        "hidden" : false,
-        "label" : "Pages (Author)",
-        "locked" : false,
-        "meta" : {
-          "contentTypeId" : "pages",
-          "reverseName" : "author"
-        },
-        "name" : "pages_author",
-        "required" : false,
-        "showInCms" : false
-      }, {
         "controlType" : "textfield",
         "hidden" : true,
         "label" : "Preview URL",
@@ -224,19 +212,6 @@ var WXMLImporter = (function() {
         "name" : "articles",
         "required" : false,
         "showInCms" : true
-      }, {
-        "controlType" : "relation",
-        "help" : "Pages attached to this tag.",
-        "hidden" : false,
-        "label" : "Pages",
-        "locked" : false,
-        "meta" : {
-          "contentTypeId" : "pages",
-          "reverseName" : "tags"
-        },
-        "name" : "pages",
-        "required" : false,
-        "showInCms" : false
       }, {
         "controlType" : "textfield",
         "hidden" : true,
