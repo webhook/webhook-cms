@@ -516,7 +516,9 @@ Ember.Application.initializer({
         window.ENV.firebase.root().child('management/commands/build/' + siteName).set(data, function () {});
         application.get('buildEnvironment').set('building', true);
       } else {
-        window.ENV.sendGruntCommand('build');
+        window.ENV.sendGruntCommand('build', function () {
+          window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
+        });
       }
     };
 

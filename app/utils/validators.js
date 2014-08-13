@@ -12,7 +12,7 @@ export default function validateControls (contentType, item) {
   };
 
   var invalidate = function (control, message) {
-    Ember.Logger.warn('VadlidateControls::invalide', control.get('name'));
+    Ember.Logger.warn('VadlidateControls::invalid', control.get('name'));
     control.set('widgetIsValid', false);
     control.get('widgetErrors').pushObject(message);
   };

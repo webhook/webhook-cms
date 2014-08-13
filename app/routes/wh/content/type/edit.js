@@ -289,6 +289,16 @@ export default Ember.Route.extend({
         });
       }
 
+      if (!controls.isAny('name', 'slug')) {
+        addControl({
+          controlType: this.store.getById('control-type', 'textfield'),
+          name       : 'slug',
+          label      : 'Slug',
+          showInCms  : false,
+          required   : false
+        });
+      }
+
       if (save) {
         contentType.save();
       }
