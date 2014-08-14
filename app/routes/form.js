@@ -70,6 +70,13 @@ export default Ember.Route.extend({
 
     });
 
+    if (typeof model.get('customUrls') === 'undefined') {
+      model.set('customUrls', {
+        individualUrl: null,
+        listUrl: null
+      });
+    }
+
     this._super.apply(this, arguments);
   }
 });

@@ -8,6 +8,9 @@ export default DS.Model.extend({
   // scaffolding md5s
   individualMD5: DS.attr('string'),
   listMD5      : DS.attr('string'),
-  oneOffMD5    : DS.attr('string')
-  
+  oneOffMD5    : DS.attr('string'),
+
+  // custom urls
+  customUrls: DS.attr('json')
+
 });

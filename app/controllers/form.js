@@ -84,10 +84,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
     });
 
-    this.get('controls').filterBy('name', 'slug').forEach(function (control) {
-      control.set('widgetIsValid', false);
-      control.get('widgetErrors').addObject('Slug is a reserved name. Please choose another label.');
-    });
+    // this.get('controls').filterBy('name', 'slug').forEach(function (control) {
+    //   control.set('widgetIsValid', false);
+    //   control.get('widgetErrors').addObject('Slug is a reserved name. Please choose another label.');
+    // });
 
   },
 
@@ -793,6 +793,15 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
 
       });
+
+
+      // Custom URLs
+      if (contentType.get('customUrls.individualUrl') === '') {
+        contentType.set('customUrls.individualUrl', null);
+      }
+      if (contentType.get('customUrls.listUrl') === '') {
+        contentType.set('customUrls.listUrl', null);
+      }
 
       this.promptConfirmChanges();
 
