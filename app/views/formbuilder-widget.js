@@ -37,7 +37,7 @@ export default WidgetView.extend({
       collectionView.incrementProperty('initialControlsAdded');
     }
 
-    if (this.get('context.hidden')) {
+    if (this.get('context.hidden') && this.get('context.controlType.widget') !== 'relation') {
       this.$().hide();
     } else {
       this.$(this.get('element')).tooltip({
