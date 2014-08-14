@@ -7,10 +7,11 @@
 //
 // window.ENV = {FEATURES: {'with-controller': true}};
 
+window.ENV = window.ENV || {};
 window.ENV = {
-  dbName: 'webhook',
-  uploadUrl: 'http://server.webhook.com/',
-  embedlyKey: '13dde81b8137446e89c7933edca679eb',
+  dbName: window.ENV.dbName || 'webhook',
+  uploadUrl: window.ENV.uploadUrl || 'http://server.webhook.com/',
+  embedlyKey: window.ENV.embedlyKey || '13dde81b8137446e89c7933edca679eb',
   displayUrl : 'https://i.embed.ly/1/display/',
 
   themes: [
