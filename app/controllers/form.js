@@ -218,6 +218,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   updateRelations: function () {
 
+    var controller = this;
+
     Ember.Logger.info('Looking for relationships to update.');
 
     // Store relation promises here
@@ -228,24 +230,59 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     Ember.Logger.info('Need to remove ' + removedRelations.get('length') + ' reverse relationships.');
 
     removedRelations.forEach(function (control) {
+
       Ember.Logger.info('Attempting to remove `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
+
       var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-        this.get('store').find('contentType', control.get('meta.data.contentTypeId')).then(function (contentType) {
+
+        controller.store.find('contentType', control.get('meta.data.contentTypeId')).then(function (contentType) {
+
           var controls = contentType.get('controls');
           var controlToRemove = controls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
           controls.removeObject(controlToRemove);
+
           contentType.save().then(function () {
             Ember.Logger.info('Successfully removed `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
-            Ember.run(null, resolve);
+            resolve();
           }, function (error) {
-            Ember.run(null, reject, error);
+            reject(error);
           });
+
+          // remove relation data from related content types
+          var relatedContentTypeItemModelName = getItemModelName(contentType);
+
+          var removeData = function (item) {
+            var itemData = item.get('data');
+
+            itemData[controlToRemove.get('name')] = null;
+
+            item.set('data', itemData);
+            item.save().then(function (savedItem) {
+              Ember.Logger.info('Relation data removed from', savedItem.get('id'));
+              SearchIndex.indexItem(savedItem, contentType);
+            });
+          };
+
+          if (contentType.get('oneOff')) {
+            controller.store.find(relatedContentTypeItemModelName, contentType.get('id')).then(removeData);
+          } else {
+            controller.store.find(relatedContentTypeItemModelName).then(function (items) {
+              items.forEach(removeData);
+            });
+          }
+
         }, function (error) {
-          Ember.run(null, reject, error);
+          reject(error);
         });
-      }.bind(this));
+
+      });
+
       relationUpdates.push(relationPromise);
-    }.bind(this));
+
+
+
+
+    });
 
     var addedRelations = this.get('addedControls').filterBy('controlType.widget', 'relation');
 
