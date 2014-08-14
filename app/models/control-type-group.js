@@ -3,20 +3,24 @@ var ControlTypeGroup = DS.Model.extend({
   controlTypes: DS.hasMany('control-type', { async: true })
 });
 
-ControlTypeGroup.FIXTURES = [];
+var fixtures = [];
 
 var controlTypeGroupId = 0,
     controlTypeId = 0;
 
 $.each(window.ENV.controlTypeGroups, function (index, group) {
   controlTypeGroupId++;
-  ControlTypeGroup.FIXTURES.push({
+  fixtures.push({
     id: controlTypeGroupId,
     name: group.name,
     controlTypes: $.map(group.controlTypes, function (control, index) {
       return control.widget;
     })
   });
+});
+
+ControlTypeGroup.reopenClass({
+  FIXTURES: fixtures
 });
 
 export default ControlTypeGroup;

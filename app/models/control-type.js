@@ -22,7 +22,7 @@ var ControlType = DS.Model.extend({
   }.property('widget')
 });
 
-ControlType.FIXTURES = [];
+var fixtures = [];
 
 var controlTypeGroupId = 0,
     controlTypeId = 0;
@@ -30,11 +30,15 @@ var controlTypeGroupId = 0,
 $.each(window.ENV.controlTypeGroups, function (index, group) {
   controlTypeGroupId++;
   $.each(group.controlTypes, function (index, control) {
-    ControlType.FIXTURES.push($.extend({
+    fixtures.push($.extend({
       id: control.widget,
       group: controlTypeGroupId
     }, control));
   });
+});
+
+ControlType.reopenClass({
+  FIXTURES: fixtures
 });
 
 export default ControlType;

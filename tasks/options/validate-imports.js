@@ -4,7 +4,9 @@ module.exports = {
   options: {
     whitelist: {
       'ember/resolver': ['default'],
-      'ember-qunit': ['moduleForComponent', 'moduleFor', 'test', 'default'],
+      'ember/load-initializers': ['default'],
+      'ember-qunit': ['moduleForComponent', 'moduleForModel', 'moduleFor', 'test', 'default'],
+      'ic-ajax': ['default', 'request', 'raw', 'defineFixture', 'lookupFixture'],
     }
   },
 

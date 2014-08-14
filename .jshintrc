@@ -14,7 +14,9 @@
     "moment",
     "marked",
     "Webhook",
-    "XMLHttpRequest"
+    "XMLHttpRequest",
+    "ga",
+    "CustomEvent"
   ],
   "node" : false,
   "browser" : false,
