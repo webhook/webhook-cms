@@ -18,7 +18,7 @@ export default Ember.Component.extend({
 
       this.get('store').find('contentType', contentTypeId).then(function (contentType) {
         var modelName = getItemModelName(contentType);
-        this.get('targetObject.store').find(modelName, itemId).then(function (model) {
+        this.get('store').find(modelName, itemId).then(function (model) {
           array.pushObject(model);
         }.bind(this), function (error) {
           this.get('control.value').removeObject(valueItem);
