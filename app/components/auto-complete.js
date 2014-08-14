@@ -16,7 +16,7 @@ export default Ember.Component.extend({
       var contentTypeId = valueItem.split(' ')[0];
       var itemId = valueItem.split(' ')[1];
 
-      this.get('targetObject.store').find('contentType', contentTypeId).then(function (contentType) {
+      this.get('store').find('contentType', contentTypeId).then(function (contentType) {
         var modelName = getItemModelName(contentType);
         this.get('targetObject.store').find(modelName, itemId).then(function (model) {
           array.pushObject(model);
