@@ -9,6 +9,10 @@ export default Ember.View.extend({
     'controlClass'
   ],
 
+  control: function () {
+    return this.get('context');
+  }.property(),
+
   controlClass: function () {
     return 'wy-control-group-' + this.get('context.controlType.widget');
   }.property(),
