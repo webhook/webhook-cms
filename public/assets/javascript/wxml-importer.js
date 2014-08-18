@@ -755,7 +755,12 @@ var WXMLImporter = (function() {
   }
 
   function fixBody(body) {
-    var bodyObj = $('<div>' + body + '</div>');
+    var lines = body.split('\n');
+    var htmlString = "<p>";
+    lines.forEach(function(line) { if(line === "") return; htmlString += line + "<p></p>"; })
+    htmlString = htmlString.slice(0, htmlString.length - 3);
+
+    var bodyObj = $('<div>' + htmlString + '</div>');
 
     var captionParsed = false;
     bodyObj.shortcode({
@@ -807,6 +812,25 @@ var WXMLImporter = (function() {
       }
     });
 
+    bodyObj.find('iframe').each(function(index, val) {
+      var frame = $(val);
+
+      var src = frame.attr('src');
+
+      if(src.indexOf('youtube.com') !== -1 || src.indexOf('vimeo.com') !== -1) {
+        frame.wrap('<figure data-type="video"></figure>');
+      } else {
+        frame.wrap('<figure data-type="embed"></figure>');
+      }
+    });
+
+
+    bodyObj.find('object').each(function(index, val) {
+      var frame = $(val);
+
+      frame.wrap('<figure data-type="embed"></figure>');
+    });
+
     return bodyObj.html();
   };
 
@@ -823,6 +847,9 @@ var WXMLImporter = (function() {
   }
 
   function uploadImage(url, callback) {
+
+    callback({ url: '' });
+    return;
 
     $.ajax({
       url: 'http://server.webhook.com/upload-url/',
