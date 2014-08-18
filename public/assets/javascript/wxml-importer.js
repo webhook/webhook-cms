@@ -848,9 +848,6 @@ var WXMLImporter = (function() {
 
   function uploadImage(url, callback) {
 
-    callback({ url: '' });
-    return;
-
     $.ajax({
       url: 'http://server.webhook.com/upload-url/',
       type: 'POST',
