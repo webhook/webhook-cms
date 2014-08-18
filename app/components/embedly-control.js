@@ -51,7 +51,7 @@ export default Ember.Component.extend({
 
       $.embedly.oembed(this.get('url'), {
         key: window.ENV.embedlyKey,
-        query: this.get('control.meta.data.options')
+        query: this.get('control.meta.options')
       }).progress(function (data) {
         embedlyControl.set('isFetching', false);
         embedlyControl.set('control.value', data);

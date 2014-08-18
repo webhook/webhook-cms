@@ -4,17 +4,17 @@
   <p class="edit-instruction"><strong>What are page layouts?</strong>Page layouts allow the user to choose a specific HTML layout to use for each {{model.name}} object in the CMS. These HTML files need to be included in the <code>/{{ model.id }}/layouts/</code> directory of the content object. By default, if no layout is selected, the <code>/{{model.id}}/individual.html</code> file will be used as normal.</p>
   <label for="Options">Page layouts</label>
   <div class="wy-control">
-    {{#each option in editingControl.meta.data.options}}
+    {{#each option in editingControl.meta.options}}
     <label class="wy-checkbox">
       {{view "radio-button"
         name="default-template-option"
-        selection=editingControl.meta.data.defaultValue
+        selection=editingControl.meta.defaultValue
         value=option.value
       }}
       {{input value=option.label placeholder="Fancy layout"}}
       {{input value=option.value placeholder="layout_name.html"}}
-      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.data.options}}></span>
-      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.data.options option}}></span>
+      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.options}}></span>
+      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.options option}}></span>
     </label>
     {{/each}}
   </div>

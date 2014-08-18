@@ -8,13 +8,13 @@
         content=contentTypes
         optionValuePath="content.id"
         optionLabelPath="content.name"
-        value=editingControl.meta.data.contentTypeId
+        value=editingControl.meta.contentTypeId
         prompt="Select a relation"
       }}
     </div>
     <div class="wy-control">
       <label class="wy-checkbox">
-        {{input type="checkbox" checked=editingControl.meta.data.isSingle}}
+        {{input type="checkbox" checked=editingControl.meta.isSingle}}
         Only allow one searched item and no more.
       </label>
     </div>

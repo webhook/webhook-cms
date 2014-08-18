@@ -23,8 +23,8 @@ export default Ember.ArrayController.extend({
       Ember.Logger.info('Look for reverse relationships to remove.');
       contentType.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
 
-        var relatedContentTypeId = control.get('meta.data.contentTypeId');
-        var relatedControlName = control.get('meta.data.reverseName');
+        var relatedContentTypeId = control.get('meta.contentTypeId');
+        var relatedControlName = control.get('meta.reverseName');
 
         Ember.Logger.info('Removing', relatedContentTypeId, ':', relatedControlName);
 

@@ -7,8 +7,8 @@ export default Ember.Component.extend({
   results: Ember.A([]),
 
   showAutocomplete: function () {
-    return !this.get('control.meta.data.isSingle') || (!this.get('control.value.length') && this.get('control.meta.data.isSingle'));
-  }.property('control.value.@each', 'control.meta.data.isSingle'),
+    return !this.get('control.meta.isSingle') || (!this.get('control.value.length') && this.get('control.meta.isSingle'));
+  }.property('control.value.@each', 'control.meta.isSingle'),
 
   currentSelection: Ember.arrayComputed('control.value', {
     addedItem: function (array, valueItem, changeMeta) {

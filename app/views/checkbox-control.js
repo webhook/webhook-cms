@@ -2,7 +2,7 @@ export default Ember.Checkbox.extend({
 
   stateChanged: function () {
     this.set('option.value', this.get('checked'));
-    this.set('control.value', this.get('control.meta.data.options').map(function (option) {
+    this.set('control.value', this.get('control.meta.options').map(function (option) {
       return { label: option.label, value: option.value };
     }).toArray());
   }.observes('checked'),

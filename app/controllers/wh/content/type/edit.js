@@ -108,7 +108,7 @@ export default Ember.ObjectController.extend({
         return this.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = getItemModelName(contentType);
           var foreignControls = contentType.get('controls');
-          var reverseControl = control.get('meta.data.reverseName') && foreignControls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
+          var reverseControl = control.get('meta.reverseName') && foreignControls.filterBy('name', control.get('meta.reverseName')).get('firstObject');
 
           // Legacy support
           // If we don't have a reverse relationship, add it.
@@ -125,11 +125,9 @@ export default Ember.ObjectController.extend({
                 var reverseControl = this.store.createRecord('control', {
                   label      : this.get('type.name'),
                   controlType: controlType,
-                  meta: this.store.createRecord('meta-data', {
-                    data: {
-                      contentTypeId: this.get('type.id'),
-                      reverseName: control.get('name')
-                    }
+                  meta: Ember.Object.create({
+                    contentTypeId: this.get('type.id'),
+                    reverseName: control.get('name')
                   })
                 });
 
@@ -147,7 +145,7 @@ export default Ember.ObjectController.extend({
                 foreignControls.addObject(reverseControl);
 
                 // update near side contentType relation control with reverse name.
-                control.set('meta.data.reverseName', reverseControl.get('name'));
+                control.set('meta.reverseName', reverseControl.get('name'));
                 this.get('type').save().then(function () {
 
                   // update far side contentType relation control
@@ -170,17 +168,17 @@ export default Ember.ObjectController.extend({
             // Find and update reverse item.
             return this.store.find(modelName, itemId).then(function (item) {
 
-              if (reverseControl.get('meta.data.isSingle')) {
+              if (reverseControl.get('meta.isSingle')) {
 
                 if (updateType === 'remove') {
-                  item.get('data')[control.get('meta.data.reverseName')] = null;
+                  item.get('data')[control.get('meta.reverseName')] = null;
                 } else {
-                  item.get('data')[control.get('meta.data.reverseName')] = relatedValue;
+                  item.get('data')[control.get('meta.reverseName')] = relatedValue;
                 }
 
               } else {
 
-                var currentItems = Ember.A(item.get('data')[control.get('meta.data.reverseName')] || []);
+                var currentItems = Ember.A(item.get('data')[control.get('meta.reverseName')] || []);
 
                 if (updateType === 'remove') {
                   currentItems.removeObject(relatedValue);
@@ -189,7 +187,7 @@ export default Ember.ObjectController.extend({
                 }
 
                 // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
-                item.get('data')[control.get('meta.data.reverseName')] = currentItems.toArray();
+                item.get('data')[control.get('meta.reverseName')] = currentItems.toArray();
 
               }
               return item.save().then(function () {
@@ -390,7 +388,7 @@ export default Ember.ObjectController.extend({
 
     addTabularRow: function (control) {
       var emptyRow = Ember.A([]);
-      control.get('meta.data.options').forEach(function () {
+      control.get('meta.options').forEach(function () {
         emptyRow.pushObject(Ember.Object.create());
       });
       control.get('value').pushObject(emptyRow);

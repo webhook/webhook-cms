@@ -10,7 +10,7 @@ export default DS.Model.extend({
   showInCms  : DS.attr('boolean'),
   locked     : DS.attr('boolean'),
   hidden     : DS.attr('boolean'),
-  meta       : DS.belongsTo('meta-data', { embedded: 'always' }),
+  meta       : DS.attr('json'),
 
   setName: function () {
     // you cannot change the name of locked controls

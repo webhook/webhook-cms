@@ -170,7 +170,7 @@ export default Ember.Route.extend({
       }
 
       if (control.get('controlType.widget') === 'checkbox') {
-        control.get('meta.data.options').forEach(function (option) {
+        control.get('meta.options').forEach(function (option) {
           option.value = value && value.findBy('label', option.label) ? value.findBy('label', option.label).value : false;
         });
       }
@@ -184,7 +184,7 @@ export default Ember.Route.extend({
         if (!value) {
           value = Ember.A([]);
           var emptyRow = Ember.A([]);
-          control.get('meta.data.options').forEach(function () {
+          control.get('meta.options').forEach(function () {
             emptyRow.pushObject("");
           });
           value.pushObject(emptyRow);

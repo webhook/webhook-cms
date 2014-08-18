@@ -8,7 +8,7 @@ export default Ember.View.extend({
 
   options: function () {
 
-    var options = this.get('control.meta.data');
+    var options = this.get('control.meta');
 
     return Ember.Object.create({
       min: parseInt(options.min || 0, 10),
@@ -16,7 +16,7 @@ export default Ember.View.extend({
       step: parseFloat(options.step || 0)
     });
 
-  }.property('control.meta.data.max'),
+  }.property('control.meta.max'),
 
   didInsertElement: function () {
 
@@ -72,7 +72,7 @@ export default Ember.View.extend({
 
   maxChanged: function () {
     this.setEmpties();
-  }.observes('control.meta.data.max'),
+  }.observes('control.meta.max'),
 
   updateStars: function () {
 
