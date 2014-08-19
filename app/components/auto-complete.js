@@ -36,6 +36,10 @@ export default Ember.Component.extend({
   actions: {
     addToSelection: function (result) {
 
+      if (!result) {
+        return;
+      }
+
       var value = this.getWithDefault('control.value', Ember.A([]));
 
       var resultKey = result.get('type') + ' ' + result.get('id');

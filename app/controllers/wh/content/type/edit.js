@@ -178,13 +178,19 @@ export default Ember.ObjectController.extend({
 
               } else {
 
-                var currentItems = Ember.A(item.get('data')[control.get('meta.reverseName')] || []);
+                var currentItems = item.get('data')[control.get('meta.reverseName')];
+
+                if (Ember.isEmpty(currentItems)) {
+                  currentItems = Ember.A([]);
+                }
 
                 if (updateType === 'remove') {
                   currentItems.removeObject(relatedValue);
                 } else {
                   currentItems.addObject(relatedValue);
                 }
+
+                item.get('data')[control.get('meta.reverseName')] = currentItems;
 
               }
               return item.save().then(function () {
