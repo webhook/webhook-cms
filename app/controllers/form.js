@@ -395,10 +395,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     var updateData = function (item) {
       var itemData = item.get('data');
 
-      // changedNameControls.forEach(function (control) {
-      //   itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
-      //   itemData[control.get('originalName')] = null;
-      // });
+      changedNameControls.forEach(function (control) {
+        itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
+        itemData[control.get('originalName')] = null;
+      });
 
       removedControls.forEach(function (control) {
         itemData[control.get('originalName')] = null;
@@ -411,6 +411,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       });
 
       item.set('data', itemData);
+
       item.save().then(function (savedItem) {
         Ember.Logger.info('Data updates applied to', savedItem.get('id'));
         SearchIndex.indexItem(savedItem, contentType);
