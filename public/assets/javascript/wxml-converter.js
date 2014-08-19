@@ -45,12 +45,7 @@ var WXMLConverter = (function() {
     wordpressData.language = convertEmpty(getNodeValue(channel['language']));
     wordpressData.image = convertEmpty(getNodeValue(channel['image']));
 
-    for(var key in channel['wp:author']) {
-      if(!channel['wp:author'].hasOwnProperty(key)) {
-        continue;
-      }
-
-      var author = channel['wp:author'][key];
+    var parseAuthor = function(author) {
       var newAuthor = {};
 
       for(var okey in author) {
@@ -74,12 +69,19 @@ var WXMLConverter = (function() {
       wordpressData.authors[fixedAuthor.login] = fixedAuthor;
     }
 
-    for(var key in channel['wp:category']) {
-        if(!channel['wp:category'].hasOwnProperty(key)) {
+    if(Array.isArray(channel['wp:author'])) {
+      for(var key in channel['wp:author']) {
+        if(!channel['wp:author'].hasOwnProperty(key)) {
           continue;
         }
 
-      var category = channel['wp:category'][key];
+        parseAuthor(channel['wp:author'][key]);
+      }
+    } else if (channel['wp:author']) {
+        parseAuthor(channel['wp:author']);
+    }
+
+    var parseCategory = function(category) {
       var newCategory = {};
 
       for(var okey in category) {
@@ -99,12 +101,19 @@ var WXMLConverter = (function() {
       wordpressData.categories[newCategory.category_nicename] = fixedCategory;
     }
 
-    for(var key in channel['wp:tag']) {
-      if(!channel['wp:tag'].hasOwnProperty(key)) {
-        continue;
-      }
+    if(Array.isArray(channel['wp:author'])) {
+      for(var key in channel['wp:category']) {
+          if(!channel['wp:category'].hasOwnProperty(key)) {
+            continue;
+          }
 
-      var tag = channel['wp:tag'][key];
+        parseCategory(channel['wp:category'][key]);
+      }
+    } else if (channel['wp:author']) {
+        parseCategory(channel['wp:category']);
+    }
+
+    var parseTag = function(tag) {
       var newTag = {};
 
       for(var okey in tag) {
@@ -120,6 +129,18 @@ var WXMLConverter = (function() {
       fixedTag.name = convertEmpty(newTag.tag_name);
 
       wordpressData.tags[fixedTag.slug] = fixedTag;
+    }
+
+    if(Array.isArray(channel['wp:tag'])) {
+      for(var key in channel['wp:tag']) {
+        if(!channel['wp:tag'].hasOwnProperty(key)) {
+          continue;
+        }
+
+        parseTag(channel['wp:tag'][key]);
+      }
+    } else if (channel['wp:tag']) {
+        parseTag(channel['wp:tag']);
     }
 
     for(var key in channel['item']) {
