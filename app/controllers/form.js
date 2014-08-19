@@ -113,8 +113,16 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     controls = this.get('model.controls');
 
+    var dupeNamesCount = controls.filterBy('controlType.name', controlType.get('name')).get('length');
+
+    var label = controlType.get('name');
+
+    if (dupeNamesCount) {
+      label = label + ' ' + (dupeNamesCount + 1);
+    }
+
     control = this.store.createRecord('control', {
-      label      : controlType.get('name'),
+      label      : label,
       controlType: controlType,
       showInCms  : (controls.filterBy('showInCms').get('length') < 3)
     });
