@@ -113,7 +113,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     controls = this.get('model.controls');
 
-    var dupeNamesCount = controls.filterBy('controlType.name', controlType.get('name')).get('length');
+    var dupeNamesCount = controls.filterBy('label', controlType.get('name')).get('length');
 
     var label = controlType.get('name');
 
