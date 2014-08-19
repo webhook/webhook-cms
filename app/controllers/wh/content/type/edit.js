@@ -186,9 +186,6 @@ export default Ember.ObjectController.extend({
                   currentItems.addObject(relatedValue);
                 }
 
-                // toArray will remove extraneous _super and _nextSuper properties that are undefined and mess up firebase updates.
-                item.get('data')[control.get('meta.reverseName')] = currentItems.toArray();
-
               }
               return item.save().then(function () {
                 Ember.Logger.log('`' + item.get('data.name') + '` updated.');

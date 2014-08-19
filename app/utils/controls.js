@@ -9,12 +9,6 @@ export default function dataFromControls (controls) {
 
     var value = control.get('value');
 
-    // Convert ember arrays to normal arrays so firebase doesn't throw
-    // a fit on `_super` and `@each` properties
-    if (Ember.isArray(value)) {
-      value = value.toArray();
-    }
-
     if (control.get('controlType.valueType') === 'object') {
 
       switch (control.get('controlType.widget')) {

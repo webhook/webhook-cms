@@ -121,20 +121,22 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     control.set('widgetIsValid', true);
 
-    var meta = Ember.Object.create();
+    var meta;
 
     switch (controlType.get('widget')) {
       case 'instruction':
         control.set('showInCms', false);
         break;
       case 'radio':
-        meta.set('options', [
-          { value: 'Option 1' },
-          { value: 'Option 2' }
-        ]);
+        meta = Ember.Object.create({
+          options: [
+            { value: 'Option 1' },
+            { value: 'Option 2' }
+          ]
+        });
         break;
       case 'layout':
-        meta.set({
+        meta = Ember.Object.create({
           defaultValue: '',
           options: [
             { label: 'None', value: '' },
@@ -143,7 +145,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'select':
-        meta.set({
+        meta = Ember.Object.create({
           defaultValue: '',
           options: [
             { value: '' },
@@ -152,7 +154,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'checkbox':
-        meta.set({
+        meta = Ember.Object.create({
           options: [
             { label: 'Option 1' },
             { label: 'Option 2' }
@@ -160,7 +162,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'wysiwyg':
-        meta.set({
+        meta = Ember.Object.create({
           image: true,
           link : true,
           quote: true,
@@ -169,14 +171,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'rating':
-        meta.set({
+        meta = Ember.Object.create({
           min: 0,
           max: 5,
           step: 0.5
         });
         break;
       case 'tabular':
-        meta.set({
+        meta = Ember.Object.create({
           options: [
             { value: 'Column 1' },
             { value: 'Column 2' }
@@ -192,7 +194,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         break;
 
       case 'relation':
-        meta.set('contentTypeId', null);
+        meta = Ember.Object.create({ contentTypeId: null });
         break;
     }
 
@@ -813,15 +815,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
           control.get('meta.options').setEach('value', null);
-        }
-
-        // hax
-        // firebase doesn't like undefined values and for some reason `_super` is
-        // being added to arrays in ember with undefined value
-        if (Ember.isArray(control.get('meta.options'))) {
-          control.set('meta.options', control.get('meta.options').toArray());
-          Ember.run.sync();
-          delete control.get('meta.options').__nextSuper;
         }
 
       });

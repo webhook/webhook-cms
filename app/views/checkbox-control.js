@@ -12,7 +12,7 @@ export default Ember.Checkbox.extend({
   }.observes('option.defaultValue'),
 
   willInsertElement: function () {
-    if (this.get('checked') === undefined && this.get('option.defaultValue')) {
+    if (this.get('option.value') === undefined && this.get('option.defaultValue')) {
       this.set('checked', this.get('option.defaultValue'));
     }
   }

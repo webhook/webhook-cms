@@ -2,9 +2,10 @@
   <label class="wy-checkbox">
     {{view 'checkbox-control'
       checked=option.value
-      control=control
+      control=this
       option=option
     }}
     {{option.label}}
+    {{option.value}}:{{option.defaultValue}}
   </label>
 {{/each}}
