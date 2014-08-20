@@ -2,7 +2,7 @@ import downcode from 'appkit/utils/downcode';
 
 export default DS.Model.extend({
   name    : DS.attr('string'),
-  controls: DS.hasMany('control', { embedded: 'always' }),
+  controls: DS.hasMany('control', { embedded: true }),
   oneOff  : DS.attr('boolean'),
 
   // scaffolding md5s

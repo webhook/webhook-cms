@@ -12,7 +12,7 @@ export default DS.JSONSerializer.extend({
     return this._super(type, newHash);
   },
   serialize: function (record, options) {
-    return record.get('data');
+    return JSON.parse(JSON.stringify(record.get('data')));
   },
   _normalizeSingle: function (hash) {
     var newHash = { data: {} };
