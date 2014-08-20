@@ -50,18 +50,18 @@ export default Ember.Route.extend({
     model.get('controls').setEach('value', null);
 
     model.get('controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
-      control.get('meta.data.options').setEach('value', undefined);
+      control.get('meta.options').setEach('value', undefined);
     });
 
     model.get('controls').filterBy('controlType.widget', 'radio').forEach(function (control) {
-      control.set('originalOptions', control.get('meta.data.options').getEach('value'));
+      control.set('originalOptions', control.get('meta.options').getEach('value'));
     });
 
     model.get('controls').filterBy('controlType.widget', 'tabular').forEach(function (control) {
 
       var value = Ember.A([]);
       var emptyRow = Ember.A([]);
-      control.get('meta.data.options').forEach(function () {
+      control.get('meta.options').forEach(function () {
         emptyRow.pushObject("");
       });
       value.pushObject(emptyRow);

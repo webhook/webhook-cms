@@ -78,7 +78,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     });
 
     this.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
-      if (Ember.isNone(control.get('meta.data.contentTypeId'))) {
+      if (Ember.isNone(control.get('meta.contentTypeId'))) {
         control.set('widgetIsValid', false);
         control.get('widgetErrors').addObject('You must select a related content type.');
       }
@@ -113,22 +113,30 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     controls = this.get('model.controls');
 
+    var dupeNamesCount = controls.filterBy('label', controlType.get('name')).get('length');
+
+    var label = controlType.get('name');
+
+    if (dupeNamesCount) {
+      label = label + ' ' + (dupeNamesCount + 1);
+    }
+
     control = this.store.createRecord('control', {
-      label      : controlType.get('name'),
+      label      : label,
       controlType: controlType,
       showInCms  : (controls.filterBy('showInCms').get('length') < 3)
     });
 
     control.set('widgetIsValid', true);
 
-    var meta = this.store.createRecord('meta-data');
+    var meta;
 
     switch (controlType.get('widget')) {
       case 'instruction':
         control.set('showInCms', false);
         break;
       case 'radio':
-        meta.set('data', {
+        meta = Ember.Object.create({
           options: [
             { value: 'Option 1' },
             { value: 'Option 2' }
@@ -136,7 +144,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'layout':
-        meta.set('data', {
+        meta = Ember.Object.create({
           defaultValue: '',
           options: [
             { label: 'None', value: '' },
@@ -145,7 +153,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'select':
-        meta.set('data', {
+        meta = Ember.Object.create({
           defaultValue: '',
           options: [
             { value: '' },
@@ -154,7 +162,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'checkbox':
-        meta.set('data', {
+        meta = Ember.Object.create({
           options: [
             { label: 'Option 1' },
             { label: 'Option 2' }
@@ -162,7 +170,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'wysiwyg':
-        meta.set('data', {
+        meta = Ember.Object.create({
           image: true,
           link : true,
           quote: true,
@@ -171,14 +179,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'rating':
-        meta.set('data', {
+        meta = Ember.Object.create({
           min: 0,
           max: 5,
           step: 0.5
         });
         break;
       case 'tabular':
-        meta.set('data', {
+        meta = Ember.Object.create({
           options: [
             { value: 'Column 1' },
             { value: 'Column 2' }
@@ -186,7 +194,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         var value = Ember.A([]);
         var emptyRow = Ember.A([]);
-        meta.get('data.options').forEach(function () {
+        meta.get('options').forEach(function () {
           emptyRow.pushObject("");
         });
         value.pushObject(emptyRow);
@@ -194,9 +202,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         break;
 
       case 'relation':
-        meta.set('data', {
-          contentTypeId: null
-        });
+        meta = Ember.Object.create({ contentTypeId: null });
         break;
     }
 
@@ -231,18 +237,18 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     removedRelations.forEach(function (control) {
 
-      Ember.Logger.info('Attempting to remove `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
+      Ember.Logger.info('Attempting to remove `' + control.get('meta.reverseName') + '` from `' + control.get('meta.contentTypeId') + '`');
 
       var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
 
-        controller.store.find('contentType', control.get('meta.data.contentTypeId')).then(function (contentType) {
+        controller.store.find('contentType', control.get('meta.contentTypeId')).then(function (contentType) {
 
           var controls = contentType.get('controls');
-          var controlToRemove = controls.filterBy('name', control.get('meta.data.reverseName')).get('firstObject');
+          var controlToRemove = controls.filterBy('name', control.get('meta.reverseName')).get('firstObject');
           controls.removeObject(controlToRemove);
 
           contentType.save().then(function () {
-            Ember.Logger.info('Successfully removed `' + control.get('meta.data.reverseName') + '` from `' + control.get('meta.data.contentTypeId') + '`');
+            Ember.Logger.info('Successfully removed `' + control.get('meta.reverseName') + '` from `' + control.get('meta.contentTypeId') + '`');
             resolve();
           }, function (error) {
             reject(error);
@@ -290,11 +296,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     addedRelations.forEach(function (localControl) {
 
-      Ember.Logger.info('Attempting to add reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '`');
+      Ember.Logger.info('Attempting to add reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '`');
 
       var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
 
-        this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
+        this.get('store').find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
 
           var foreignControls = contentType.get('controls');
           var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
@@ -307,11 +313,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             var control = this.store.createRecord('control', {
               label      : controlLabel,
               controlType: controlType,
-              meta: this.store.createRecord('meta-data', {
-                data: {
-                  contentTypeId: this.get('model.id'),
-                  reverseName: localControl.get('name')
-                }
+              meta: Ember.Object.create({
+                contentTypeId: this.get('model.id'),
+                reverseName: localControl.get('name')
               })
             });
 
@@ -325,13 +329,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '` on `' + contentType.get('id') + '`');
 
             // Remember reverse relation name in meta data
-            localControl.set('meta.data.reverseName', control.get('name'));
+            localControl.set('meta.reverseName', control.get('name'));
 
             // Add new relation control to the stack
             contentType.get('controls').pushObject(control);
 
             contentType.save().then(function (contentType) {
-              Ember.Logger.info('Reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '` successfully added.');
+              Ember.Logger.info('Reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '` successfully added.');
               Ember.run(null, resolve);
             }, function (error) {
               Ember.run(null, reject, error);
@@ -353,15 +357,15 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     changedRelations.forEach(function (localControl) {
 
-      Ember.Logger.info('Attempting to update reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.data.contentTypeId') + '`');
+      Ember.Logger.info('Attempting to update reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '`');
 
       var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-        this.get('store').find('contentType', localControl.get('meta.data.contentTypeId')).then(function (contentType) {
+        this.get('store').find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
 
           var foreignControls = contentType.get('controls');
           var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
 
-          foreignControls.filterBy('name', localControl.get('meta.data.reverseName')).setEach('meta.data.reverseName', localControl.get('name'));
+          foreignControls.filterBy('name', localControl.get('meta.reverseName')).setEach('meta.reverseName', localControl.get('name'));
 
           contentType.save().then(function (contentType) {
             Ember.Logger.info('`' + contentType.get('name') + '` updated.');
@@ -417,6 +421,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       });
 
       item.set('data', itemData);
+
       item.save().then(function (savedItem) {
         Ember.Logger.info('Data updates applied to', savedItem.get('id'));
         SearchIndex.indexItem(savedItem, contentType);
@@ -526,16 +531,16 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           // Update relationships
 
           var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
-          var relatedTypes = relationControls.getEach('meta.data.contentTypeId').uniq();
+          var relatedTypes = relationControls.getEach('meta.contentTypeId').uniq();
 
           relatedTypes.forEach(function (relatedTypeId) {
 
-            var relationControlsForType = relationControls.filterBy('meta.data.contentTypeId', relatedTypeId);
+            var relationControlsForType = relationControls.filterBy('meta.contentTypeId', relatedTypeId);
 
             formController.store.find('content-type', relatedTypeId).then(function (relatedType) {
 
               relationControlsForType.forEach(function (control) {
-                relatedType.get('controls').filterBy('name', control.get('meta.data.reverseName')).setEach('meta.data.contentTypeId', newId);
+                relatedType.get('controls').filterBy('name', control.get('meta.reverseName')).setEach('meta.contentTypeId', newId);
               });
 
               relatedType.save().then(function () {
@@ -551,9 +556,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
                   relationControlsForType.forEach(function (control) {
 
-                    Ember.Logger.log('Checking `%@` for `%@` data to update.'.fmt(item.get('data.name'), control.get('meta.data.reverseName')));
+                    Ember.Logger.log('Checking `%@` for `%@` data to update.'.fmt(item.get('data.name'), control.get('meta.reverseName')));
 
-                    var targetData = itemData[control.get('meta.data.reverseName')];
+                    var targetData = itemData[control.get('meta.reverseName')];
 
                     if (!Ember.isEmpty(targetData)) {
 
@@ -574,7 +579,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
                       }
 
-                      itemData[control.get('meta.data.reverseName')] = targetData;
+                      itemData[control.get('meta.reverseName')] = targetData;
                       changed = true;
 
                     } else {
@@ -798,7 +803,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         // See if we changed any radio values
         if (control.get('controlType.widget') === 'radio') {
           var changedRadioControls = null;
-          control.get('meta.data.options').getEach('value').forEach(function (value, index) {
+          control.get('meta.options').getEach('value').forEach(function (value, index) {
             var originalValue = control.getWithDefault('originalOptions', Ember.A([])).objectAt(index);
             if (originalValue && originalValue !== value) {
               if (!changedRadioControls) {
@@ -817,16 +822,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
-          control.get('meta.data.options').setEach('value', null);
-        }
-
-        // hax
-        // firebase doesn't like undefined values and for some reason `_super` is
-        // being added to arrays in ember with undefined value
-        if (Ember.isArray(control.get('meta.data.options'))) {
-          control.set('meta.data.options', control.get('meta.data.options').toArray());
-          Ember.run.sync();
-          delete control.get('meta.data.options').__nextSuper;
+          control.get('meta.options').setEach('value', null);
         }
 
       });
@@ -874,7 +870,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     editControl: function (control) {
 
       if (!control.get('meta')) {
-        control.set('meta', this.store.createRecord('meta-data', { data: {} }));
+        control.set('meta', Ember.Object.create());
       }
 
       this.set('editingControl', control);

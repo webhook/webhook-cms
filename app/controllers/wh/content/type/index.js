@@ -133,8 +133,8 @@ export default Ember.ArrayController.extend({
 
           Ember.Logger.info('Updating reverse relations of `' + control.get('name') + '`');
 
-          var relatedContentTypeId = control.get('meta.data.contentTypeId');
-          var relatedControlName = control.get('meta.data.reverseName');
+          var relatedContentTypeId = control.get('meta.contentTypeId');
+          var relatedControlName = control.get('meta.reverseName');
           var relatedItemIds = (item.get('data')[control.get('name')] || []).map(function (value) {
             return value.split(' ')[1];
           });

@@ -3,16 +3,16 @@
 <div class="wy-control-group">
   <label for="Options">Dropdown options <i class="icon icon-question-sign" data-toggle="tooltip" title="Use the plus and minus to add new options. Click the radio to make it default when on a fresh form."></i></label>
   <div class="wy-control">
-    {{#each option in editingControl.meta.data.options}}
+    {{#each option in editingControl.meta.options}}
     <label class="wy-checkbox">
       {{view "radio-button"
         name="default-option"
-        selection=editingControl.meta.data.defaultValue
+        selection=editingControl.meta.defaultValue
         value=option.value
       }}
       {{input value=option.value}}
-      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.data.options}}></span>
-      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.data.options option}}></span>
+      <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action "addOption" editingControl.meta.options}}></span>
+      <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action "removeOption" editingControl.meta.options option}}></span>
     </label>
     {{/each}}
   </div>

@@ -1,7 +1,7 @@
 var ControlType = DS.Model.extend({
   name     : DS.attr('string'),
   group    : DS.belongsTo('control-type-group'),
-  iconClass  : DS.attr('string'),
+  iconClass: DS.attr('string'),
   widget   : DS.attr('string', { defaultValue: 'textfield' }),
 
   // The following are used as defaults for new controls of this type
@@ -9,7 +9,7 @@ var ControlType = DS.Model.extend({
   placeholder: DS.attr('string'),
   help       : DS.attr('string'),
 
-  valueType: DS.attr('string', { defaultValue: 'string' }),
+  valueType  : DS.attr('string', { defaultValue: 'string' }),
 
   controlPartialPath: function () {
     return 'widgets/' + this.get('widget');

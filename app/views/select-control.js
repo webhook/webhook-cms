@@ -6,27 +6,17 @@ export default Ember.Select.extend({
     this.set('value', this.get('defaultValue'));
   }.observes('defaultValue'),
 
-  didInsertElement: function () {
-    this._super.apply(this, arguments);
-
-    // make sure the control (context) value matches selection
-    this.addObserver('value', function () {
-      this.set('context.value', this.get('value'));
-    });
-
-    // if we have a starting value, use that in the select
-    if (this.get('context.value')) {
-      this.set('value', this.get('context.value'));
-    }
+  willInsertElement: function () {
 
     // if we don't have a starting value, use the default
-    else if (this.get('defaultValue') && this.get('context.value') === undefined && this.get('context.value') !== this.get('defaultValue')) {
-      this.set('context.value', this.get('defaultValue'));
+    // value is null in formbuilder, undefined in new item for some reason.
+    if (this.get('defaultValue') && (this.get('value') === null || this.get('value') === undefined)) {
+      this.set('value', this.get('defaultValue'));
     }
 
     // if not starting value and no default value, just use the first item
-    else {
-      this.set('context.value', this.get('content.firstObject.value'));
+    else if (this.get('defaultValue') === null || this.get('defaultValue') === undefined) {
+      this.set('value', this.get('content.firstObject.value'));
     }
   }
 

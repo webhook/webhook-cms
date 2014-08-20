@@ -1,8 +1,8 @@
-{{#each option in meta.data.options}}
+{{#each option in meta.options}}
   <label class="wy-checkbox">
     {{view 'checkbox-control'
       checked=option.value
-      control=control
+      control=this
       option=option
     }}
     {{option.label}}

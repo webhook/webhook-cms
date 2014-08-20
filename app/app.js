@@ -66,7 +66,21 @@ Ember.Route.reopen({
 });
 
 Ember.TextField.reopen({
-  attributeBindings: [ 'required' ]
+
+  init: function () {
+
+    var view = this;
+
+    // Make sure that number fields are saved as numbers.
+    if (this.get('type') === 'number') {
+      this.addBeforeObserver('value', function (obj, key) {
+        view['value'] = parseFloat(view.get('value')) || null;
+      });
+    }
+
+    return this._super.apply(this, arguments);
+  }
+
 });
 
 // Ian doesn't like pluralizing, singularizing
