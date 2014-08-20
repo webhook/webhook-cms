@@ -755,7 +755,14 @@ var WXMLImporter = (function() {
   }
 
   function fixBody(body) {
-    var bodyObj = $('<div>' + body + '</div>');
+    body = body.replace(/\r\n/g, '\n');
+    body = body.replace(/\r/g, '');
+    var lines = body.split('\n\n');
+    var htmlString = "<p>";
+    lines.forEach(function(line) { htmlString += line + "</p><p>"; })
+    htmlString = htmlString.slice(0, htmlString.length - 3);
+
+    var bodyObj = $('<div>' + htmlString + '</div>');
 
     var captionParsed = false;
     bodyObj.shortcode({
@@ -805,6 +812,25 @@ var WXMLImporter = (function() {
 
         $(val).replaceWith(figureTag);
       }
+    });
+
+    bodyObj.find('iframe').each(function(index, val) {
+      var frame = $(val);
+
+      var src = frame.attr('src');
+
+      if(src.indexOf('youtube.com') !== -1 || src.indexOf('vimeo.com') !== -1) {
+        frame.wrap('<figure data-type="video"></figure>');
+      } else {
+        frame.wrap('<figure data-type="embed"></figure>');
+      }
+    });
+
+
+    bodyObj.find('object').each(function(index, val) {
+      var frame = $(val);
+
+      frame.wrap('<figure data-type="embed"></figure>');
     });
 
     return bodyObj.html();

@@ -82,7 +82,18 @@ export default function dataFromControls (controls) {
 
     data[control.get('name')] = value;
 
-    Ember.Logger.info(control.get('controlType.widget') + ':' + control.get('name') + ' value', value);
+    switch (control.get('controlType.widget')) {
+    case 'checkbox':
+      Ember.Logger.info('checkbox:' + control.get('name') + ' value', value.map(function (option) {
+        return option.label + ':' + option.value;
+      }));
+      break;
+
+    default:
+      Ember.Logger.info(control.get('controlType.widget') + ':' + control.get('name') + ' value', value);
+      break;
+    }
+
   });
 
   controls.filterBy('controlType.widget', 'select').forEach(function (control) {
