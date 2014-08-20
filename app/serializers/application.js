@@ -20,10 +20,10 @@ export default DS.FirebaseSerializer.extend({
   serialize: function () {
 
     var jsonDirty = this._super.apply(this, arguments);
-    var jsonClean = JSON.parse(JSON.stringify(jsonClean));
+    var jsonClean = JSON.parse(JSON.stringify(jsonDirty));
 
     return jsonClean;
-    
+
   }
 
 });

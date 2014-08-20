@@ -825,6 +825,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           control.get('meta.options').setEach('value', null);
         }
 
+        // force dirty state on all controls so they will save.
+        // kind of a hack but meta data doesn't trigger dirty state.
+        control.transitionTo('updated.uncommitted');
       });
 
 
