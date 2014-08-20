@@ -8,16 +8,14 @@
     </tr>
   </thead>
   <tbody>
-    {{#with this as control}}
     {{#each row in value}}
       <tr>
         {{#each data in row}}
           <td>{{input value=data.value}}</td>
         {{/each}}
-        <td><button type="button" class="btn btn-link icon icon-remove-sign" {{action "removeTabularRow" row control}}></button>
+        <td><button type="button" class="btn btn-link icon icon-remove-sign" {{action "removeTabularRow" row this}}></button>
       </tr>
     {{/each}}
-    {{/with}}
   </tbody>
 </table>
 
