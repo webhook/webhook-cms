@@ -128,8 +128,10 @@ export default Ember.Route.extend({
     var control = type.get('controls').filterBy('name', 'name').get('firstObject');
 
     if (this.get('isObservingName')) {
-
-      control.get('widgetErrors').removeObject(this.get('dupeNameError'));
+      control.get('widgetErrors').removeObjects([
+        'This field is required',
+        this.get('dupeNameError')
+      ]);
       if (!control.get('widgetErrors.length')) {
         control.set('widgetIsValid', true);
       }

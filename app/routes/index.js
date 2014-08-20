@@ -1,11 +1,14 @@
 export default Ember.Route.extend({
   beforeModel: function () {
+
+    var route = this;
+
     this.store.find('content-type').then(function (types) {
       if (types.get('length')) {
-        this.transitionTo('wh');
+        route.transitionTo('wh');
       } else {
-        this.transitionTo('start');
+        route.transitionTo('start');
       }
-    }.bind(this));
+    });
   }
 });

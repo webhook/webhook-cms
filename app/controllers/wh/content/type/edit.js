@@ -83,11 +83,11 @@ export default Ember.ObjectController.extend({
 
     var editItemController = this;
 
-    var controls = this.get('type.controls');
+    var relationControls = this.get('type.controls').filterBy('controlType.widget', 'relation');
 
-    Ember.Logger.info('Updating reverse relationships.');
+    Ember.Logger.info('Updating reverse relationships (%@).'.fmt(relationControls.get('length')));
 
-    controls.filterBy('controlType.widget', 'relation').forEach(function (control) {
+    relationControls.filterBy('controlType.widget', 'relation').forEach(function (control) {
 
       var currentRelations = control.get('value') || Ember.A([]);
       var initialRelations = this.get('initialRelations').get(control.get('name')) || Ember.A([]);
