@@ -755,9 +755,11 @@ var WXMLImporter = (function() {
   }
 
   function fixBody(body) {
-    var lines = body.split('\n');
+    body = body.replace(/\r\n/g, '\n');
+    body = body.replace(/\r/g, '');
+    var lines = body.split('\n\n');
     var htmlString = "<p>";
-    lines.forEach(function(line) { if(line === "") return; htmlString += line + "<p></p>"; })
+    lines.forEach(function(line) { htmlString += line + "</p><p>"; })
     htmlString = htmlString.slice(0, htmlString.length - 3);
 
     var bodyObj = $('<div>' + htmlString + '</div>');
@@ -847,9 +849,6 @@ var WXMLImporter = (function() {
   }
 
   function uploadImage(url, callback) {
-
-    callback({ url: '' });
-    return;
 
     $.ajax({
       url: 'http://server.webhook.com/upload-url/',
