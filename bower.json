@@ -15,7 +15,6 @@
     "webhook-redactor": "git@github.com:webhook/webhook-redactor.git",
     "firebase": "*",
     "firebase-simple-login": "*",
-    "matchbox": "*",
     "embedly-jquery": "~3.1.1",
     "FileSaver.js": "eligrey/FileSaver.js",
     "filereader.js": "bgrins/filereader.js",
