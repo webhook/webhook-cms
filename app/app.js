@@ -1,18 +1,6 @@
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 
-Ember.debouncedObserver = function(func, key, time) {
-  return Em.observer(function() {
-    Em.run.debounce(this, func, time);
-  }, key);
-};
-
-Ember.throttledObserver = function(func, key, time) {
-  return Em.observer(function() {
-    Em.run.throttle(this, func, time);
-  }, key);
-};
-
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
 var App = Ember.Application.extend({
@@ -31,19 +19,42 @@ var App = Ember.Application.extend({
 
 loadInitializers(App, 'appkit');
 
+Ember.debouncedObserver = function(func, key, time) {
+  return Em.observer(function() {
+    Em.run.debounce(this, func, time);
+  }, key);
+};
+
+Ember.throttledObserver = function(func, key, time) {
+  return Em.observer(function() {
+    Em.run.throttle(this, func, time);
+  }, key);
+};
+
 // Before any route, kick user to login if they aren't logged in
 Ember.Route.reopen({
   beforeModel: function (transition) {
-    var openRoutes = ['login', 'password-reset', 'create-user', 'confirm-email', 'resend-email', 'expired'];
 
+    // These routes you do not need to be logged in to access.
+    var openRoutes = [
+      'login',
+      'password-reset',
+      'create-user',
+      'confirm-email',
+      'resend-email',
+      'expired'
+    ];
+
+    // Logged in, but account is inactive. Redirect to expired route.
     if (this.get('session.user') && this.get('session.billing.active') === false && transition.targetName !== 'expired') {
-      Ember.Logger.info('Site is not active, redirecting to expired route.');
+      Ember.Logger.warn('Site is not active, redirecting to expired route.');
       transition.abort();
       this.transitionTo('expired');
     }
 
+    // Not logged in and attempting to access protected route, redirect to login.
     else if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
-      Ember.Logger.info('Attempting to access protected route when not logged in. Aborting.');
+      Ember.Logger.warn('Attempting to access protected route when not logged in. Aborting.');
       this.set('session.transition', transition);
       transition.abort();
       this.transitionTo('login');
@@ -51,10 +62,18 @@ Ember.Route.reopen({
 
     else {
 
-      // Only executed if you are logged in
-      var ownerRoutes = ['wh.settings.team', 'wh.settings.general', 'wh.settings.billing', 'wh.settings.domain', 'wh.settings.data'];
+      // Routes that only site owners should be able to access.
+      var ownerRoutes = [
+        'wh.settings.team',
+        'wh.settings.general',
+        'wh.settings.billing',
+        'wh.settings.domain',
+        'wh.settings.data'
+      ];
+
+      // If not owner and trying to access an owner route, redirect to index.
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
-        Ember.Logger.info('Attempting to access protected route without permission. Aborting.');
+        Ember.Logger.warn('Attempting to access protected route without permission. Aborting.');
         this.set('session.transition', transition);
         transition.abort();
         this.transitionTo('wh.index');
@@ -65,22 +84,17 @@ Ember.Route.reopen({
   }
 });
 
+// Coerce number type values when using input[type=number]
 Ember.TextField.reopen({
-
   init: function () {
-
     var view = this;
-
-    // Make sure that number fields are saved as numbers.
     if (this.get('type') === 'number') {
       this.addBeforeObserver('value', function (obj, key) {
         view['value'] = parseFloat(view.get('value')) || null;
       });
     }
-
     return this._super.apply(this, arguments);
   }
-
 });
 
 // Ian doesn't like pluralizing, singularizing
