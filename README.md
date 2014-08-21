@@ -1,9 +1,13 @@
 #### How to install for local dev
 
+*You need a Webhook site to run Webhook CMS.*
+
 The Webhook CMS is an ember project that can be run locally with grunt.
 
-* clone and navigate to the webhook-cms folder.
-* Run an `npm install` and a `bower install`
+* Clone and navigate to the webhook-cms directory
+* Run `npm install` for node dependencies
+* Run `bower install` for front-end dependencies
+* Look for `<meta name="siteName" content="test" />` in `app/index.html` and change `test` to your site name
 * Run `grunt server` to load, then visit localhost:8000
 
 #### How to deploy changes to all webhook sites
