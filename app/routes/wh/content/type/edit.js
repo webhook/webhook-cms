@@ -1,5 +1,4 @@
 import getItemModelName from 'appkit/utils/model';
-import uuid from 'appkit/utils/uuid';
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({

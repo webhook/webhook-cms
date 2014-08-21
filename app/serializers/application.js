@@ -1,9 +1,9 @@
 export default DS.FirebaseSerializer.extend({
 
+  // fix legacy webhook relationships for emberfire
+  // example: { "controls": { "control_id": true } }
   normalize: function (type, payload) {
 
-    // fix relationships for emberfire
-    // example: { "controls": { "control_id": true } }
     type.eachRelationship(function (key, relationship) {
       if (relationship.options.embedded && Ember.isArray(payload[key])) {
         var payloadKeyObject = {};
@@ -17,13 +17,12 @@ export default DS.FirebaseSerializer.extend({
     return this._super.apply(this, [type, payload]);
   },
 
+  // firebase throws a fit with Ember's prototype extensions.
+  // this returns the object to a native object
   serialize: function () {
-
     var jsonDirty = this._super.apply(this, arguments);
     var jsonClean = JSON.parse(JSON.stringify(jsonDirty));
-
     return jsonClean;
-
   }
 
 });

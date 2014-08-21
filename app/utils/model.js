@@ -1,10 +1,6 @@
-import ItemAdapter from 'appkit/adapters/item';
+import ApplicationAdapter from 'appkit/adapters/application';
 import ItemModel from 'appkit/models/item';
 import ItemSerializer from 'appkit/serializers/item';
-
-import DataAdapter from 'appkit/adapters/data';
-import DataModel from 'appkit/models/data';
-import DataSerializer from 'appkit/serializers/data';
 
 export default function getItemModelName(contentType) {
 
@@ -24,7 +20,7 @@ export default function getItemModelName(contentType) {
       window.App[modelName] = ItemModel.extend();
 
       // dynamic adapter
-      window.App[modelName + 'Adapter'] = ItemAdapter.extend({
+      window.App[modelName + 'Adapter'] = ApplicationAdapter.extend({
         // needs to be set here because it doesn't exist when adapter/item.js is parsed from the ItemAdapter import
         firebase: window.ENV.firebase.child('data')
       });
