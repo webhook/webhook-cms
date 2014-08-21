@@ -1,55 +1,66 @@
-#### How to install for local dev
+# Webhook repositories
 
-*You need a Webhook site to run Webhook CMS.*
+This repository is for the Webhook CMS. We are currently in the process of open sourcing the entirely of Webhook which is split over a few repos. The goal is to have them available by late August.
 
-The Webhook CMS is an ember project that can be run locally with grunt.
+* [webhook-generate](https://github.com/webhook/webhook-generate) - The local runserver for Webhook.
+* [webhook-js](https://github.com/webhook/webhook-js) - A collection of jQuery utils for Webhook.
+* [webhook-cms](https://github.com/webhook/webhook-cms) - A single page ember app which acts as the CMS for individual Webhook sites.
+* webhook-server - The production server for serving and regenerating live Webhook sites.
 
-* Clone and navigate to the webhook-cms directory
+## Webhook CMS overview
+
+The Webhook CMS is the CMS layer of Webhook.com. Essentially it is a one-page Ember app based upon [Ember App Kit][1]. It uses an ES6 Module Transpiler which allows for [ES6 module syntax][2]. The code for the Ember app is in the `app` directory.
+
+**The CMS provides two primary functions.**
+
+* Inserting data into a [Firebase][3] location following this [format][4].
+* Sending calls through websockets to the [local generator][5] and production server to rebuild your site.
+
+## How to install for local development
+
+**Important:** *You need a working Webhook site account to develop on the CMS.*
+
+Steps to install:
+
+* Clone this repo and navigate to the webhook-cms directory
 * Run `npm install` for node dependencies
 * Run `bower install` for front-end dependencies
 * Look for `<meta name="siteName" content="test" />` in `app/index.html` and change `test` to your site name
-* Run `grunt server` to load, then visit localhost:8000
+* Run `grunt server`, which loads on localhost:8000. It will activate livereload on changes to your JS, Handlebar and Sass files.
 
-#### Developing Webhook CMS
+## Widgets in the form builder
 
-Webhook CMS was originally based on [Ember App Kit](https://github.com/stefanpenner/ember-app-kit) which has been deprecated in favor of [Ember CLI](http://www.ember-cli.com/). It uses an ES6 Module Transpiler which allows for [ES6 module syntax](http://wiki.ecmascript.org/doku.php?id=harmony:modules#quick_examples).
+Webhook uses a form builder to construct the various data entry forms users will use in the CMS. We call the different fields the Formbuilder allows "widgets".
 
-The code for the Ember app is in the `app` directory.
-
-##### Creating a widget
-
-The `config/environment.js` file names every widget in the CMS. Each widget is organized into a `controlType` and a `controlTypeGroup`. Below is an example of the `number` widget:
+The `config/environment.js` file names every widget the Form Builder allows. Each widget is organized into a `controlType` and a `controlTypeGroup`. Below is an example of the `number` widget:
 
 ```
 {
   name     : 'Number',       // display name for widget
   widget   : 'number',       // id for widget
-  iconClass: 'icon-list-ol', // icon for CMS button
+  iconClass: 'icon-list-ol', // icon for the button used in the Form Builder.
   valueType: null            // 'object' is the only supported non-null value type
 }
 ```
 
-The `widget` field determines the proper template and code to execute in the CMS. If the value you are going to store is not a string or number, you must use the 'object' valueType. There are three templates for each widget all located in the `app/templates/widgets` directory.
+The `widget` id field determines the proper template and code to execute in the CMS. If the value you are going to store is not a string or number, you must use the 'object' valueType. There are three differnt templates for each widget all located in the `app/templates/widgets` directory.
 
-`app/templates/widgets/_number.hbs` is the template used for data entry on in the form.
+* `app/templates/widgets/_number.hbs` is the template used for data entry by users.
+  * These load into `app/templates/widgets/common/formbuilder-widget.hbs`, which is the common template for all widgets.
+* `app/templates/widgets/info/_number.hbs` is the template used when you edit the widget in the formbuilder.
+  * These load into `app/templates/form/_nav.hbs`, which is a common template for all widgets.
+* `app/templates/widgets/value/_number.hbs` is the template used on the list view in the CMS. Like a list of existing blogs.
 
-`app/templates/widgets/info/_number.hbs` is the template used to store extra metadata about the widget.
+Validation for all widgets is done in `app/utils/validators.js`.
 
-`app/templates/widgets/value/_number.hbs` is the template used to display the current widget value in CMS lists.
+## Handlebar helpers
 
-Validation is done in `app/utils/validators.js`.
+Helpers are located in `app/helpers`.
 
-Have a look at some of the current widgets to get an idea of how they work.
+* `resize-image`: Accepts a width, height, a grow parameter. If grow is not specified, images will be resized to width/height but small images will not be filled in. If grow is set to true, small images will be filled into resize dimensions.
 
-#### How to deploy changes to all webhook sites
-
-You'll need a `.cloudstorage.key` in the root of webhook-cms.
-
-Run the following commands.
-
-* `grunt dist` - build the newest dist.
-* `grunt deploy` - deploy to google.
-
-Handlebar Helpers:
-
-* resize-image: Accepts a width, height, a grow parameter. If grow is not specified, images will be resized to width/height but small images will not be filled in. If grow is set to true, small images will be filled into resize dimensions.
+[1]: https://github.com/stefanpenner/ember-app-kit
+[2]: http://wiki.ecmascript.org/doku.php?id=harmony:modules#quick_examples
+[3]: http://www.firebase.com
+[4]: http://www.webhook.com/docs/importing-custom-data/
+[5]: https://github.com/webhook/webhook-generate
