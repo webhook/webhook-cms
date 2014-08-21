@@ -9,7 +9,7 @@ export default ApplicationAdapter.extend({
     var recordCache = Ember.get(adapter._recordCacheForType, fmt('%@.%@', [type.typeKey, record.get('id')])) || {};
 
     return this._getSerializedRecord(record).then(function(serializedRecord) {
-      return new Promise(function(resolve, reject) {
+      return new Ember.RSVP.Promise(function(resolve, reject) {
         var savedRelationships = Ember.A();
         record.eachRelationship(function(key, relationship) {
           var save ;
