@@ -16,19 +16,30 @@ Webhook CMS was originally based on [Ember App Kit](https://github.com/stefanpen
 
 The code for the Ember app is in the `app` directory.
 
-##### Widgets
+##### Creating a widget
 
 The `config/environment.js` file names every widget in the CMS. Each widget is organized into a `controlType` and a `controlTypeGroup`. Below is an example of the `number` widget:
 
 ```
 {
-  name     : 'Number',      // display name for widget
-  widget   : 'number',      // id for widget
-  iconClass: 'icon-list-ol' // icon for CMS button
+  name     : 'Number',       // display name for widget
+  widget   : 'number',       // id for widget
+  iconClass: 'icon-list-ol', // icon for CMS button
+  valueType: null            // 'object' is the only supported non-null value type
 }
 ```
 
-The `widget` field determines the proper template and code to execute in the CMS.
+The `widget` field determines the proper template and code to execute in the CMS. If the value you are going to store is not a string or number, you must use the 'object' valueType. There are three templates for each widget all located in the `app/templates/widgets` directory.
+
+`app/templates/widgets/_number.hbs` is the template used for data entry on in the form.
+
+`app/templates/widgets/info/_number.hbs` is the template used to store extra metadata about the widget.
+
+`app/templates/widgets/value/_number.hbs` is the template used to display the current widget value in CMS lists.
+
+Validation is done in `app/utils/validators.js`.
+
+Have a look at some of the current widgets to get an idea of how they work.
 
 #### How to deploy changes to all webhook sites
 
