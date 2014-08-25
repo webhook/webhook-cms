@@ -26,11 +26,11 @@ export default Ember.Route.extend({
         });
       }).then(function () {
 
-        // Lock it down!
-        lockRef.set(this.get('session.user.email'));
-
         // Unlock on disconnect
         lockRef.onDisconnect().remove();
+
+        // Lock it down!
+        lockRef.set(this.get('session.user.email'));
 
         return this.store.find(modelName, itemId).then(function (item) {
 
