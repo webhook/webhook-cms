@@ -12,16 +12,16 @@ export default DS.JSONSerializer.extend({
     return this._super(type, newHash);
   },
   serialize: function (record, options) {
-    return JSON.parse(JSON.stringify(record.get('data')));
+    return JSON.parse(JSON.stringify(record.get('itemData')));
   },
   _normalizeSingle: function (hash) {
-    var newHash = { data: {} };
+    var newHash = { itemData: {} };
 
     Ember.$.each(hash, function(key, value) {
       if (key === 'id') {
         newHash[key] = value;
       } else {
-        newHash.data[key] = value;
+        newHash.itemData[key] = value;
       }
     });
 

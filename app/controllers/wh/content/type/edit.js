@@ -171,14 +171,14 @@ export default Ember.ObjectController.extend({
               if (reverseControl.get('meta.isSingle')) {
 
                 if (updateType === 'remove') {
-                  item.get('data')[control.get('meta.reverseName')] = null;
+                  item.get('itemData')[control.get('meta.reverseName')] = null;
                 } else {
-                  item.get('data')[control.get('meta.reverseName')] = relatedValue;
+                  item.get('itemData')[control.get('meta.reverseName')] = relatedValue;
                 }
 
               } else {
 
-                var currentItems = item.get('data')[control.get('meta.reverseName')];
+                var currentItems = item.get('itemData')[control.get('meta.reverseName')];
 
                 if (Ember.isEmpty(currentItems)) {
                   currentItems = Ember.A([]);
@@ -190,11 +190,11 @@ export default Ember.ObjectController.extend({
                   currentItems.addObject(relatedValue);
                 }
 
-                item.get('data')[control.get('meta.reverseName')] = currentItems;
+                item.get('itemData')[control.get('meta.reverseName')] = currentItems;
 
               }
               return item.save().then(function () {
-                Ember.Logger.log('`' + item.get('data.name') + '` updated.');
+                Ember.Logger.log('`' + item.get('itemData.name') + '` updated.');
               });
             }.bind(this));
 
@@ -285,19 +285,19 @@ export default Ember.ObjectController.extend({
       return;
     }
 
-    var data = dataFromControls(controls);
+    var itemData = dataFromControls(controls);
 
-    data.isDraft = this.getWithDefault('isDraft', null);
+    itemData.isDraft = this.getWithDefault('isDraft', null);
 
     var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
 
     this.updateReverseRelationships(itemModel);
 
-    itemModel.set('data', data).save().then(function (item) {
+    itemModel.set('itemData', itemData).save().then(function (item) {
 
       this.set('initialValues', controls.getEach('value'));
 
-      window.ENV.sendBuildSignal(data.publish_date);
+      window.ENV.sendBuildSignal(itemData.publish_date);
 
       SearchIndex.indexItem(item, this.get('type'));
 
@@ -309,14 +309,14 @@ export default Ember.ObjectController.extend({
       }
 
       // Draft
-      else if (data.isDraft) {
+      else if (itemData.isDraft) {
         this.send('notify', 'info', 'Draft saved', {
           icon: 'ok-sign'
         });
       }
 
       // Live
-      else if (data.publish_date && moment(data.publish_date).isBefore()) {
+      else if (itemData.publish_date && moment(itemData.publish_date).isBefore()) {
         this.send('notify', 'info', 'Saved. Initiating build.', {
           icon: 'ok-sign'
         });

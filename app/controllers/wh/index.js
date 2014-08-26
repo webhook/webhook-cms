@@ -24,7 +24,7 @@ export default Ember.ArrayController.extend({
         controller.set('session.isDeployed', true);
       }
 
-      controller.get('session.serverMessages').insertAt(0, message);
+      controller.getWithDefault('session.serverMessages', Ember.A([])).insertAt(0, message);
     });
 
   },
@@ -32,8 +32,8 @@ export default Ember.ArrayController.extend({
   actions: {
     moreServerMessages: function () {
 
-      var endAt = this.get('session.serverMessages.lastObject.id'),
-          serverMessages = this.get('session.serverMessages'),
+      var serverMessages = this.get('session.serverMessages'),
+          endAt = serverMessages.get('lastObject.id'),
           lastIndex = serverMessages.get('length');
 
       this.get('messageRef').endAt(null, endAt).once('value', function (snapshot) {

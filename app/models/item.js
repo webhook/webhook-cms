@@ -1,3 +1,3 @@
 export default DS.Model.extend({
-  data: DS.attr('json')
+  itemData: DS.attr('json')
 });

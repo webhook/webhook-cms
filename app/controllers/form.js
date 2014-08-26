@@ -259,11 +259,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           var relatedContentTypeItemModelName = getItemModelName(contentType);
 
           var removeData = function (item) {
-            var itemData = item.get('data');
+            var itemData = item.get('itemData');
 
             itemData[controlToRemove.get('name')] = null;
 
-            item.set('data', itemData);
+            item.set('itemData', itemData);
             item.save().then(function (savedItem) {
               Ember.Logger.info('Relation data removed from', savedItem.get('id'));
               SearchIndex.indexItem(savedItem, contentType);
@@ -404,7 +404,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     Ember.Logger.info('Updating `' + itemModelName + '` item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
 
     var updateData = function (item) {
-      var itemData = item.get('data');
+      var itemData = item.get('itemData');
 
       changedNameControls.forEach(function (control) {
         itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
@@ -421,7 +421,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
       });
 
-      item.set('data', itemData);
+      item.set('itemData', itemData);
 
       item.save().then(function (savedItem) {
         Ember.Logger.info('Data updates applied to', savedItem.get('id'));
@@ -553,7 +553,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 items.forEach(function (item) {
 
                   var changed = false;
-                  var itemData = item.get('data');
+                  var itemData = item.get('itemData');
 
                   relationControlsForType.forEach(function (control) {
 
@@ -592,12 +592,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                   });
 
                   if (changed) {
-                    item.set('data', itemData);
+                    item.set('itemData', itemData);
                     item.save().then(function (savedItem) {
-                      Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('data.name')));
+                      Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('itemData.name')));
                     });
                   } else {
-                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('data.name')));
+                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('itemData.name')));
                   }
                 });
               });

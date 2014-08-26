@@ -47,7 +47,7 @@ export default Ember.Route.extend({
             // hack to overwrite empty state model that is being put in store from find method
             this.store.push(modelName, {
               id  : contentType.get('id'),
-              data: { name: "" }
+              itemData: { name: "" }
             });
 
             // use the item we just put in the store
@@ -156,7 +156,7 @@ export default Ember.Route.extend({
     controller.set('itemModel', this.get('itemModel'));
     controller.set('initialRelations', Ember.Object.create());
 
-    var data = this.getWithDefault('itemModel.data', {});
+    var data = this.getWithDefault('itemModel.itemData', {});
 
     type.get('controls').forEach(function (control) {
 
