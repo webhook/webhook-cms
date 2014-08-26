@@ -1,7 +1,7 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.ArrayController.extend({
-  sortProperties : ['data.publish_date'],
+  sortProperties : ['itemData.publish_date'],
   sortAscending  : false,
   sortedByPublish: true,
 
@@ -28,7 +28,7 @@ export default Ember.ArrayController.extend({
     var cmsControls = Ember.A([]);
     this.get('cmsControls').forEach(function (control) {
       cmsControls.pushObject({
-        value: item.get('data')[control.get('name')],
+        value: item.get('itemData')[control.get('name')],
         controlType: control.get('controlType')
       });
     });
@@ -44,20 +44,20 @@ export default Ember.ArrayController.extend({
     });
 
     switch (this.get('sortProperties.firstObject')) {
-    case 'data.publish_date':
+    case 'itemData.publish_date':
       this.set('sortedByPublish', true);
       break;
-    case 'data.create_date':
+    case 'itemData.create_date':
       this.set('sortedByCreated', true);
       break;
-    case 'data.name':
+    case 'itemData.name':
       this.set('sortedByAlpha', true);
       break;
     }
 
   }.observes('sortProperties'),
 
-  cmsItems: Ember.arrayComputed('model.@each.data', 'cmsControls.@each.showInCms', {
+  cmsItems: Ember.arrayComputed('model.@each.itemData', 'cmsControls.@each.showInCms', {
     addedItem: function (array, item, changeMeta) {
 
       if (item.constructor.typeKey === 'control') {
@@ -90,7 +90,7 @@ export default Ember.ArrayController.extend({
       if (!filterQuery) {
         return true;
       } else {
-        return (new RegExp(filterQuery, 'ig')).test(item.get('data.name'));
+        return (new RegExp(filterQuery, 'ig')).test(item.get('itemData.name'));
       }
     });
 
@@ -106,7 +106,7 @@ export default Ember.ArrayController.extend({
 
   actions: {
     deleteItem: function (item) {
-      if (!window.confirm('Are you sure you want to remove ' + item.get('data.name') + '?')) {
+      if (!window.confirm('Are you sure you want to remove ' + item.get('itemData.name') + '?')) {
         return;
       }
 
@@ -135,7 +135,7 @@ export default Ember.ArrayController.extend({
 
           var relatedContentTypeId = control.get('meta.contentTypeId');
           var relatedControlName = control.get('meta.reverseName');
-          var relatedItemIds = (item.get('data')[control.get('name')] || []).map(function (value) {
+          var relatedItemIds = (item.get('itemData')[control.get('name')] || []).map(function (value) {
             return value.split(' ')[1];
           });
 
@@ -147,15 +147,15 @@ export default Ember.ArrayController.extend({
 
             relatedItemIds.forEach(function (relatedItemId) {
               itemIndexController.store.find(relatedItemModelName, relatedItemId).then(function (relatedItem) {
-                var itemData = relatedItem.get('data');
+                var itemData = relatedItem.get('itemData');
                 var updatedRelations = Ember.A([]);
-                (relatedItem.get('data')[relatedControlName] || []).forEach(function (value) {
+                (relatedItem.get('itemData')[relatedControlName] || []).forEach(function (value) {
                   if (value !== relatedKey) {
                     updatedRelations.addObject(value);
                   }
                 });
                 itemData[relatedControlName] = updatedRelations.get('length') ? updatedRelations.toArray() : null;
-                relatedItem.set('data', itemData);
+                relatedItem.set('itemData', itemData);
                 relatedItem.save().then(function () {
                   Ember.Logger.info('`' + relatedItemModelName + ':' + relatedItem.get('id') + '` updated.');
                 });
@@ -186,7 +186,7 @@ export default Ember.ArrayController.extend({
       this.get('cmsControls').setEach('isSortAscending', false);
       this.get('cmsControls').setEach('isSortDescending', false);
 
-      var field = 'data.' + control.get('name');
+      var field = 'itemData.' + control.get('name');
 
       var sortProperties = this.get('sortProperties');
 

@@ -2,6 +2,7 @@
 import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 import downcode from 'appkit/utils/downcode';
+import MetaWithOptions from 'appkit/utils/meta-options';
 
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
@@ -136,7 +137,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         control.set('showInCms', false);
         break;
       case 'radio':
-        meta = Ember.Object.create({
+        meta = MetaWithOptions.create({
           options: [
             { value: 'Option 1' },
             { value: 'Option 2' }
@@ -144,7 +145,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'layout':
-        meta = Ember.Object.create({
+        meta = MetaWithOptions.create({
           defaultValue: '',
           options: [
             { label: 'None', value: '' },
@@ -153,7 +154,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'select':
-        meta = Ember.Object.create({
+        meta = MetaWithOptions.create({
           defaultValue: '',
           options: [
             { value: '' },
@@ -162,7 +163,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'checkbox':
-        meta = Ember.Object.create({
+        meta = MetaWithOptions.create({
           options: [
             { label: 'Option 1' },
             { label: 'Option 2' }
@@ -186,7 +187,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         });
         break;
       case 'tabular':
-        meta = Ember.Object.create({
+        meta = MetaWithOptions.create({
           options: [
             { value: 'Column 1' },
             { value: 'Column 2' }
@@ -258,11 +259,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           var relatedContentTypeItemModelName = getItemModelName(contentType);
 
           var removeData = function (item) {
-            var itemData = item.get('data');
+            var itemData = item.get('itemData');
 
             itemData[controlToRemove.get('name')] = null;
 
-            item.set('data', itemData);
+            item.set('itemData', itemData);
             item.save().then(function (savedItem) {
               Ember.Logger.info('Relation data removed from', savedItem.get('id'));
               SearchIndex.indexItem(savedItem, contentType);
@@ -403,7 +404,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     Ember.Logger.info('Updating `' + itemModelName + '` item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
 
     var updateData = function (item) {
-      var itemData = item.get('data');
+      var itemData = item.get('itemData');
 
       changedNameControls.forEach(function (control) {
         itemData[control.get('name')] = itemData[control.get('originalName')] === undefined ? null : itemData[control.get('originalName')];
@@ -420,7 +421,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
       });
 
-      item.set('data', itemData);
+      item.set('itemData', itemData);
 
       item.save().then(function (savedItem) {
         Ember.Logger.info('Data updates applied to', savedItem.get('id'));
@@ -552,7 +553,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 items.forEach(function (item) {
 
                   var changed = false;
-                  var itemData = item.get('data');
+                  var itemData = item.get('itemData');
 
                   relationControlsForType.forEach(function (control) {
 
@@ -591,12 +592,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                   });
 
                   if (changed) {
-                    item.set('data', itemData);
+                    item.set('itemData', itemData);
                     item.save().then(function (savedItem) {
-                      Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('data.name')));
+                      Ember.Logger.log('Data updates applied to `%@`'.fmt(item.get('itemData.name')));
                     });
                   } else {
-                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('data.name')));
+                    Ember.Logger.log('No data changes for `%@`'.fmt(item.get('itemData.name')));
                   }
                 });
               });
@@ -890,8 +891,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       this.send('editControl', this.get('editingControl') || this.get('model.controls.firstObject'));
     },
 
-    addOption: function (array) {
-      array.pushObject({});
+    addOption: function (array, index) {
+      if (array.get('length') > index + 1) {
+        array.insertAt(index + 1, {});
+      } else {
+        array.pushObject({});
+      }
       var control = this.get('editingControl');
       if (control.get('controlType.widget') === 'tabular') {
         control.get('value').forEach(function (row) {
@@ -900,15 +905,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
     },
 
-    removeOption: function (array, option) {
+    removeOption: function (array, index) {
       var control = this.get('editingControl');
       if (control.get('controlType.widget') === 'tabular') {
-        var optionIndex = array.indexOf(option);
         control.get('value').forEach(function (row) {
-          row.removeAt(optionIndex);
+          row.removeAt(index);
         });
       }
-      array.removeObject(option);
+      array.removeAt(index);
     },
 
     quitForm: function () {

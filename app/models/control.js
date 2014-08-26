@@ -1,4 +1,5 @@
 import downcode from 'appkit/utils/downcode';
+import MetaWithOptions from 'appkit/utils/meta-options';
 
 export default DS.Model.extend({
   name       : DS.attr('string'),

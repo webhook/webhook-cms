@@ -1,3 +1,5 @@
+import MetaWithOptions from 'appkit/utils/meta-options';
+
 export default Ember.Route.extend({
   beforeModel: function (transition) {
 
@@ -48,6 +50,23 @@ export default Ember.Route.extend({
 
     model.get('controls').setEach('widgetIsValid', true);
     model.get('controls').setEach('value', null);
+
+    // controls with meta.options (checkbox, radio, tabular, select)
+    // get special treatment
+    model.get('controls').filter(function (control) {
+      switch (control.get('controlType.widget')) {
+        case 'checkbox':
+        case 'radio':
+        case 'select':
+        case 'tabular':
+        case 'layout':
+          return true;
+        default:
+          return false;
+      }
+    }).forEach(function (control) {
+      control.set('meta', MetaWithOptions.create(control.get('meta')));
+    });
 
     model.get('controls').filterBy('controlType.widget', 'checkbox').forEach(function (control) {
       control.get('meta.options').setEach('value', undefined);
