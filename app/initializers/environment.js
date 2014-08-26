@@ -51,7 +51,7 @@ export default {
             storedCallback(data);
           }
         } else if (event.data.indexOf('message:') === 0) {
-          var message = JSON.parse(event.data.replce('message:', ''));
+          var message = JSON.parse(event.data.replace('message:', ''));
           localSocket.set('message', message);
         }
       };
