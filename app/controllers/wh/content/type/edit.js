@@ -417,7 +417,7 @@ export default Ember.ObjectController.extend({
     },
 
     editSlug: function () {
-      this.set('isEditingSlug', true);
+      this.toggleProperty('isEditingSlug');
     },
 
     forceSlug: function () {
