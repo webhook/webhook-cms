@@ -168,6 +168,12 @@ export default Ember.Route.extend({
       // Use search to check for duplicate names
       if (control.get('name') === 'name') {
         control.addObserver('value', route.dupeNameCheck.bind(route));
+        controller.set('nameControl', control);
+      }
+
+      if (control.get('name') === 'slug') {
+        controller.set('slugControl', control);
+        controller.set('isEditingSlug', false);
       }
 
       if (control.get('controlType.widget') === 'checkbox') {

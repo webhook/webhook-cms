@@ -17,6 +17,13 @@ export default Ember.ObjectController.extend({
   initialRelations: Ember.Object.create(),
   initialValues: Ember.A([]),
 
+  nameControl: null,
+  slugControl: null,
+
+  isEditingSlug: false,
+
+  defaultSlug: null,
+
   fullPreviewUrl: function () {
     if(this.get('previewUrl') === null) {
       this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
@@ -27,6 +34,18 @@ export default Ember.ObjectController.extend({
     }
     return '/_wh_previews/' + this.get('type.id') + '/' + this.get('previewUrl') + '/';
   }.property('previewUrl'),
+
+  setDefaultSlug: function () {
+    if (Ember.isEmpty(this.get('nameControl.value')) || !Ember.isEmpty(this.get('slugControl.value'))) {
+      this.set('defaultSlug', null);
+      return;
+    }
+
+    var controller = this;
+    window.ENV.sendGruntCommand('generate_slug:%@'.fmt(JSON.stringify(this.get('nameControl.value'))), function (slug) {
+      controller.set('defaultSlug', slug);
+    });
+  }.observes('nameControl.value'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -395,6 +414,19 @@ export default Ember.ObjectController.extend({
         emptyRow.pushObject(Ember.Object.create());
       });
       control.get('value').pushObject(emptyRow);
+    },
+
+    editSlug: function () {
+      this.set('isEditingSlug', true);
+    },
+
+    forceSlug: function () {
+      if (!Ember.isEmpty(this.get('slugControl.value'))) {
+        var controller = this;
+        window.ENV.sendGruntCommand('generate_slug:%@'.fmt(JSON.stringify(this.get('slugControl.value'))), function (slug) {
+          controller.set('slugControl.value', slug);
+        });
+      }
     }
   }
 });
