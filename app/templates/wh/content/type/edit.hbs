@@ -1,13 +1,13 @@
-<section class="wh-content-edit-head">
+<section class="wh-content-head">
   {{#if fullPreviewUrl }}
     {{#unless type.oneOff}}
-    <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn icon icon-eye-open btn-preview btn-small btn-invert"> Preview</a>
+    <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn icon icon-eye-open btn-preview btn-small btn-info"> Preview</a>
     {{/unless}}
   {{/if}}
   <span>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}{{#unless type.oneOff}} &raquo; {{nameControl.value}}{{/unless}}</span>
 </section>
 {{#if itemModel}}
-  <section class="wh-item-publish-time">
+  <section class="wh-content-subhead">
     <span class="wh-item-publish-time-section">{{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}</span>
     <span class="wh-item-publish-time-section">{{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}</span>
   </section>

@@ -1,11 +1,8 @@
-<section class="wh-content-list">
-  <section class="wh-content-list-title">
-    {{#link-to 'wh.content.type.new' contentType class="btn btn-neutral icon icon-plus-sign btn-preview"}} Add new {{contentType.name}}{{/link-to}}
-    <h1>{{contentType.name}}</h1>
-  </section>
-
-  <hr>
-
+<section class="wh-content-head">
+  {{contentType.name}}
+  {{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} Add new {{contentType.name}}{{/link-to}}
+</section>
+<section class="wh-content-subhead">
   {{input type="search" placeholder="Filter" value=filterQuery}}
 
   <div class="wy-dropdown wy-dropdown-display-options float-right">
@@ -21,6 +18,9 @@
       {{/each}}
     </dl>
   </div>
+</section>
+<section class="wh-content-list">
+
 
   {{#if limited}}
   <div class="wy-alert wy-alert-warning">
@@ -61,6 +61,6 @@
     </div>
   {{/unless}}
   {{#if limited}}
-    <button type="button" class="btn" {{action 'moreRecords'}}>Load More Records</button>
+    <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> Load More Records</button>
   {{/if}}
 </section>
