@@ -6,7 +6,9 @@
       {{#if hasPreview}}
         <div class="wy-form-upload-image">
           {{#if control.value.resize_url}}
-          <a {{bind-attr href=control.value.url}}>{{resize-image control.value size="150" crop=true}}</a>
+            {{#view 'fluidbox' image=control.value}}
+              {{resize-image control.value size="150" crop=true}}
+            {{/view}}
           {{else}}
             <img {{ bind-attr src=tempUrl }}>
           {{/if}}
