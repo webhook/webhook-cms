@@ -25,6 +25,7 @@
     "qunit": "~1.12.0",
     "ember-qunit": "~0.1.8",
     "wyrm": "~0.0.x",
+    "fluidbox": "~1.3.4",
     "ember-testing-httpRespond": "~0.1.1"
   }
 }

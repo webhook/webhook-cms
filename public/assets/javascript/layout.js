@@ -25,6 +25,8 @@ $( document ).ready(function() {
     }
   });
 
+  $('.wy-form-upload-image a').fluidbox();
+
   $(document).on("click", function(event) {
     var target = $(event.target);
 

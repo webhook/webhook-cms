@@ -6,7 +6,7 @@
       {{#if hasPreview}}
         <div class="wy-form-upload-image">
           {{#if control.value.resize_url}}
-            {{resize-image control.value size="75"}}
+          <a {{bind-attr href=control.value.url}}>{{resize-image control.value size="150" crop=true}}</a>
           {{else}}
             <img {{ bind-attr src=tempUrl }}>
           {{/if}}
@@ -14,7 +14,7 @@
       {{/if}}
 
       <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-image"> Drag or select image</button>
+        <button type="button" class="btn btn-neutral icon icon-image"> {{#if control.value }}Replace image{{else}}Drag or select image{{/if}}</button>
         <div class="image-loading btn btn-info">
           <div class="wy-spinner"></div>
           <span></span>
