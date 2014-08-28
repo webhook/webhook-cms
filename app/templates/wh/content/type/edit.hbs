@@ -4,7 +4,7 @@
     <a target="_blank" {{ bind-attr href="fullPreviewUrl" }} class="btn icon icon-eye-open btn-preview btn-small btn-info"> Preview</a>
     {{/unless}}
   {{/if}}
-  <span>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}{{#unless type.oneOff}} &raquo; {{nameControl.value}}{{/unless}}</span>
+  <h1>{{#if itemModel}}Edit{{else}}New{{/if}} {{type.name}}{{#unless type.oneOff}} &raquo; {{nameControl.value}}{{/unless}}</h1>
 </section>
 {{#if itemModel}}
   <section class="wh-content-subhead">
