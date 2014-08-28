@@ -4,6 +4,22 @@
 // Some extra form elements that Webhook needs beyond Wyrm.
 // ------------------------------------------------------------
 
+.wh-content-edit-head
+  background: $gray-dark
+  color: $text-invert
+  padding: $base-line-height / 2 $base-line-height
+
+.wy-control-group
+  border-bottom: dotted 1px $table-border-color
+  padding: $base-line-height
+  padding-top: 0
+.wh-content-edit
+  background: $white
+  padding: $base-line-height * 2 $base-line-height $base-line-height $base-line-height
+  border: solid 1px $table-border-color
+  .wy-control-group:last-child
+    border: none
+
 .wy-control-group
   .wh-template-var
     opacity: 0
@@ -76,13 +92,11 @@
     height: 100%
 
 .wh-slug
-  background: $white
-  border: solid 1px $table-border-color
-  padding: $base-line-height
   input[type=text].big-name
     width: 100%
     border: none
-    border-bottom: dotted 1px $gray-lighter
+    border-bottom: solid 2px $input-border-color
+    margin-bottom: $base-line-height / 4
     box-shadow: none
     font-size: 150%
     background: none
@@ -104,4 +118,5 @@ input[type=color]
 
 .btn-preview
   float: right
+  margin-top: -6px
 
