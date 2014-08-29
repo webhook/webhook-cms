@@ -3,7 +3,7 @@
 </section>
 <section class="wh-content-subhead">
   Your site is currently available at
-  {{buildEnvironment.siteName}}.webhook.org {{#if domain}}and {{ domain }}{{/if}}
+  <strong>{{buildEnvironment.siteName}}.webhook.org</strong> {{#if domain}}and <strong>{{ domain }}</strong>{{/if}}
 </section>
 <section class="wh-content-edit">
 
@@ -13,10 +13,10 @@
 
   <p>Great. Point your host records to the following address.</p>
 
-  <pre class="hljs">
-  A-RECORD     @              174.129.25.170
-  CNAME        www            dns.webhook.com
-  </pre>
+<pre class="hljs">
+A-RECORD     @              174.129.25.170
+CNAME        www            dns.webhook.com
+</pre>
 
   <p>You can find more detailed instructions in our docs on <a href="http://www.webhook.com/docs/deployment-domains/">how to set up your domain</a>.</p>
   {{else}}
@@ -41,6 +41,8 @@
         Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller,
         then return here.
       </p>
+
+      <hr>
 
       <div class="wy-control-group fluid-input">
         <label>Enter your domain name</label>
