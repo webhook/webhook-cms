@@ -1,57 +1,60 @@
-{{#if success }}
+<section class="wh-content-head">
+  <h1>Domains</h1>
+</section>
+<section class="wh-content-subhead">
+  Your site is currently available at
+  {{buildEnvironment.siteName}}.webhook.org {{#if domain}}and {{ domain }}{{/if}}
+</section>
+<section class="wh-content-edit">
 
-<h2>Almost done</h2>
+  {{#if success }}
 
-<p>Great. Point your host records to the following address.</p>
+  <h2>Almost done</h2>
 
-<pre class="hljs">
-A-RECORD     @              174.129.25.170
-CNAME        www            dns.webhook.com
-</pre>
-{{else}}
-  {{#if session.billing.isTrial }}
-    <h2>Upgrade to use custom domains</h2>
-    <p>This site is still on a free trial. Only paid sites allow the use of custom domains.</p>
-    <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade at webhook.com</a>
+  <p>Great. Point your host records to the following address.</p>
+
+  <pre class="hljs">
+  A-RECORD     @              174.129.25.170
+  CNAME        www            dns.webhook.com
+  </pre>
+
+  <p>You can find more detailed instructions in our docs on <a href="http://www.webhook.com/docs/deployment-domains/">how to set up your domain</a>.</p>
   {{else}}
+    {{#if session.billing.isTrial }}
+      <h2>Upgrade to use custom domains</h2>
+      <p>This site is still on a free trial. Only paid sites allow the use of custom domains.</p>
+      <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade at webhook.com</a>
+    {{else}}
 
-  {{#if errors}}
-    <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">Please fix the following errors.</div>
-      <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
-    </div>
-  {{/if}}
-
-  <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
-
-    <h1>Domains</h1>
-
-    <p>
-      Your site is currently available at
-      {{buildEnvironment.siteName}}.webhook.org {{#if domain}}and {{ domain }}{{/if}}
-    </p>
-
-    <hr/>
-
-    <h2>Use a previously purchased domain</h2>
-
-    <p>
-      Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller,
-      then return here.
-    </p>
-
-    <div class="wy-control-group fluid-input">
-      <label>Enter your domain name</label>
-      <div class="wy-control">
-        {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
+    {{#if errors}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">Please fix the following errors.</div>
+        <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
       </div>
-    </div>
+    {{/if}}
 
-    <div class="wy-btn-group">
-      <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Use this domain</button>
-    </div>
+    <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
 
-  </form>
+      <h2>Use a previously purchased domain</h2>
+
+      <p>
+        Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller,
+        then return here.
+      </p>
+
+      <div class="wy-control-group fluid-input">
+        <label>Enter your domain name</label>
+        <div class="wy-control">
+          {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
+        </div>
+      </div>
+
+      <div class="wy-btn-group">
+        <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Use this domain</button>
+      </div>
+
+    </form>
+    {{/if}}
   {{/if}}
-{{/if}}
 
+</section>
