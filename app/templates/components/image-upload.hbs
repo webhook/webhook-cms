@@ -7,7 +7,7 @@
         <div class="wy-form-upload-image">
           {{#if control.value.resize_url}}
             {{#view 'fluidbox' image=control.value}}
-              {{resize-image control.value size="150" crop=true}}
+              {{resize-image control.value size="150"}}
             {{/view}}
           {{else}}
             <img {{ bind-attr src=tempUrl }}>
