@@ -19,6 +19,7 @@
     <div class="wy-control">
       {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
 
+    {{#unless type.oneOff}}
       {{#if session.supportedMessages.generate_slug}}
 
         {{#if isEditingSlug}}
@@ -28,6 +29,7 @@
         {{/if}}
 
       {{/if}}
+    {{/unless}}
     </div>
   </div>
 
