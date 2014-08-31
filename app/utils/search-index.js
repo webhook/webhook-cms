@@ -31,7 +31,7 @@ export default {
     var searchData = {};
 
     // Simplify search indexing by storing all objects as strings.
-    Ember.$.each(item.get('data'), function (key, value) {
+    Ember.$.each(item.get('itemData'), function (key, value) {
       if (typeof value === 'object') {
         searchData[key] = JSON.stringify(value);
       } else {
