@@ -23,7 +23,7 @@
       {{#if session.supportedMessages.generate_slug}}
 
         {{#if isEditingSlug}}
-          <span class="wy-form-message">This page will live at /{{#if type.slug}}{{type.slug}}{{else}}{{type.id}}{{/if}}/{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign"></span></span>
+          <span class="wy-form-message">This page will live at /{{#if type.slug}}{{type.slug}}{{else}}{{type.id}}{{/if}}/{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
         {{else}}
           <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if type.slug}}{{type.slug}}{{else}}{{type.id}}{{/if}}/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
         {{/if}}
