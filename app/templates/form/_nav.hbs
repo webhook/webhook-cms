@@ -98,6 +98,25 @@
               </ul>
             </div>
           {{/unless}}
+
+          <div class="wy-control-group">
+            <label>Custom URLs (list/individual)</label>
+            <div>
+              /{{input placeholder=id value=customUrls.listUrl}}/{{input value=customUrls.individualUrl}}/
+            </div>
+          </div>
+
+<pre>// Support dates in the url and the typename
+// All refer to the publish date of the item
+// #Y - Year Full
+// #y - Year last two digits
+// #m - Month number, leading zero
+// #n - Month number, no leading zero
+// #F - Month name full (january, october, etc)
+// #M - Month short name (jan, oct, etc)
+// #d - Day leading zero
+// #j - Day, no leading zero
+// #T - The typename (e.g. articles)</pre>
         </form>
       </div>
     </nav>
