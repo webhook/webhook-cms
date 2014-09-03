@@ -40,24 +40,25 @@ export default Ember.ObjectController.extend({
 
   setDefaultSlug: function () {
 
-    if (Ember.isEmpty(this.get('nameControl.value'))) {
+    if (Ember.isEmpty(this.get('nameControl.value')) || Ember.isEmpty(this.get('type.id')) || !Ember.isEmpty(this.get('slugControl.value'))) {
       this.set('defaultSlug', null);
       return;
     }
 
-    var defaultContentTypeSlug = (this.get('type.customUrls.listUrl') || this.get('type.id')) + '/';
-
-    if (!Ember.isEmpty(this.get('type.customUrls.individualUrl'))) {
-      defaultContentTypeSlug += this.get('type.customUrls.individualUrl') + '/';
-    }
-
     var controller = this;
 
-    window.ENV.sendGruntCommand('generate_slug:%@'.fmt(JSON.stringify(this.get('nameControl.value'))), function (slug) {
-      controller.set('defaultSlug', defaultContentTypeSlug + slug);
+    var commandString = JSON.stringify({
+      name: this.get('nameControl.value'),
+      date: moment().format(),
+      type: this.get('type.id')
     });
 
-  }.observes('nameControl.value', 'type.customUrls.individualUrl', 'type.customUrls.listUrl'),
+    window.ENV.sendGruntCommand('generate_slug_v2:%@'.fmt(commandString), function (slug) {
+      Ember.Logger.log('Generated slug', slug);
+      controller.set('defaultSlug', slug);
+    });
+
+  }.observes('nameControl.value', 'type.id'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -433,11 +434,8 @@ export default Ember.ObjectController.extend({
     },
 
     forceSlug: function () {
-      if (!Ember.isEmpty(this.get('slugControl.value'))) {
-        var controller = this;
-        window.ENV.sendGruntCommand('generate_slug:%@'.fmt(JSON.stringify(this.get('slugControl.value'))), function (slug) {
-          controller.set('slugControl.value', slug);
-        });
+      if (Ember.isEmpty(this.get('slugControl.value'))) {
+        this.setDefaultSlug();
       }
     }
   }

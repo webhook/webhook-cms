@@ -20,7 +20,7 @@
       {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
 
     {{#unless type.oneOff}}
-      {{#if session.supportedMessages.generate_slug}}
+      {{#if session.supportedMessages.generate_slug_v2}}
 
         {{#if isEditingSlug}}
           <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
