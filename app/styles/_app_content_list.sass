@@ -77,6 +77,9 @@
     img
       border-radius: 50px
       margin-right: $base-line-height / 4
++media($tablet)
+  .wh-content-head
+    +clearfix
 
 +media($mobile)
   .wh-content th, .wh-content td
@@ -85,6 +88,10 @@
     font-size: 125%
     padding: $base-line-height / 2 0
     display: block
+  .wh-content-edit
+    padding: $base-line-height 0
+  .wh-content-list
+    padding: $base-line-height $base-line-height / 2
   .wy-dropdown.wy-dropdown-display-options
     display: none
   .wh-content-list
