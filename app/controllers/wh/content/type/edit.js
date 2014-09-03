@@ -25,6 +25,7 @@ export default Ember.ObjectController.extend({
   defaultSlug: null,
 
   fullPreviewUrl: function () {
+
     if(this.get('previewUrl') === null) {
       this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
     }
@@ -32,20 +33,31 @@ export default Ember.ObjectController.extend({
     if(!this.get('previewUrl')) {
       return null;
     }
+
     return '/_wh_previews/' + this.get('type.id') + '/' + this.get('previewUrl') + '/';
+
   }.property('previewUrl'),
 
   setDefaultSlug: function () {
-    if (Ember.isEmpty(this.get('nameControl.value')) || !Ember.isEmpty(this.get('slugControl.value'))) {
+
+    if (Ember.isEmpty(this.get('nameControl.value'))) {
       this.set('defaultSlug', null);
       return;
     }
 
+    var defaultContentTypeSlug = (this.get('type.customUrls.listUrl') || this.get('type.id')) + '/';
+
+    if (!Ember.isEmpty(this.get('type.customUrls.individualUrl'))) {
+      defaultContentTypeSlug += this.get('type.customUrls.individualUrl') + '/';
+    }
+
     var controller = this;
+
     window.ENV.sendGruntCommand('generate_slug:%@'.fmt(JSON.stringify(this.get('nameControl.value'))), function (slug) {
-      controller.set('defaultSlug', slug);
+      controller.set('defaultSlug', defaultContentTypeSlug + slug);
     });
-  }.observes('nameControl.value'),
+
+  }.observes('nameControl.value', 'type.customUrls.individualUrl', 'type.customUrls.listUrl'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
