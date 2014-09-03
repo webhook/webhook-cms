@@ -83,7 +83,7 @@
 
           <div class="wy-control-group">
             <label>Content type name</label>
-            <div class="wy-form-full">
+            <div class="wy-control wy-form-full">
               {{input value=name}}
             </div>
           </div>
@@ -99,24 +99,23 @@
             </div>
           {{/unless}}
 
+          <p class="edit-instruction"><strong>URL slug control</strong>You can tailor the location of the URLs for this content type below. Left empty the default list page would live a <code>site.com/{{ name }}/</code> and the individual pages would be at <code>site.com/{{ name }}/name-of-item/</code>. These fields allow some variables, including date handling. See the <a href="http://www.webhoo.com/docs/" target="_blank">full documentation here</a>.</p>
+          <hr>
+
           <div class="wy-control-group">
-            <label>Custom URLs (list/individual)</label>
-            <div>
-              /{{input placeholder=id value=customUrls.listUrl}}/{{input value=customUrls.individualUrl}}/
+            <label>URL for the list page of all {{ name }}</label>
+            <div class="wy-control wy-form-full">
+              {{input placeholder=id value=customUrls.listUrl}}
             </div>
           </div>
 
-<pre>// Support dates in the url and the typename
-// All refer to the publish date of the item
-// #Y - Year Full
-// #y - Year last two digits
-// #m - Month number, leading zero
-// #n - Month number, no leading zero
-// #F - Month name full (january, october, etc)
-// #M - Month short name (jan, oct, etc)
-// #d - Day leading zero
-// #j - Day, no leading zero
-// #T - The typename (e.g. articles)</pre>
+          <div class="wy-control-group">
+            <label>URL prefix for a single {{ name }} page</label>
+            <div class="wy-control wy-form-full">
+              {{input value=customUrls.individualUrl}}
+            </div>
+          </div>
+
         </form>
       </div>
     </nav>
