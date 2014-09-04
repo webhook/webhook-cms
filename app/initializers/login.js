@@ -260,7 +260,7 @@ export default {
       }
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com/search/',
+        url: window.ENV.uploadUrl + 'search/',
         type: 'POST',
         data: {
           token: key,
@@ -317,7 +317,7 @@ export default {
       Ember.Logger.info('Updating search index for', typeName, id);
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com/search/index/',
+        url: window.ENV.uploadUrl + 'search/index/',
         type: 'POST',
         data: {
           id: id,
@@ -339,7 +339,7 @@ export default {
       var key = bucket;
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com/search/delete/',
+        url: window.ENV.uploadUrl + 'search/delete/',
         type: 'POST',
         data: {
           id: id,
@@ -357,7 +357,7 @@ export default {
       var key = bucket;
 
       Ember.$.ajax({
-        url: 'http://server.webhook.com/search/delete/type/',
+        url: window.ENV.uploadUrl + 'search/delete/type/',
         type: 'POST',
         data: {
           token: key,

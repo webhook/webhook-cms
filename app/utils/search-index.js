@@ -1,7 +1,7 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default {
-  baseUrl: 'http://server.webhook.com/search/',
+  baseUrl: window.ENV.uploadUrl + 'search/',
 
   search: function (query, page, typeName) {
 
