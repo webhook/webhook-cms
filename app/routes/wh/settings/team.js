@@ -55,15 +55,15 @@ export default Ember.Route.extend({
       var siteName = this.get('buildEnvironment').siteName;
 
       if(this.get('ownerListner')) {
-        window.Env.firebaseRoot.child("management/sites/" + siteName + "/owners").off('value', this.get('ownerListner'));
+        window.ENV.firebaseRoot.child("management/sites/" + siteName + "/owners").off('value', this.get('ownerListner'));
       }
 
       if(this.get('userListener')) {
-        window.Env.firebaseRoot.child("management/sites/" + siteName + "/users").off('value', this.get('userListener'));
+        window.ENV.firebaseRoot.child("management/sites/" + siteName + "/users").off('value', this.get('userListener'));
       }
 
       if(this.get('potentialListener')) {
-        window.Env.firebaseRoot.child("management/sites/" + siteName + "/potential_users").off('value', this.get('potentialListener'));
+        window.ENV.firebaseRoot.child("management/sites/" + siteName + "/potential_users").off('value', this.get('potentialListener'));
       }
 
       return true;
