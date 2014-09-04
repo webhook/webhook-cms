@@ -8,7 +8,7 @@ export default Ember.Route.extend({
       var backupsRef = window.ENV.firebaseRoot.child('management/backups');
       backupsRef.once('value', function (snapshot) {
 
-        var backups = Ember.$.map(snapshot.val(), function (timestamp) {
+        var backups = Ember.$.map(snapshot.val() || [], function (timestamp) {
           return {
             fileName: siteName + '-' + moment(timestamp).format() + '.json',
             url: 'http://server.webhook.com/backup-snapshot/?site=' + siteName + '&token=' + siteToken + '&timestamp=' + timestamp,
