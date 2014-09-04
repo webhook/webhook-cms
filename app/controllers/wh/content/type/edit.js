@@ -38,6 +38,10 @@ export default Ember.ObjectController.extend({
 
   }.property('previewUrl'),
 
+  showSlug: function () {
+    return !Ember.isEmpty(this.get('nameControl.value')) && this.get('session.supportedMessages.generate_slug_v2') && !this.get('type.oneOff');
+  }.property('nameControl.value', 'session.supportedMessages.generate_slug_v2', 'type.oneOff'),
+
   setDefaultSlug: function () {
 
     if (Ember.isEmpty(this.get('nameControl.value')) || Ember.isEmpty(this.get('type.id')) || !Ember.isEmpty(this.get('slugControl.value'))) {
@@ -49,7 +53,7 @@ export default Ember.ObjectController.extend({
 
     var commandString = JSON.stringify({
       name: this.get('nameControl.value'),
-      date: moment().format(),
+      date: (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format(),
       type: this.get('type.id')
     });
 
@@ -58,7 +62,7 @@ export default Ember.ObjectController.extend({
       controller.set('defaultSlug', slug);
     });
 
-  }.observes('nameControl.value', 'type.id'),
+  }.observes('nameControl.value', 'type.id', 'slugControl.value'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -385,6 +389,10 @@ export default Ember.ObjectController.extend({
   },
 
   actions: {
+    saveItem: function () {
+      this.saveItem();
+    },
+
     saveDraft: function () {
       this.set('isDraft', true);
       this.set('publishDate', null);

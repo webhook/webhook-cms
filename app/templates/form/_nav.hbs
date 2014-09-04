@@ -105,14 +105,14 @@
           <div class="wy-control-group">
             <label>URL for the list page of all {{ name }}</label>
             <div class="wy-control wy-form-full">
-              {{input placeholder=id value=customUrls.listUrl}}
+              {{input placeholder=id value=customUrls.listUrl focus-out="correctListUrl"}}
             </div>
           </div>
 
           <div class="wy-control-group">
             <label>URL prefix for a single {{ name }} page</label>
             <div class="wy-control wy-form-full">
-              {{input value=customUrls.individualUrl}}
+              {{input value=customUrls.individualUrl focus-out="correctIndividualUrl"}}
             </div>
           </div>
 

@@ -1,3 +1,5 @@
+import downcode from 'appkit/utils/downcode';
+
 export default function validateControls (contentType, item) {
 
   Ember.Logger.log('Validating controls.');
@@ -12,7 +14,6 @@ export default function validateControls (contentType, item) {
   };
 
   var invalidate = function (control, message) {
-    Ember.Logger.warn('ValidateControls::invalid', control.get('name'), message);
     control.set('widgetIsValid', false);
     control.get('widgetErrors').pushObject(message);
   };
@@ -20,8 +21,6 @@ export default function validateControls (contentType, item) {
   var nameControl;
 
   controls.forEach(function (control) {
-
-    Ember.Logger.log('Validating `' + control.get('name') + '`');
 
     var value = control.get('value'),
         options = control.get('meta') || {};
@@ -71,6 +70,36 @@ export default function validateControls (contentType, item) {
         invalidate(control, 'This field must be a valid date and time.');
       }
       break;
+    }
+
+    if (control.get('name') === 'slug' && !Ember.isEmpty(value)) {
+      var correctedSlug = value;
+      control.set('correctedSlug', null);
+      if (value.charAt(0) === '/') {
+        invalidate(control, 'The slug cannot start with a "/".');
+        correctedSlug = correctedSlug.substr(1);
+      }
+      if (value.substr(-1) === '/') {
+        invalidate(control, 'The slug cannot end with a "/".');
+        correctedSlug = correctedSlug.slice(0, -1);
+      }
+      if (/\s+/g.test(value)) {
+        invalidate(control, 'The slug cannot contain spaces.');
+        correctedSlug = correctedSlug.replace(/\s+/g, '-');
+      }
+      if (value !== downcode(value)) {
+        invalidate(control, 'The slug contains invalid characters.');
+        correctedSlug = downcode(correctedSlug);
+      }
+      if (correctedSlug !== value) {
+        control.set('correctedSlug', correctedSlug);
+      }
+    }
+
+    if (control.get('widgetIsValid')) {
+      Ember.Logger.log('-- %@: ✓'.fmt(control.get('name')));
+    } else {
+      Ember.Logger.warn('-- %@: ✗'.fmt(control.get('name')));
     }
 
   });

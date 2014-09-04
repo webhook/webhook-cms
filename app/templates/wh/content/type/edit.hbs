@@ -19,8 +19,7 @@
     <div class="wy-control">
       {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
 
-    {{#unless type.oneOff}}
-      {{#if session.supportedMessages.generate_slug_v2}}
+      {{#if showSlug}}
 
         {{#if isEditingSlug}}
           <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
@@ -28,8 +27,16 @@
           <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
         {{/if}}
 
+        {{#if slugControl.widgetErrors}}
+          <ul>
+            {{#each slugControl.widgetErrors}}
+              <li><span class="wy-form-message">{{this}}</span></li>
+            {{/each}}
+          </ul>
+          {{slugControl.correctedSlug}}
+        {{/if}}
+
       {{/if}}
-    {{/unless}}
     </div>
   </div>
 
@@ -49,7 +56,7 @@
   {{#if type.oneOff}}
 
     <div class="wy-btn-group">
-      <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
+      <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
     </div>
 
   {{else}}
@@ -96,7 +103,7 @@
           <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
         </span>
         <button type="button" class="btn btn-small btn-link wh-save-item-extra-btn" data-toggle="wh-save-item-extra-btn">More options</button>
-        <button type="submit" class="btn btn-small btn-success icon icon-ok-sign"> Save</button>
+        <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
       </div>
 
     {{/if}}
