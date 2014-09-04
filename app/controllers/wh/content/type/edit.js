@@ -4,6 +4,7 @@ import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 import uuid from 'appkit/utils/uuid';
 import SearchIndex from 'appkit/utils/search-index';
+import slugger from 'appkit/utils/slugger';
 
 export default Ember.ObjectController.extend({
   type        : null,
@@ -39,8 +40,8 @@ export default Ember.ObjectController.extend({
   }.property('previewUrl'),
 
   showSlug: function () {
-    return !Ember.isEmpty(this.get('nameControl.value')) && this.get('session.supportedMessages.generate_slug_v2') && !this.get('type.oneOff');
-  }.property('nameControl.value', 'session.supportedMessages.generate_slug_v2', 'type.oneOff'),
+    return !Ember.isEmpty(this.get('nameControl.value')) && !this.get('type.oneOff');
+  }.property('nameControl.value', 'type.oneOff'),
 
   setDefaultSlug: function () {
 
@@ -49,18 +50,12 @@ export default Ember.ObjectController.extend({
       return;
     }
 
-    var controller = this;
-
-    var commandString = JSON.stringify({
+    var slug = slugger({
       name: this.get('nameControl.value'),
-      date: (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format(),
-      type: this.get('type.id')
-    });
+      publish_date: (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format()
+    }, this.get('type.id'), this.get('type.customUrls'));
 
-    window.ENV.sendGruntCommand('generate_slug_v2:%@'.fmt(commandString), function (slug) {
-      Ember.Logger.log('Generated slug', slug);
-      controller.set('defaultSlug', slug);
-    });
+    this.set('defaultSlug', slug);
 
   }.observes('nameControl.value', 'type.id', 'slugControl.value'),
 
