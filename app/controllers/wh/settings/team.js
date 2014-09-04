@@ -200,7 +200,7 @@ export default Ember.ObjectController.extend({
       window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/verification/verified').once('value', function(snapshot) {
         var value = snapshot.val();
 
-        if(!value) // Not a verified email, add to the potential user list
+        if(!value && !window.ENV.selfHosted) // Not a verified email, add to the potential user list
         {
           window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(email, function(err) {
             if(err) {

@@ -82,6 +82,7 @@ export default {
     buildEnv.set('siteName', siteName);
     buildEnv.set('siteUrl', 'http://' + siteName + '.webhook.com/');
     buildEnv.set('building', false);
+    buildEnv.set('selfHosted', window.ENV.selfHosted);
 
     window.ENV.siteDNS = siteName + '.webhook.org';
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function (snap) {
