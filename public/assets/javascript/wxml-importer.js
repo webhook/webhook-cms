@@ -535,7 +535,7 @@ var WXMLImporter = (function() {
        "_sort_create_date": newDate.unix(),
        "_sort_last_updated": newDate.unix(),
        "_sort_publish_date": publishDate ? publishDate.unix() : null,
-       "create_date": newDate.format(), 
+       "create_date": newDate.format(),
        "last_updated": newDate.format(),
        "body":  fixBody(body),
        "authors": [ "authors " + authorId  ],
@@ -851,7 +851,7 @@ var WXMLImporter = (function() {
   function uploadImage(url, callback) {
 
     $.ajax({
-      url: 'http://server.webhook.com/upload-url/',
+      url: window.ENV.uploadUrl + 'upload-url/',
       type: 'POST',
       data: {
         url: url,

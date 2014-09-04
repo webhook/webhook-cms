@@ -93,6 +93,13 @@ export default {
 
     application.set('buildEnvironment', buildEnv);
 
+    if (window.ENV.uploadUrl.indexOf('http://') !== 0) {
+      window.ENV.uploadUrl = 'http://' + window.ENV.uploadUrl;
+    }
+    if (window.ENV.uploadUrl.substr(-1) !== '/') {
+      window.ENV.uploadUrl = window.ENV.uploadUrl + '/';
+    }
+
     Ember.run(application, application.advanceReadiness);
   }
 };
