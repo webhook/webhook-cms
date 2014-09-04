@@ -1,37 +1,41 @@
-<h1>Search results</h1>
-<hr>
+<section class="wh-content-head">
+  <h1>Search results</h1>
+</section>
 
-{{#if isLoading}}
-  <div class="wy-spinner wy-spinner"></div>
-{{else}}
 
-  {{#if debouncedQuery}}
-    {{#if searchResults}}
-      <p>Search results for {{debouncedQuery}}.</p>
-    {{else}}
-      <p>No results for {{debouncedQuery}}.</p>
-    {{/if}}
+<section class="wh-content-list">
+  {{#if isLoading}}
+    <div class="wy-spinner wy-spinner"></div>
   {{else}}
-    <p>Please enter a search query.</p>
-  {{/if}}
 
-  {{#if searchResults}}
-      <ul class="wh-search-results">
-        {{#each searchResults}}
-          <li>
-            {{#link-to 'wh.content.type.edit' type id }}
-              {{{ name }}}
-              <span class="wh-search-results-type">{{ type }}</span>
-            {{/link-to}}
-            <dl>
-              {{#each highlights}}
-                <dt>{{ key }}</dt>
-                <dd>{{{ highlight }}}</dd>
-              {{/each}}
-            </dl>
-          </li>
-        {{/each}}
-      </ul>
-  {{/if}}
+    {{#if debouncedQuery}}
+      {{#if searchResults}}
+        <p>Search results for {{debouncedQuery}}.</p>
+      {{else}}
+        <p>No results for {{debouncedQuery}}.</p>
+      {{/if}}
+    {{else}}
+      <p>Please enter a search query.</p>
+    {{/if}}
 
-{{/if}}
+    {{#if searchResults}}
+        <ul class="wh-search-results">
+          {{#each searchResults}}
+            <li>
+              {{#link-to 'wh.content.type.edit' type id }}
+                {{{ name }}}
+                <span class="wh-search-results-type">{{ type }}</span>
+              {{/link-to}}
+              <dl>
+                {{#each highlights}}
+                  <dt>{{ key }}</dt>
+                  <dd>{{{ highlight }}}</dd>
+                {{/each}}
+              </dl>
+            </li>
+          {{/each}}
+        </ul>
+    {{/if}}
+
+  {{/if}}
+</div>

@@ -17,9 +17,9 @@ export default Ember.View.extend({
     return 'wy-control-group-' + this.get('context.controlType.widget');
   }.property(),
 
-  nameFocus: function () {
+  didInsertElement: function () {
     if (this.get('context.name') === 'name') {
-      this.$('input').focus();
+      this.$().hide();
     }
-  }.on('didInsertElement')
+  }
 });

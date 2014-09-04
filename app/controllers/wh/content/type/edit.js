@@ -17,7 +17,15 @@ export default Ember.ObjectController.extend({
   initialRelations: Ember.Object.create(),
   initialValues: Ember.A([]),
 
+  nameControl: null,
+  slugControl: null,
+
+  isEditingSlug: false,
+
+  defaultSlug: null,
+
   fullPreviewUrl: function () {
+
     if(this.get('previewUrl') === null) {
       this.set('previewUrl', this.get('type.controls').findBy('name', 'preview_url').get('value'));
     }
@@ -25,8 +33,36 @@ export default Ember.ObjectController.extend({
     if(!this.get('previewUrl')) {
       return null;
     }
+
     return '/_wh_previews/' + this.get('type.id') + '/' + this.get('previewUrl') + '/';
+
   }.property('previewUrl'),
+
+  showSlug: function () {
+    return !Ember.isEmpty(this.get('nameControl.value')) && this.get('session.supportedMessages.generate_slug_v2') && !this.get('type.oneOff');
+  }.property('nameControl.value', 'session.supportedMessages.generate_slug_v2', 'type.oneOff'),
+
+  setDefaultSlug: function () {
+
+    if (Ember.isEmpty(this.get('nameControl.value')) || Ember.isEmpty(this.get('type.id')) || !Ember.isEmpty(this.get('slugControl.value'))) {
+      this.set('defaultSlug', null);
+      return;
+    }
+
+    var controller = this;
+
+    var commandString = JSON.stringify({
+      name: this.get('nameControl.value'),
+      date: (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format(),
+      type: this.get('type.id')
+    });
+
+    window.ENV.sendGruntCommand('generate_slug_v2:%@'.fmt(commandString), function (slug) {
+      Ember.Logger.log('Generated slug', slug);
+      controller.set('defaultSlug', slug);
+    });
+
+  }.observes('nameControl.value', 'type.id', 'slugControl.value'),
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -353,6 +389,10 @@ export default Ember.ObjectController.extend({
   },
 
   actions: {
+    saveItem: function () {
+      this.saveItem();
+    },
+
     saveDraft: function () {
       this.set('isDraft', true);
       this.set('publishDate', null);
@@ -395,6 +435,16 @@ export default Ember.ObjectController.extend({
         emptyRow.pushObject(Ember.Object.create());
       });
       control.get('value').pushObject(emptyRow);
+    },
+
+    editSlug: function () {
+      this.toggleProperty('isEditingSlug');
+    },
+
+    forceSlug: function () {
+      if (Ember.isEmpty(this.get('slugControl.value'))) {
+        this.setDefaultSlug();
+      }
     }
   }
 });
