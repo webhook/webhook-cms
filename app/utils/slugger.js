@@ -1,6 +1,7 @@
-export default function slugger (item, customUrls) {
+/*global uslug*/
+export default function slugger (item, type, customUrls) {
   var tmpSlug = '';
-  tmpSlug = slug(item.name).toLowerCase();
+  tmpSlug = uslug(item.name).toLowerCase();
 
   if(customUrls && customUrls.individualUrl) {
     tmpSlug = parseCustomUrl(customUrls.individualUrl, item) + '/' + tmpSlug;
@@ -12,10 +13,10 @@ export default function slugger (item, customUrls) {
     tmpSlug = type + '/' + tmpSlug;
   }
 
-  return tmpSlug
+  return tmpSlug;
 }
 
-function parseCustomUrl = function(url, object) {
+function parseCustomUrl (url, object) {
   var publishDate = object.publish_date ? object.publish_date : object;
 
    publishDate = moment(publishDate);
