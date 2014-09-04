@@ -148,21 +148,40 @@ export default {
 
           session.set('supportedMessages', Ember.Object.create());
 
-          // Skip if we're not connected to generate server (ie: developing cms)
           var localSocket = application.get('buildEnvironment').localSocket;
           if (!localSocket || !localSocket.connected) {
-            return resolve();
-          }
 
-          window.ENV.sendGruntCommand('supported_messages', function (messages) {
-            if (messages && Ember.isArray(messages)) {
-              messages.forEach(function (message) {
-                session.get('supportedMessages').set(message, true);
-              });
-              Ember.Logger.info('Server Messages Supported:', messages.join(', '));
-            }
-            resolve();
-          });
+            Ember.$.ajax({
+              dataType: 'jsonp',
+              jsonpCallback: 'supportedJSONPCallback',
+              url: '/.wh/_supported/',
+              success: function(messages) {
+                if (messages && Ember.isArray(messages)) {
+                  messages.forEach(function (message) {
+                    session.get('supportedMessages').set(message, true);
+                  });
+                  Ember.Logger.info('Server Messages Supported:', messages.join(', '));
+                }
+                resolve();
+              },
+              error: function() {
+                resolve();
+              }
+            });
+
+          } else {
+
+            window.ENV.sendGruntCommand('supported_messages', function (messages) {
+              if (messages && Ember.isArray(messages)) {
+                messages.forEach(function (message) {
+                  session.get('supportedMessages').set(message, true);
+                });
+                Ember.Logger.info('Server Messages Supported:', messages.join(', '));
+              }
+              resolve();
+            });
+
+          }
 
         });
 
