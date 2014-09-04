@@ -14,7 +14,7 @@
 {{/if}}
 <section class="wh-content-edit">
 
-  <div class="wy-control-group wy-control-group-required wh-slug">
+  <div {{bind-attr class="slugControl.widgetErrors:wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
     <label>Name</label>
     <div class="wy-control">
       {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
@@ -33,7 +33,6 @@
               <li><span class="wy-form-message">{{this}}</span></li>
             {{/each}}
           </ul>
-          {{slugControl.correctedSlug}}
         {{/if}}
 
       {{/if}}
