@@ -5,6 +5,8 @@ export default Ember.View.extend({
     return this.get('image.resize_url') + '=s' + Math.max($(window).height(), $(window).width());
   }.property(),
   didInsertElement: function () {
-    this.$().fluidbox();
+    this.$().fluidbox({
+      stackIndex: 301
+    });
   }
 });
