@@ -14,10 +14,18 @@
 {{/if}}
 <section class="wh-content-edit">
 
-  <div {{bind-attr class="slugControl.widgetErrors:wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
+  <div {{bind-attr class="isNameAndSlugValid::wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
     <label>Name</label>
     <div class="wy-control">
       {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
+
+      {{#if nameControl.widgetErrors}}
+        <ul>
+          {{#each nameControl.widgetErrors}}
+            <li><span class="wy-form-message">{{this}}</span></li>
+          {{/each}}
+        </ul>
+      {{/if}}
 
       {{#if showSlug}}
 

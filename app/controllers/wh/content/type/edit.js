@@ -39,6 +39,10 @@ export default Ember.ObjectController.extend({
 
   }.property('previewUrl'),
 
+  isNameAndSlugValid: function () {
+    return this.get('nameControl.widgetIsValid') && this.get('slugControl.widgetIsValid');
+  }.property('nameControl.widgetIsValid', 'slugControl.widgetIsValid'),
+
   showSlug: function () {
     return !Ember.isEmpty(this.get('nameControl.value')) && !this.get('type.oneOff');
   }.property('nameControl.value', 'type.oneOff'),
