@@ -1,11 +1,25 @@
-<section class="wh-content-edit">
-  <h2>Account settings</h2>
-  <p>Need to change your password?</p>
-  {{#link-to 'wh.settings.password-change' class="btn btn-neutral icon icon-lock"}} Change your password here{{/link-to}}
-  <hr>
-  <h2>Global variables</h2>
+<section class="wh-content-head">
+  <h1>Account settings</h1>
+</section>
 
-  <p>These are global values used in your front end templates. To retrieve them into your site, check the <a href="http://www.webhook.com/docs/template-rules-and-filters/#_getsetting" target="_blank">documentation here</a>.</p>
+<section class="wh-content-edit">
+  <div class="wy-control-group">
+    <label>Need to change your password?</label>
+    <div class="wy-control">
+      {{#link-to 'wh.settings.password-change' class="btn btn-neutral icon icon-lock"}} Change your password here{{/link-to}}
+    </div>
+  </div>
+</section>
+
+<section class="wh-content-head wh-content-head-again">
+  <h1>Global variables</h1>
+</section>
+
+<section class="wh-content-subhead">
+  These are global values used in your front end templates. To retrieve them into your site, check the <a href="http://www.webhook.com/docs/template-rules-and-filters/#_getsetting" target="_blank">documentation here</a>.
+</section>
+
+<section class="wh-content-edit">
 
   <form {{action "saveSettings" on="submit"}}>
     <fieldset>

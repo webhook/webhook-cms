@@ -20,7 +20,7 @@ export default Ember.CollectionView.extend({
     var originalindex;
 
     this.$().sortable({
-      items      : '> li:not(.wy-control-group-hidden)',
+      items      : '> li:not(.wy-control-group-hidden, .wy-control-name-name)',
       placeholder: 'wh-form-control-placeholder',
       helper     : 'clone',
       axis       : 'y',

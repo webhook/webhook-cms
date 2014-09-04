@@ -23,7 +23,7 @@ export default Ember.ObjectController.extend({
         return;
       }
 
-      if (!this.get('verification_key')) {
+      if (!this.get('verification_key') && !window.ENV.selfHosted) {
         this.set('error', { code: 'IMPOSSIBLE', message: 'No verification key specified, please go through the invite process' });
         return;
       }
@@ -65,21 +65,34 @@ export default Ember.ObjectController.extend({
         fireRoot.auth(token, function() {
 
           fireRoot.child('management/users/' + user.email.replace(/\./g, ',1') + '/exists').set(true, function(err) {
-            verifyUser(user, this.get('verification_key'), function(err) {
+            if(!window.ENV.selfHosted) {
+
+              verifyUser(user, this.get('verification_key'), function(err) {
+                fireRoot.unauth();
+                this.set('isSending', false);
+                if(err) {
+                  this.set('error', err);
+                  return;
+                }
+
+                this.get('session.auth').login('password', {
+                  email     : this.get('email'),
+                  password  : this.get('password'),
+                  rememberMe: true
+                });
+
+              }.bind(this));
+
+            } else {
               fireRoot.unauth();
               this.set('isSending', false);
-              if(err) {
-                this.set('error', err);
-                return;
-              }
 
               this.get('session.auth').login('password', {
                 email     : this.get('email'),
                 password  : this.get('password'),
                 rememberMe: true
               });
-
-            }.bind(this));
+            }
           }.bind(this));
         }.bind(this));
 

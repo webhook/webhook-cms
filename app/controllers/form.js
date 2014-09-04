@@ -53,6 +53,21 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     return downcode(this.get('model.name')).replace(/\s+|\W/g, '').toLowerCase();
   }.property('model.name'),
 
+  correctSlug: function (slug) {
+    if (Ember.isEmpty(slug)) {
+      return null;
+    }
+    if (slug.charAt(0) === '/') {
+      slug = slug.substr(1);
+    }
+    if (slug.substr(-1) === '/') {
+      slug = slug.slice(0, -1);
+    }
+    slug = slug.replace(/\s+/g, '-');
+    slug = downcode(slug);
+    return slug;
+  },
+
   validateControls: function () {
 
     this.get('controls').setEach('widgetIsValid', true);
@@ -285,9 +300,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       });
 
       relationUpdates.push(relationPromise);
-
-
-
 
     });
 
@@ -833,10 +845,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
 
       // Custom URLs
-      if (contentType.get('customUrls.individualUrl') === '') {
+      if (Ember.isEmpty(contentType.get('customUrls.individualUrl'))) {
         contentType.set('customUrls.individualUrl', null);
       }
-      if (contentType.get('customUrls.listUrl') === '') {
+      if (Ember.isEmpty(contentType.get('customUrls.listUrl'))) {
         contentType.set('customUrls.listUrl', null);
       }
 
@@ -956,6 +968,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     editTypeId: function () {
       this.set('isEditing', false);
       this.set('isEditingTypeId', true);
+    },
+
+    correctIndividualUrl: function () {
+      this.set('customUrls.individualUrl', this.correctSlug(this.get('customUrls.individualUrl')));
+    },
+
+    correctListUrl: function () {
+      this.set('customUrls.listUrl', this.correctSlug(this.get('customUrls.listUrl')));
     }
   }
 });

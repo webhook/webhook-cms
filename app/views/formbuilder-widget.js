@@ -7,12 +7,17 @@ export default WidgetView.extend({
   classNameBindings: [
     'isEditing:wy-control-group-edit',
     'isPlaced:wy-control-group-placed',
-    'controlClass'
+    'controlClass',
+    'controlName'
   ],
 
   controlClass: function () {
     return 'wy-control-group-' + this.get('context.controlType.widget');
   }.property(),
+
+  controlName: function () {
+    return 'wy-control-name-' + this.get('context.name');
+  }.property('context.name'),
 
   isEditing: function () {
     return this.get('controller.isEditing') && this.get('context') === this.get('controller.editingControl');

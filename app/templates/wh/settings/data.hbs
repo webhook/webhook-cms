@@ -1,144 +1,164 @@
-<h2>Import / export data</h2>
+<section class="wh-content-head">
+  <h1>Import / export data</h1>
+</section>
 
-{{# if dataBackup}}
-  <p>We found the following data in your file:</p>
+<section class="wh-content-edit">
 
-  <table class="wy-table wy-table-bordered-rows full-width">
-    <thead>
-      <tr><th>Content Type</th><th>Item Count</th></tr>
-    </thead>
-    <tbody>
-      {{#each dataBreakdown.content}}
-        <tr>
-          <td>{{name}}</td>
-          <td>{{itemCount}}</td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="100">No content to import.</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  {{# if dataBackup}}
+    <p>We found the following data in your file:</p>
 
-  <table class="wy-table wy-table-bordered-rows full-width">
-    <thead>
-      <tr><th>Setting</th><th>Value</th></tr>
-    </thead>
-    <tbody>
-      {{#each dataBreakdown.settings}}
-        <tr>
-          <td>{{name}}</td>
-          <td>{{value}}</td>
-        </tr>
-      {{else}}
-        <tr>
-          <td colspan="100">No settings to import.</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+    <table class="wy-table wy-table-bordered-rows full-width">
+      <thead>
+        <tr><th>Content Type</th><th>Item Count</th></tr>
+      </thead>
+      <tbody>
+        {{#each dataBreakdown.content}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{itemCount}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="100">No content to import.</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-  {{#if validImport}}
-    <div class="wy-alert wy-alert-danger">
-      <div class="wy-alert-title">Warning!</div>
-      <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. It will also rebuild your site with the imported data. If you have not created a backup in a while, now would be a good time.</p>
-      <div class="wy-btn-group">
-        <button class="btn btn-success icon icon-ok-sign" {{action "confirm"}}> Proceed</button>
-        <button class="btn btn-danger icon icon-remove-sign" {{action "reset"}}> Cancel</button>
+    <table class="wy-table wy-table-bordered-rows full-width">
+      <thead>
+        <tr><th>Setting</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        {{#each dataBreakdown.settings}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{value}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="100">No settings to import.</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    {{#if validImport}}
+      <div class="wy-alert wy-alert-danger">
+        <div class="wy-alert-title">Warning!</div>
+        <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. It will also rebuild your site with the imported data. If you have not created a backup in a while, now would be a good time.</p>
+        <div class="wy-btn-group">
+          <button class="btn btn-success icon icon-ok-sign" {{action "confirm"}}> Proceed</button>
+          <button class="btn btn-danger icon icon-remove-sign" {{action "reset"}}> Cancel</button>
+        </div>
       </div>
-    </div>
-  {{else}}
-    <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">No data</div>
-      <p>We could not find any valid data to import from your file.</p>
-      <div class="wy-btn-group">
-        <button class="btn btn-neutral" {{action "reset"}}> Back</button>
+    {{else}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">No data</div>
+        <p>We could not find any valid data to import from your file.</p>
+        <div class="wy-btn-group">
+          <button class="btn btn-neutral" {{action "reset"}}> Back</button>
+        </div>
       </div>
-    </div>
-  {{/if}}
-{{else}}
-  {{#if dataError}}
-    <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">We were unable to parse your file.</div>
-      <p>Please make sure you are uploading a <strong>valid</strong> JSON file and try again.</p>
-      <pre>{{dataError.name}}: {{dataError.message}}</pre>
-    </div>
+    {{/if}}
   {{else}}
-      <p>You are not restricted to just uploading backups. You can upload any data you want but it must conform to the expected format. See the <a href="http://www.webhook.com/docs/importing-custom-data/">documentation</a> for more information.</p>
-  {{/if}}
-  <div class="wy-btn-group">
+    {{#if dataError}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">We were unable to parse your file.</div>
+        <p>Please make sure you are uploading a <strong>valid</strong> JSON file and try again.</p>
+        <pre>{{dataError.name}}: {{dataError.message}}</pre>
+      </div>
+    {{else}}
+        <p>You are not restricted to just uploading backups. You can upload any data you want but it must conform to the expected format. See the <a href="http://www.webhook.com/docs/importing-custom-data/">documentation</a> for more information.</p>
+    {{/if}}
     {{download-backup classNames="btn btn-neutral icon icon-download" text=" Export JSON data"}}
     <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> Import JSON data</button>
-  </div>
-{{/if}}
+  {{/if}}
 
-<hr>
-
-<h2>Backups</h2>
-
-<p>
-  Webhook automatically exports a JSON backup every night at 3AM PST. We keep these files around for seven days.
-  For new sites, the backups will only work for the days after your site was created.
-</p>
-
-<ul class="wy-plain-list-disc">
-  {{#each backup in model}}
-    <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
-  {{/each}}
-</ul>
-
-<hr>
-
-<h2>Import Wordpress blog (beta)</h2>
-<p>
-  Wordpress allows you to <a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">export your blog data into an XML document</a>.
-  Once downloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
-  size them properly.
-</p>
-
-{{#select-file action='wordpressFileSelected' accept='application/xml' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
-
-<hr>
+</section>
 
 
-<h2>Rebuild search index</h2>
+<section class="wh-content-head wh-content-head-again">
+  <h1>Backups</h1>
+</section>
 
-<p>If you're having trouble with the CMS search. Rebuilding your index can often help.</p>
+<section class="wh-content-edit">
 
-<button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}} Indexing data <span class="wy-spinner"></span>{{else}} Rebuild search index{{/if}}</button>
+  <p>
+    Webhook automatically exports a JSON backup every night at 3AM PST. We keep these files around for seven days.
+    For new sites, the backups will only work for the days after your site was created.
+  </p>
 
-<hr>
+  <ul class="wy-plain-list-disc">
+    {{#each backup in model}}
+      <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
+    {{/each}}
+  </ul>
 
-<h2>Reset your website</h2>
+</section>
 
-{{#if buildEnvironment.local}}
-  <p>This will allow you to reset your site so you can start over. Please make a backup before performing this action.</p>
 
-  <div class="wy-control-group">
-    <label>These changes are irreversible</label>
-    <div class="wy-control">
-      <label class="wy-radio">
-        {{view "radio-button"
-          name="deleteOptions"
-          selection=deleteOption
-          value="data"
-        }}
-        <strong>Delete my data.</strong> (This will delete your forms, but your templates will remain.)
-      </label>
+<section class="wh-content-head wh-content-head-again">
+  <h1>Import Wordpress blog (beta)</h1>
+</section>
 
-      <label class="wy-radio">
-        {{view "radio-button"
-          name="deleteOptions"
-          selection=deleteOption
-          value="everything"
-        }}
-        <strong>Delete my templates and my data.</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
-      </label>
+<section class="wh-content-edit">
+
+  <p>
+    Wordpress allows you to <a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">export your blog data into an XML document</a>.
+    Once downloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
+    size them properly.
+  </p>
+
+  {{#select-file action='wordpressFileSelected' accept='application/xml' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
+
+</section>
+
+
+<section class="wh-content-head wh-content-head-again">
+  <h1>Rebuild search index</h1>
+</section>
+
+<section class="wh-content-edit">
+
+  <p>If you're having trouble with the CMS search. Rebuilding your index can often help.</p>
+
+  <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}} Indexing data <span class="wy-spinner"></span>{{else}} Rebuild search index{{/if}}</button>
+
+</section>
+
+<section class="wh-content-head wh-content-head-again">
+  <h1>Reset your website</h1>
+</section>
+
+<section class="wh-content-edit">
+  {{#if buildEnvironment.local}}
+    <p>This will allow you to reset your site so you can start over. Please make a backup before performing this action.</p>
+
+    <div class="wy-control-group">
+      <div class="wy-control">
+        <label class="wy-radio">
+          {{view "radio-button"
+            name="deleteOptions"
+            selection=deleteOption
+            value="data"
+          }}
+          <strong>Delete my data.</strong> (This will delete your forms, but your templates will remain.)
+        </label>
+
+        <label class="wy-radio">
+          {{view "radio-button"
+            name="deleteOptions"
+            selection=deleteOption
+            value="everything"
+          }}
+          <strong>Delete my templates and my data.</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
+        </label>
+      </div>
     </div>
-  </div>
-  <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
-{{else}}
-  <p>You can only reset your website when running it locally.</p>
-{{/if}}
+    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
+  {{else}}
+    <p>You can only reset your website when running it locally.</p>
+  {{/if}}
+</section>
 

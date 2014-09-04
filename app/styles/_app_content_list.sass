@@ -1,16 +1,48 @@
+.wh-content-head
+  background: $gray-dark
+  color: $text-invert
+  padding: $base-line-height / 2
+  +border-top-radius(4px)
+  h1
+    font-family: $base-font-family
+    margin: 0
+    font-size: 100%
+    display: inline
+    text-transform: capitalize
+    +font-smooth
+
+.wh-content-head.wh-content-head-again
+  margin-top: $base-line-height * 2
+
+.wh-content-edit
+  background: $white
+  padding: $base-line-height * 2 $base-line-height $base-line-height $base-line-height
+  border: solid 1px $table-border-color
+
+.wh-content-edit .wy-control-group, .wh-content-list .wy-control-group
+  border-bottom: dotted 1px $table-border-color
+  padding: $base-line-height
+  padding-top: 0
+
+.wh-content-edit .wy-btn-group
+  padding-left: $base-line-height
+
+
 .wh-content-list-title
   +clearfix
 .wh-content-list
-  input[type=search]
-    margin-bottom: $base-line-height
-    border-radius: 50px
-    padding-left: $base-line-height / 2
+  background: $white
+  padding: $base-line-height * 2
+  border: solid 1px $table-border-color
   .icon-remove-sign
     color: $text-color
     &:hover
       color: $red !important
   .icon-lock
     color: $text-color !important
+
+.wh-content-list .wh-content
+  margin-bottom: 0
 
 .wy-dropdown.wy-dropdown-display-options
   dd
@@ -45,6 +77,9 @@
     img
       border-radius: 50px
       margin-right: $base-line-height / 4
++media($tablet)
+  .wh-content-head
+    +clearfix
 
 +media($mobile)
   .wh-content th, .wh-content td
@@ -53,6 +88,10 @@
     font-size: 125%
     padding: $base-line-height / 2 0
     display: block
+  .wh-content-edit
+    padding: $base-line-height 0
+  .wh-content-list
+    padding: $base-line-height $base-line-height / 2
   .wy-dropdown.wy-dropdown-display-options
     display: none
   .wh-content-list

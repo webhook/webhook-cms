@@ -42,6 +42,7 @@
             {{/if}}
             <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
             <li>{{#link-to 'wh.settings.general'}}Settings{{/link-to}}</li>
+            {{#unless buildEnvironment.selfHosted}}
             <li>
               {{#link-to 'wh.settings.billing'}}
                 {{#if session.billing.isTrial}}
@@ -58,7 +59,10 @@
                 {{/if}}
               {{/link-to}}
             </li>
+            {{/unless}}
+            {{#unless buildEnvironment.selfHosted}}
             <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
+            {{/unless}}
             <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
           </ul>
         {{/if}}

@@ -19,7 +19,8 @@
     "FileSaver.js": "eligrey/FileSaver.js",
     "filereader.js": "bgrins/filereader.js",
     "moment": "~2.8.1",
-    "emberfire": "~1.1.3"
+    "emberfire": "~1.1.3",
+    "fluidbox": "webhook/Fluidbox#1.3.5"
   },
   "devDependencies": {
     "qunit": "~1.12.0",
