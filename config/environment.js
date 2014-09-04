@@ -12,7 +12,7 @@ window.ENV = {
   dbName: window.ENV.dbName || 'webhook',
   uploadUrl: window.ENV.uploadUrl || 'http://server.webhook.com/',
   embedlyKey: window.ENV.embedlyKey || '13dde81b8137446e89c7933edca679eb',
-  selfHosted: true || window.ENV.selfHosted || false,
+  selfHosted: window.ENV.selfHosted || false,
   displayUrl : 'https://i.embed.ly/1/display/',
 
   themes: [
