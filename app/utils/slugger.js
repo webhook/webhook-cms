@@ -4,7 +4,7 @@ export default function slugger (item, type, customUrls) {
   tmpSlug = uslug(item.name).toLowerCase();
 
   if(customUrls && customUrls.individualUrl) {
-    tmpSlug = parseCustomUrl(customUrls.individualUrl, item) + '/' + tmpSlug;
+    tmpSlug = parseCustomUrl(customUrls.individualUrl, item, type) + '/' + tmpSlug;
   } 
 
   if(customUrls && customUrls.listUrl) {
@@ -16,7 +16,7 @@ export default function slugger (item, type, customUrls) {
   return tmpSlug;
 }
 
-function parseCustomUrl (url, object) {
+function parseCustomUrl (url, object, type) {
   var publishDate = object.publish_date ? object.publish_date : object;
 
    publishDate = moment(publishDate);
@@ -39,7 +39,7 @@ function parseCustomUrl (url, object) {
     } else if (timeIdent === 'j') {
       return publishDate.format('D').toLowerCase();
     } else if (timeIdent === 'T') {
-      return object._type.toLowerCase();
+      return type.toLowerCase();
     } else {
       return match;
     }
