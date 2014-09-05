@@ -175,7 +175,7 @@ export default Ember.Controller.extend({
 
     download: function () {
 
-      var fileName = this.get('buildEnvironment.siteName') + '-' + moment().format() + '.json';
+      var fileName = this.get('buildEnvironment.siteDisplayName') + '-' + moment().format() + '.json';
 
       window.ENV.firebase.once('value', function (snapshot) {
         var data = snapshot.val();

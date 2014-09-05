@@ -80,6 +80,7 @@ export default {
     buildEnv.set('local', isLocal);
     buildEnv.set('localSocket', localSocket);
     buildEnv.set('siteName', siteName);
+    buildEnv.set('siteDisplayName', window.ENV.selfHosted ? siteName.replace('/,1/g', '.') : siteName);
     buildEnv.set('siteUrl', 'http://' + siteName + '.webhook.com/');
     buildEnv.set('building', false);
     buildEnv.set('selfHosted', window.ENV.selfHosted);
