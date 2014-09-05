@@ -8,6 +8,8 @@ export default Ember.Controller.extend({
   isDeleting: false,
 
   isIndexing: false,
+  downloadLink: '',
+  downloadFileName: '',
 
   dataBreakdown: function () {
 

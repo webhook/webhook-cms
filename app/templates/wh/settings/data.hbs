@@ -128,6 +128,18 @@
 </section>
 
 <section class="wh-content-head wh-content-head-again">
+  <h1>Download your website</h1>
+</section>
+
+{{#unless buildEnvironment.selfHosted }}
+<section class="wh-content-edit">
+  <p>You can download the last copy of your site files, that were pushed to our servers, using this link.</p>
+
+  <a class="btn btn-neutral icon icon-download"  {{bind-attr download=downloadFileName}} {{bind-attr href=downloadLink}}> Download site files</a>
+</section>
+{{/unless}}
+
+<section class="wh-content-head wh-content-head-again">
   <h1>Reset your website</h1>
 </section>
 
