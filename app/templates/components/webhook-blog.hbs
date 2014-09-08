@@ -3,7 +3,7 @@
   <ul>
   {{#each post in posts}}
     <li>
-      <a href="http://www.webhook.com/blog/{{unbound post.slug}}">
+      <a href="http://www.webhook.com/{{unbound post.slug}}">
         <h4>{{post.name}}</h4>
         <p>{{post.short_version}}</p>
         <p class="date">{{format-time post.publish_date}}</p>
