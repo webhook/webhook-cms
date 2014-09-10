@@ -1,13 +1,16 @@
-# Webhook repositories
+# Webhook Overview
 
-This repository is for the Webhook CMS. We are currently in the process of open sourcing the entirely of Webhook which is split over a few repos. The goal is to have them available by late August.
+This repository is for the Webhook command line tools. There are several other repositories in Webhook's core.
 
+* [webhook](https://github.com/webhook/webhook) - The Webhook command line tools.
 * [webhook-generate](https://github.com/webhook/webhook-generate) - The local runserver for Webhook.
-* [webhook-js](https://github.com/webhook/webhook-js) - A collection of jQuery utils for Webhook.
-* [webhook-cms](https://github.com/webhook/webhook-cms) - A single page ember app which acts as the CMS for individual Webhook sites.
-* webhook-server - The production server for serving and regenerating live Webhook sites.
+* [webhook-cms](https://github.com/webhook/webhook-cms) - The CMS layer and frotend GUI. A single page Ember app.
+* [webhook-server-open](https://github.com/webhook/webhook-server-open) - The production server for serving and regenerating live Webhook sites.
+* [webhook-images](https://github.com/webhook/webhook-images) - Image resizing for the Webhook frontend. For Google App Engine.
 
-## Webhook CMS overview
+If you are interested in self-hosting Webhook, [check the instructions here](http://www.webhook.com/docs/self-host-webhook/).
+
+## Webhook CMS
 
 The Webhook CMS is the CMS layer of Webhook.com. Essentially it is a one-page Ember app based upon [Ember App Kit][1]. It uses an ES6 Module Transpiler which allows for [ES6 module syntax][2]. The code for the Ember app is in the `app` directory.
 
