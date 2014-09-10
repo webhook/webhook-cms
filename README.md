@@ -1,6 +1,6 @@
 # Webhook Overview
 
-This repository is for the Webhook command line tools. There are several other repositories in Webhook's core.
+This repository is for the Webhook CMS layer. There are several other repositories in Webhook's core.
 
 * [webhook](https://github.com/webhook/webhook) - The Webhook command line tools.
 * [webhook-generate](https://github.com/webhook/webhook-generate) - The local runserver for Webhook.
