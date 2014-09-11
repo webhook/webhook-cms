@@ -28,7 +28,7 @@ Steps to install:
 * Clone this repo and navigate to the webhook-cms directory
 * Run `npm install` for node dependencies
 * Run `bower install` for front-end dependencies
-* Look for `<meta name="siteName" content="test" />` in `app/index.html` and change `test` to your site name
+* Look for `<meta name="siteName" content="test" />` in `app/index.html` and change `test` to your site name. You can always `wh create` a new trial site if you want to work with scratch data.
 * Run `grunt server`, which loads on localhost:8000. It will activate livereload on changes to your JS, Handlebar and Sass files.
 
 ## Widgets in the form builder
