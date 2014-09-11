@@ -57,6 +57,11 @@ export default Ember.Route.extend({
         notifications.removeObject(notification);
       }, 5000);
 
+    },
+
+    chooseLanguage: function (language) {
+      localStorage.setItem('webhook-cms-language', language);
+      window.App.reset();
     }
   }
 });

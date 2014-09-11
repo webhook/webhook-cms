@@ -11,6 +11,8 @@ export default Ember.ObjectController.extend({
     this.set('isLoading', false);
   }.observes('session.error'),
 
+  supportedLanguages: Ember.ENV.I18N_SUPPORTED_LANGUAGES,
+
   actions: {
     loginUser: function () {
       if (this.get('isLoading')) {
