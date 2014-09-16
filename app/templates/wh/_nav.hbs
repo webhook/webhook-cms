@@ -27,7 +27,7 @@
 
         {{#if model}}
           <hr>
-          <header>Your content</header>
+          <header>{{t 'wh.navContent'}}</header>
           {{#collection 'animate-collection' content=model}}
             {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
           {{/collection}}
@@ -35,13 +35,13 @@
 
         {{# if session.isOwner }}
           <hr>
-          <header>Configuration</header>
+          <header>{{t 'wh.configuration.title'}}</header>
           <ul>
             {{#if buildEnvironment.local}}
-              <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}{{t 'wh.contentTypes'}}{{/link-to}}</li>
+              <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}{{t 'wh.configuration.types'}}{{/link-to}}</li>
             {{/if}}
-            <li>{{#link-to 'wh.settings.team'}}{{t 'wh.team'}}{{/link-to}}</li>
-            <li>{{#link-to 'wh.settings.general'}}{{t 'wh.settings'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.team'}}{{t 'wh.configuration.team'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.general'}}{{t 'wh.configuration.settings'}}{{/link-to}}</li>
             {{#unless buildEnvironment.selfHosted}}
             <li>
               {{#link-to 'wh.settings.billing'}}
@@ -55,15 +55,15 @@
                     {{/if}}
                   </span>
                 {{else}}
-                    {{t 'wh.billing'}}
+                    {{t 'wh.configuration.billing'}}
                 {{/if}}
               {{/link-to}}
             </li>
             {{/unless}}
             {{#unless buildEnvironment.selfHosted}}
-            <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.dns'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
             {{/unless}}
-            <li>{{#link-to 'wh.settings.data'}}{{t 'wh.data'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.data'}}{{t 'wh.configuration.data'}}{{/link-to}}</li>
           </ul>
         {{/if}}
 

@@ -1,9 +1,8 @@
 <section class="wh-content-head">
-  <h1>Domains</h1>
+  <h1>{{t 'wh.settings.domain.title'}}</h1>
 </section>
 <section class="wh-content-subhead">
-  Your site is currently available at
-  <strong>{{buildEnvironment.siteName}}.webhook.org</strong> {{#if domain}}and <strong>{{ domain }}</strong>{{/if}}
+  {{t 'wh.settings.domain.description'}}
 </section>
 <section class="wh-content-edit">
 
@@ -35,24 +34,21 @@ CNAME        www            dns.webhook.com
 
     <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
 
-      <h2>Use a previously purchased domain</h2>
+      <h2>{{t 'wh.settings.domain.form.title'}}</h2>
 
-      <p>
-        Don't have a domain? Buy one over at <a href="http://www.namecheap.com/?aff=65093">Namecheap</a> or any domain seller,
-        then return here.
-      </p>
+      <p>{{t 'wh.settings.domain.form.instruction'}}</p>
 
       <hr>
 
       <div class="wy-control-group fluid-input">
-        <label>Enter your domain name</label>
+        <label>{{t 'wh.settings.domain.form.label'}}</label>
         <div class="wy-control">
           {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
         </div>
       </div>
 
       <div class="wy-btn-group">
-        <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > Use this domain</button>
+        <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > {{t 'wh.settings.domain.form.action'}}</button>
       </div>
 
     </form>

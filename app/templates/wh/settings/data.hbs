@@ -1,5 +1,5 @@
 <section class="wh-content-head">
-  <h1>Import / export data</h1>
+  <h1>{{t 'wh.settings.data.importExport.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
@@ -69,78 +69,69 @@
         <pre>{{dataError.name}}: {{dataError.message}}</pre>
       </div>
     {{else}}
-        <p>You are not restricted to just uploading backups. You can upload any data you want but it must conform to the expected format. See the <a href="http://www.webhook.com/docs/importing-custom-data/">documentation</a> for more information.</p>
+      <p>{{t 'wh.settings.data.importExport.instruction'}}</p>
     {{/if}}
     {{download-backup classNames="btn btn-neutral icon icon-download" text=" Export JSON data"}}
-    <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> Import JSON data</button>
+    <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> {{t 'wh.settings.data.importExport.action.import'}}</button>
   {{/if}}
 
 </section>
 
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Backups</h1>
+  <h1>{{t 'wh.settings.data.backups.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
-  <h4>Data backups</h4>
-  <p>
-    Webhook automatically exports a JSON backup every night at 3AM PST. We keep these files around for seven days.
-    For new sites, the backups will only work for the days after your site was created.
-  </p>
-
+  <h4>{{t 'wh.settings.data.backups.data.title'}}</h4>
+  <p>{{t 'wh.settings.data.backups.data.instruction'}}</p>
   <ul class="wy-plain-list-disc">
     {{#each backup in model}}
       <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
     {{/each}}
   </ul>
 
-  <h4>Template and site files backup</h4>
+  <h4>{{t 'wh.settings.data.backups.templates.title'}}</h4>
   {{#unless buildEnvironment.selfHosted }}
-    <p>This will download your Webhook site directory including all the templates and static files as they exist on the live website. You can use these files to recreate your site locally if need be.</p>
-
-    <a class="btn btn-neutral icon icon-download"  {{bind-attr download=downloadFileName}} {{bind-attr href=downloadLink}}> Download your website files</a>
+    <p>{{t 'wh.settings.data.backups.templates.instruction'}}</p>
+    <a class="btn btn-neutral icon icon-download" {{bind-attr download=downloadFileName}} {{bind-attr href=downloadLink}}> {{t 'wh.settings.data.backups.templates.action'}}</a>
   {{/unless}}
 
 </section>
 
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Import Wordpress blog (beta)</h1>
+  <h1>{{t 'wh.settings.data.wordpress.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
 
-  <p>
-    Wordpress allows you to <a href="http://codex.wordpress.org/Tools_Export_Screen" target="_blank">export your blog data into an XML document</a>.
-    Once downloaded, use the button below to import that data into Webhook. We'll do our best to import the images included in your articles and
-    size them properly.
-  </p>
+  <p>{{t 'wh.settings.data.wordpress.instruction'}}</p>
 
-  {{#select-file action='wordpressFileSelected' accept='application/xml' class="icon icon-wordpress"}} Select a wordpress xml file{{/select-file}}
+  {{#select-file action='wordpressFileSelected' accept='application/xml' class="icon icon-wordpress"}} {{t 'wh.settings.data.wordpress.action'}}{{/select-file}}
 
 </section>
 
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Rebuild search index</h1>
+  <h1>{{t 'wh.settings.data.search.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
 
-  <p>If you're having trouble with the CMS search. Rebuilding your index can often help.</p>
+  <p>{{t 'wh.settings.data.search.instruction'}}</p>
 
-  <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}} Indexing data <span class="wy-spinner"></span>{{else}} Rebuild search index{{/if}}</button>
+  <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}} Indexing data <span class="wy-spinner"></span>{{else}} {{t 'wh.settings.data.search.action'}}{{/if}}</button>
 
 </section>
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Reset your website</h1>
+  <h1>{{t 'wh.settings.data.backups.reset.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
   {{#if buildEnvironment.local}}
-    <p>This will allow you to reset your site so you can start over. Please make a backup before performing this action.</p>
+    <p>{{t 'wh.settings.data.reset.instruction'}}</p>
 
     <div class="wy-control-group">
       <div class="wy-control">
@@ -150,7 +141,7 @@
             selection=deleteOption
             value="data"
           }}
-          <strong>Delete my data.</strong> (This will delete your forms, but your templates will remain.)
+          {{t 'wh.settings.data.reset.options.data'}}
         </label>
 
         <label class="wy-radio">
@@ -159,13 +150,12 @@
             selection=deleteOption
             value="everything"
           }}
-          <strong>Delete my templates and my data.</strong> (This will return this site to a completely fresh install. Useful for changing themes.)
+          {{t 'wh.settings.data.reset.options.all'}}
         </label>
       </div>
     </div>
-    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}Delete {{deleteOption}}{{/if}}</button>
+    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action'}}{{/if}}</button>
   {{else}}
-    <p>You can only reset your website when running it locally.</p>
+    <p>{{t 'wh.settings.data.backups.reset.warning'}}</p>
   {{/if}}
 </section>
-

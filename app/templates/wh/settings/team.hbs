@@ -1,5 +1,5 @@
 <section class="wh-content-head">
-  <h1>Invite a new team member.</h1>
+  <h1>{{t 'wh.settings.team.invite.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
@@ -7,12 +7,12 @@
   <form class="wy-aligned">
     {{#if session.isDeployed}}
       <div class="wy-control-group">
-        <label>Invite a new collaborator by email</label>
+        <label>{{t 'wh.settings.team.invite.instruction'}}</label>
         {{input type="email" required="required" value=inviteEmail }}
-        <div class="wy-form-message">The person will not be active until they verify their email address.</div>
+        <div class="wy-form-message">{{t 'wh.settings.team.invite.help'}}</div>
       </div>
       <div class="wy-btn-group">
-        <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> Send invite</button>
+        <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> {{t 'wh.settings.team.invite.action'}}</button>
       </div>
     {{else}}
       <div class="wy-alert wy-alert-danger">
@@ -35,11 +35,10 @@
 
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Current team members</h1>
+  <h1>{{t 'wh.settings.team.current.title'}}</h1>
 </section>
 <section class="wh-content-subhead">
-    Owners have access to billing and the local dev tools. Contributors only have the ability to add and edit
-    content on the live CMS.
+  {{t 'wh.settings.team.current.description'}}
 </section>
 
 <section class="wh-content-edit">
@@ -47,8 +46,8 @@
   <table class="wy-table wy-table-bordered-rows full-width">
     <thead>
       <tr>
-        <th>Email</th>
-        <th>Permissions</th>
+        <th>{{t 'wh.settings.team.current.email'}}</th>
+        <th>{{t 'wh.settings.team.current.permissions'}}</th>
       </tr>
     </thead>
     <tbody>
