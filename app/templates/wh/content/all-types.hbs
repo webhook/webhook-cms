@@ -1,6 +1,6 @@
 <section class="wh-content-head">
-  {{#link-to 'wh.content.start' class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} Add new content type{{/link-to}}
-  <h1>Your existing content types</h1>
+  {{#link-to 'wh.content.start' class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.allTypes.addType'}}{{/link-to}}
+  <h1>{{t 'wh.content.allTypes.title'}}</h1>
 </section>
 
 <section class="wh-content-list">
@@ -8,10 +8,9 @@
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
-        <th><a {{action "toggleSort" "name"}}>Content type</a></th>
-        <th>ID</th>
-        <th><a {{action "toggleSort" "oneOff"}}>Form style</a></th>
-        <!-- <th>Items</th> -->
+        <th><a {{action "toggleSort" "name"}}>{{t 'wh.content.allTypes.contentType'}}</a></th>
+        <th>{{t 'wh.content.allTypes.id'}}</th>
+        <th><a {{action "toggleSort" "oneOff"}}>{{t 'wh.content.allTypes.formStyle'}}</a></th>
         <th></th>
       </tr>
     </thead>
@@ -20,14 +19,12 @@
         {{#link-to 'form' id tagName='tr'}}
           <td>{{name}}</td>
           <td>{{id}}</td>
-          <td>{{#if oneOff}}Single Item{{else}}Multiple Items{{/if}}</td>
-          <!-- <td>22</td> -->
+          <td>{{#if oneOff}}{{t 'wh.content.allTypes.single'}}{{else}}{{t 'wh.content.allTypes.multiple'}}{{/if}}</td>
           <td class="wy-table-actions">
             <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this bubbles=false}}></button>
           </td>
         {{/link-to}}
       {{/each}}
-    </tbody>
   </table>
 
 </section>

@@ -1,12 +1,12 @@
 <section class="wh-content-head">
-  {{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} Add new {{contentType.name}}{{/link-to}}
+  {{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.addNewItem'}}{{/link-to}}
   <h1>{{contentType.name}}</h1>
 </section>
 <section class="wh-content-subhead">
   {{input type="search" placeholder="Filter" value=filterQuery}}
 
   <div class="wy-dropdown wy-dropdown-display-options float-right">
-    <span class="btn btn-neutral btn-small icon icon-table"> Display <span class="caret"></span></span>
+    <span class="btn btn-neutral btn-small icon icon-table"> {{t 'wh.content.display'}} <span class="caret"></span></span>
     <dl class="wy-dropdown-menu">
       <dt>Show columns</dt>
       {{#each columnChoices}}
@@ -24,7 +24,7 @@
 
   {{#if limited}}
   <div class="wy-alert wy-alert-warning">
-    <span class="icon icon-exclamation-circle"></span> For better performance, we have limited the number of records shown on this page to the last {{recordLimit}} created.
+    <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.limited'}}
   </div>
   {{/if}}
 
@@ -57,10 +57,10 @@
   </table>
   {{#unless model}}
     <div class="wy-alert wy-alert-warning">
-      <span class="icon icon-exclamation-circle"></span> You haven't added any {{contentType.name}} yet.
+      <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.noRecords'}}
     </div>
   {{/unless}}
   {{#if limited}}
-    <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> Load More Records</button>
+    <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
   {{/if}}
 </section>
