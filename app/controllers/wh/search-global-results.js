@@ -1,4 +1,4 @@
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   needs: ["wh"],
   searchResults: Ember.computed.alias("controllers.wh.searchResults"),
   isLoading: Ember.computed.alias("controllers.wh.searchLoading"),

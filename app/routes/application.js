@@ -60,7 +60,10 @@ export default Ember.Route.extend({
     },
 
     chooseLanguage: function (language) {
+      Ember.Logger.log('Changing language to %@'.fmt(language));
       window.localStorage.setItem('webhook-cms-language', language);
+
+      Ember.Logger.log('Resetting app.');
       window.App.reset();
     }
   }

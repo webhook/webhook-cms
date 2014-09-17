@@ -1,8 +1,10 @@
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   sortProperties: ['name'],
   searchQuery: '',
   searchLoading: false,
   debouncedQuery: '',
+
+  supportedLanguages: Ember.ENV.I18N_SUPPORTED_LANGUAGES,
 
   init: function () {
 

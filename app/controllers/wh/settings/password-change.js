@@ -1,4 +1,5 @@
 export default Ember.ObjectController.extend({
+
   oldPassword : "",
   newPassword : "",
   newPassword2: "",
