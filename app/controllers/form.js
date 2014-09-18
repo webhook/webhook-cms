@@ -22,6 +22,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditingTypeId: false,
   newTypeIdErrors: Ember.A([]),
 
+  translatedControlTypeGroups: function () {
+
+    return Ember.A([]);
+
+  }.property('controlTypeGroups'),
+
   isValidTypeId: function () {
 
     var valid = true;

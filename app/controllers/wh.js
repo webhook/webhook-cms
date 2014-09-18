@@ -4,7 +4,13 @@ export default Ember.Controller.extend({
   searchLoading: false,
   debouncedQuery: '',
 
-  supportedLanguages: Ember.ENV.I18N_SUPPORTED_LANGUAGES,
+  supportedLanguages: function () {
+    var languages = Ember.A([]);
+    Ember.$.each(Ember.ENV.I18N_CODE_MAP, function (code, language) {
+      languages.push({ code: code, language: language });
+    });
+    return languages;
+  }.property(),
 
   init: function () {
 
