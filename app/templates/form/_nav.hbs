@@ -6,40 +6,40 @@
       <div class="wh-logo"></div>
     </div>
       <ul class="wh-form-builder-tabs">
-        <li {{action "stopEditing"}}>Add field</li>
-        <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
+        <li {{action "stopEditing"}}>{{t 'form.add'}}</li>
+        <li class="active">{{t 'form.edit'}} <span class="icon icon-arrow-right"></span></li>
       </ul>
       <form class="wy-form-stacked">
 
         {{#unless model.isNew}}
-          <p class="warning"><strong>Warning</strong>Changes to these details may require changes in your templates as well.</p>
+          <p class="warning">{{t 'form.isNewWarning'}}</p>
           <hr>
         {{/unless}}
 
         <div class="wy-control-group">
           {{#unless editingControl.locked}}
             <div class="wy-form-halves">
-              <label for="label" {{bind-attr for="view.label.elementId"}}>Field label <i class="icon icon-question-sign" data-toggle="tooltip" title="Short phase to describe the content in this field."></i></label>
+              <label for="label" {{bind-attr for="view.label.elementId"}}>{{t 'form.info.label'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.labelTitle"}}></i></label>
               {{input valueBinding="editingControl.label" viewName="label"}}
             </div>
           {{/unless}}
           {{#if editingControl.showPlaceholder}}
             <div class="wy-form-halves">
-              <label {{bind-attr for="view.placeholder.elementId"}}>Placeholder value <i class="icon icon-question-sign" data-toggle="tooltip" title="This will show within the input until it has a value. It does not save as a default."></i></label>
+              <label {{bind-attr for="view.placeholder.elementId"}}>{{t 'form.info.placeholder'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.placeholderTitle"}}></i></label>
               {{input valueBinding="editingControl.placeholder" viewName="placeholder"}}
             </div>
           {{/if}}
           <div class="wy-form-full">
-            <label {{bind-attr for="view.help.elementId"}}>Instructions for user <i class="icon icon-question-sign" data-toggle="tooltip" title="Instructions to the user on what they should enter into this field."></i></label>
+            <label {{bind-attr for="view.help.elementId"}}>{{t 'form.info.instruction'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.instructionTitle"}}></i></label>
             {{textarea valueBinding="editingControl.help" viewName="help"}}
           </div>
           {{#if editingControl.showRequired}}
             <div class="wy-form-full">
-              <label for="check-example">Required <i class="icon icon-question-sign" data-toggle="tooltip" title="The form can't be saved unless this field has a value."></i></label>
+              <label for="check-example">{{t 'form.info.required'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.requiredTitle"}}></i></label>
               <div class="wy-control">
                 <label class="wy-checkbox">
                   {{view Ember.Checkbox checkedBinding="editingControl.required"}}
-                  Make this field required.
+                  {{t 'form.info.requiredCheckbox'}}
                 </label>
               </div>
             </div>
@@ -52,7 +52,7 @@
 
         <div class="wy-btn-group">
           {{#unless editingControl.locked}}
-            <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> Delete this field</button>
+            <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> {{t 'form.info.delete'}}</button>
           {{/unless}}
         </div>
       </form>
@@ -71,18 +71,18 @@
         </div>
 
         <ul class="wh-form-builder-tabs">
-          <li {{action "stopEditing"}}>Add field</li>
-          <li class="active">Edit details <span class="icon icon-arrow-right"></span></li>
+          <li {{action "stopEditing"}}>{{t 'form.add'}}</li>
+          <li class="active">{{t 'form.edit'}} <span class="icon icon-arrow-right"></span></li>
         </ul>
 
         <form class="wy-form-stacked">
           {{#unless model.isNew}}
-            <p class="warning"><strong>Warning</strong>If you change your content-type's name you will need to make changes in your templates as well.</p>
+            <p class="warning">{{t 'form.isNewWarning'}}</p>
             <hr>
           {{/unless}}
 
           <div class="wy-control-group">
-            <label>Content type name</label>
+            <label>{{t 'form.typeName'}}</label>
             <div class="wy-control wy-form-full">
               {{input value=name}}
             </div>
@@ -90,7 +90,7 @@
 
           {{#unless isValidTypeId}}
             <div class="wy-alert wy-alert-danger">
-              <div class="wy-alert-title">Type name is invalid.</div>
+              <div class="wy-alert-title">{{t 'form.typeNameInvalid'}}</div>
               <ul>
                 {{#each newTypeIdErrors}}
                   <li>{{this}}</li>
@@ -99,18 +99,18 @@
             </div>
           {{/unless}}
 
-          <p class="edit-instruction"><strong>URL slug control</strong>You can tailor the location of the URLs for this content type below. Left empty the default list page would live a <code>site.com/{{ name }}/</code> and the individual pages would be at <code>site.com/{{ name }}/name-of-item/</code>. These fields allow some variables, including date handling. See the <a href="http://www.webhook.com/docs/pages-and-templates/" target="_blank">full documentation here</a>.</p>
+          <p class="edit-instruction">{{t 'form.slugInstruction'}}</p>
           <hr>
 
           <div class="wy-control-group">
-            <label>URL for the list page of all {{ name }}</label>
+            <label>{{t 'form.listUrlLabel'}}</label>
             <div class="wy-control wy-form-full">
               {{input placeholder=id value=customUrls.listUrl focus-out="correctListUrl"}}
             </div>
           </div>
 
           <div class="wy-control-group">
-            <label>URL prefix for a single {{ name }} page</label>
+            <label>{{t 'form.individualUrlLabel'}}</label>
             <div class="wy-control wy-form-full">
               {{input value=customUrls.individualUrl focus-out="correctIndividualUrl"}}
             </div>
@@ -127,8 +127,8 @@
           <div class="wh-logo"></div>
         </div>
         <ul class="wh-form-builder-tabs">
-          <li class="active">Add field <span class="icon icon-arrow-down"></span></li>
-          <li {{action "startEditing"}}>Edit details</li>
+          <li class="active">{{t 'form.add'}} <span class="icon icon-arrow-down"></span></li>
+          <li {{action "startEditing"}}>{{t 'form.edit'}}</li>
         </ul>
         {{#view "draggable"}}
           {{#each controlTypeGroups}}
