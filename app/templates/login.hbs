@@ -27,7 +27,15 @@
       {{#link-to 'password-reset' classNames='btn btn-small btn-link'}}{{t "login.forgotPassword"}}{{/link-to}}
     </div>
 
-    {{#each supportedLanguages}}<button type="button" {{action "chooseLanguage" this}}>{{this}}</button>{{/each}}
 
   </form>
 </div>
+
+<ul class="wh-lang-select">
+  {{#each supportedLanguages}}
+    <li>
+      <a {{action "chooseLanguage" this}}>{{this}}</a>
+    </li>
+  {{/each}}
+</ul>
+
