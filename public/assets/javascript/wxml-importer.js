@@ -560,10 +560,10 @@ var WXMLImporter = (function() {
         var tagId = tagsToId[tag];
         var tagObj = structuredData.tags[tagId];
 
-        //if(structuredData.tags[tagId]) {
+        if(structuredData.tags[tagId]) {
           newArticle.tags.push("tags " + tagId);
           structuredData.tags[tagId].articles.push("articles " + pushId);
-        //}
+        }
       }
 
       articles[pushId] = newArticle;
