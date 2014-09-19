@@ -3,7 +3,7 @@
   <div class="wy-control-group">
     <label>{{t 'wh.content.start.nameLabel'}}</label>
     <div class="wy-control">
-      {{input value=newTypeName placeholder="ex: comics, articles, about us, homepage, cities, vampires" class="wy-input-large full-width"}}
+      {{view Ember.TextField value=newTypeName placeholderTranslation="wh.content.start.namePlaceholder" class="wy-input-large full-width"}}
     </div>
   </div>
   {{#if isDuplicate}}

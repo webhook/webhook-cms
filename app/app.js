@@ -97,6 +97,9 @@ Ember.TextField.reopen({
   }
 });
 
+// Add translatable attributes to textfield.
+Ember.TextField.reopen(Em.I18n.TranslateableAttributes);
+
 // Ian doesn't like pluralizing, singularizing
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };
 Ember.Inflector.inflector.singularize = function (string ) { return string; };
