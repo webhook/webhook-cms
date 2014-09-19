@@ -1,36 +1,26 @@
 <div class="wh-start">
   <div class="wh-logo"></div>
-  <h1>How should we set up your site?</h1>
+  <h1>{{t 'start.title'}}</h1>
 
   <section>
     <center>
-      <h4>Show me some magic.</h4>
-      <img src="http://cms.webhook.com/v1/assets/images/wizard.png"/>
-      {{#link-to 'theme' class="btn btn-neutral icon icon-rocket"}} Start from a theme{{/link-to}}
+      <h4>{{t 'start.theme.title'}}</h4>
+      <img src="http://cms.webhook.com/v1/assets/images/wizard.png">
+      {{#link-to 'theme' class="btn btn-neutral icon icon-rocket"}} {{t 'start.theme.action'}}{{/link-to}}
     </center>
-    <hr/>
-    <p>
-      Pick one of our pre-built sites that follow common
-      CMS and design patterns. Customize later.
-    </p>
-    <p>
-      Example: A blog site, a portfolio site.
-    </p>
+    <hr>
+    {{t 'start.theme.instruction'}}
   </section>
   <section class="wh-start-or">
     Or
   </section>
   <section>
     <center>
-      <h4>I am the magic!</h4>
-      <img src="http://cms.webhook.com/v1/assets/images/dragon.png"/>
-      {{#link-to 'wh.content.all-types' class="btn btn-neutral icon icon-leaf"}} Start from scratch{{/link-to}}
+      <h4>{{t 'start.empty.title'}}</h4>
+      <img src="http://cms.webhook.com/v1/assets/images/dragon.png">
+      {{#link-to 'wh.content.all-types' class="btn btn-neutral icon icon-leaf"}} {{t 'start.empty.action'}}{{/link-to}}
     </center>
-    <hr/>
-    <p>
-      Use the formbuilder to set up a custom CMS with
-      page types that you define.
-    </p>
-    <p>You'll need to code your design in HTML / CSS.</p>
+    <hr>
+    {{t 'start.empty.instruction'}}
   </section>
 </div>
