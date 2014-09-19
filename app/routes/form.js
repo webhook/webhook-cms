@@ -3,11 +3,17 @@ import MetaWithOptions from 'appkit/utils/meta-options';
 export default Ember.Route.extend({
   beforeModel: function (transition) {
 
+    var formRoute = this;
+
     var promises = [this.store.find('control-type')];
 
+    promises.push(this.store.find('control-type-group').then(function (controlTypeGroups) {
+      formRoute.set('controlTypeGroups', controlTypeGroups);
+    }));
+
     promises.push(this.store.find('content-type').then(function (contentTypes) {
-      this.set('contentTypes', contentTypes);
-    }.bind(this)));
+      formRoute.set('contentTypes', contentTypes);
+    }));
 
     return Ember.RSVP.all(promises);
   },
@@ -30,7 +36,7 @@ export default Ember.Route.extend({
     controller.set('editingControl', null);
     controller.set('isEditing', false);
 
-    controller.set('controlTypeGroups', this.store.find('control-type-group'));
+    controller.set('controlTypeGroups', this.get('controlTypeGroups'));
 
     if (this.get('session.supportedMessages.layouts')) {
 
