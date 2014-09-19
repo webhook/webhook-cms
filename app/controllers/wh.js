@@ -4,14 +4,6 @@ export default Ember.Controller.extend({
   searchLoading: false,
   debouncedQuery: '',
 
-  supportedLanguages: function () {
-    var languages = Ember.A([]);
-    Ember.$.each(Ember.ENV.I18N_CODE_MAP, function (code, language) {
-      languages.push({ code: code, language: language });
-    });
-    return languages;
-  }.property(),
-
   init: function () {
 
     var user = this.get('session.user');

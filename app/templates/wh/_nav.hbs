@@ -21,8 +21,6 @@
         (<a {{action "logoutUser" on="click"}}>{{t 'wh.logout'}}</a>)
       </div>
 
-      {{#each supportedLanguages}}<button type="button" {{action "chooseLanguage" code}}>{{language}}</button>{{/each}}
-
       {{input placeholder="Press S to search" value=searchQuery}}
     </div>
 
