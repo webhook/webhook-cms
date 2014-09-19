@@ -22,28 +22,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditingTypeId: false,
   newTypeIdErrors: Ember.A([]),
 
-  // translatedControlTypeGroups: function () {
-  //
-  //   var translatedGroups = Ember.A([]);
-  //
-  //   this.get('controlTypeGroups').forEach(function (group) {
-  //     var translatedGroup = Ember.Object.createWithMixins(Ember.I18n.TranslateableProperties, {
-  //       nameTranslation: 'form.group.' + group.get('name').toLowerCase()
-  //     });
-  //
-  //     // window.console.log(group);
-  //
-  //     group.get('controlTypes').then(function (controlTypes) {
-  //       window.console.log(controlTypes);
-  //     });
-  //
-  //     translatedGroups.push(translatedGroup);
-  //   });
-  //
-  //   return translatedGroups;
-  //
-  // }.property(),
-
   isValidTypeId: function () {
 
     var valid = true;

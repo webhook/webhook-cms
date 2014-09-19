@@ -9,7 +9,7 @@
   <div {{ bind-attr class=":wy-form-upload-container showUploadButton:on" }}>
     <div class="wy-form-upload">
       <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-music"> Drag or select audio file</button>
+        <button type="button" class="btn btn-neutral icon icon-music"> {{t 'form.control.audio.action'}}</button>
         <div class="image-loading btn btn-info">
           <div class="wy-spinner"></div>
           <span></span>
@@ -17,13 +17,13 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
+    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
   </div>
 
   <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix showUrlInput:on" }}>
-    <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
+    <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
     <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> Cancel</button>
+    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
   </div>
 
 </div>
