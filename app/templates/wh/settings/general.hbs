@@ -1,4 +1,3 @@
-{{#each supportedLanguages}}<button type="button" {{action "chooseLanguage" code}}>{{language}}</button>{{/each}}
 
 <section class="wh-content-head">
   <h1>{{t 'wh.settings.general.account.title'}}</h1>
@@ -9,6 +8,14 @@
     <label>{{t 'wh.settings.general.account.password.prompt'}}</label>
     <div class="wy-control">
       {{#link-to 'wh.settings.password-change' class="btn btn-neutral icon icon-lock"}} {{t 'wh.settings.general.account.password.action'}}{{/link-to}}
+    </div>
+  </div>
+  <div class="wy-control-group">
+    <label>{{t 'wh.settings.general.account.language'}}</label>
+    <div class="wy-control">
+      {{#each supportedLanguages}}
+        <a {{action "chooseLanguage" code}}>{{language}}</a>
+      {{/each}}
     </div>
   </div>
 </section>
