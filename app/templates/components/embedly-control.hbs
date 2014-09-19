@@ -1,6 +1,6 @@
 {{input type="url" value=url disabled=isFetching action="getEmbed"}}
 
-<button type="button" class="btn btn-neutral btn-small icon icon-cloud-download" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> Fetch {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
+<button type="button" class="btn btn-neutral btn-small icon icon-cloud-download" {{action "getEmbed"}} {{bind-attr disabled=isFetching}}> {{t 'form.control.embedly.action'}} {{#if isFetching}}<span class="wy-spinner"></span>{{/if}}</button>
 
 {{#if hasValue}}
 
@@ -9,10 +9,10 @@
   {{/if}}
 
   {{#if showCode}}
-    <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> Preview</button>
+    <button type="button" class="btn btn-small btn-link icon icon-eye-open" {{action "togglePreview"}}> {{t 'form.control.embedly.preview'}}</button>
   {{/if}}
 
-  <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> Clear</button>
+  <button type="button" class="btn btn-link btn-small" {{action "clearValue"}}> {{t 'form.control.embedly.clear'}}</button>
 
   <div {{bind-attr class=":wh-embedly-content control.value.type"}}>
     {{#if showPreview}}

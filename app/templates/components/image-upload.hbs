@@ -16,7 +16,7 @@
       {{/if}}
 
       <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-image"> {{#if control.value }}Replace image{{else}}Drag or select image{{/if}}</button>
+        <button type="button" class="btn btn-neutral icon icon-image"> {{#if control.value }}{{t 'form.control.image.replace'}}{{else}}{{t 'form.control.image.action'}}{{/if}}</button>
         <div class="image-loading btn btn-info">
           <div class="wy-spinner"></div>
           <span></span>
@@ -24,17 +24,17 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
+    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
 
     {{#if control.value.url}}
-      <button type="button" class="btn btn-link btn-small icon wy-text-danger icon-remove-sign" {{action "clear"}}> Remove</button>
+      <button type="button" class="btn btn-link btn-small icon wy-text-danger icon-remove-sign" {{action "clear"}}> {{t 'form.control.file.remove'}}</button>
     {{/if}}
   </div>
 
   <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix wantUrlInput:on" }}>
-    <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
-    <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> Cancel</button>
+    <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
+    <button type="button" class="btn btn-neutral btn-small upload-url">{{t 'form.control.file.upload'}}</button>
+    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
   </div>
 
 </div>
