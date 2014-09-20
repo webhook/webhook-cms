@@ -10,26 +10,26 @@
     <span class="wy-input-context"> {{t 'wh.content.start.duplicate'}}</span>
   {{/if}}
   {{#if isIdTooLong}}
-    <span class="wy-input-context"> {{t 'wh.content.start.long'}}</span>
+    <span class="wy-input-context"> {{t 'wh.content.start.long' lengthBinding="newTypeId.length"}}</span>
   {{/if}}
   <p>{{t 'wh.content.start.instruction'}}</p>
   {{#if newTypeName}}
-    <h2>{{t 'wh.content.start.multiple.title'}}</h2>
+    <h2>{{t 'wh.content.start.multiple.title' newTypeNameBinding="newTypeName"}}</h2>
     <p>{{t 'wh.content.start.multiple.instruction'}}</p>
     <div class="wy-control-group wh-select-type">
       <div class="wy-control">
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="single"}}
-          {{t 'wh.content.start.multiple.one'}}
+          {{t 'wh.content.start.multiple.one' newTypeNameBinding="newTypeName"}}
         </label>
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="multiple"}}
-          {{t 'wh.content.start.multiple.many'}}
+          {{t 'wh.content.start.multiple.many' newTypeNameBinding="newTypeName"}}
         </label>
       </div>
     </div>
     <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDisabled"}}> {{t 'wh.content.start.action'}}</button>
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDisabled"}}> {{t 'wh.content.start.action' newTypeNameBinding="newTypeName"}}</button>
       {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} {{t 'wh.content.start.cancel'}}{{/link-to}}
     </div>
   {{/if}}
