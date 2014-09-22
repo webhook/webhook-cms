@@ -11,11 +11,14 @@
         <div class="icon icon-user"> {{onlineUsers.length}}</div>
       </div>
     {{/if}}
+
     <div class="wy-side-nav-search">
+
       {{#link-to 'wh' classNameBindings=":wh-logo buildEnvironment.building:wh-logo-spinner buildEnvironment.local:wh-logo-local"}}{{/link-to}}
+
       <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
         {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
-        (<a {{action "logoutUser" on="click"}}>Logout</a>)
+        (<a {{action "logoutUser" on="click"}}>{{t 'wh.logout'}}</a>)
       </div>
 
       {{input placeholder="Press S to search" value=searchQuery}}
@@ -27,7 +30,7 @@
 
         {{#if model}}
           <hr>
-          <header>Your content</header>
+          <header>{{t 'wh.navContent'}}</header>
           {{#collection 'animate-collection' content=model}}
             {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
           {{/collection}}
@@ -35,13 +38,13 @@
 
         {{# if session.isOwner }}
           <hr>
-          <header>Configuration</header>
+          <header>{{t 'wh.configuration.title'}}</header>
           <ul>
             {{#if buildEnvironment.local}}
-              <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}Add / edit content types{{/link-to}}</li>
+              <li data-menu-item="customize-forms">{{#link-to 'wh.content.all-types'}}{{t 'wh.configuration.types'}}{{/link-to}}</li>
             {{/if}}
-            <li>{{#link-to 'wh.settings.team'}}Team members{{/link-to}}</li>
-            <li>{{#link-to 'wh.settings.general'}}Settings{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.team'}}{{t 'wh.configuration.team'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.general'}}{{t 'wh.configuration.settings'}}{{/link-to}}</li>
             {{#unless buildEnvironment.selfHosted}}
             <li>
               {{#link-to 'wh.settings.billing'}}
@@ -55,15 +58,15 @@
                     {{/if}}
                   </span>
                 {{else}}
-                    Billing
+                    {{t 'wh.configuration.billing'}}
                 {{/if}}
               {{/link-to}}
             </li>
             {{/unless}}
             {{#unless buildEnvironment.selfHosted}}
-            <li>{{#link-to 'wh.settings.domain'}}Domain{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
             {{/unless}}
-            <li>{{#link-to 'wh.settings.data'}}Backups and data{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.data'}}{{t 'wh.configuration.data'}}{{/link-to}}</li>
           </ul>
         {{/if}}
 

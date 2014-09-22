@@ -3,7 +3,7 @@
   <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
     <div class="wy-form-upload">
       <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-image"> Drag or select images</button>
+        <button type="button" class="btn btn-neutral icon icon-image"> {{t 'form.control.gallery.action'}}</button>
         <div class="image-loading btn btn-info">
           <div class="wy-spinner"></div>
           <span></span>
@@ -11,27 +11,27 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>or use a URL?</button>
+    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
   </div>
 
   <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix wantUrlInput:on" }}>
-    <span class="wy-input-context">Paste URL <span class="icon icon-arrow-right"></span></span><input type="text">
-    <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> Cancel</button>
+    <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
+    <button type="button" class="btn btn-neutral btn-small upload-url">{{t 'form.control.file.upload'}}</button>
+    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
   </div>
 
 </div>
 
 {{#if items}}
-  <p class="wy-form-gallery-instructions icon icon-circle-blank"> Circled images have captions. Click to edit an individual image. Drag to sort.</p>
+  <p class="wy-form-gallery-instructions icon icon-circle-blank"> {{t 'form.control.gallery.instruction'}}</p>
 
   {{#collection 'gallery' content=items images=control.value}}
     {{#if editing}}
       <div class="wy-form-gallery-edit">
         <div class="wy-form-gallery-edit-img">{{resize-image image size="200"}}</div>
         {{textarea value=image.caption placeholder="caption"}}
-        <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> Delete</button>
-        <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> Save / close</button>
+        <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> {{t 'form.control.gallery.delete'}}</button>
+        <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> {{t 'form.control.gallery.close'}}</button>
         <span class="triangle"></span>
       </div>
     {{/if}}

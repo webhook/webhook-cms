@@ -1,22 +1,23 @@
+
 <section class="wh-content-head">
-  <h1>Account settings</h1>
+  <h1>{{t 'wh.settings.general.account.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
   <div class="wy-control-group">
-    <label>Need to change your password?</label>
+    <label>{{t 'wh.settings.general.account.password.prompt'}}</label>
     <div class="wy-control">
-      {{#link-to 'wh.settings.password-change' class="btn btn-neutral icon icon-lock"}} Change your password here{{/link-to}}
+      {{#link-to 'wh.settings.password-change' class="btn btn-neutral icon icon-lock"}} {{t 'wh.settings.general.account.password.action'}}{{/link-to}}
     </div>
   </div>
 </section>
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>Global variables</h1>
+  <h1>{{t 'wh.settings.general.global.title'}}</h1>
 </section>
 
 <section class="wh-content-subhead">
-  These are global values used in your front end templates. To retrieve them into your site, check the <a href="http://www.webhook.com/docs/template-rules-and-filters/#_getsetting" target="_blank">documentation here</a>.
+  {{t 'wh.settings.general.global.description'}}
 </section>
 
 <section class="wh-content-edit">
@@ -24,54 +25,54 @@
   <form {{action "saveSettings" on="submit"}}>
     <fieldset>
       <div class="wy-control-group">
-        <label>Site name</label>
+        <label>{{t 'wh.settings.general.global.fields.name.label'}}</label>
         <div class="wy-control">
           {{input value=model.siteName disabled=model.isSaving}}
         </div>
       </div>
       <div class="wy-control-group">
-        <label>Site description</label>
+        <label>{{t 'wh.settings.general.global.fields.description.label'}}</label>
         <div class="wy-control">
           {{textarea value=model.siteDescription disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">A short description of your site.</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.description.help'}}</span>
       </div>
       <div class="wy-control-group">
-        <label>Site keywords</label>
+        <label>{{t 'wh.settings.general.global.fields.keywords.label'}}</label>
         <div class="wy-control">
           {{textarea value=model.siteKeywords disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Comma seperated list of keywords descibring your site.</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.keywords.help'}}</span>
       </div>
       <div class="wy-control-group">
-        <label>Site url</label>
+        <label>{{t 'wh.settings.general.global.fields.url.label'}}</label>
         <div class="wy-control">
           {{input value=model.siteUrl disabled=model.isSaving placeholder="http://www.example.com"}}
         </div>
-        <span class="wy-form-message">Please use full URL like http://www.example.com.</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.url.help'}}</span>
       </div>
       <div class="wy-control-group">
-        <label>Site analytics id</label>
+        <label>{{t 'wh.settings.general.global.fields.analytics.label'}}</label>
         <div class="wy-control">
           {{input value=model.analyticsId disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Analytics Service ID. Usually something like UA-XX-XXXX</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.analytics.help'}}</span>
       </div>
       <div class="wy-control-group">
-        <label>Site twitter</label>
+        <label>{{t 'wh.settings.general.global.fields.twitter.label'}}</label>
         <div class="wy-control">
           {{input value=model.siteTwitter disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Twitter handle, without the @ sign.</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.twitter.help'}}</span>
       </div>
       <div class="wy-control-group">
-        <label>Site facebook</label>
+        <label>{{t 'wh.settings.general.global.fields.facebook.label'}}</label>
         <div class="wy-control">
           {{input value=model.siteFacebook disabled=model.isSaving}}
         </div>
-        <span class="wy-form-message">Facebook name.</span>
+        <span class="wy-form-message">{{t 'wh.settings.general.global.fields.facebook.help'}}</span>
       </div>
-      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled=model.isSaving}}> Save</button>
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled=model.isSaving}}> {{t 'wh.settings.general.global.action'}}</button>
     </fieldset>
   </form>
 

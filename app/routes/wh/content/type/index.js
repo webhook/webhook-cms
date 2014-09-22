@@ -9,6 +9,7 @@ export default Ember.Route.extend({
     if (contentType.get('oneOff')) {
       this.transitionTo('wh.content.type.edit', contentType.get('id'));
     }
+    this.set('contentType', contentType);
   },
   model: function () {
     var itemModelName = getItemModelName(this.modelFor('wh.content.type'));
@@ -23,7 +24,9 @@ export default Ember.Route.extend({
 
     controller.set('filterQuery', '');
 
-    controller.set('contentType', this.modelFor('wh.content.type'));
+    window.console.log(this.get('contentType.name'));
+
+    controller.set('contentType', this.get('contentType'));
 
     var lockedItems = Ember.A([]),
         lockedRef   = window.ENV.firebase.child('presence/locked').child(this.get('itemModelName'));

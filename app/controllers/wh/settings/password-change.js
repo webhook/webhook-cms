@@ -1,4 +1,5 @@
 export default Ember.ObjectController.extend({
+
   oldPassword : "",
   newPassword : "",
   newPassword2: "",
@@ -8,6 +9,14 @@ export default Ember.ObjectController.extend({
   errors   : Ember.A([]),
 
   isValid: false,
+
+  supportedLanguages: function () {
+    var languages = Ember.A([]);
+    Ember.$.each(Ember.ENV.I18N_CODE_MAP, function (code, language) {
+      languages.push({ code: code, language: language });
+    });
+    return languages;
+  }.property(),
 
   reset: function () {
     this.setProperties({

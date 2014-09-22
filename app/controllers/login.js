@@ -11,6 +11,14 @@ export default Ember.ObjectController.extend({
     this.set('isLoading', false);
   }.observes('session.error'),
 
+  supportedLanguages: function () {
+    var languages = Ember.A([]);
+    Ember.$.each(Ember.ENV.I18N_CODE_MAP, function (code, language) {
+      languages.push({ code: code, language: language });
+    });
+    return languages;
+  }.property(),
+
   actions: {
     loginUser: function () {
       if (this.get('isLoading')) {

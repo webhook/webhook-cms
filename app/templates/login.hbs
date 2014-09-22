@@ -10,22 +10,33 @@
     {{/if}}
 
     <div class="wy-control-group fluid-input">
-      <label>Email</label>
+      <label>{{t "login.email"}}</label>
       <div class="wy-control">
         {{input type="email" value=email name='email' disabled=isLoading}}
       </div>
     </div>
     <div class="wy-control-group fluid-input">
-      <label>Password</label>
+      <label>{{t "login.password"}}</label>
       <div class="wy-control">
         {{input type="password" value=password name='password' disabled=isLoading}}
       </div>
     </div>
 
     <div class="wy-btn-group">
-      <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isLoading"}}> Sign in</button>
-      {{#link-to 'password-reset' classNames='btn btn-small btn-link'}}Forgot password?{{/link-to}}
+      <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isLoading"}}> {{t "login.signIn"}}</button>
+      {{#link-to 'password-reset' classNames='btn btn-small btn-link'}}{{t "login.forgotPassword"}}{{/link-to}}
     </div>
 
   </form>
 </div>
+
+<ul class="wh-lang-select">
+  {{#each supportedLanguages}}
+    <li>
+      <a {{action "chooseLanguage" code}}>{{language}}</a>
+    </li>
+  {{/each}}
+</ul>
+
+<p class="wy-text-center wy-text-small"><a href="https://github.com/webhook/webhook-cms-i18n">{{t "login.addLanguage" }}</a>.</p>
+

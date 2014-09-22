@@ -1,36 +1,36 @@
 <form class="wy-form-stacked" {{action "createType" on="submit"}}>
-  <h1>OK, let's add a new form to the CMS</h1>
+  <h1>{{t 'wh.content.start.title'}}</h1>
   <div class="wy-control-group">
-    <label>Name of new object</label>
+    <label>{{t 'wh.content.start.nameLabel'}}</label>
     <div class="wy-control">
-      {{input value=newTypeName placeholder="ex: comics, articles, about us, homepage, cities, vampires" class="wy-input-large full-width"}}
+      {{view Ember.TextField value=newTypeName placeholderTranslation="wh.content.start.namePlaceholder" class="wy-input-large full-width"}}
     </div>
   </div>
   {{#if isDuplicate}}
-    <span class="wy-input-context"> There is already an content type with that name</span>
+    <span class="wy-input-context"> {{t 'wh.content.start.duplicate'}}</span>
   {{/if}}
   {{#if isIdTooLong}}
-    <span class="wy-input-context"> The content type ID must be 250 characters or shorter. The ID created from the name entered is {{newTypeId.length}} characters long.</span>
+    <span class="wy-input-context"> {{t 'wh.content.start.long' lengthBinding="newTypeId.length"}}</span>
   {{/if}}
-  <p>This will be the CMS menu name (on <span class="icon icon-circle-arrow-left"></span> left) and also define the URL pattern on your front-facing site, so choose wisey.</p>
+  <p>{{t 'wh.content.start.instruction'}}</p>
   {{#if newTypeName}}
-    <h2>So... how many {{newTypeName}} are there?</h2>
-    <p>For example, there is only one homepage entry, but there are multiple blog entries.</p>
+    <h2>{{t 'wh.content.start.multiple.title' newTypeNameBinding="newTypeName"}}</h2>
+    <p>{{t 'wh.content.start.multiple.instruction'}}</p>
     <div class="wy-control-group wh-select-type">
       <div class="wy-control">
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="single"}}
-          There is only <strong>one</strong> {{newTypeName}} entry.
+          {{t 'wh.content.start.multiple.one' newTypeNameBinding="newTypeName"}}
         </label>
         <label class="wy-radio">
           {{view "radio-button" name="contentTypeType" selection=newTypeType value="multiple"}}
-          There are <strong>multiple</strong> {{newTypeName}} entries.
+          {{t 'wh.content.start.multiple.many' newTypeNameBinding="newTypeName"}}
         </label>
       </div>
     </div>
     <div class="wy-button-group">
-      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDisabled"}}> Let's create a {{#if newTypeName}}{{newTypeName}}{{/if}} form!</button>
-      {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} Cancel{{/link-to}}
+      <button type="submit" class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isDisabled"}}> {{t 'wh.content.start.action' newTypeNameBinding="newTypeName"}}</button>
+      {{#link-to 'wh.content.start' class="btn btn-small btn-link icon icon-remove-sign"}} {{t 'wh.content.start.cancel'}}{{/link-to}}
     </div>
   {{/if}}
 </form>
