@@ -94,5 +94,9 @@ export default function dataFromControls (controls) {
     data[control.get('name')] = control.getWithDefault('value', '');
   });
 
+  controls.filterBy('controlType.widget', 'layout').forEach(function (control) {
+    data[control.get('name')] = control.getWithDefault('value', null);
+  });
+
   return data;
 }
