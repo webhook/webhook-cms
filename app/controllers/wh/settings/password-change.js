@@ -10,6 +10,14 @@ export default Ember.ObjectController.extend({
 
   isValid: false,
 
+  supportedLanguages: function () {
+    var languages = Ember.A([]);
+    Ember.$.each(Ember.ENV.I18N_CODE_MAP, function (code, language) {
+      languages.push({ code: code, language: language });
+    });
+    return languages;
+  }.property(),
+
   reset: function () {
     this.setProperties({
       isValid     : false,
