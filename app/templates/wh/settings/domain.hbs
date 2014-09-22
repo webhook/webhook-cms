@@ -2,32 +2,33 @@
   <h1>{{t 'wh.settings.domain.title'}}</h1>
 </section>
 <section class="wh-content-subhead">
-  {{t 'wh.settings.domain.description'}}
+  {{t 'wh.settings.domain.description' siteNameBinding="buildEnvironment.siteName"}}
+  {{#if domain}}{{t 'wh.settings.domain.descriptionDomain' domainBinding="domain"}}{{/if}}
 </section>
 <section class="wh-content-edit">
 
   {{#if success }}
 
-  <h2>Almost done</h2>
+  <h2>{{t 'wh.settings.domain.success.title'}}</h2>
 
-  <p>Great. Point your host records to the following address.</p>
+  <p>{{t 'wh.settings.domain.success.instruction'}}</p>
 
 <pre class="hljs">
 A-RECORD     @              174.129.25.170
 CNAME        www            dns.webhook.com
 </pre>
 
-  <p>You can find more detailed instructions in our docs on <a href="http://www.webhook.com/docs/deployment-domains/">how to set up your domain</a>.</p>
+  <p>{{t 'wh.settings.domain.success.docs'}}</p>
   {{else}}
     {{#if session.billing.isTrial }}
-      <h2>Upgrade to use custom domains</h2>
-      <p>This site is still on a free trial. Only paid sites allow the use of custom domains.</p>
-      <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> Upgrade at webhook.com</a>
+      <h2>{{t 'wh.settings.domain.trial.title'}}</h2>
+      <p>{{t 'wh.settings.domain.trial.instruction'}}</p>
+      <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> {{t 'wh.settings.domain.trial.upgrade'}}</a>
     {{else}}
 
     {{#if errors}}
       <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">Please fix the following errors.</div>
+        <div class="wy-alert-title">{{t 'wh.settings.domain.error'}}</div>
         <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
       </div>
     {{/if}}

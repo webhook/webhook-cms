@@ -3,7 +3,7 @@
 
   {{#if buildEnvironment.local}}
     <h1>{{t 'theme.title'}}</h1>
-    <p class="wh-themes-desc">{{t 'theme.instruction'}}</p>
+    <p class="wh-themes-desc">{{t 'theme.instruction'}} {{#link-to 'wh.content'}}{{t 'theme.scratch'}}{{/link-to}}</p>
 
     {{#if isSending}}
       <div class="wy-spinner wy-spinner-large"></div>
