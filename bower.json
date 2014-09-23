@@ -21,7 +21,7 @@
     "moment": "~2.8.1",
     "emberfire": "~1.1.3",
     "fluidbox": "webhook/Fluidbox#1.3.5",
-    "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.1.0"
+    "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.1.x"
   },
   "devDependencies": {
     "qunit": "~1.12.0",

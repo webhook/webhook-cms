@@ -5,11 +5,11 @@
 <section class="wh-content-edit">
 
   {{# if dataBackup}}
-    <p>We found the following data in your file:</p>
+    <p>{{t 'wh.settings.data.importExport.import.found'}}</p>
 
     <table class="wy-table wy-table-bordered-rows full-width">
       <thead>
-        <tr><th>Content Type</th><th>Item Count</th></tr>
+        <tr><th>{{t 'wh.settings.data.importExport.import.type'}}</th><th>{{t 'wh.settings.data.importExport.import.item'}}</th></tr>
       </thead>
       <tbody>
         {{#each dataBreakdown.content}}
@@ -19,7 +19,7 @@
           </tr>
         {{else}}
           <tr>
-            <td colspan="100">No content to import.</td>
+            <td colspan="100">{{t 'wh.settings.data.importExport.import.noContent'}}</td>
           </tr>
         {{/each}}
       </tbody>
@@ -27,7 +27,7 @@
 
     <table class="wy-table wy-table-bordered-rows full-width">
       <thead>
-        <tr><th>Setting</th><th>Value</th></tr>
+        <tr><th>{{t 'wh.settings.data.importExport.import.setting'}}</th><th>{{t 'wh.settings.data.importExport.import.value'}}</th></tr>
       </thead>
       <tbody>
         {{#each dataBreakdown.settings}}
@@ -37,7 +37,7 @@
           </tr>
         {{else}}
           <tr>
-            <td colspan="100">No settings to import.</td>
+            <td colspan="100">{{t 'wh.settings.data.importExport.import.noSettings'}}</td>
           </tr>
         {{/each}}
       </tbody>
@@ -45,33 +45,35 @@
 
     {{#if validImport}}
       <div class="wy-alert wy-alert-danger">
-        <div class="wy-alert-title">Warning!</div>
-        <p>Using a backup will <strong>permenantly delete</strong> current data and replace it with the data you just uploaded. It will also rebuild your site with the imported data. If you have not created a backup in a while, now would be a good time.</p>
+        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.warningTitle'}}</div>
+        <p>{{t 'wh.settings.data.importExport.import.warning'}}</p>
         <div class="wy-btn-group">
-          <button class="btn btn-success icon icon-ok-sign" {{action "confirm"}}> Proceed</button>
-          <button class="btn btn-danger icon icon-remove-sign" {{action "reset"}}> Cancel</button>
+          <button class="btn btn-success icon icon-ok-sign" {{action "confirm"}}> {{t 'wh.settings.data.importExport.import.proceed'}}</button>
+          <button class="btn btn-danger icon icon-remove-sign" {{action "reset"}}> {{t 'wh.settings.data.importExport.import.cancel'}}</button>
         </div>
       </div>
     {{else}}
       <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">No data</div>
-        <p>We could not find any valid data to import from your file.</p>
+        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.noDataTitle'}}</div>
+        <p>{{t 'wh.settings.data.importExport.import.noData'}}</p>
         <div class="wy-btn-group">
-          <button class="btn btn-neutral" {{action "reset"}}> Back</button>
+          <button class="btn btn-neutral" {{action "reset"}}> {{t 'wh.settings.data.importExport.import.goBack'}}</button>
         </div>
       </div>
     {{/if}}
   {{else}}
     {{#if dataError}}
       <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">We were unable to parse your file.</div>
-        <p>Please make sure you are uploading a <strong>valid</strong> JSON file and try again.</p>
+        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.invalidTitle'}}</div>
+        <p>{{t 'wh.settings.data.importExport.import.invalid'}}</p>
         <pre>{{dataError.name}}: {{dataError.message}}</pre>
       </div>
     {{else}}
       <p>{{t 'wh.settings.data.importExport.instruction'}}</p>
     {{/if}}
-    {{download-backup classNames="btn btn-neutral icon icon-download" text=" Export JSON data"}}
+    {{#download-backup classNames="btn btn-neutral icon icon-download" text=""}}
+      {{t 'wh.settings.data.importExport.action.export'}}
+    {{/download-backup}}
     <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> {{t 'wh.settings.data.importExport.action.import'}}</button>
   {{/if}}
 
@@ -121,7 +123,7 @@
 
   <p>{{t 'wh.settings.data.search.instruction'}}</p>
 
-  <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}>{{#if isIndexing}} Indexing data <span class="wy-spinner"></span>{{else}} {{t 'wh.settings.data.search.action'}}{{/if}}</button>
+  <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}> {{#if isIndexing}}{{t 'wh.settings.data.search.indexing'}} <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.search.action'}}{{/if}}</button>
 
 </section>
 
@@ -154,7 +156,7 @@
         </label>
       </div>
     </div>
-    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action' deleteOptionBinding="deleteOption"}}{{/if}}</button>
+    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}{{t 'wh.settings.data.reset.deleting'}} <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action' deleteOptionBinding="deleteOption"}}{{/if}}</button>
   {{else}}
     <p>{{t 'wh.settings.data.backups.reset.warning'}}</p>
   {{/if}}
