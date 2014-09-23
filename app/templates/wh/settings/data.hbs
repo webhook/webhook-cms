@@ -126,7 +126,7 @@
 </section>
 
 <section class="wh-content-head wh-content-head-again">
-  <h1>{{t 'wh.settings.data.backups.reset.title'}}</h1>
+  <h1>{{t 'wh.settings.data.reset.title'}}</h1>
 </section>
 
 <section class="wh-content-edit">
@@ -154,7 +154,7 @@
         </label>
       </div>
     </div>
-    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action'}}{{/if}}</button>
+    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}Deleting data <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action' deleteOptionBinding="deleteOption"}}{{/if}}</button>
   {{else}}
     <p>{{t 'wh.settings.data.backups.reset.warning'}}</p>
   {{/if}}
