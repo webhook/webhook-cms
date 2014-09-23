@@ -8,7 +8,7 @@
             <dd>{{this}}</dd>
           {{/each}}
         </dl>
-        <div class="icon icon-user"> {{onlineUsers.length}}</div>
+        <div class="icon icon-user"> {{onlineUsers.length}} <span>{{t 'wh.userCount'}}</span></div>
       </div>
     {{/if}}
 
@@ -16,12 +16,12 @@
 
       {{#link-to 'wh' classNameBindings=":wh-logo buildEnvironment.building:wh-logo-spinner buildEnvironment.local:wh-logo-local"}}{{/link-to}}
 
-      <div class="wh-user-dropdown" data-toggle="tooltip" title="Click to change your password and other account info.">
+      <div class="wh-user-dropdown" data-toggle="tooltip" {{translateAttr title="wh.accountTooltip"}}>
         {{#link-to 'wh.settings.password-change'}}{{session.user.email}}{{/link-to}}
         (<a {{action "logoutUser" on="click"}}>{{t 'wh.logout'}}</a>)
       </div>
 
-      {{input placeholder="Press S to search" value=searchQuery}}
+      {{view Ember.TextField placeholderTranslation="wh.search" value=searchQuery}}
     </div>
 
     <div class="wy-menu wy-menu-vertical">

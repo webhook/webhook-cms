@@ -288,6 +288,8 @@ pre code
     margin-left: $base-line-height / 2
     &:before
       color: $text-light
+    span
+      display: none
   dl
     max-height: 0
     overflow: hidden
@@ -301,10 +303,10 @@ pre code
   > .icon
     background: $gray-darker
     color: $white
+    span
+      display: inline
   > .icon:before
     color: $gray
-  > .icon:after
-    content: " online now."
   dl
     max-height: 200px
 
@@ -539,6 +541,3 @@ pre code
       text-align: center
   .wh-save-item-extra-btn
     display: inline-block
-
-
-

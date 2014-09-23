@@ -16,8 +16,8 @@
       </div>
     {{else}}
       <div class="wy-alert wy-alert-danger">
-        <div class="wy-alert-title">You need to deploy first</div>
-        <p>Before you can add new members to your team you need to deploy the site onto the Internet. You can do this by running <code>wh deploy</code> in your local site directory. Then return to this page.</p>
+        <div class="wy-alert-title">{{t 'wh.settings.team.deploy.title'}}</div>
+        <p>{{t 'wh.settings.team.deploy.instruction'}}</p>
       </div>
     {{/if}}
 
@@ -58,24 +58,24 @@
           <td>
             {{#if user.owner }}
             <div class="wy-dropdown wy-dropdown-bubble">
-              <span class="btn btn-neutral icon icon-lock"> Owner <span class="caret"></span</span>
+              <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.owner'}} <span class="caret"></span</span>
               <dl class="wy-dropdown-menu">
-                <dd><a href="" {{ action "makeUser" user }}>Change to contributor</a></dd>
-                <dd><a href="" {{ action "removeUser" user }}>Remove access entirely</a></dd>
+                <dd><a href="" {{ action "makeUser" user }}>{{t 'wh.settings.team.current.toContributor'}}</a></dd>
+                <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
               </dl>
             </div>
             {{/if}}
             {{#if user.user }}
               <div class="wy-dropdown wy-dropdown-bubble">
-                <span class="btn btn-neutral icon icon-lock"> Contributor <span class="caret"></span</span>
+                <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.contributor'}} <span class="caret"></span</span>
                 <dl class="wy-dropdown-menu">
-                  <dd><a href="" {{ action "makeOwner" user }}>Change to owner</a></dd>
-                  <dd><a href="" {{ action "removeUser" user }}>Remove access entirely</a></dd>
+                  <dd><a href="" {{ action "makeOwner" user }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
+                  <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
                 </dl>
               </div>
             {{/if}}
             {{#if user.potential }}
-              Waiting on verification (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> Cancel invite</a>)
+              {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
             {{/if}}
           </td>
         </tr>
