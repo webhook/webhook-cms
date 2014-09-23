@@ -24,8 +24,6 @@ export default Ember.Route.extend({
 
     controller.set('filterQuery', '');
 
-    window.console.log(this.get('contentType.name'));
-
     controller.set('contentType', this.get('contentType'));
 
     var lockedItems = Ember.A([]),
