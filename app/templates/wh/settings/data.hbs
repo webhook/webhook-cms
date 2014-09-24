@@ -156,7 +156,7 @@
         </label>
       </div>
     </div>
-    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}{{t 'wh.settings.data.reset.deleting'}} <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.reset.action' deleteOptionBinding="deleteOption"}}{{/if}}</button>
+    <button class="btn btn-danger icon icon-remove-sign" {{action "deleteData"}} {{bind-attr disabled=isDeleting}}> {{#if isDeleting}}{{t 'wh.settings.data.reset.deleting'}} <span class="wy-spinner"></span>{{else}}{{#if isDeleteData}}{{t 'wh.settings.data.reset.action.deleteData'}}{{else}}{{t 'wh.settings.data.reset.action.deleteEverything'}}{{/if}}{{/if}}</button>
   {{else}}
     <p>{{t 'wh.settings.data.backups.reset.warning'}}</p>
   {{/if}}
