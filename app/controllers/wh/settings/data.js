@@ -11,6 +11,10 @@ export default Ember.Controller.extend({
   downloadLink: '',
   downloadFileName: '',
 
+  isDeleteData: function () {
+    return this.get('deleteOption') === 'data';
+  }.property('deleteOption'),
+
   dataBreakdown: function () {
 
     var dataBackup = this.get('dataBackup');
