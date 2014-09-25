@@ -30,7 +30,7 @@
         <form class="wy-form-stacked" {{action "updateType" on="submit"}}>
           <fieldset>
 
-            <h2 class="wh-form-builder-title wh-form-builder-title-set" data-toggle="tooltip" data-placement="left" title="Click to edit the name and URL structure for this content type." {{action 'editTypeId'}}>{{name}}</h2>
+            <h2 class="wh-form-builder-title wh-form-builder-title-set" data-toggle="tooltip" data-placement="left" {{translateAttr title="form.nameTooltip"}} {{action 'editTypeId'}}>{{name}}</h2>
 
             {{#each errors.fields}}
               <span class="wy-form-message">{{this}}</span>
@@ -40,9 +40,9 @@
           </fieldset>
 
           <div class="wh-form-builder-save wy-btn-group">
-            <a href="https://vimeo.com/98492453" target="_blank" class="btn btn-link icon icon-question-sign" data-toggle="tooltip" title="Watch a tutorial video about the form builder."> Help</a>
-            <button type="submit" class="btn btn-success icon icon-ok-sign float-right"> Save form</button>
-            <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action "quitForm"}}> Cancel / Return to CMS</button>
+            <a href="https://vimeo.com/98492453" target="_blank" class="btn btn-link icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.helpTooltip"}}> {{t 'form.help'}}</a>
+            <button type="submit" class="btn btn-success icon icon-ok-sign float-right"> {{t 'form.action'}}</button>
+            <button type="button" class="btn btn-link btn-back-to-cms icon icon-remove-sign float-right" {{action "quitForm"}}> {{t 'form.goBack'}}</button>
           </div>
 
         </form>
