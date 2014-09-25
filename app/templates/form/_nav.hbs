@@ -99,18 +99,18 @@
             </div>
           {{/unless}}
 
-          <p class="edit-instruction">{{t 'form.slugInstruction'}}</p>
+          <p class="edit-instruction">{{t 'form.slugInstruction' nameBinding="name"}}</p>
           <hr>
 
           <div class="wy-control-group">
-            <label>{{t 'form.listUrlLabel'}}</label>
+            <label>{{t 'form.listUrlLabel' nameBinding="name"}}</label>
             <div class="wy-control wy-form-full">
               {{input placeholder=id value=customUrls.listUrl focus-out="correctListUrl"}}
             </div>
           </div>
 
           <div class="wy-control-group">
-            <label>{{t 'form.individualUrlLabel'}}</label>
+            <label>{{t 'form.individualUrlLabel' nameBinding="name"}}</label>
             <div class="wy-control wy-form-full">
               {{input value=customUrls.individualUrl focus-out="correctIndividualUrl"}}
             </div>
