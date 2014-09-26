@@ -72,29 +72,34 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function(err) {
+      if(this.get('owners').length === 1) {
+        this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
+        return;
+      }
 
-        if(err) {
-          this.set('error', err);
-          return;
-        }
+      window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true, function(err) {
+        window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
+          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function(err) {
 
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove(function(err) {
-          if(err) {
-            this.set('error', err);
-            return;
-          }
+            if(err) {
+              this.set('error', err);
+              return;
+            }
 
-          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true, function(err) {
-            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
+            window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove(function(err) {
+              if(err) {
+                this.set('error', err);
+                return;
+              }
+
               // Hey if this was you.. kick you out of this page now
               if(this.get('session.user.email') === email) {
                 this.transitionToRoute('wh');
               }
             }.bind(this));
+
           }.bind(this));
         }.bind(this));
-
       }.bind(this));
     },
     makeOwner : function(user) {
@@ -131,28 +136,31 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('buildEnvironment').siteName;
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function(err) {
-        if(err) {
-          this.set('error', err);
-          return;
-        }
+      if(this.get('owners').length === 1) {
+        this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
+        return;
+      }
 
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function(err) {
-          if(err) {
-            this.set('error', err);
-            return;
-          }
+      window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
+        window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function(err) {
+          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function(err) {
+            if(err) {
+              this.set('error', err);
+              return;
+            }
 
-          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function(err) {
-            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function(err) {
+            window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function(err) {
+              if(err) {
+                this.set('error', err);
+                return;
+              }
+
               if(this.get('session.user.email') === email) {
-                this.transitionToRoute('wh');
+                this.get('session').get('auth').logout();
               }
             }.bind(this));
           }.bind(this));
-
         }.bind(this));
-
       }.bind(this));
     },
 
