@@ -2,7 +2,7 @@ export default Ember.Component.extend({
   classNames: ['wh-markdown-editor'],
   classNameBindings: ['whMarkdownEditorFullscreen'],
 
-  wyMarkdownEditorFullscreen: false,
+  whMarkdownEditorFullscreen: false,
 
   selectionStart: 0,
 
