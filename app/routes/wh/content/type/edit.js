@@ -5,92 +5,93 @@ export default Ember.Route.extend({
 
   beforeModel: function (transition) {
 
+    var EditRoute = this;
+    var contentType = this.modelFor('wh.content.type');
     var promises = [];
-
-    var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
-
-    if (itemId) {
-      var contentType = this.modelFor('wh.content.type');
-      var modelName = getItemModelName(contentType),
-          lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
-
-      var userEmail = this.get('session.user.email');
-
-      var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
-        lockRef.once('value', function (snapshot) {
-          if (snapshot.val() && snapshot.val() !== userEmail) {
-            Ember.run(null, reject, new Ember.Error(snapshot.val() + ' is already editing this item.'));
-          } else {
-            Ember.run(null, resolve);
-          }
-        });
-      }).then(function () {
-
-        // Unlock on disconnect
-        lockRef.onDisconnect().remove();
-
-        // Lock it down!
-        lockRef.set(this.get('session.user.email'));
-
-        return this.store.find(modelName, itemId).then(function (item) {
-
-          // item found
-          this.set('itemModel', item);
-
-        }.bind(this), function (message) {
-
-          // item does not exist
-
-          // create the item if we're a one-off
-          if (this.modelFor('wh.content.type').get('oneOff')) {
-
-            // hack to overwrite empty state model that is being put in store from find method
-            this.store.push(modelName, {
-              id  : contentType.get('id'),
-              itemData: { name: "" }
-            });
-
-            // use the item we just put in the store
-            var item = this.store.getById(modelName, contentType.get('id'));
-
-            this.set('itemModel', item);
-
-            return Ember.RSVP.resolve(item);
-
-          } else {
-
-            lockRef.remove();
-            return Ember.RSVP.reject(new Ember.Error(itemId + ' does not exist.'));
-
-          }
-
-        }.bind(this));
-
-      }.bind(this));
-
-      promises.push(lockCheck);
-
-      this.set('lockRef', lockRef);
-      this.set('itemId', itemId);
-
-    }
 
     // need to make sure all the content types are in the store
     // basically a hack
     promises.push(this.store.find('control-type'));
 
-    // make sure `create_date`, `last_updated` and `publish_date` controls exist
-    promises.push(this.fixControlType(this.modelFor('wh.content.type')));
+    // add missing controls that the generator requires
+    promises.push(this.fixContentType(contentType));
 
-    return Ember.RSVP.Promise.all(promises).catch(function (error) {
-      window.alert(error.message);
-      transition.abort();
+    var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
 
-      // The user entered this URL into the browser. We need to redirect them somewhere.
-      if (transition.urlMethod === 'replaceQuery') {
-        this.transitionTo('wh');
-      }
-    }.bind(this));
+    if (itemId) {
+      var modelName = getItemModelName(contentType);
+
+      var editingRef = window.ENV.firebase.child('presence/editing').child(modelName).child(itemId);
+
+      var editorRef = editingRef.child(this.get('session.user.uid'));
+      editorRef.onDisconnect().remove();
+      editorRef.set(this.get('session.user.email'));
+      this.set('editorRef', editorRef);
+
+      var draftRef = window.ENV.firebase.child('draft').child(modelName).child(itemId);
+      this.set('draftRef', draftRef);
+
+      var itemPromise = this.store.find(modelName, itemId).catch(function () {
+
+        // item does not exist
+
+        // create the item if we're a one-off
+        if (EditRoute.modelFor('wh.content.type').get('oneOff')) {
+
+          // hack to overwrite empty state model that is being put in store from find method
+          EditRoute.store.push(modelName, {
+            id  : contentType.get('id'),
+            itemData: { name: "" }
+          });
+
+          // use the item we just put in the store
+          var item = EditRoute.store.getById(modelName, contentType.get('id'));
+
+          EditRoute.set('itemModel', item);
+
+          return Ember.RSVP.resolve(item);
+
+        } else {
+
+          return Ember.RSVP.reject(new Ember.Error('%@ does not exist.'.fmt(itemId)));
+
+        }
+
+      }).then(function (item) {
+
+        EditRoute.set('itemModel', item);
+
+        return new Ember.RSVP.Promise(function (resolve, reject) {
+          draftRef.once('value', function (snapshot) {
+            if (snapshot.val()) {
+              return resolve(snapshot.val());
+            } else {
+              return resolve(item.getWithDefault('itemData', {}));
+            }
+          });
+        });
+
+      }).then(function (itemData) {
+        EditRoute.set('itemData', itemData);
+
+        var updateControl = function (snapshot) {
+          contentType.get('controls').filterBy('name', snapshot.name()).forEach(function (control) {
+            control.set('value', snapshot.val());
+          });
+        };
+
+        draftRef.on('child_added', updateControl);
+        draftRef.on('child_removed', updateControl);
+        draftRef.on('child_changed', updateControl);
+      });
+
+      promises.push(itemPromise);
+      this.set('itemId', itemId);
+
+    }
+
+    return Ember.RSVP.Promise.all(promises);
+
   },
 
   model: function (params) {
@@ -156,7 +157,9 @@ export default Ember.Route.extend({
     controller.set('itemModel', this.get('itemModel'));
     controller.set('initialRelations', Ember.Object.create());
 
-    var data = this.getWithDefault('itemModel.itemData', {});
+    controller.set('draftRef', this.get('draftRef'));
+
+    var data = this.get('itemData');
 
     type.get('controls').forEach(function (control) {
 
@@ -214,7 +217,7 @@ export default Ember.Route.extend({
       }
 
       if (value && control.get('controlType.widget') === 'relation') {
-        if (value && !Ember.isArray(value)) {
+        if (!Ember.isArray(value)) {
           value = Ember.A([value]);
         }
         // Remember what the initial relations are so we can check for diffs on save.
@@ -226,6 +229,17 @@ export default Ember.Route.extend({
       }
 
       control.set('value', value);
+
+
+      // Drafts
+      function setDraftValue () {
+        route.get('draftRef').child(control.get('name')).set(control.getWithDefault('correctedValue', null));
+      }
+
+      setDraftValue();
+
+      control.addObserver('value', setDraftValue);
+
     });
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
@@ -247,72 +261,73 @@ export default Ember.Route.extend({
     controller.set('initialValues', type.get('controls').getEach('value'));
   },
 
-  fixControlType: function (contentType) {
+  fixContentType: function (contentType) {
 
-    return this.store.find('control-type', 'datetime').then(function (controlType) {
+    var route = this;
 
-      var datetimeDefaults = {
-        controlType: controlType,
-        locked     : true,
-        showInCms  : true,
-        required   : true,
-        hidden     : true
-      };
+    var datetimeDefaults = {
+      controlType: this.store.getById('control-type', 'datetime'),
+      locked     : true,
+      showInCms  : true,
+      required   : true,
+      hidden     : true
+    };
 
-      var controls = contentType.get('controls'),
-          save = false;
+    var controls = contentType.get('controls'),
+        save = false;
 
-      var addControl = function (data) {
-        controls.pushObject(this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
-        save = true;
-      }.bind(this);
+    var addControl = function (data) {
+      controls.pushObject(route.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
+      save = true;
+    };
 
-      if (!controls.isAny('name', 'create_date')) {
-        addControl({
-          name : 'create_date',
-          label: 'Create Date'
-        });
-      }
+    if (!controls.isAny('name', 'create_date')) {
+      addControl({
+        name : 'create_date',
+        label: 'Create Date'
+      });
+    }
 
-      if (!controls.isAny('name', 'last_updated')) {
-        addControl({
-          name : 'last_updated',
-          label: 'Last Updated'
-        });
-      }
+    if (!controls.isAny('name', 'last_updated')) {
+      addControl({
+        name : 'last_updated',
+        label: 'Last Updated'
+      });
+    }
 
-      if (!controls.isAny('name', 'publish_date')) {
-        addControl({
-          name : 'publish_date',
-          label: 'Publish Date',
-          required: false
-        });
-      }
+    if (!controls.isAny('name', 'publish_date')) {
+      addControl({
+        name : 'publish_date',
+        label: 'Publish Date',
+        required: false
+      });
+    }
 
-      if (!controls.isAny('name', 'preview_url')) {
-        addControl({
-          controlType: this.store.getById('control-type', 'textfield'),
-          name       : 'preview_url',
-          label      : 'Preview URL',
-          showInCms  : false
-        });
-      }
+    if (!controls.isAny('name', 'preview_url')) {
+      addControl({
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'preview_url',
+        label      : 'Preview URL',
+        showInCms  : false
+      });
+    }
 
-      if (!controls.isAny('name', 'slug')) {
-        addControl({
-          controlType: this.store.getById('control-type', 'textfield'),
-          name       : 'slug',
-          label      : 'Slug',
-          showInCms  : false,
-          required   : false
-        });
-      }
+    if (!controls.isAny('name', 'slug')) {
+      addControl({
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'slug',
+        label      : 'Slug',
+        showInCms  : false,
+        required   : false
+      });
+    }
 
-      if (save) {
-        contentType.save();
-      }
+    if (save) {
+      return contentType.save();
+    } else {
+      return Ember.RSVP.Promise.resolve();
+    }
 
-    }.bind(this));
   },
 
   actions: {
@@ -328,12 +343,15 @@ export default Ember.Route.extend({
 
       this.get('controller.type.controls').filterBy('name', 'name').forEach(function (control) {
         control.removeObserver('value');
-      }.bind(this));
+      });
       this.set('isObservingName', false);
 
-      // Unlock on transition
-      if (this.get('lockRef')) {
-        this.get('lockRef').remove();
+      if (this.get('editorRef')) {
+        this.get('editorRef').remove();
+      }
+
+      if (this.get('draftRef')) {
+        this.get('draftRef').off();
       }
 
       return true;

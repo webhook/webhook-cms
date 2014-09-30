@@ -1,7 +1,6 @@
 /*globals ga*/
 import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
-import dataFromControls from 'appkit/utils/controls';
 import uuid from 'appkit/utils/uuid';
 import SearchIndex from 'appkit/utils/search-index';
 import slugger from 'appkit/utils/slugger';
@@ -17,6 +16,8 @@ export default Ember.ObjectController.extend({
   previewUrl  : null,
   initialRelations: Ember.Object.create(),
   initialValues: Ember.A([]),
+
+  draftRef: null,
 
   nameControl: null,
   slugControl: null,
@@ -320,7 +321,11 @@ export default Ember.ObjectController.extend({
       return;
     }
 
-    var itemData = dataFromControls(controls);
+    var itemData = {};
+
+    controls.forEach(function (control) {
+      itemData[control.get('name')] = control.get('correctedValue');
+    });
 
     itemData.isDraft = this.getWithDefault('isDraft', null);
 

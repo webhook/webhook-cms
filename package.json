@@ -53,13 +53,14 @@
     "grunt-es6-import-validate": "0.0.6"
   },
   "dependencies": {
-    "gapitoken": "~0.1.0",
-    "request": "~2.33.0",
-    "mime": "~1.2.11",
-    "wrench": "~1.5.6",
     "async": "~0.2.10",
+    "connect-header": "0.0.5",
+    "gapitoken": "~0.1.0",
+    "grunt-es6-module-transpiler": "^0.6.0",
     "grunt-exec": "~0.4.5",
+    "mime": "~1.2.11",
     "proxy-middleware": "~0.5.0",
-    "connect-header": "0.0.5"
+    "request": "~2.33.0",
+    "wrench": "~1.5.6"
   }
 }
