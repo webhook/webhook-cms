@@ -109,18 +109,18 @@ export default DS.Model.extend({
 
     value = typeof value === 'undefined' ? null : value;
 
-    switch (control.get('controlType.widget')) {
-    case 'checkbox':
-      Ember.Logger.log('checkbox:%@'.fmt(control.get('name')), value.map(function (option) {
-        return option.label + ':' + option.value;
-      }));
-      break;
-
-    default:
-      Ember.Logger.log('%@:%@'.fmt(control.get('controlType.widget'), control.get('name')), value);
-      break;
-
-    }
+    // switch (control.get('controlType.widget')) {
+    // case 'checkbox':
+    //   Ember.Logger.log('checkbox:%@'.fmt(control.get('name')), value.map(function (option) {
+    //     return option.label + ':' + option.value;
+    //   }));
+    //   break;
+    //
+    // default:
+    //   Ember.Logger.log('%@:%@'.fmt(control.get('controlType.widget'), control.get('name')), value);
+    //   break;
+    //
+    // }
 
     return value;
 

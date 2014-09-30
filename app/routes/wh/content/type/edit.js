@@ -73,16 +73,6 @@ export default Ember.Route.extend({
 
       }).then(function (itemData) {
         EditRoute.set('itemData', itemData);
-
-        var updateControl = function (snapshot) {
-          contentType.get('controls').filterBy('name', snapshot.name()).forEach(function (control) {
-            control.set('value', snapshot.val());
-          });
-        };
-
-        draftRef.on('child_added', updateControl);
-        draftRef.on('child_removed', updateControl);
-        draftRef.on('child_changed', updateControl);
       });
 
       promises.push(itemPromise);
@@ -150,6 +140,7 @@ export default Ember.Route.extend({
     this._super.apply(this, arguments);
 
     var route = this;
+    var draftRef = this.get('draftRef');
 
     this.set('dupeNameError', 'Name must be unique among ' + type.get('name') + ' entries.');
 
@@ -230,10 +221,13 @@ export default Ember.Route.extend({
 
       control.set('value', value);
 
+      control.set('draftValue', Ember.A([]));
 
       // Drafts
       function setDraftValue () {
-        route.get('draftRef').child(control.get('name')).set(control.getWithDefault('correctedValue', null));
+        var draftValue = control.getWithDefault('correctedValue');
+        control.get('draftValue').pushObject(draftValue);
+        draftRef.child(control.get('name')).set(draftValue);
       }
 
       setDraftValue();
@@ -241,6 +235,22 @@ export default Ember.Route.extend({
       control.addObserver('value', setDraftValue);
 
     });
+
+    var updateControl = function (snapshot) {
+      var control = type.get('controls').findBy('name', snapshot.name());
+      var draftValue = snapshot.val();
+
+      if (~control.get('draftValue').indexOf(draftValue)) {
+        control.get('draftValue').removeObject(draftValue);
+      } else {
+        control.set('value', snapshot.val());
+      }
+
+    };
+
+    draftRef.on('child_added', updateControl);
+    draftRef.on('child_removed', updateControl);
+    draftRef.on('child_changed', updateControl);
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
 
