@@ -2,7 +2,13 @@ export default function dataFromControls (controls) {
 
   var data = {};
 
-  // gather and clean data for storage
+  // gather data for storage
+  // emberfire uses the update() method when saving so we need to explicitly set every key
+  controls.forEach(function (control) {
+    data[control.get('name')] = control.get('value');
+  });
+
+  // normalize data for storage
   controls.filterBy('value').forEach(function (control) {
 
     Ember.Logger.info('Extracting value from ' + control.get('controlType.widget') + ':' + control.get('name'));
