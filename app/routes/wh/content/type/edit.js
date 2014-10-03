@@ -5,6 +5,7 @@ export default Ember.Route.extend({
 
   beforeModel: function (transition) {
 
+    var EditRoute = this;
     var promises = [];
 
     var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
@@ -18,10 +19,16 @@ export default Ember.Route.extend({
 
       var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
         lockRef.once('value', function (snapshot) {
-          if (snapshot.val() && snapshot.val() !== userEmail) {
-            Ember.run(null, reject, new Ember.Error(snapshot.val() + ' is already editing this item.'));
+          var lock = snapshot.val();
+          if (lock && typeof lock === 'object' && lock.email !== userEmail) {
+            // check for expired lock
+            if (moment(lock.time).diff(moment()) > 0) {
+              reject(new Ember.Error(lock.email + ' is already editing this item.'));
+            } else {
+              resolve();
+            }
           } else {
-            Ember.run(null, resolve);
+            resolve();
           }
         });
       }).then(function () {
@@ -29,8 +36,9 @@ export default Ember.Route.extend({
         // Unlock on disconnect
         lockRef.onDisconnect().remove();
 
-        // Lock it down!
-        lockRef.set(this.get('session.user.email'));
+        EditRoute.addObserver('lockUntil', EditRoute.updateLock);
+
+        EditRoute.set('lockUntil', moment().add(2, 'minutes').format());
 
         return this.store.find(modelName, itemId).then(function (item) {
 
@@ -46,7 +54,7 @@ export default Ember.Route.extend({
 
             // hack to overwrite empty state model that is being put in store from find method
             this.store.push(modelName, {
-              id  : contentType.get('id'),
+              id: contentType.get('id'),
               itemData: { name: "" }
             });
 
@@ -85,12 +93,30 @@ export default Ember.Route.extend({
     return Ember.RSVP.Promise.all(promises).catch(function (error) {
       window.alert(error.message);
       transition.abort();
-
-      // The user entered this URL into the browser. We need to redirect them somewhere.
-      if (transition.urlMethod === 'replaceQuery') {
-        this.transitionTo('wh');
-      }
+      this.transitionTo('wh.content.type', this.modelFor('wh.content.type'));
     }.bind(this));
+  },
+
+  updateLock: function () {
+
+    var lockUntil = this.get('lockUntil');
+
+    if (Ember.isEmpty(lockUntil)) {
+      return;
+    }
+
+    this.get('lockRef').set({
+      email: this.get('session.user.email'),
+      time: lockUntil
+    });
+
+    var EditRoute = this;
+    var incrementLockTime = Ember.run.later(function () {
+      EditRoute.set('lockUntil', moment().add(2, 'minutes').format());
+    }, 60000);
+
+    this.set('incrementLockTime', incrementLockTime);
+
   },
 
   model: function (params) {
@@ -326,12 +352,13 @@ export default Ember.Route.extend({
       this.get('controller').removeObserver('type.controls.@each.value');
       this.set('controller.isDirty', false);
 
-      this.get('controller.type.controls').filterBy('name', 'name').forEach(function (control) {
-        control.removeObserver('value');
-      }.bind(this));
+      this.get('controller.type.controls').findBy('name', 'name').removeObserver('value');
       this.set('isObservingName', false);
 
+
       // Unlock on transition
+      this.removeObserver('lockUntil', this.updateLock);
+      this.set('lockUntil', null);
       if (this.get('lockRef')) {
         this.get('lockRef').remove();
       }

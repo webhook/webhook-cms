@@ -34,13 +34,19 @@ export default Ember.Route.extend({
     var lockedItem = function (snapshot) {
       lockMap.set(snapshot.name(), Ember.Object.create({
         id: snapshot.name(),
-        email: snapshot.val()
+        email: snapshot.val().email
       }));
       return lockMap.get(snapshot.name());
     };
 
     lockedRef.on('child_added', function (snapshot) {
-      lockedItems.pushObject(lockedItem(snapshot));
+      var lock = snapshot.val();
+      var diff = moment(lock.time).diff(moment());
+      if (diff < 0) {
+        snapshot.ref().remove();
+      } else {
+        lockedItems.pushObject(lockedItem(snapshot));
+      }
     });
 
     lockedRef.on('child_removed', function (snapshot) {
