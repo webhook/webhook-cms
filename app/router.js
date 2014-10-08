@@ -27,6 +27,7 @@ Router.map(function() {
       this.route('general');
       this.route('team');
       this.route('password-change');
+      this.route('urls');
     });
 
     this.route('search-global-results');
