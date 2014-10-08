@@ -49,7 +49,7 @@
 
             {{#if theme.demo}}<a class="btn btn-small btn-neutral" {{ bind-attr href=theme.demo }} target="_blank">{{t 'theme.demo'}}</a>{{/if}}
             <a class="btn btn-small btn-neutral" {{ bind-attr href=theme.code }} target="_blank">GitHub</a>
-            <button class="btn btn-small btn-neutral" {{ action downloadPreset theme }}>{{t 'theme.install'}}</button>
+            <button class="btn btn-small btn-neutral" {{ action 'downloadPreset' theme }}>{{t 'theme.install'}}</button>
         </li>
         {{/each}}
       </ul>
