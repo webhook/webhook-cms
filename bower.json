@@ -19,7 +19,7 @@
     "FileSaver.js": "eligrey/FileSaver.js",
     "filereader.js": "bgrins/filereader.js",
     "moment": "2.8.x",
-    "emberfire": "1.2.x",
+    "emberfire": "1.2.5",
     "fluidbox": "webhook/Fluidbox#1.3.5",
     "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.3.x"
   },
