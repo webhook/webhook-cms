@@ -240,11 +240,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   removeRelations: function () {
 
-    var relationControls = this.get('removedControls').filterBy('controlType.widget', 'relation');
+    var controller = this;
+
+    // Filter out relation controls that are related to their parent content type.
+    var relationControls = this.get('removedControls').filterBy('controlType.widget', 'relation').filter(function (control) {
+      return control.get('meta.contentTypeId') !== controller.get('model.id');
+    });
 
     Ember.Logger.log('Removing %@ reverse relationships.'.fmt(relationControls.get('length')));
-
-    var controller = this;
 
     var relationUpdates = relationControls.map(function (control) {
 
@@ -257,37 +260,39 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         controls.removeObject(controlToRemove);
 
         return contentType.save().then(function (contentType) {
+
           Ember.Logger.log('Removed `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
           return Ember.RSVP.Promise.resolve(contentType);
+
+        }).then(function (contentType) {
+
+          // remove relation data from related content types
+          var relatedContentTypeItemModelName = getItemModelName(contentType);
+
+          var removeData = function (item) {
+
+            var itemData = item.get('itemData');
+
+            itemData[controlToRemove.get('name')] = null;
+
+            item.set('itemData', itemData);
+
+            return item.save().then(function (savedItem) {
+              Ember.Logger.log('Relation data removed from `$@`'.fmt(savedItem.get('id')));
+              SearchIndex.indexItem(savedItem, contentType);
+            });
+
+          };
+
+          if (contentType.get('oneOff')) {
+            return controller.store.find(relatedContentTypeItemModelName, contentType.get('id')).then(removeData);
+          } else {
+            return controller.store.find(relatedContentTypeItemModelName).then(function (items) {
+              return Ember.RSVP.Promise.all(items.map(removeData));
+            });
+          }
+
         });
-
-      }).then(function (contentType) {
-
-        // remove relation data from related content types
-        var relatedContentTypeItemModelName = getItemModelName(contentType);
-
-        var removeData = function (item) {
-
-          var itemData = item.get('itemData');
-
-          itemData[controlToRemove.get('name')] = null;
-
-          item.set('itemData', itemData);
-
-          return item.save().then(function (savedItem) {
-            Ember.Logger.log('Relation data removed from `$@`'.fmt(savedItem.get('id')));
-            SearchIndex.indexItem(savedItem, contentType);
-          });
-
-        };
-
-        if (contentType.get('oneOff')) {
-          return controller.store.find(relatedContentTypeItemModelName, contentType.get('id')).then(removeData);
-        } else {
-          return controller.store.find(relatedContentTypeItemModelName).then(function (items) {
-            return Ember.RSVP.Promise.all(items.map(removeData));
-          });
-        }
 
       });
 
@@ -299,11 +304,21 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   addRelations: function () {
 
-    var relationControls = this.get('addedControls').filterBy('controlType.widget', 'relation');
+    var controller = this;
+
+    // Filter out relation controls that are related to their parent content type.
+    var relationControls = this.get('addedControls').filterBy('controlType.widget', 'relation').filter(function (control) {
+
+      var isSelfRelated = control.get('meta.contentTypeId') === controller.get('model.id');
+
+      if (isSelfRelated) {
+        control.set('meta.reverseName', control.get('name'));
+      }
+
+      return !isSelfRelated;
+    });
 
     Ember.Logger.log('Adding %@ reverse relationships.'.fmt(relationControls.get('length')));
-
-    var controller = this;
 
     var relationUpdates = relationControls.map(function (localControl) {
 
@@ -359,11 +374,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   changeRelations: function () {
 
-    var relationControls = this.get('changedNameControls').filterBy('controlType.widget', 'relation');
+    var controller = this;
+
+    // Filter out relation controls that are related to their parent content type.
+    var relationControls = this.get('changedNameControls').filterBy('controlType.widget', 'relation').filter(function (control) {
+      return control.get('meta.contentTypeId') !== controller.get('model.id');
+    });
 
     Ember.Logger.log('Updating %@ reverse relationships.'.fmt(relationControls.get('length')));
-
-    var controller = this;
 
     var relationUpdates = relationControls.map(function (localControl) {
 
