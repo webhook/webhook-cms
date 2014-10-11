@@ -238,159 +238,161 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
-  updateRelations: function () {
+  removeRelations: function () {
+
+    var relationControls = this.get('removedControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.log('Removing %@ reverse relationships.'.fmt(relationControls.get('length')));
 
     var controller = this;
 
-    Ember.Logger.info('Looking for relationships to update.');
+    var relationUpdates = relationControls.map(function (control) {
 
-    // Store relation promises here
-    var relationUpdates = Ember.A([]);
+      Ember.Logger.log('Removing `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
 
-    var removedRelations = this.get('removedControls').filterBy('controlType.widget', 'relation');
+      return controller.store.find('contentType', control.get('meta.contentTypeId')).then(function (contentType) {
 
-    Ember.Logger.info('Need to remove ' + removedRelations.get('length') + ' reverse relationships.');
+        var controls = contentType.get('controls');
+        var controlToRemove = controls.filterBy('name', control.get('meta.reverseName')).get('firstObject');
+        controls.removeObject(controlToRemove);
 
-    removedRelations.forEach(function (control) {
+        return contentType.save().then(function (contentType) {
+          Ember.Logger.log('Removed `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
+          return Ember.RSVP.Promise.resolve(contentType);
+        });
 
-      Ember.Logger.info('Attempting to remove `' + control.get('meta.reverseName') + '` from `' + control.get('meta.contentTypeId') + '`');
+      }).then(function (contentType) {
 
-      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
+        // remove relation data from related content types
+        var relatedContentTypeItemModelName = getItemModelName(contentType);
 
-        controller.store.find('contentType', control.get('meta.contentTypeId')).then(function (contentType) {
+        var removeData = function (item) {
 
-          var controls = contentType.get('controls');
-          var controlToRemove = controls.filterBy('name', control.get('meta.reverseName')).get('firstObject');
-          controls.removeObject(controlToRemove);
+          var itemData = item.get('itemData');
 
-          contentType.save().then(function () {
-            Ember.Logger.info('Successfully removed `' + control.get('meta.reverseName') + '` from `' + control.get('meta.contentTypeId') + '`');
-            resolve();
-          }, function (error) {
-            reject(error);
+          itemData[controlToRemove.get('name')] = null;
+
+          item.set('itemData', itemData);
+
+          return item.save().then(function (savedItem) {
+            Ember.Logger.log('Relation data removed from `$@`'.fmt(savedItem.get('id')));
+            SearchIndex.indexItem(savedItem, contentType);
           });
 
-          // remove relation data from related content types
-          var relatedContentTypeItemModelName = getItemModelName(contentType);
+        };
 
-          var removeData = function (item) {
-            var itemData = item.get('itemData');
+        if (contentType.get('oneOff')) {
+          return controller.store.find(relatedContentTypeItemModelName, contentType.get('id')).then(removeData);
+        } else {
+          return controller.store.find(relatedContentTypeItemModelName).then(function (items) {
+            return Ember.RSVP.Promise.all(items.map(removeData));
+          });
+        }
 
-            itemData[controlToRemove.get('name')] = null;
+      });
 
-            item.set('itemData', itemData);
-            item.save().then(function (savedItem) {
-              Ember.Logger.info('Relation data removed from', savedItem.get('id'));
-              SearchIndex.indexItem(savedItem, contentType);
-            });
-          };
+    });
 
-          if (contentType.get('oneOff')) {
-            controller.store.find(relatedContentTypeItemModelName, contentType.get('id')).then(removeData);
-          } else {
-            controller.store.find(relatedContentTypeItemModelName).then(function (items) {
-              items.forEach(removeData);
-            });
+    return Ember.RSVP.Promise.all(relationUpdates);
+
+  },
+
+  addRelations: function () {
+
+    var relationControls = this.get('addedControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.log('Adding %@ reverse relationships.'.fmt(relationControls.get('length')));
+
+    var controller = this;
+
+    var relationUpdates = relationControls.map(function (localControl) {
+
+      Ember.Logger.log('Adding reverse relationship of `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
+
+      return controller.store.find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
+
+        var foreignControls = contentType.get('controls');
+        var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
+
+        return controller.store.find('control-type', 'relation').then(function (controlType) {
+
+          var capitalizedModelName = controller.get('model.name').charAt(0).toUpperCase() + controller.get('model.name').slice(1);
+          var controlLabel = '%@ (%@)'.fmt(capitalizedModelName, localControl.get('label'));
+
+          var control = controller.store.createRecord('control', {
+            label: controlLabel,
+            controlType: controlType,
+            meta: Ember.Object.create({
+              contentTypeId: controller.get('model.id'),
+              reverseName: localControl.get('name')
+            })
+          });
+
+          // The new reverse relation control must have a unique name
+          var counter = 1;
+          while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
+            counter = counter + 1;
+            control.set('label', controlLabel + ' ' + counter);
           }
 
-        }, function (error) {
-          reject(error);
+          Ember.Logger.log('Setting unique name for reverse relationship: `%@` on `%@`'.fmt(control.get('name'), contentType.get('id')));
+
+          // Remember reverse relation name in meta data
+          localControl.set('meta.reverseName', control.get('name'));
+
+          // Add new relation control to the stack
+          contentType.get('controls').pushObject(control);
+
+          return contentType.save().then(function (contentType) {
+            Ember.Logger.log('Reverse relationship of `%@` to `%@` added.'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
+            return Ember.RSVP.Promise.resolve(contentType);
+          });
+
         });
 
       });
 
-      relationUpdates.push(relationPromise);
+    });
+
+    return Ember.RSVP.Promise.all(relationUpdates);
+  },
+
+  changeRelations: function () {
+
+    var relationControls = this.get('changedNameControls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.log('Updating %@ reverse relationships.'.fmt(relationControls.get('length')));
+
+    var controller = this;
+
+    var relationUpdates = relationControls.map(function (localControl) {
+
+      Ember.Logger.log('Updating reverse relationship of `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
+
+      return controller.store.find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
+
+        var foreignControls = contentType.get('controls');
+        var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
+
+        foreignControls.filterBy('name', localControl.get('meta.reverseName')).setEach('meta.reverseName', localControl.get('name'));
+
+        contentType.save().then(function (contentType) {
+          Ember.Logger.log('`%@` updated.'.fmt(contentType.get('name')));
+        });
+
+      });
 
     });
 
-    var addedRelations = this.get('addedControls').filterBy('controlType.widget', 'relation');
+    return Ember.RSVP.Promise.all(relationUpdates);
+  },
 
-    Ember.Logger.info('Need to add ' + addedRelations.get('length') + ' reverse relationships.');
-
-    addedRelations.forEach(function (localControl) {
-
-      Ember.Logger.info('Attempting to add reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '`');
-
-      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-
-        this.get('store').find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
-
-          var foreignControls = contentType.get('controls');
-          var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
-
-          this.store.find('control-type', 'relation').then(function (controlType) {
-
-            var capitalizedModelName = this.get('model.name').charAt(0).toUpperCase() + this.get('model.name').slice(1);
-            var controlLabel = capitalizedModelName + ' (' + localControl.get('label') + ')';
-
-            var control = this.store.createRecord('control', {
-              label      : controlLabel,
-              controlType: controlType,
-              meta: Ember.Object.create({
-                contentTypeId: this.get('model.id'),
-                reverseName: localControl.get('name')
-              })
-            });
-
-            // The new reverse relation control must have a unique name
-            var counter = 1;
-            while (foreignControls.getEach('name').indexOf(control.get('name')) >= 0) {
-              counter = counter + 1;
-              control.set('label', controlLabel + ' ' + counter);
-            }
-
-            Ember.Logger.info('Setting unique name for reverse relationship: `' + control.get('name') + '` on `' + contentType.get('id') + '`');
-
-            // Remember reverse relation name in meta data
-            localControl.set('meta.reverseName', control.get('name'));
-
-            // Add new relation control to the stack
-            contentType.get('controls').pushObject(control);
-
-            contentType.save().then(function (contentType) {
-              Ember.Logger.info('Reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '` successfully added.');
-              Ember.run(null, resolve);
-            }, function (error) {
-              Ember.run(null, reject, error);
-            });
-
-          }.bind(this));
-
-        }.bind(this));
-
-      }.bind(this));
-
-      relationUpdates.push(relationPromise);
-
-    }.bind(this));
-
-    var changedRelations = this.get('changedNameControls').filterBy('controlType.widget', 'relation');
-
-    Ember.Logger.info('Need to update ' + changedRelations.get('length') + ' reverse relationships.');
-
-    changedRelations.forEach(function (localControl) {
-
-      Ember.Logger.info('Attempting to update reverse relationship of `' + localControl.get('name') + '` to `' + localControl.get('meta.contentTypeId') + '`');
-
-      var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
-        this.get('store').find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
-
-          var foreignControls = contentType.get('controls');
-          var foreignRelations = foreignControls.filterBy('controlType.widget', 'relation');
-
-          foreignControls.filterBy('name', localControl.get('meta.reverseName')).setEach('meta.reverseName', localControl.get('name'));
-
-          contentType.save().then(function (contentType) {
-            Ember.Logger.info('`' + contentType.get('name') + '` updated.');
-            Ember.run(null, resolve);
-          });
-        }.bind(this));
-
-      }.bind(this));
-
-    }.bind(this));
-
-    return relationUpdates;
+  updateForeignRelations: function () {
+    return Ember.RSVP.Promise.all([
+      this.removeRelations(),
+      this.addRelations(),
+      this.changeRelations()
+    ]);
   },
 
   updateItems: function () {
@@ -413,7 +415,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var itemModelName = getItemModelName(contentType);
 
-    Ember.Logger.info('Updating `' + itemModelName + '` item data and search indices for', removedControls.get('length'), 'removed controls,', changedNameControls.get('length'), 'renamed controls, and', changedRadioControls.get('length'), 'changed radio controls.');
+    Ember.Logger.log('Updating `%@` item data and search indices for %@ removed controls, %@ renamed controls, and %@ changed radio controls.'.fmt(itemModelName, removedControls.get('length'), changedNameControls.get('length'), changedRadioControls.get('length')));
 
     var updateData = function (item) {
       var itemData = item.get('itemData');
@@ -467,20 +469,16 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   // we have updated associated items, we're go for type saving.
   saveType: function () {
 
+    Ember.Logger.info('Saving contentType `%@`'.fmt(this.get('model.name')));
+
     var formController = this;
 
     var wasNew = this.get('model.isNew');
 
-    // update relationships
-    // check if we changes relationship widget names
-    var relationUpdates = this.updateRelations();
+    // When all the foreign relationships are updated, save this contentType.
+    this.updateForeignRelations().then(function () {
 
-    // When all the relationships are updated, save this contentType.
-    Ember.RSVP.Promise.all(relationUpdates).then(function () {
-
-      Ember.Logger.info('Saving contentType `' + this.get('model.name') + '`');
-
-      this.get('model').save().then(function (contentType) {
+      formController.get('model').save().then(function (contentType) {
 
         // If the user changes the content type name, we must do the following
         // - move content type in firebase
@@ -541,7 +539,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             });
           });
 
-          // Update relationships
+
+          // Update foreign relationships with changed control name
 
           var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
           var relatedTypes = relationControls.getEach('meta.contentTypeId').uniq();
@@ -646,18 +645,22 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         } else {
 
-          this.transitionToRoute('wh.content.type.index', contentType);
+          // this.transitionToRoute('wh.content.type.index', contentType);
 
         }
 
       }.bind(this), function (error) {
+
         Ember.Logger.error(error);
+
         if (window.trackJs) {
-          window.trackJs.log("Attempted to save form.", this.get('model'));
+          window.trackJs.log("Attempted to save form.", formController.get('model'));
           window.trackJs.track(error);
         }
-        this.send('notify', 'danger', 'There was an error while saving.');
-      }.bind(this));
+
+        formController.send('notify', 'danger', 'There was an error while saving.');
+
+      });
 
     }.bind(this));
 
@@ -779,8 +782,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   actions: {
     updateType: function () {
 
-      Ember.Logger.info('Saving content type', this.get('model.id'));
-
       ga('send', 'event', 'contentType', 'save');
 
       this.set('isEditing', false);
@@ -788,12 +789,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       this.validateControls();
 
       if (this.get('model.controls').isAny('widgetIsValid', false)) {
-        Ember.Logger.warn('The following controls are invalid:', this.get('model.controls').filterBy('widgetIsValid', false).getEach('name'));
+        Ember.Logger.warn('The following controls are invalid: %@.'.fmt(this.get('model.controls').filterBy('widgetIsValid', false).getEach('name').join(', ')));
         return;
       }
 
       if (!this.get('isValidTypeId')) {
-        Ember.Logger.warn('New type id would be invalid for the following reasons:', this.get('newTypeIdErrors').join(', '));
+        Ember.Logger.warn('New type id would be invalid for the following reasons: %@.'.fmt(this.get('newTypeIdErrors').join(', ')));
         return;
       }
 
