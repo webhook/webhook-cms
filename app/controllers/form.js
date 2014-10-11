@@ -251,7 +251,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var relationUpdates = relationControls.map(function (control) {
 
-      Ember.Logger.log('Removing `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
+      Ember.Logger.log('- Removing `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
 
       return controller.store.find('contentType', control.get('meta.contentTypeId')).then(function (contentType) {
 
@@ -322,7 +322,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var relationUpdates = relationControls.map(function (localControl) {
 
-      Ember.Logger.log('Adding reverse relationship of `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
+      Ember.Logger.log('- Adding `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
 
       return controller.store.find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
 
@@ -385,7 +385,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var relationUpdates = relationControls.map(function (localControl) {
 
-      Ember.Logger.log('Updating reverse relationship of `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
+      Ember.Logger.log('- Updating `%@` to `%@`'.fmt(localControl.get('name'), localControl.get('meta.contentTypeId')));
 
       return controller.store.find('contentType', localControl.get('meta.contentTypeId')).then(function (contentType) {
 
@@ -663,7 +663,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         } else {
 
-          // this.transitionToRoute('wh.content.type.index', contentType);
+          this.transitionToRoute('wh.content.type.index', contentType);
 
         }
 
