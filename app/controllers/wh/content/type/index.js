@@ -12,7 +12,7 @@ export default Ember.ArrayController.extend({
   originalRecordLimit: 0,
   limited: function () {
     return this.get('content.length') >= this.get('recordLimit');
-  }.property('content', 'recordLimit'),
+  }.property('content.@each', 'recordLimit'),
 
   filterQuery: '',
 
@@ -143,8 +143,16 @@ export default Ember.ArrayController.extend({
     },
 
     moreRecords: function () {
+      this.set('isLoading', true);
       this.set('recordLimit', this.get('recordLimit') + this.get('originalRecordLimit'));
-      this.set('content', this.store.find(this.get('itemModelName'), { limit: this.get('recordLimit') }));
+
+      this.set('content', Ember.A([]));
+
+      var controller = this;
+      this.store.find(this.get('itemModelName'), { limit: this.get('recordLimit') }).then(function (records) {
+        controller.set('isLoading', false);
+        controller.set('content', records);
+      });
     }
   }
 

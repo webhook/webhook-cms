@@ -21,7 +21,6 @@
 </section>
 <section class="wh-content-list">
 
-
   {{#if limited}}
   <div class="wy-alert wy-alert-warning">
     <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.limited' recordLimitBinding="recordLimit"}}
@@ -55,11 +54,18 @@
       </td>
     {{/collection}}
   </table>
-  {{#unless model}}
-    <div class="wy-alert wy-alert-warning">
-      <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.noRecords' nameBinding="contentType.name"}}
-    </div>
-  {{/unless}}
+
+  {{#if isLoading}}
+    <br>
+    <div class="wy-spinner"></div>
+  {{else}}
+    {{#unless model}}
+      <div class="wy-alert wy-alert-warning">
+        <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.noRecords' nameBinding="contentType.name"}}
+      </div>
+    {{/unless}}
+  {{/if}}
+
   {{#if limited}}
     <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
   {{/if}}
