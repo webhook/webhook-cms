@@ -40,7 +40,12 @@ export default Ember.Route.extend({
             return value.split(' ')[1];
           });
 
-          Ember.Logger.log('`%@` IDs %@ need to be updated'.fmt(relatedContentTypeId, relatedItemIds.join(', ')));
+          if (Ember.isEmpty(relatedItemIds)) {
+            Ember.Logger.log('`%@` has no items to update.'.fmt(relatedContentTypeId));
+            return;
+          }
+
+          Ember.Logger.log('`%@` items %@ need to be updated'.fmt(relatedContentTypeId, relatedItemIds.join(', ')));
 
           // We have to get the contentType to get the itemModel.
           route.store.find('content-type', relatedContentTypeId).then(function (relatedContentType) {
