@@ -28,7 +28,7 @@ export default Ember.Route.extend({
 
         var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
 
-        Ember.Logger.log('Found %@ relation control(s)'.fmt(relationControls.get('length')));
+        Ember.Logger.log('Found %@ relation controls'.fmt(relationControls.get('length')));
 
         relationControls.forEach(function (control) {
 
@@ -41,11 +41,11 @@ export default Ember.Route.extend({
           });
 
           if (Ember.isEmpty(relatedItemIds)) {
-            Ember.Logger.log('`%@` has no items to update.'.fmt(relatedContentTypeId));
+            Ember.Logger.log('`%@` control has no related items to update.'.fmt(control.get('name')));
             return;
           }
 
-          Ember.Logger.log('`%@` items %@ need to be updated'.fmt(relatedContentTypeId, relatedItemIds.join(', ')));
+          Ember.Logger.log('`%@` control has %@ items in `%@` need to be updated'.fmt(control.get('name'), relatedItemIds.get('length'), relatedContentTypeId));
 
           // We have to get the contentType to get the itemModel.
           route.store.find('content-type', relatedContentTypeId).then(function (relatedContentType) {
@@ -55,24 +55,26 @@ export default Ember.Route.extend({
             relatedItemIds.forEach(function (relatedItemId) {
               route.store.find(relatedItemModelName, relatedItemId).then(function (relatedItem) {
                 var itemData = relatedItem.get('itemData');
-                var updatedRelations = Ember.A([]);
 
-                // if the relationship is single, it will be a string and the only value, so skip this and set to null
-                if (itemData[relatedControlName] && !control.get('meta.isSingle')) {
-                  itemData[relatedControlName].forEach(function (value) {
-                    if (value !== relatedKey) {
-                      updatedRelations.addObject(value);
-                    }
+                if (Ember.isEmpty(itemData[relatedControlName])) {
+                  Ember.Logger.warn('No reverse data found at `%@` control!'.fmt(relatedControlName));
+                } else {
+
+                  if (Ember.isArray(itemData[relatedControlName])) {
+                    itemData[relatedControlName] = Ember.A(itemData[relatedControlName]).removeObject(relatedKey).toArray();
+                  } else {
+                    itemData[relatedControlName] = null;
+                  }
+
+                  Ember.Logger.log('Setting `%@` to %@'.fmt(relatedControlName, itemData[relatedControlName]));
+
+                  relatedItem.set('itemData', itemData);
+
+                  relatedItem.save().then(function () {
+                    Ember.Logger.log('`%@:%@` relations updated.'.fmt(relatedItemModelName, relatedItem.get('id')));
                   });
+
                 }
-
-                itemData[relatedControlName] = updatedRelations.get('length') ? updatedRelations.toArray() : null;
-
-                relatedItem.set('itemData', itemData);
-
-                relatedItem.save().then(function () {
-                  Ember.Logger.log('`%@:%@` updated.'.fmt(relatedItemModelName, relatedItem.get('id')));
-                });
               });
             });
 
