@@ -8,8 +8,15 @@ import slugger from 'appkit/utils/slugger';
 
 export default Ember.ObjectController.extend({
   type        : null,
-  lastUpdated : null,
-  createDate  : null,
+
+  lastUpdated: function () {
+    return this.get('type.controls').findBy('name', 'last_updated').get('value');
+  }.property(),
+
+  createDate: function () {
+    return this.get('type.controls').findBy('name', 'create_date').get('value');
+  }.property(),
+
   isDraft     : null,
   publishDate : null,
   showSchedule: false,

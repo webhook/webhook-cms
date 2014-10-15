@@ -9,7 +9,13 @@ export default Ember.View.extend({
     var view = this;
     var store = this.get('controller').store;
 
-    var keyParts = this.get('context').split(' ');
+    var context = this.get('context');
+
+    if (Ember.isEmpty(context)) {
+      return;
+    }
+
+    var keyParts = context.split(' ');
     var contentTypeId = keyParts[0];
     var itemId = keyParts[1];
 

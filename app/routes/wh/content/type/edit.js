@@ -263,9 +263,6 @@ export default Ember.Route.extend({
       controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
     }
 
-    controller.set('lastUpdated', type.get('controls').findBy('name', 'last_updated').get('value'));
-    controller.set('createDate', type.get('controls').findBy('name', 'create_date').get('value'));
-
     controller.set('type', type);
 
     controller.set('previewUrl', null);
