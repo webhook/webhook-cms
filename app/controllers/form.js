@@ -449,7 +449,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
                       if (Ember.isArray(reverseItemControlData)) {
                         var nearKey = controller.get('model.id') + ' ' + item.get('id');
-                        window.console.log('THIS IS THE NEARKEY', nearKey);
                         updatedReverseItemControlData = Ember.A(reverseItemControlData).removeObject(nearKey);
                       }
 
