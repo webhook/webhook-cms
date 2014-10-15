@@ -15,6 +15,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   removedControls     : Ember.A([]),
   changedNameControls : Ember.A([]),
   changedRadioControls: Ember.A([]),
+  changedRelationTypeControls: Ember.A([]),
 
   removedControlsApproved     : null,
   changedControlNamessApproved: null,
@@ -375,7 +376,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   // If the name of the relation widget is changed, reverse relations must be updated to point back to new name
-  changeRelations: function () {
+  changeRelationNames: function () {
 
     var controller = this;
 
@@ -408,10 +409,81 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     return Ember.RSVP.Promise.all(relationUpdates);
   },
 
+  // If the relation type is changed from multi to single or single to multi, update data to reflect change
+  changeRelationTypes: function () {
+
+    var controller = this;
+
+    // Filter out relation controls that are related to their parent content type.
+    var relationControls = this.get('changedRelationTypeControls');
+
+    Ember.Logger.log('Updating data for %@ changed relationship types.'.fmt(relationControls.get('length')));
+
+    // Change data in every item for this content type
+    return controller.store.find(getItemModelName(controller.get('model'))).then(function (items) {
+
+      var itemUpdates = items.map(function (item) {
+
+        var itemData = item.get('itemData');
+
+        relationControls.forEach(function (control) {
+
+          var controlValue = itemData[control.get('name')];
+          var updatedValue = null;
+
+          if (!Ember.isEmpty(controlValue)) {
+
+            if (control.get('meta.isSingle')) {
+
+              // changing to single relation type, use the first value
+              updatedValue = Ember.isArray(controlValue) ? controlValue.shift() : controlValue;
+
+              // remove reverse relationship of any remaining values
+              if (Ember.isArray(controlValue)) {
+                controlValue.forEach(function (relationKey) {
+                  controller.store.find('content-type', relationKey.split(' ')[0]).then(function (contentType) {
+                    controller.store.find(getItemModelName(contentType), relationKey.split(' ')[1]).then(function (reverseItem) {
+                      var reverseItemData = reverseItem.get('itemData');
+                      var reverseItemControlData = reverseItemData[control.get('meta.reverseName')];
+                      var updatedReverseItemControlData = null;
+
+                      if (Ember.isArray(reverseItemControlData)) {
+                        var nearKey = controller.get('model.id') + ' ' + item.get('id');
+                        window.console.log('THIS IS THE NEARKEY', nearKey);
+                        updatedReverseItemControlData = Ember.A(reverseItemControlData).removeObject(nearKey);
+                      }
+
+                      reverseItemData[control.get('meta.reverseName')] = updatedReverseItemControlData;
+
+                      reverseItem.set('itemData', reverseItemData).save();
+                    });
+                  });
+                });
+              }
+
+            } else {
+              updatedValue = Ember.isArray(controlValue) ? controlValue : [controlValue];
+            }
+
+          }
+
+          itemData[control.get('name')] = updatedValue;
+        });
+
+        return item.set('itemData', itemData).save();
+
+      });
+
+      return Ember.RSVP.Promise.all(itemUpdates);
+
+    });
+  },
+
   updateForeignRelations: function () {
     return this.removeRelations()
       .then(this.addRelations.bind(this))
-      .then(this.changeRelations.bind(this));
+      .then(this.changeRelationNames.bind(this))
+      .then(this.changeRelationTypes.bind(this));
   },
 
   updateItems: function () {
@@ -477,7 +549,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   promptConfirmChanges: function () {
-    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length') || this.get('changedRelationControls.length')) {
+    if (this.get('removedControls.length') ||
+        this.get('changedNameControls.length') ||
+        this.get('changedRadioControls.length') ||
+        this.get('changedRelationTypeControls.length')) {
       this.toggleProperty('confirmChangedControlsPrompt');
     } else {
       this.saveType();
@@ -825,8 +900,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       // reset changedRadioControls in case they backed out and decided to change the values back
       formController.set('changedRadioControls', Ember.A([]));
 
-      // reset changedRelationControls in case they backed out and decided to change the values back
-      formController.set('changedRelationControls', Ember.A([]));
+      // reset changedRelationTypeControls in case they backed out and decided to change the values back
+      formController.set('changedRelationTypeControls', Ember.A([]));
 
       contentType.get('controls').forEach(function (control) {
 
@@ -855,12 +930,23 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           }
         }
 
-        // See if related content type changed on relation widgets
-        // Behavior is to act as if old relation widget was removed and new one was added
-        if (control.get('controlType.widget') === 'relation' && control.get('originalRelatedContentTypeId') && control.get('originalRelatedContentTypeId') !== control.get('meta.contentTypeId')) {
-          formController.get('removedControls').addObject(control);
-          formController.get('addedControls').addObject(control);
+
+        if (control.get('controlType.widget') === 'relation' && !contentType.get('isNew')) {
+
+          // See if related content type changed on relation widgets
+          // Behavior is to act as if old relation widget was removed and new one was added
+          if (control.get('originalRelatedContentTypeId') !== control.get('meta.contentTypeId')) {
+            formController.get('removedControls').addObject(control);
+            formController.get('addedControls').addObject(control);
+          }
+
+          // See if relation widget changed from single to multi or visa vera
+          if (control.get('originalRelatedIsSingle') !== control.get('meta.isSingle')) {
+            formController.get('changedRelationTypeControls').addObject(control);
+          }
+
         }
+
 
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {

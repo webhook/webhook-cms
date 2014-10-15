@@ -225,7 +225,7 @@ export default Ember.ObjectController.extend({
                 // - In Author form add Article that already has an Author.
                 // - Must replace previous Author on Article.
                 // - Must remove Article from previous Author.
-                if (!Ember.isEmpty(reverseValue)) {
+                if (!Ember.isEmpty(reverseValue) && reverseValue !== controller.get('type.id') + ' ' + itemModel.get('id')) {
                   Ember.Logger.log('Removing previous single relationship');
                   controller.store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (previouslyRelatedItem) {
                     var reverseControlName = reverseControl.get('meta.reverseName');
