@@ -31,7 +31,11 @@ export default Ember.Component.extend({
           var editController = component.get('parentView.parentView.context');
           var editType = editController.get('type');
           var editItem = editController.get('itemModel');
-          var editItemKey = editType.get('id') + ' ' + editItem.get('id');
+          var editItemKey = null;
+
+          if (!Ember.isEmpty(editItem)) {
+            editItemKey = editType.get('id') + ' ' + editItem.get('id');
+          }
 
           var reverseValue = model.get('itemData')[reverseName];
 
