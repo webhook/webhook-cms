@@ -29,7 +29,8 @@ export default Ember.ArrayController.extend({
     this.get('cmsControls').forEach(function (control) {
       cmsControls.pushObject({
         value: item.get('itemData')[control.get('name')],
-        controlType: control.get('controlType')
+        controlType: control.get('controlType'),
+        control: control
       });
     });
     item.set('cmsControls', cmsControls);

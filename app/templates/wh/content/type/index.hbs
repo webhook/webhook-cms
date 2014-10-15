@@ -41,18 +41,20 @@
         <th></th>
       </tr>
     </thead>
-    {{#collection 'content-index' content=sortedCmsItems contentType=contentType}}
-      {{#each cmsControls}}
-        <td {{ bind-attr class=controlType.widget }}>{{partial controlType.valuePartialPath}}</td>
+    <tbody>
+      {{#each sortedCmsItems itemView='item-row'}}
+        {{#each cmsControls itemView='item-cell'}}
+          {{partial controlType.valuePartialPath}}
+        {{/each}}
+        <td class="wy-table-actions">
+          {{#if lockedBy}}
+            <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
+          {{else}}
+            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>
+          {{/if}}
+        </td>
       {{/each}}
-      <td class="wy-table-actions">
-        {{#if lockedBy}}
-          <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
-        {{else}}
-          <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>
-        {{/if}}
-      </td>
-    {{/collection}}
+    </tbody>
   </table>
 
   {{#if isLoading}}
