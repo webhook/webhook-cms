@@ -114,9 +114,10 @@ export default Ember.ObjectController.extend({
     }
   }.observes('isDirty'),
 
-  updateReverseRelationships: function (itemModel) {
+  updateReverseRelationships: function () {
 
     var controller = this;
+    var itemModel = this.get('itemModel');
 
     // Filter out relation controls that are related to their parent content type.
     var relationControls = controller.get('controls').filterBy('controlType.widget', 'relation');
@@ -150,13 +151,11 @@ export default Ember.ObjectController.extend({
           // If we don't have a reverse relationship, add it.
           if (reverseControl) {
 
-            Ember.Logger.log('Reverse control found for `%@` on `%@`, proceeding.'.fmt(control.get('name'), contentType.get('name')));
-
             return Ember.RSVP.Promise.resolve(contentType);
 
           } else {
 
-            Ember.Logger.log('Reverse control NOT found for `%@` on `%@`, creating it.'.fmt(control.get('name'), contentType.get('name')));
+            Ember.Logger.warn('Reverse control NOT found for `%@` on `%@`, creating it.'.fmt(control.get('name'), contentType.get('name')));
 
             return controller.store.find('control-type', 'relation').then(function (controlType) {
 
@@ -201,22 +200,46 @@ export default Ember.ObjectController.extend({
         }).then(function (contentType) {
 
           // Find and update reverse item.
-          return controller.store.find(getItemModelName(contentType), itemId).then(function (item) {
+          return controller.store.find(getItemModelName(contentType), itemId).then(function (reverseItem) {
 
             var reverseName = control.get('meta.reverseName');
             var reverseControl = contentType.get('controls').findBy('name', reverseName);
+            var reverseValue = reverseItem.get('itemData')[reverseName];
 
             if (reverseControl.get('meta.isSingle')) {
 
               if (updateType === 'remove') {
-                item.get('itemData')[reverseName] = null;
+                reverseItem.get('itemData')[reverseName] = null;
               } else {
-                item.get('itemData')[reverseName] = relatedValue;
+
+                // if reverse control is single and already has a value, make sure it is removed from its previously related item
+                // example:
+                // - Articles can only have one Author.
+                // - In Author form add Article that already has an Author.
+                // - Must replace previous Author on Article.
+                // - Must remove Article from previous Author.
+                if (!Ember.isEmpty(reverseValue)) {
+                  Ember.Logger.log('Removing previous single relationship');
+                  controller.store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (previouslyRelatedItem) {
+                    var reverseControlName = reverseControl.get('meta.reverseName');
+                    var itemData = previouslyRelatedItem.get('itemData');
+
+                    if (typeof itemData[reverseControlName] === 'string') {
+                      itemData[reverseControlName] = null;
+                    } else {
+                      itemData[reverseControlName] = Ember.A(itemData[reverseControlName]).removeObject(contentType.get('id') + ' ' + reverseItem.get('id'));
+                    }
+
+                    previouslyRelatedItem.set('itemData', itemData).save();
+                  });
+                }
+
+                reverseItem.get('itemData')[reverseName] = relatedValue;
               }
 
             } else {
 
-              var currentItems = item.get('itemData')[reverseName];
+              var currentItems = reverseItem.get('itemData')[reverseName];
 
               if (Ember.isEmpty(currentItems)) {
                 currentItems = Ember.A([]);
@@ -228,26 +251,15 @@ export default Ember.ObjectController.extend({
                 currentItems.addObject(relatedValue);
               }
 
-              item.get('itemData')[reverseName] = currentItems;
+              reverseItem.get('itemData')[reverseName] = currentItems;
 
             }
 
-            return item.save().then(function () {
-              Ember.Logger.log('`%@` updated.'.fmt(item.get('itemData.name')));
+            return reverseItem.save().then(function () {
+              Ember.Logger.log('`%@` updated.'.fmt(reverseItem.get('itemData.name')));
             });
 
           });
-
-        }, function (error) {
-
-          Ember.Logger.error(error);
-
-          if (window.trackJs) {
-            window.trackJs.log("Attempted to save form.", itemModel);
-            window.trackJs.track(error);
-          }
-
-          controller.send('notify', 'danger', 'Error saving relationship.');
 
         });
 
@@ -285,6 +297,8 @@ export default Ember.ObjectController.extend({
 
   saveItem: function () {
 
+    var controller = this;
+
     ga('send', 'event', 'item', 'save');
 
     var controls = this.get('type.controls');
@@ -312,18 +326,30 @@ export default Ember.ObjectController.extend({
       this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
-    validateControls(this.get('type'), this.get('itemModel')).then(this.commitItem.bind(this));
+    // if all controls are valid update relationships then commit the item
+    validateControls(this.get('type'), this.get('itemModel'))
+      .then(this.updateReverseRelationships.bind(this))
+      .then(this.commitItem.bind(this))
+      .catch(function (error) {
+
+        Ember.Logger.error(error);
+
+        if (window.trackJs) {
+          window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
+          window.trackJs.track(error);
+        }
+
+        controller.send('notify', 'danger', "There was an error while saving.");
+
+      });
 
   },
 
   commitItem: function () {
 
-    var controls = this.get('type.controls');
+    var controller = this;
 
-    if (controls.isAny('widgetIsValid', false)) {
-      this.send('notify', 'danger', "Didn't save. Errors in form.");
-      return;
-    }
+    var controls = this.get('type.controls');
 
     var itemData = dataFromControls(controls);
 
@@ -331,9 +357,7 @@ export default Ember.ObjectController.extend({
 
     var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
 
-    this.updateReverseRelationships(itemModel);
-
-    itemModel.set('itemData', itemData).save().then(function (item) {
+    return itemModel.set('itemData', itemData).save().then(function (item) {
 
       this.set('initialValues', controls.getEach('value'));
 
@@ -341,32 +365,28 @@ export default Ember.ObjectController.extend({
 
       SearchIndex.indexItem(item, this.get('type'));
 
+      var sendNotify = function (message) {
+        controller.send('notify', 'info', message, { icon: 'ok-sign' });
+      };
+
       // One Off
       if (this.get('type.oneOff')) {
-        this.send('notify', 'info', 'Saved. Initiating build.', {
-          icon: 'ok-sign'
-        });
+        sendNotify('Saved. Initiating build.');
       }
 
       // Draft
       else if (itemData.isDraft) {
-        this.send('notify', 'info', 'Draft saved', {
-          icon: 'ok-sign'
-        });
+        sendNotify('Draft saved.');
       }
 
       // Live
       else if (itemData.publish_date && moment(itemData.publish_date).isBefore()) {
-        this.send('notify', 'info', 'Saved. Initiating build.', {
-          icon: 'ok-sign'
-        });
+        sendNotify('Saved, initiating build.');
       }
 
       // Future
       else {
-        this.send('notify', 'info', 'Saved, will go live later', {
-          icon: 'ok-sign'
-        });
+        sendNotify('Saved, will go live later.');
       }
 
       if (!this.get('itemModel')) {
@@ -381,13 +401,6 @@ export default Ember.ObjectController.extend({
 
       }
 
-    }.bind(this), function (error) {
-      Ember.Logger.error(error);
-      if (window.trackJs) {
-        window.trackJs.log("Attempted to save item.", itemModel);
-        window.trackJs.track(error);
-      }
-      this.send('notify', 'danger', 'There was an error while saving.');
     }.bind(this));
 
   },
