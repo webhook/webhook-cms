@@ -238,30 +238,31 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
+  // If a relation widget is removed, the reverse widget and data must be removed from the related content type
   removeRelations: function () {
 
     var controller = this;
 
     // Filter out relation controls that are related to their parent content type.
     var relationControls = this.get('removedControls').filterBy('controlType.widget', 'relation').filter(function (control) {
-      return control.get('meta.contentTypeId') !== controller.get('model.id');
+      return control.get('originalRelatedContentTypeId') !== controller.get('model.id');
     });
 
     Ember.Logger.log('Removing %@ reverse relationships.'.fmt(relationControls.get('length')));
 
     var relationUpdates = relationControls.map(function (control) {
 
-      Ember.Logger.log('- Removing `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
+      Ember.Logger.log('- Removing `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('originalRelatedContentTypeId')));
 
-      return controller.store.find('contentType', control.get('meta.contentTypeId')).then(function (contentType) {
+      return controller.store.find('contentType', control.get('originalRelatedContentTypeId')).then(function (contentType) {
 
         var controls = contentType.get('controls');
-        var controlToRemove = controls.filterBy('name', control.get('meta.reverseName')).get('firstObject');
+        var controlToRemove = controls.findBy('name', control.get('meta.reverseName'));
         controls.removeObject(controlToRemove);
 
         return contentType.save().then(function (contentType) {
 
-          Ember.Logger.log('Removed `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('meta.contentTypeId')));
+          Ember.Logger.log('- Removed `%@` from `%@`'.fmt(control.get('meta.reverseName'), control.get('originalRelatedContentTypeId')));
           return Ember.RSVP.Promise.resolve(contentType);
 
         }).then(function (contentType) {
@@ -278,7 +279,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             item.set('itemData', itemData);
 
             return item.save().then(function (savedItem) {
-              Ember.Logger.log('Relation data removed from `$@`'.fmt(savedItem.get('id')));
+              Ember.Logger.log('- Relation data removed from `$@`'.fmt(savedItem.get('id')));
               SearchIndex.indexItem(savedItem, contentType);
             });
 
@@ -302,6 +303,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
+  // If you add a relation control, the reverse control must be added on the related content type
   addRelations: function () {
 
     var controller = this;
@@ -372,6 +374,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     return Ember.RSVP.Promise.all(relationUpdates);
   },
 
+  // If the name of the relation widget is changed, reverse relations must be updated to point back to new name
   changeRelations: function () {
 
     var controller = this;
@@ -406,11 +409,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   updateForeignRelations: function () {
-    return Ember.RSVP.Promise.all([
-      this.removeRelations(),
-      this.addRelations(),
-      this.changeRelations()
-    ]);
+    return this.removeRelations()
+      .then(this.addRelations.bind(this))
+      .then(this.changeRelations.bind(this));
   },
 
   updateItems: function () {
@@ -476,8 +477,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   },
 
   promptConfirmChanges: function () {
-    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length')) {
-      Ember.Logger.log('Prompt for changed control or type id confirmation.');
+    if (this.get('removedControls.length') || this.get('changedNameControls.length') || this.get('changedRadioControls.length') || this.get('changedRelationControls.length')) {
       this.toggleProperty('confirmChangedControlsPrompt');
     } else {
       this.saveType();
@@ -487,7 +487,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   // we have updated associated items, we're go for type saving.
   saveType: function () {
 
-    Ember.Logger.info('Saving contentType `%@`'.fmt(this.get('model.name')));
+    Ember.Logger.log('Saving contentType `%@`'.fmt(this.get('model.name')));
 
     var formController = this;
 
@@ -825,6 +825,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       // reset changedRadioControls in case they backed out and decided to change the values back
       formController.set('changedRadioControls', Ember.A([]));
 
+      // reset changedRelationControls in case they backed out and decided to change the values back
+      formController.set('changedRelationControls', Ember.A([]));
+
       contentType.get('controls').forEach(function (control) {
 
         // See if we changed any control names
@@ -850,6 +853,13 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           if (changedRadioControls) {
             formController.get('changedRadioControls').addObject(changedRadioControls);
           }
+        }
+
+        // See if related content type changed on relation widgets
+        // Behavior is to act as if old relation widget was removed and new one was added
+        if (control.get('controlType.widget') === 'relation' && control.get('originalRelatedContentTypeId') && control.get('originalRelatedContentTypeId') !== control.get('meta.contentTypeId')) {
+          formController.get('removedControls').addObject(control);
+          formController.get('addedControls').addObject(control);
         }
 
         // we don't want to store checkbox values to the db when we save
