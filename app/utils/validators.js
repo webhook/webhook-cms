@@ -1,6 +1,6 @@
 import downcode from 'appkit/utils/downcode';
 
-export default function validateControls (contentType, item) {
+export default function validateControls (contentType) {
 
   Ember.Logger.log('Validating controls.');
 

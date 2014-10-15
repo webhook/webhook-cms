@@ -326,8 +326,12 @@ export default Ember.ObjectController.extend({
       this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
+    if (Ember.isEmpty(this.get('itemModel'))) {
+      this.set('itemModel', this.store.createRecord(getItemModelName(this.get('model'))));
+    }
+
     // if all controls are valid update relationships then commit the item
-    validateControls(this.get('type'), this.get('itemModel'))
+    validateControls(this.get('type'))
       .then(this.updateReverseRelationships.bind(this))
       .then(this.commitItem.bind(this))
       .catch(function (error) {
@@ -349,13 +353,12 @@ export default Ember.ObjectController.extend({
 
     var controller = this;
 
-    var controls = this.get('type.controls');
+    var itemModel = this.get('itemModel');
 
+    var controls = this.get('type.controls');
     var itemData = dataFromControls(controls);
 
     itemData.isDraft = this.getWithDefault('isDraft', null);
-
-    var itemModel = this.get('itemModel') || this.store.createRecord(getItemModelName(this.get('model')));
 
     return itemModel.set('itemData', itemData).save().then(function (item) {
 
