@@ -26,9 +26,21 @@ export default Ember.Route.extend({
     controller.set('removedControls', Ember.A([]));
     controller.set('changedNameControls', Ember.A([]));
     controller.set('changedRadioControls', Ember.A([]));
+    controller.set('changedRelationTypeControls', Ember.A([]));
 
+    // Save original name for comparison when saving
+    // If control name changes, data keys must be updated
     model.get('controls').forEach(function (control) {
       control.set('originalName', control.get('name'));
+    });
+
+    // Save original related content types for comparison when saving
+    // If contentTypeId changes
+    // - old reverse relations must be removed
+    // - new reverse relations must be added
+    model.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
+      control.set('originalRelatedContentTypeId', control.get('meta.contentTypeId'));
+      control.set('originalRelatedIsSingle', control.get('meta.isSingle'));
     });
 
     controller.set('isEditingTypeId', false);

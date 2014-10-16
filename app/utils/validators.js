@@ -1,6 +1,6 @@
 import downcode from 'appkit/utils/downcode';
 
-export default function validateControls (contentType, item) {
+export default function validateControls (contentType) {
 
   Ember.Logger.log('Validating controls.');
 
@@ -31,6 +31,7 @@ export default function validateControls (contentType, item) {
       if (control.get('required')) {
         invalidate(control, 'This field is required');
       }
+      Ember.Logger.warn('-- %@: %@'.fmt(control.get('name'), control.get('widgetErrors').join(', ')));
       return;
     }
 
@@ -99,11 +100,17 @@ export default function validateControls (contentType, item) {
     if (control.get('widgetIsValid')) {
       Ember.Logger.log('-- %@: ✓'.fmt(control.get('name')));
     } else {
-      Ember.Logger.warn('-- %@: ✗'.fmt(control.get('name')));
+      Ember.Logger.warn('-- %@: %@'.fmt(control.get('name'), control.get('widgetErrors').join(', ')));
     }
 
   });
 
-  return Ember.RSVP.Promise.resolve();
+  if (controls.isAny('widgetIsValid', false)) {
+    return Ember.RSVP.Promise.reject(controls.filterBy('widgetIsValid', false).map(function (control) {
+      return control.get('name') + ': ' + control.get('widgetErrors').join(', ');
+    }).join('/n'));
+  } else {
+    return Ember.RSVP.Promise.resolve(controls);
+  }
 
 }

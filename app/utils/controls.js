@@ -8,10 +8,10 @@ export default function dataFromControls (controls) {
     data[control.get('name')] = control.get('value');
   });
 
+  Ember.Logger.log('Extracting data from %@ controls.'.fmt(controls.get('length')));
+
   // normalize data for storage
   controls.filterBy('value').forEach(function (control) {
-
-    Ember.Logger.info('Extracting value from ' + control.get('controlType.widget') + ':' + control.get('name'));
 
     var value = control.get('value');
 
@@ -82,15 +82,29 @@ export default function dataFromControls (controls) {
 
     data[control.get('name')] = value;
 
+    // Log values
+    Ember.Logger.log(control.get('controlType.widget') + ':' + control.get('name'));
+
     switch (control.get('controlType.widget')) {
     case 'checkbox':
-      Ember.Logger.info('checkbox:' + control.get('name') + ' value', value.map(function (option) {
+      Ember.Logger.log(value.map(function (option) {
         return option.label + ':' + option.value;
       }));
       break;
 
+    case 'relation':
+      Ember.Logger.log(Ember.isArray(value) ? value.join(', ') : value);
+      break;
+
+    case 'embedly':
+    case 'image':
+    case 'file':
+    case 'audio':
+      Ember.Logger.log(JSON.stringify(value, null, 2));
+      break;
+
     default:
-      Ember.Logger.info(control.get('controlType.widget') + ':' + control.get('name') + ' value', value);
+      Ember.Logger.log(value);
       break;
     }
 

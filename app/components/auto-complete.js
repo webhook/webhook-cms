@@ -16,14 +16,52 @@ export default Ember.Component.extend({
       var contentTypeId = valueItem.split(' ')[0];
       var itemId = valueItem.split(' ')[1];
 
-      this.get('store').find('contentType', contentTypeId).then(function (contentType) {
+      var component = this;
+
+      this.store.find('contentType', contentTypeId).then(function (contentType) {
+
         var modelName = getItemModelName(contentType);
-        this.get('store').find(modelName, itemId).then(function (model) {
-          array.pushObject(model);
-        }.bind(this), function (error) {
-          this.get('control.value').removeObject(valueItem);
-        }.bind(this));
-      }.bind(this));
+
+        var reverseName = component.get('control.meta.reverseName');
+        var reverseIsSingle = contentType.get('controls').findBy('name', reverseName).get('meta.isSingle');
+
+        component.store.find(modelName, itemId).then(function (model) {
+
+          // this feels like a hacky way to get the type and item from the edit controller
+          var editController = component.get('parentView.parentView.context');
+          var editType = editController.get('type');
+          var editItem = editController.get('itemModel');
+          var editItemKey = null;
+
+          if (!Ember.isEmpty(editItem)) {
+            editItemKey = editType.get('id') + ' ' + editItem.get('id');
+          }
+
+          var reverseValue = model.get('itemData')[reverseName];
+
+          if (reverseIsSingle && reverseValue && editItemKey !== reverseValue) {
+
+            component.store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (reverseValueModel) {
+
+              if (window.confirm('The `%@` content type only allows one `%@` to be attached. Do you want to replace `%@` in the current relation with `%@`?'.fmt(contentType.get('name'), editType.get('name'), reverseValueModel.get('itemData.name'), editController.get('controls').findBy('name', 'name').get('value') || 'unnamed item'))) {
+                array.pushObject(model);
+              } else {
+                component.get('control.value').removeObject(valueItem);
+              }
+
+            });
+
+          } else {
+            array.pushObject(model);
+          }
+
+        }, function (error) {
+
+          component.get('control.value').removeObject(valueItem);
+
+        });
+
+      });
 
       return array;
     },
