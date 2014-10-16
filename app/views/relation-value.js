@@ -8,8 +8,6 @@ export default Ember.View.extend({
 
   willInsertElement: function () {
 
-    window.console.log();
-
     var view = this;
     var store = this.get('controller').store;
 
