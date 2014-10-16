@@ -4,8 +4,9 @@
   {{/view}}
 {{else}}
   {{#view 'relation-values' relationKeys=value}}
-    {{#each view.slicedKeys itemView='relation-value'}}
-      {{#link-to 'wh.content.type.edit' view.contentType.id view.relatedItem.id}}{{view.relatedItem.itemData.name}}{{/link-to}}
-    {{/each}}
+    {{each view.slicedKeys itemView='relation-value'}}
+    {{#if view.more}}
+      and {{view.more}} more
+    {{/if}}
   {{/view}}
 {{/if}}

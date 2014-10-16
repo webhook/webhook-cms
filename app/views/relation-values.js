@@ -4,6 +4,11 @@ export default Ember.View.extend({
 
   slicedKeys: function () {
     return this.getWithDefault('relationKeys', []).slice(0, this.get('limit'));
-  }.property('relationKeys')
+  }.property('relationKeys.@each'),
+
+  more: function () {
+    var delta = this.get('relationKeys.length') - this.get('limit');
+    return delta > 0 ? delta : null;
+  }.property('limit', 'relationKeys.@each')
 
 });

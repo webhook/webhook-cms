@@ -4,7 +4,11 @@ export default Ember.View.extend({
 
   tagName: 'span',
 
+  templateName: 'widgets/value/relation-item',
+
   willInsertElement: function () {
+
+    window.console.log();
 
     var view = this;
     var store = this.get('controller').store;
@@ -24,6 +28,10 @@ export default Ember.View.extend({
       view.set('relatedItem', store.find(getItemModelName(contentType), itemId));
     });
 
-  }
+  },
+
+  comma: function () {
+    return (Ember.empty(this.get('_parentView.more')) && this.get('_parentView._parentView.relationKeys.lastObject') === this.get('context')) ? null : ',';
+  }.property('relatedItem.id', 'contentType.id', '_parentView.content.@each', '_parentView.more')
 
 });
