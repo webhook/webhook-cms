@@ -30,8 +30,13 @@ export default Ember.View.extend({
 
   },
 
+  // values are displayed in a list, comma is true if this is not the last item or if there are more items
   comma: function () {
-    return (Ember.empty(this.get('_parentView.more')) && this.get('_parentView._parentView.relationKeys.lastObject') === this.get('context')) ? null : ',';
+    if (Ember.isEmpty(this.get('_parentView._parentView.relationKeys'))) {
+      return;
+    }
+    var isLast = this.get('_parentView._parentView.relationKeys.lastObject') === this.get('context');
+    return Ember.isEmpty(this.get('_parentView.more')) && isLast ? null : ',';
   }.property('relatedItem.id', 'contentType.id', '_parentView.content.@each', '_parentView.more')
 
 });

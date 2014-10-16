@@ -1,7 +1,5 @@
 {{#if control.meta.isSingle}}
-  {{#view 'relation-value' context=value}}
-    {{#link-to 'wh.content.type.edit' view.contentType.id view.relatedItem.id}}{{view.relatedItem.itemData.name}}{{/link-to}}
-  {{/view}}
+  {{view 'relation-value' context=value}}
 {{else}}
   {{#view 'relation-values' relationKeys=value}}
     {{each view.slicedKeys itemView='relation-value'}}
