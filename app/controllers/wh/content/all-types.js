@@ -1,4 +1,5 @@
 import getItemModelName from 'appkit/utils/model';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ArrayController.extend({
 
@@ -16,25 +17,28 @@ export default Ember.ArrayController.extend({
 
       var contentTypeName = contentType.get('name');
 
-      Ember.Logger.info('Preparing to destroy `' + contentTypeName + '`');
+      Ember.Logger.log('Preparing to destroy `%@`.'.fmt(contentTypeName));
 
       // remove relationships from related content types.
       // Note: I do not think we need to update the search index of related items as the data that's indexed is just IDs.
-      Ember.Logger.info('Look for reverse relationships to remove.');
-      contentType.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
+      var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
+
+      Ember.Logger.log('Removing %@ reverse relationships.'.fmt(relationControls.get('length')));
+
+      relationControls.forEach(function (control) {
 
         var relatedContentTypeId = control.get('meta.contentTypeId');
         var relatedControlName = control.get('meta.reverseName');
 
-        Ember.Logger.info('Removing', relatedContentTypeId, ':', relatedControlName);
+        Ember.Logger.log('Removing', relatedContentTypeId, ':', relatedControlName);
 
         var relationPromise = new Ember.RSVP.Promise(function (resolve, reject) {
           allTypesController.store.find('content-type', relatedContentTypeId).then(function (relatedContentType) {
             relatedContentType.get('controls').filterBy('name', relatedControlName).forEach(function (reverseControl) {
               relatedContentType.get('controls').removeObject(reverseControl);
               relatedContentType.save().then(function () {
-                Ember.Logger.info('Removed', relatedContentTypeId, ':', relatedControlName);
-                Ember.run(null, resolve);
+                Ember.Logger.log('Removed', relatedContentTypeId, ':', relatedControlName);
+                resolve();
               });
             });
           });
@@ -47,18 +51,18 @@ export default Ember.ArrayController.extend({
       // When relations are done...
       Ember.RSVP.Promise.all(relationPromises).then(function () {
 
-        Ember.Logger.info('Reverse relationships have been removed, proceeding to destroy `' + contentTypeName + '`');
+        Ember.Logger.log('Reverse relationships have been removed, proceeding to destroy `%@`.'.fmt(contentTypeName));
 
         // Remove search index info for type
-        window.ENV.deleteTypeIndex(contentType.get('id'));
+        SearchIndex.deleteType(contentType);
 
         // remove all associated data from Firebase
         window.ENV.firebase.child('data').child(contentType.get('id')).remove(function () {
-          Ember.Logger.info('Data for `' + contentTypeName + '` has been destroyed.');
+          Ember.Logger.log('Data for `%@` has been destroyed.'.fmt(contentTypeName));
 
           // remove content type
           contentType.destroyRecord().then(function () {
-            Ember.Logger.info('`' + contentTypeName + '` has been destroyed.');
+            Ember.Logger.log('`%@` has been destroyed.'.fmt(contentTypeName));
           });
         });
 

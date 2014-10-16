@@ -10,6 +10,7 @@
   <section class="wh-content-subhead">
     <span class="wh-item-publish-time-section">{{#if createDate}}Created on <span>{{format-time createDate format="MMM Do, YYYY."}}</span>{{/if}}</span>
     <span class="wh-item-publish-time-section">{{#if lastUpdated}}Last updated on <span>{{format-time lastUpdated format="MMM Do, YYYY. h:mm A"}}</span>{{/if}}</span>
+    <a class="icon icon-trash wy-text-danger" {{action "deleteItem" itemModel}}> Delete</a>
   </section>
 {{/if}}
 <section class="wh-content-edit">
@@ -54,7 +55,6 @@
           {{view 'widget' context=control}}
         {{/unless}}
       {{/each}}
-
     </fieldset>
   {{/view}}
 </section>
