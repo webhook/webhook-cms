@@ -133,7 +133,7 @@
         {{#view "draggable"}}
           {{#each group in controlTypeGroups}}
             <dl>
-              <dt>{{group.name}}: {{translate-control group.name true}}</dt>
+              <dt>{{translate-control group.name true}}</dt>
               {{#each group.controlTypes}}
                 {{#unless isHidden}}
                   <dd data-id="{{unbound id}}"><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action "addControl" this}}> {{translate-control widget}}</a></dd>
