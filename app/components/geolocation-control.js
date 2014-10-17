@@ -1,3 +1,4 @@
+/* global L */
 export default Ember.Component.extend({
 
   defaultCoords: [51.5, -0.09],
@@ -6,39 +7,41 @@ export default Ember.Component.extend({
   mapInstance: null,
   markerInstance: null,
 
-  coordsString: function () {
-    var value =this.get('control.value');
+  setCoordsString: function () {
+    var value = this.get('control.value');
 
-    if (value.hasOwnProperty('latitude') && value.hasOwnProperty('longitude')) {
-      return value.latitude + ', ' + value.longitude;
+    if (!Ember.isEmpty(value) && value.hasOwnProperty('latitude') && value.hasOwnProperty('longitude')) {
+      this.set('coordsString', value.latitude + ', ' + value.longitude);
     }
-  }.property('control.value'),
+  }.observes('control.value').on('init'),
 
   didInsertElement: function () {
     var map = L.map(this.$('.wh-geolocation-maps').get(0));
     this.set('mapInstance', map);
 
-    L.tileLayer('http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
     }).addTo(map);
 
     var value = this.get('control.value'),
         coords = this.get('defaultCoords'),
-        defaultZoom = this.get('defaultZoom');
+        defaultZoom = this.get('defaultZoom'),
+        marker = null;
 
-    if (value.hasOwnProperty('latitude') && value.hasOwnProperty('longitude')) {
+    if (!Ember.isEmpty(value) && value.hasOwnProperty('latitude') && value.hasOwnProperty('longitude')) {
       coords[0] = value.latitude;
       coords[1] = value.longitude;
 
-      var marker = L.marker(coords).addTo(map);
+      marker = L.marker(coords).addTo(map);
       this.set('markerInstance', marker);
     }
 
-    map.setView(coords, defaultZoom);
+    map.setView(coords, marker ? defaultZoom : 2);
   },
 
   actions: {
     parseCoords: function (value) {
+
       var map = this.get('mapInstance'),
           marker = this.get('markerInstance');
 
@@ -61,7 +64,7 @@ export default Ember.Component.extend({
       }
 
       var coords = value.split(',');
-      if (2 != coords.length) {
+      if (2 !== coords.length) {
         return;
       }
 
@@ -70,7 +73,7 @@ export default Ember.Component.extend({
         return;
       }
 
-      map.setView([value.latitude, value.longitude]);
+      map.setView([value.latitude, value.longitude], this.get('defaultZoom'));
 
       if (null == marker) {
         marker = L.marker(coords).addTo(map);
