@@ -165,6 +165,12 @@ window.ENV = {
           iconClass: 'icon-direction'
         },
         {
+          name     : 'Geolocation',
+          widget   : 'geolocation',
+          valueType: 'object',
+          iconClass: 'icon-marker'
+        },
+        {
           name     : 'Phone number',
           widget   : 'phone',
           iconClass: 'icon-phone-sign'
