@@ -15,74 +15,75 @@ export default Ember.Component.extend({
     }
   }.observes('control.value').on('init'),
 
+  updateMap: function () {
+
+    var map = this.get('mapInstance'),
+        marker = this.get('markerInstance'),
+        location = this.get('control.value');
+
+    if (Ember.isEmpty(location)) {
+      if (marker !== null) {
+        map.removeLayer(marker);
+        this.set('markerInstance', null);
+      }
+      map.setView(this.get('defaultCoords'), 2);
+      return;
+    }
+
+    var coords = [location.latitude, location.longitude];
+
+    map.setView(coords, this.get('defaultZoom'));
+
+    if (null == marker) {
+      marker = L.marker(coords).addTo(map);
+      this.set('markerInstance', marker);
+    } else {
+      marker.setLatLng(coords);
+    }
+
+  }.observes('control.value'),
+
   didInsertElement: function () {
     var map = L.map(this.$('.wh-geolocation-maps').get(0));
     this.set('mapInstance', map);
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    var tiles = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    var attribution = [
+      '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+      '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    ];
+
+    L.tileLayer(tiles, {
+      attribution: attribution.join(', ')
     }).addTo(map);
 
-    var value = this.get('control.value'),
-        coords = this.get('defaultCoords'),
-        defaultZoom = this.get('defaultZoom'),
-        marker = null;
-
-    if (!Ember.isEmpty(value) && value.hasOwnProperty('latitude') && value.hasOwnProperty('longitude')) {
-      coords[0] = value.latitude;
-      coords[1] = value.longitude;
-
-      marker = L.marker(coords).addTo(map);
-      this.set('markerInstance', marker);
+    if (Ember.isEmpty(this.get('control.value'))) {
+      map.setView(this.get('defaultCoords'), 2);
+    } else {
+      this.updateMap();
     }
-
-    map.setView(coords, marker ? defaultZoom : 2);
   },
 
   actions: {
-    parseCoords: function (value) {
+    parseInput: function (value) {
 
-      var map = this.get('mapInstance'),
-          marker = this.get('markerInstance');
+      var component = this;
 
-      if ('' === value) {
-        this.set('control.value', {});
+      if (Ember.isEmpty(value)) {
+        component.set('control.value', null);
+        return;
+      }
 
-        if (null != marker) {
-          map.removeLayer(marker);
-          this.set('markerInstance', null);
+      // Use Google Geocoding service for address lookups.
+      Ember.$.getJSON('https://maps.googleapis.com/maps/api/geocode/json', {
+        address: value
+      }).done(function(response) {
+        if (response.status === 'OK') {
+          var location = response.results[0].geometry.location;
+          component.set('control.value', { latitude: location.lat, longitude: location.lng });
         }
+      });
 
-        return;
-      }
-
-      var urlRegex = /@(.*)\//g;
-      if (urlRegex.test(value)) {
-        value = value.match(urlRegex)[0];
-        // Slice the last , character (this is the zoom property).
-        value = value.slice(1, value.lastIndexOf(','));
-      }
-
-      var coords = value.split(',');
-      if (2 !== coords.length) {
-        return;
-      }
-
-      value = { latitude: parseFloat(coords[0]), longitude: parseFloat(coords[1]) };
-      if (isNaN(value.latitude) || isNaN(value.longitude)) {
-        return;
-      }
-
-      map.setView([value.latitude, value.longitude], this.get('defaultZoom'));
-
-      if (null == marker) {
-        marker = L.marker(coords).addTo(map);
-        this.set('markerInstance', marker);
-      } else {
-        marker.setLatLng(coords);
-      }
-
-      this.set('control.value', value);
     }
   }
 });
