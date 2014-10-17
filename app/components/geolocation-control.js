@@ -21,7 +21,7 @@ export default Ember.Component.extend({
         marker = this.get('markerInstance'),
         location = this.get('control.value');
 
-    if (Ember.isEmpty(location)) {
+    if (Ember.isEmpty(location) || Ember.isEmpty(location.latitude) || Ember.isEmpty(location.longitude)) {
       if (marker !== null) {
         map.removeLayer(marker);
         this.set('markerInstance', null);
