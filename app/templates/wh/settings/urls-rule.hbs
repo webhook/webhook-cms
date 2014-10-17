@@ -1,3 +1,4 @@
-<td class="wh-tabular-input">{{input value=view.content.pattern}}</td>
-<td class="wh-tabular-input">{{input value=view.content.destination}}</td>
+<td class="wh-tabular-grab"><span class="icon icon-ellipsis-v"></span></td>
+<td class="wh-tabular-input">{{input value=view.content.pattern placeholder="^/blog/([^/]+)/" }}</td>
+<td class="wh-tabular-input">{{input value=view.content.destination placeholder="/articles/$1/" }}</td>
 <td><button class="btn btn-link icon icon-remove-sign" {{action 'removeRedirect' view.content}}></button></td>
