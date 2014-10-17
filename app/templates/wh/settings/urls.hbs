@@ -15,6 +15,13 @@
     </ul>
   </div>
 
+  {{#unless domain}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">No custom domain</div>
+      <p>Redirect rules only work if you have a custom domain set up. {{#link-to 'wh.settings.domain'}}Configure your domain.{{/link-to}}</p>
+    </div>
+  {{/unless}}
+
   <table class="wy-table wy-table-bordered-all wy-table-striped wh-table-tabular">
     <thead>
       <tr>
@@ -42,6 +49,6 @@
 
   <hr/>
 
-  <button class="btn btn-success icon icon-ok-sign" {{action 'saveRedirects'}}> Save</button>
+  <button class="btn btn-success icon icon-ok-sign" {{action 'saveRedirects'}} {{ bind-attr disabled=isSaveDisabled }}> Save</button>
 
 </section>

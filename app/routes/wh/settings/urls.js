@@ -6,5 +6,16 @@ export default Ember.Route.extend({
       });
       return Ember.RSVP.Promise.resolve(redirects);
     });
+  },
+  setupController: function (controller) {
+
+    var siteName = this.get('buildEnvironment.siteName');
+
+    window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns").once('value', function(snapshot) {
+      controller.set('domain', snapshot.val());
+    });
+
+    this._super.apply(this, arguments);
+
   }
 });
