@@ -30,19 +30,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      {{#each redirect in arrangedContent}}
-      <tr>
-        <td class="wh-tabular-input">{{input value=redirect.pattern}}</td>
-        <td class="wh-tabular-input">{{input value=redirect.destination}}</td>
-        <td>
-          <button class="btn btn-link icon icon-remove-sign" {{action 'removeRedirect' redirect}}></button>
-          <button class="btn btn-link" {{action 'moveUp' redirect}}>up</button>
-          <button class="btn btn-link" {{action 'moveDown' redirect}}>down</button>
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
+    {{view 'sortable-redirect-rules' content=arrangedContent}}
   </table>
 
   <button class="btn btn-link btn-small icon icon-plus-sign" {{action 'addRedirect'}}> Add a row</button>

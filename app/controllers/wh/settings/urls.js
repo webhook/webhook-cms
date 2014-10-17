@@ -3,7 +3,6 @@ export default Ember.ArrayController.extend({
   sortProperties: ['priority'],
 
   isSaving: false,
-
   removedRedirects: Ember.A([]),
 
   // always have one row to manipulate
@@ -13,13 +12,39 @@ export default Ember.ArrayController.extend({
     }
   }.observes('content.@each'),
 
+  isReordered: function () {
+    return this.get('content').filter(function (redirect, index) {
+      return redirect.get('priority') !== index;
+    }).get('length');
+  }.property('content.@each.priority'),
+
   isDirty: function () {
-    return this.get('content').isAny('isDirty') || !Ember.isEmpty(this.get('removedRedirects'));
-  }.property('content.@each.isDirty'),
+    return this.get('content').isAny('isDirty') || !Ember.isEmpty(this.get('removedRedirects')) || this.get('isReordered');
+  }.property('content.@each.isDirty', 'isReordered', 'removedRedirects.@each'),
 
   isSaveDisabled: function () {
     return this.get('isSaving') || !this.get('isDirty');
   }.property('isDirty', 'isSaving'),
+
+  moveRule: function (originalPriority, targetPriority) {
+
+    var redirect = this.get('content').findBy('priority', originalPriority);
+
+    this.get('content').forEach(function (redirect, index) {
+      if (originalPriority > targetPriority) {
+        if (index >= targetPriority && index <= originalPriority) {
+          redirect.incrementProperty('priority');
+        }
+      } else {
+        if (index >= originalPriority && index <= targetPriority) {
+          redirect.decrementProperty('priority');
+        }
+      }
+    });
+
+    redirect.set('priority', targetPriority);
+
+  },
 
   actions: {
     addRedirect: function () {
@@ -90,40 +115,6 @@ export default Ember.ArrayController.extend({
     removeRedirect: function (redirect) {
       redirect.deleteRecord();
       this.get('removedRedirects').addObject(redirect);
-    },
-
-    moveUp: function (redirect) {
-
-      var originalPriority = redirect.get('priority');
-      var targetPriority = redirect.get('priority') - 1;
-
-      this.get('content').forEach(function (redirect, index) {
-
-        if (index >= targetPriority && index <= originalPriority) {
-          redirect.incrementProperty('priority');
-        }
-
-      });
-
-      redirect.set('priority', targetPriority);
-
-    },
-
-    moveDown: function (redirect) {
-
-      var originalPriority = redirect.get('priority');
-      var targetPriority = redirect.get('priority') + 1;
-
-      this.get('content').forEach(function (redirect, index) {
-
-        if (index >= originalPriority && index <= targetPriority) {
-          redirect.decrementProperty('priority');
-        }
-
-      });
-
-      redirect.set('priority', targetPriority);
-
     }
   }
 
