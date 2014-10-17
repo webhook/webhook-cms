@@ -5,7 +5,7 @@ export default Ember.ArrayController.extend({
   // always have one row to manipulate
   generateFirst: function () {
     if (!this.get('content.length')) {
-      this.store.createRecord('redirect');
+      this.store.createRecord('redirect', { priority: 0 });
     }
   }.observes('content.@each'),
 
