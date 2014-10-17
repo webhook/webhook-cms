@@ -10,10 +10,11 @@ export default Ember.Route.extend({
 
     var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
 
+    var contentType = this.modelFor('wh.content.type');
+    var modelName = getItemModelName(contentType);
+
     if (itemId) {
-      var contentType = this.modelFor('wh.content.type');
-      var modelName = getItemModelName(contentType),
-          lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
+      var lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);
 
       var userEmail = this.get('session.user.email');
 
@@ -261,9 +262,6 @@ export default Ember.Route.extend({
     } else {
       controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
     }
-
-    controller.set('lastUpdated', type.get('controls').findBy('name', 'last_updated').get('value'));
-    controller.set('createDate', type.get('controls').findBy('name', 'create_date').get('value'));
 
     controller.set('type', type);
 

@@ -1,3 +1,10 @@
-{{#collection 'relations' relationKeys=value}}
-{{#link-to 'wh.content.type.edit' contentType.id view.relation.id}}{{view.relation.itemData.name}}{{/link-to}}{{#unless view.last}},{{/unless}}{{#if view.more}}, and {{view.more}} more{{/if}}
-{{/collection}}
+{{#if control.meta.isSingle}}
+  {{view 'relation-value' context=value}}
+{{else}}
+  {{#view 'relation-values' relationKeys=value}}
+    {{each view.slicedKeys itemView='relation-value'}}
+    {{#if view.more}}
+      and {{view.more}} more
+    {{/if}}
+  {{/view}}
+{{/if}}

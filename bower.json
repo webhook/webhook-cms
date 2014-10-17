@@ -21,7 +21,7 @@
     "moment": "2.8.x",
     "emberfire": "1.2.5",
     "fluidbox": "webhook/Fluidbox#1.3.5",
-    "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.3.x",
+    "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.4.x",
     "leaflet": "~0.7.3"
   },
   "devDependencies": {
