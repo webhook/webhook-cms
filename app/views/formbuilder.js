@@ -37,7 +37,7 @@ export default Ember.CollectionView.extend({
 
         var newindex = ui.item.parent().children(':not(script)').index(ui.item);
 
-        if (ui.item.hasClass('ui-draggable')) {
+        if (ui.item.hasClass('ui-draggable-dragging')) {
 
           var type = ui.item.data('id');
 
