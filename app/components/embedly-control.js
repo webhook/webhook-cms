@@ -4,7 +4,8 @@ export default Ember.Component.extend({
   showCode   : false,
 
   hasValue: function () {
-    return Object.keys(this.get('control.value') || {}).length;
+    var value = this.get('control.value');
+    return !Ember.isEmpty(value) && typeof value === 'object' && Object.keys(value).length;
   }.property('control.value'),
 
   dataString: function () {
