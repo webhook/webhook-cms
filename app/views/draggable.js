@@ -2,7 +2,7 @@ export default Ember.View.extend({
 
   didInsertElement : function () {
     // real dumb way of making sure the content types are there
-    this.$().on('mouseenter', this.makeDraggable.bind(this));
+    this.$().one('mouseenter', this.makeDraggable.bind(this));
   },
 
   makeDraggable: function () {
@@ -11,6 +11,8 @@ export default Ember.View.extend({
 
         var helper = $('<div class="wh-form-control-clone">'),
             icon = $('<span>').appendTo(helper);
+
+        helper.data('id', $(this).data('id'));
 
         icon.addClass($(this).find('a').attr('class')).text($(this).text());
 
