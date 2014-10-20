@@ -3,7 +3,9 @@ export default Ember.ArrayController.extend({
   sortProperties: ['priority'],
 
   isSaving: false,
-  removedRedirects: Ember.A([]),
+  forceEnableSave: false,
+
+  removedRules: Ember.A([]),
 
   // always have one row to manipulate
   generateFirst: function () {
@@ -19,12 +21,16 @@ export default Ember.ArrayController.extend({
   }.property('content.@each.priority'),
 
   isDirty: function () {
-    return this.get('content').isAny('isDirty') || !Ember.isEmpty(this.get('removedRedirects')) || this.get('isReordered');
-  }.property('content.@each.isDirty', 'isReordered', 'removedRedirects.@each'),
+    return this.get('content').isAny('isDirty') || this.get('isReordered') || this.get('removedRules.length');
+  }.property('content.@each.isDirty', 'isReordered', 'removedRules.@each'),
 
   isSaveDisabled: function () {
+    if (this.get('forceEnableSave')) {
+      return false;
+    }
+
     return this.get('isSaving') || !this.get('isDirty');
-  }.property('isDirty', 'isSaving'),
+  }.property('isDirty', 'isSaving', 'content.@each'),
 
   moveRule: function (originalPriority, targetPriority) {
 
@@ -51,6 +57,11 @@ export default Ember.ArrayController.extend({
       this.store.createRecord('redirect', { priority: this.get('content.length') });
     },
 
+    removeRedirect: function (redirect) {
+      redirect.deleteRecord();
+      this.get('removedRules').pushObject(redirect);
+    },
+
     saveRedirects: function () {
 
       var controller = this;
@@ -59,6 +70,9 @@ export default Ember.ArrayController.extend({
       // Save redirect rules with ordering (priority)
       var redirectUpdates = this.get('model').map(function (redirect) {
         return redirect.save().then(function (redirect) {
+          if (Ember.isEmpty(redirect.get('pattern')) || Ember.isEmpty(redirect.get('destination'))) {
+            return Ember.RSVP.Promise.resolve();
+          }
           return new Ember.RSVP.Promise(function (resolve, reject) {
             window.ENV.firebase.child('settings/redirect').child(redirect.get('id')).setPriority(redirect.get('priority'), function (error) {
               if (error) {
@@ -71,7 +85,12 @@ export default Ember.ArrayController.extend({
         });
       });
 
-      Ember.RSVP.Promise.all(redirectUpdates).then(function () {
+      // Save deletions
+      var redirectRemovals = this.get('removedRules').map(function (redirect) {
+        return redirect.save();
+      });
+
+      Ember.RSVP.Promise.all([redirectUpdates, redirectRemovals]).then(function () {
 
         if (controller.get('domain')) {
           // only send signal if domain is set
@@ -103,18 +122,23 @@ export default Ember.ArrayController.extend({
 
       }).then(function (messages) {
 
+        controller.set('forceEnableSave', false);
         controller.set('isSaving', false);
+        controller.set('isRuleRemoved', false);
         messages.forEach(function (message) {
           controller.send('notify', 'success', message);
         });
 
+      }).catch(function (error) {
+
+        controller.set('forceEnableSave', true);
+        controller.set('isSaving', false);
+        controller.set('isRuleRemoved', false);
+        controller.send('notify', 'danger', 'Error saving redirects. Try again.');
+        Ember.Logger.error(error);
+
       });
 
-    },
-
-    removeRedirect: function (redirect) {
-      redirect.deleteRecord();
-      this.get('removedRedirects').addObject(redirect);
     }
   }
 
