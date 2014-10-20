@@ -65,6 +65,7 @@
             {{/unless}}
             {{#unless buildEnvironment.selfHosted}}
             <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.urls'}}URL redirects{{/link-to}}</li>
             {{/unless}}
             <li>{{#link-to 'wh.settings.data'}}{{t 'wh.configuration.data'}}{{/link-to}}</li>
           </ul>
