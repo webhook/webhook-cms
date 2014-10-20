@@ -89,7 +89,7 @@
   <p>{{t 'wh.settings.data.backups.data.instruction'}}</p>
   <ul class="wy-plain-list-disc">
     {{#each backup in model}}
-      <li><a href="#" {{action getBackup backup}}>{{format-time backup.timestamp}}</a></li>
+      <li><a href="#" {{action "getBackup" backup}}>{{format-time backup.timestamp}}</a></li>
     {{/each}}
   </ul>
 

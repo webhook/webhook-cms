@@ -308,7 +308,7 @@ export default Ember.Controller.extend({
           dataController.send('notify', 'danger', 'Backup has no data.');
           return;
         }
-        var blob = new window.Blob([data, { type: "text/plain;charset=utf-8" }]);
+        var blob = new window.Blob([data], { type: "text/plain;charset=utf-8" });
         window.saveAs(blob, backup.fileName);
       });
     },
