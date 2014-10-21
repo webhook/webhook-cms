@@ -934,7 +934,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           // See if related content type changed on relation widgets
           // Behavior is to act as if old relation widget was removed and new one was added
-          if (control.get('originalRelatedContentTypeId') !== control.get('meta.contentTypeId')) {
+          if (!Ember.isEmpty(control.get('originalRelatedContentTypeId')) && control.get('originalRelatedContentTypeId') !== control.get('meta.contentTypeId')) {
             formController.get('removedControls').addObject(control);
             formController.get('addedControls').addObject(control);
           }
