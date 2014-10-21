@@ -8,9 +8,13 @@ module.exports = {
       test_page: 'tmp/result/tests/index.html',
       routes: {
         '/tests/tests.js': 'tmp/result/tests/tests.js',
+        '/tests/tests.js.map': 'tmp/result/tests/tests.js.map',
         '/assets/app.js': 'tmp/result/assets/app.js',
+        '/assets/app.js.map': 'tmp/result/assets/app.js.map',
         '/assets/templates.js': 'tmp/result/assets/templates.js',
-        '/assets/app.css': 'tmp/result/assets/app.css'
+        '/assets/app.css': 'tmp/result/assets/app.css',
+        '/assets/app.css.map': 'tmp/result/assets/app.css.map',
+        '/assets/javascript': 'public/assets/javascript'
       },
       src_files: [
         'tmp/result/**/*.js'
@@ -27,9 +31,13 @@ module.exports = {
       test_page: 'tmp/result/tests/index.html',
       routes: {
         '/tests/tests.js': 'tmp/result/tests/tests.js',
+        '/tests/tests.js.map': 'tmp/result/tests/tests.js.map',
         '/assets/app.js': 'tmp/result/assets/app.js',
+        '/assets/app.js.map': 'tmp/result/assets/app.js.map',
         '/assets/templates.js': 'tmp/result/assets/templates.js',
-        '/assets/app.css': 'tmp/result/assets/app.css'
+        '/assets/app.css': 'tmp/result/assets/app.css',
+        '/assets/app.css.map': 'tmp/result/assets/app.css.map',
+        '/assets/javascript': 'public/assets/javascript'
       },
       src_files: [
         'tmp/result/**/*.js'
