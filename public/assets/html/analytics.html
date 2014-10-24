@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Embed API Demo</title>
+</head>
+<body>
+
+<!-- Step 1: Create the containing elements. -->
+
+
+<section id="auth-button"></section>
+<section id="error" style="display: none; color: red;">This user does not have permission to view this information.</section>
+<section id="logout-button" style="display: none;"><button>Logout</button></section>
+Active Users: <section id="active-users" style="display: inline-block;"></section>
+<section id="view-selector"></section>
+
+<a href="#" id="30daysago">30 Days</a>
+<a href="#" id="7daysago">7 Days</a>
+<a href="#" id="1daysago">1 Days</a>
+
+<section id="realtime"></section>
+<section id="referrer"></section>
+<section id="pageviews"></section>
+
+Page Views Over Time:
+<section id="timeline" style="width: 100%;"></section>
+
+Operating System Break Down:
+<section id="operating" style="width: 100%;"></section>
+
+Region Break Down:
+<section id="region" style="width: 100%;"></section>
+
+<!-- Step 2: Load the library. -->
+
+<script>
+(function(w,d,s,g,js,fjs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+}(window,document,'script'));
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+gapi.analytics.ready(function() {
+
+  gapi.analytics.createComponent('ActiveUsers', {
+
+    initialize: function(options) {
+
+      // Allow container to be a string ID or an HTMLElement.
+      this.container = typeof options.container == 'string' ?
+        document.getElementById(options.container) : options.container;
+
+      this.polling = false;
+      this.activeUsers = 0;
+    },
+
+    execute: function() {
+      // Stop any polling currently going on.
+      if (this.polling) this.stop();
+
+      // Wait until the user is authorized.
+      if (gapi.analytics.auth.isAuthorized()) {
+        this.getActiveUsers();
+      }
+      else {
+        gapi.analytics.auth.once('success', this.getActiveUsers.bind(this));
+      }
+    },
+
+    stop: function() {
+      clearTimeout(this.timeout);
+      this.polling = false;
+      this.emit('stop', {activeUsers: this.activeUsers});
+    },
+
+    getActiveUsers: function() {
+      var options = this.get();
+      var pollingInterval = (options.pollingInterval || 5) * 1000
+
+      if (!(pollingInterval >= 1000)) {
+        throw new Error('Frequency cannot be less than 1 second.');
+      }
+
+      this.polling = true;
+      gapi.client.analytics.data.realtime
+        .get({ids:options.ids, metrics:'rt:activeUsers'})
+        .execute(function(response) {
+          var value = response.totalResults ? +response.rows[0][0] : 0;
+
+          if (value > this.activeUsers) this.onIncrease();
+          if (value < this.activeUsers) this.onDecrease();
+
+          this.activeUsers = value;
+          this.container.innerHTML = value;
+
+          if (this.polling = true) {
+            this.timeout = setTimeout(this.getActiveUsers.bind(this),
+                pollingInterval);
+          }
+        }.bind(this));
+    },
+
+    onIncrease: function() {
+      this.emit('increase', {activeUsers: this.activeUsers});
+      this.emit('change', {
+        activeUsers: this.activeUsers,
+        direction: 'increase'
+      });
+    },
+
+    onDecrease: function() {
+      this.emit('decrease', {activeUsers: this.activeUsers});
+      this.emit('change', {
+        activeUsers: this.activeUsers,
+        direction: 'decrease'
+      });
+    }
+
+  });
+
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var token = '';
+var id = getParameterByName('googleId');
+var realId = -1;
+
+
+var days = "30daysAgo";
+
+
+
+gapi.analytics.ready(function() {
+
+  // Step 3: Authorize the user.
+
+  var CLIENT_ID = '188556106710-kt1h5l0k9f0kpei5h4o60ouf009f9nm4.apps.googleusercontent.com';
+
+  gapi.analytics.auth.authorize({
+    container: 'auth-button',
+    clientid: CLIENT_ID,
+  });
+
+  // Step 5: Create the timeline chart.
+
+  var updateTimer = null;
+  var oldActiveUser = null;
+
+  var createCharts = function(id) {
+
+    gapi.client.analytics.data.realtime
+      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 5, sort: "-rt:pageviews"})
+      .execute(function(resp) {
+        var ul = 'Realtime Page Views: <ul>';
+
+        resp.rows.forEach(function(item) {
+          ul += "<li>" + item[0] + "</li>";
+          ul += "<li>" + item[1] + "</li>";
+        });
+
+        ul += '</ul>';
+
+        $('#realtime').html(ul);
+        // resp.rows is what I want, probably need to poll here
+      });
+
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, dimensions: 'ga:fullReferrer', metrics: "ga:sessions", "max-results": 5, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
+      .execute(function(resp) {
+
+        var ul = 'Referrals: <ul>';
+
+        resp.rows.forEach(function(item) {
+          ul += "<li>" + item[0] + "</li>";
+          ul += "<li>" + item[1] + "</li>";
+        });
+
+        ul += '</ul>';
+
+        $('#referrer').html(ul);
+      });
+
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, dimensions: 'ga:pagePath', metrics: "ga:sessions", "max-results": 10, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
+      .execute(function(resp) {
+
+        var ul = 'Top Page Views: <ul>';
+
+        resp.rows.forEach(function(item) {
+          ul += "<li>" + item[0] + "</li>";
+          ul += "<li>" + item[1] + "</li>";
+        });
+
+        ul += '</ul>';
+
+        $('#pageviews').html(ul);
+      });
+
+
+    if(oldActiveUser) {
+      oldActiveUser.stop();
+    }
+
+    oldActiveUser = new gapi.analytics.ext.ActiveUsers({
+      container: 'active-users',
+      pollingInterval: 5,
+      ids: 'ga:' + id
+    });
+
+    oldActiveUser.execute();
+
+    var timeline = new gapi.analytics.googleCharts.DataChart({
+      reportType: 'ga',
+      query: {
+        'ids': 'ga:' + id,
+        'metrics': 'ga:sessions',
+        'dimensions': 'ga:date',
+        'start-date': days,
+        'end-date': 'today'
+      },
+      chart: {
+        container: 'timeline',
+        type: 'LINE',
+        options: {
+          width: '100%'
+        }
+      }
+    });
+
+    timeline.execute();
+
+
+    var operating = new gapi.analytics.googleCharts.DataChart({
+      reportType: 'ga',
+      query: {
+        'ids': 'ga:' + id,
+        'metrics': 'ga:sessions',
+        'dimensions': 'ga:operatingSystem',
+        'start-date': days,
+        'end-date': 'today'
+      },
+      chart: {
+        container: 'operating',
+        type: 'PIE',
+        options: {
+          width: '100%'
+        }
+      }
+    });
+
+    operating.execute();
+
+
+    var region = new gapi.analytics.googleCharts.DataChart({
+      reportType: 'ga',
+      query: {
+        'ids': 'ga:' + id,
+        'metrics': 'ga:sessions',
+        'dimensions': 'ga:country',
+        'start-date': days,
+        'end-date': 'today'
+      },
+      chart: {
+        container: 'region',
+        type: 'GEO',
+        options: {
+          width: '100%'
+        }
+      }
+    });
+
+    region.execute();
+  }
+
+  $('#30daysago').on('click', function(e) {
+    e.preventDefault();
+
+    days = "30daysAgo";
+
+    createCharts(realId);
+  });
+
+  $('#7daysago').on('click', function(e) {
+    e.preventDefault();
+
+    days = "7daysAgo";
+
+    createCharts(realId);
+  });
+
+  $('#1daysago').on('click', function(e) {
+    e.preventDefault();
+
+    days = "1daysAgo";
+
+    createCharts(realId);
+  });
+
+
+  // Step 6: Hook up the components to work together.
+
+  gapi.analytics.auth.on('success', function(response) {
+    $('#logout-button').show();
+    token = response.access_token;
+
+    gapi.client.analytics.management.accountSummaries
+      .list({'start-index':  1})
+      .execute(function(resp) {
+
+        var foundId = false;
+
+        resp.items.forEach(function(acct) {
+          acct.webProperties.forEach(function(prop) {
+
+            if(prop.id == id && !foundId) {
+              if(prop.profiles.length > 0) {
+                foundId = true;
+                realId = prop.profiles[0].id;
+                createCharts(realId);
+                return false;
+              }              
+            }
+          });
+        });
+
+        if(!foundId) {
+          $('#error').show();
+          // Display error about auth here, tell them to log out
+        }
+      })
+  });
+
+  gapi.analytics.auth.on('error', function(response) {
+  });
+
+});
+
+
+$(document).ready(function() {
+  $('#logout-button').find('button').on('click', function() {
+    if(token) {
+      $.ajax({
+        type: 'GET',
+        url: 'https://accounts.google.com/o/oauth2/revoke?token=' + token,
+        async: false,
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function() {
+          location.reload();
+        },
+        error: function() {
+          location.reload();
+        }
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
