@@ -187,7 +187,6 @@ export default Ember.Route.extend({
 
     type.get('controls').forEach(function (control) {
 
-      control.set('widgetIsValid', true);
       control.set('widgetErrors', Ember.A([]));
 
       var value = data[control.get('name')];
@@ -287,7 +286,9 @@ export default Ember.Route.extend({
           save = false;
 
       var addControl = function (data) {
-        controls.pushObject(this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data)));
+        var control = this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data));
+        control.set('widgetIsValid', true);
+        controls.pushObject(control);
         save = true;
       }.bind(this);
 
