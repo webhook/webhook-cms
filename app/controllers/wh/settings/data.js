@@ -286,6 +286,7 @@ export default Ember.Controller.extend({
         window.ENV.sendGruntCommand('reset_files', function (error) {
 
           if (error) {
+            Ember.Logger.error(error);
             dataController.set('isDeleting', false);
             window.alert("Not all files could be deleted. Please close any open project files and directories and try again.");
           } else {

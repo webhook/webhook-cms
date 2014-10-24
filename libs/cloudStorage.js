@@ -81,7 +81,7 @@ module.exports.buckets = {
   get: function(bucketName, callback) {
 
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucketName,
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucketName,
       method: 'GET'
     }, callback);
   },
@@ -97,7 +97,7 @@ module.exports.buckets = {
     }
 
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/',
+      url: 'https://www.googleapis.com/storage/v1/b/',
       qs: { project: projectName },
       data: data,
       method: 'POST'
@@ -111,7 +111,7 @@ module.exports.buckets = {
     };
 
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucketName + '/defaultObjectAcl',
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucketName + '/defaultObjectAcl',
       data: data,
       method: 'POST',
     }, callback);
@@ -127,7 +127,7 @@ module.exports.buckets = {
     };
 
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucketName,
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucketName,
       data: data,
       method: 'PATCH'
     }, callback);
@@ -135,7 +135,7 @@ module.exports.buckets = {
 
   del: function(bucketName, callback) {
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucketName,
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucketName,
       method: 'DELETE'
     }, callback);
   }
@@ -146,14 +146,14 @@ module.exports.objects = {
 
   list: function(bucket, callback) {
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucket + '/o',
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucket + '/o',
       qs: { fields: 'kind,items(name)' }
     }, callback);
   },
 
   upload: function(bucket, local, remote, callback) {
     jsonRequest({
-      url: 'https://www.googleapis.com/upload/storage/v1beta2/b/' + bucket + '/o',
+      url: 'https://www.googleapis.com/upload/storage/v1/b/' + bucket + '/o',
       qs: { uploadType: 'multipart' },
       headers: {
         'content-type' : 'multipart/form-data'
@@ -174,7 +174,7 @@ module.exports.objects = {
 
   del: function(bucket, filename, callback) {
     jsonRequest({
-      url: 'https://www.googleapis.com/storage/v1beta2/b/' + bucket + '/o/' + encodeURIComponent(filename),
+      url: 'https://www.googleapis.com/storage/v1/b/' + bucket + '/o/' + encodeURIComponent(filename),
       method: 'DELETE'
     }, callback);
   }
