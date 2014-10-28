@@ -29,7 +29,7 @@ export default DS.Model.extend({
     return this.get('controlType.widget') !== 'instruction' && !this.get('locked');
   }.property('controlType.widget'),
 
-  setValid: function () {
-    this.set('widgetIsValid', true);
-  }.on('didLoad')
+  widgetIsValid: true,
+  widgetErrors: Ember.A([])
+
 });

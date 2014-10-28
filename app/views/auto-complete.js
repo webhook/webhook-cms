@@ -1,16 +1,23 @@
+import SearchIndex from 'appkit/utils/search-index';
+
 export default Ember.TextField.extend({
   resultsPage: 1,
 
   searchQueryObserver: Ember.debouncedObserver(function() {
 
     if (this.get('value')) {
-      this.set('parentView.isLoading', true);
-      window.ENV.search(this.get('value'), this.get('resultsPage'), this.get('filter'), function (err, data) {
-        this.set('parentView.results', Ember.A(data).map(function (result) {
+
+      var parentView = this.get('parentView');
+
+      parentView.set('isLoading', true);
+
+      SearchIndex.search(this.get('value'), this.get('resultsPage'), this.get('filter')).then(function (results) {
+        parentView.set('results', Ember.A(results).map(function (result) {
           return Ember.Object.create(result);
         }));
-        this.set('parentView.isLoading', false);
-      }.bind(this));
+        parentView.set('isLoading', false);
+      });
+
     } else {
       this.getWithDefault('parentView.results', Ember.A([])).clear();
     }

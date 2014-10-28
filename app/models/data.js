@@ -1,6 +1,7 @@
 // This is the "One Off" model
 // it is named `data` because that will put it in `dev/data/{id}`
 
-import ItemModel from 'appkit/models/item';
+import Item from 'appkit/models/item';
+import SearchIndex from 'appkit/utils/search-index';
 
-export default ItemModel.extend();
+export default Item.extend();

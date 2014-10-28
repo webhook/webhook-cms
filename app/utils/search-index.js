@@ -5,28 +5,84 @@ export default {
 
   search: function (query, page, typeName) {
 
-    Ember.Logger.log('searchIndex::search', arguments);
-
     if (Ember.isNone(query)) {
       return Ember.RSVP.Promise.reject(new Ember.Error('Search query is required.'));
     }
 
-    return new Ember.RSVP.Promise(function (resolve, reject) {
+    Ember.Logger.log('searchIndex::search::%@::%@'.fmt(query, typeName || 'all types'));
 
-      window.ENV.search(query, page || 1, typeName || null, function(error, results) {
-        if (error) {
-          Ember.Logger.warn('searchIndex::search::error', error);
-          reject(error);
-        } else {
-          Ember.Logger.info('searchIndex::search::results', results);
-          resolve(results);
-        }
+    var SearchIndex = this;
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      Ember.$.ajax({
+        url: window.ENV.uploadUrl + 'search/',
+        type: 'POST',
+        data: Ember.$.extend(SearchIndex.siteAndToken(), {
+          query: query,
+          page: page || 1,
+          typeName: typeName || null
+        }),
+        success: resolve,
+        error: reject
       });
+    }).then(function (data) {
+
+      if (data.error) {
+        return Ember.RSVP.reject(data.error);
+      } else if (Ember.isEmpty(data.hits)) {
+        return Ember.RSVP.reject('No results.');
+      } else {
+
+        var items = [];
+
+        Ember.$.each(data.hits, function(index, value) {
+          var highlights = [];
+
+          var name = value.fields.name ? value.fields.name[0] : '';
+
+          if (value.highlight) {
+            for (var key in value.highlight) {
+              if(key === 'name') {
+                name = value.highlight[key][0];
+              } else {
+                highlights.push({ key: key, highlight: value.highlight[key][0] });
+              }
+            }
+          }
+
+          items.push({
+            name: name,
+            oneOff: value.fields.__oneOff ? (value.fields.__oneOff[0] === "true" ? true : false ): false,
+            id: value._id,
+            type: value._type,
+            highlights: highlights
+          });
+        });
+
+        return Ember.RSVP.resolve(items);
+      }
     });
 
   },
 
-  indexItem: function (item, contentType) {
+  indexItem: function (item) {
+
+    if (Ember.isEmpty(item)) {
+      return Ember.RSVP.reject('Cannot index without an item.');
+    }
+
+    var typeKey = item.constructor.typeKey;
+
+    // handle one offs
+    if (typeKey === 'data') {
+      typeKey = item.get('id');
+    }
+
+    var contentType = item.store.getById('content-type', typeKey);
+
+    if (Ember.isEmpty(contentType)) {
+      return Ember.RSVP.reject('Cannot index without a content type.');
+    }
 
     var searchData = {};
 
@@ -46,57 +102,54 @@ export default {
       oneOff: contentType.get('oneOff')
     });
 
-    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('id')), searchData);
+    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('id')));
 
     return Ember.$.ajax({
       url: this.baseUrl + 'index/',
       type: 'POST',
       data: ajaxData
     });
+
   },
 
   indexType: function (contentType) {
 
     Ember.Logger.log("SearchIndex::indexType::%@".fmt(contentType.get('id')));
 
-    var indexItem = this.indexItem.bind(this);
-    var modelName = getItemModelName(contentType);
-    var store = window.App.__container__.lookup('store:main');
+    var SearchIndex = this;
+    var modelName = contentType.get('oneOff') ? 'data' : getItemModelName(contentType);
+    var store = contentType.store;
 
-    return new Ember.RSVP.Promise(function (resolve, reject) {
-      if (contentType.get('oneOff')) {
-        store.find(modelName, contentType.get('id')).then(function (item) {
-          return indexItem(item, contentType);
-        });
-      } else {
-        store.find(modelName).then(function (items) {
-          return items.reduce(function (cur, next) {
-            return cur.then(function () {
-              return indexItem(next, contentType);
-            });
-          }, Ember.RSVP.resolve());
-        });
-      }
+    if (contentType.get('oneOff')) {
+      return store.find(modelName, contentType.get('id')).then(SearchIndex.indexItem.bind(SearchIndex), function (error) {
+        Ember.Logger.warn('SearchIndex::indexType::Could not find %@, continuing.'.fmt(contentType.get('id')));
+      });
+    } else {
+      return store.find(modelName).then(function (items) {
+        return items.reduce(function (cur, next) {
+          return cur.then(function () {
+            return SearchIndex.indexItem(next);
+          });
+        }, Ember.RSVP.resolve());
+      });
+    }
 
-    });
   },
 
   indexSite: function () {
+
+    Ember.Logger.log("SearchIndex::indexSite");
+
+    var SearchIndex = this;
     var store = window.App.__container__.lookup('store:main');
-    var indexType = this.indexType.bind(this);
 
-    return new Ember.RSVP.Promise(function (resolve, reject) {
-      store.find('contentType').then(function (contentTypes) {
+    store.find('content-type').then(function (contentTypes) {
 
-        var contentTypePromises = [];
-
-        contentTypes.forEach(function (contentType) {
-          contentTypePromises.push(indexType(contentType));
-        });
-
-        Ember.RSVP.Promise.all(contentTypePromises).then(resolve).catch(reject);
-
+      var contentTypePromises = contentTypes.map(function (contentType) {
+        return SearchIndex.indexType(contentType);
       });
+
+      return Ember.RSVP.Promise.all(contentTypePromises);
 
     });
 
@@ -113,17 +166,19 @@ export default {
     });
   },
 
+  // contentType can be id or model
   deleteType: function (contentType) {
     return Ember.$.ajax({
       url: this.baseUrl + 'delete/type/',
       type: 'POST',
       data: Ember.$.extend(this.siteAndToken(), {
-        typeName: contentType.get('id')
+        typeName: typeof contentType === 'string' ? contentType : contentType.get('id')
       })
     });
   },
 
   deleteSite: function () {
+    Ember.Logger.log("SearchIndex::deleteSite");
     return Ember.$.ajax({
       url: this.baseUrl + 'delete/index/',
       type: 'POST',

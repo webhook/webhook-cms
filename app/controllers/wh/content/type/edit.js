@@ -373,8 +373,6 @@ export default Ember.ObjectController.extend({
 
       window.ENV.sendBuildSignal(itemData.publish_date);
 
-      SearchIndex.indexItem(item, this.get('type'));
-
       var sendNotify = function (message) {
         controller.send('notify', 'info', message, { icon: 'ok-sign' });
       };
