@@ -3,6 +3,7 @@
 <html>
 <head>
   <title>Embed API Demo</title>
+  <link rel="stylesheet" href="/assets/app.css">
 </head>
 <body>
 
@@ -216,7 +217,7 @@ gapi.analytics.ready(function() {
 
     gapi.client.analytics.data.realtime
       .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 5, sort: "-rt:pageviews"})
-      .execute(function(resp) { 
+      .execute(function(resp) {
 
         var data = [];
 
@@ -381,7 +382,7 @@ gapi.analytics.ready(function() {
                 realId = prop.profiles[0].id;
                 createCharts(realId);
                 return false;
-              }              
+              }
             }
           });
         });
