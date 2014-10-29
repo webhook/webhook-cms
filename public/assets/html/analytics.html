@@ -22,12 +22,14 @@ Active Users: <section id="active-users" style="display: inline-block;"></sectio
 
 <section id="realtime">
   Realtime Page Views:
-  <ul style="display: none;">
+  <table style="display: none;">
     {{#each datapoints}}
-      <li>{{ this.path }}</li>
-      <li>{{ this.count }}</li>
+    <tr>
+      <td>{{ this.path }}</td>
+      <td>{{ this.count }}</td>
+    </tr>
     {{/each}}
-  </ul>
+  </table>
 </section>
 <section id="referrer">
   Referrals:

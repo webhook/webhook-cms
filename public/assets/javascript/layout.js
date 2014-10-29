@@ -97,6 +97,8 @@ $( document ).ready(function() {
 
 });
 
+
+// Simple function to resize iframes to have a dynamic height. Needed for the analytics stuff.
 function resizeIframe(iframe) {
   iframe.height = iframe.contentWindow.document.body.scrollHeight + 50 + "px";
 }
