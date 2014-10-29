@@ -22,6 +22,8 @@
 
   <section id="realtime">
   </section>
+  <section id="traffic">
+  </section>
   <section id="referrer">
   </section>
   <section id="pageviews">
@@ -35,6 +37,9 @@
 
   Region Break Down:
   <section id="region" style="width: 100%;"></section>
+
+  Channel Break Down:
+  <section id="channels" style="width: 100%;"></section>
 
 
 <!-- Step 2: Load the library. -->
@@ -53,6 +58,18 @@
 
 <script type="text/template" id="realtimeTemplate">
   <h3>Realtime page views</h3>
+  <table class="wy-table wy-table-bordered-rows wh-content">
+    {{#each datapoints}}
+    <tr>
+      <td>{{ this.path }}</td>
+      <td>{{ this.count }}</td>
+    </tr>
+    {{/each}}
+  </table>
+</script>
+
+<script type="text/template" id="trafficTemplate">
+  <h3>Realtime traffice sources</h3>
   <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
     <tr>

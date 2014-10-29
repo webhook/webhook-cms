@@ -101,6 +101,10 @@ gapi.analytics.ready(function() {
   var realTimesource = $('#realtimeTemplate').html();
   var realTimeTemplate = Handlebars.compile(realTimesource);
 
+  var trafficTimesource = $('#trafficTemplate').html();
+  var trafficTemplate = Handlebars.compile(trafficTimesource);
+
+
   var referrerSource = $('#referrerTemplate').html();
   var referrerTemplate = Handlebars.compile(referrerSource);
 
@@ -137,8 +141,23 @@ gapi.analytics.ready(function() {
         // resp.rows is what I want, probably need to poll here
       });
 
+    gapi.client.analytics.data.realtime
+      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:source', "max-results": 5, sort: "-rt:pageviews"})
+      .execute(function(resp) {
+
+        var data = [];
+
+        resp.rows.forEach(function(item) {
+          data.push({path: item[0], count: item[1] });
+        })
+
+
+        $('#traffic').html(trafficTemplate({ datapoints: data }));
+        // resp.rows is what I want, probably need to poll here
+      });
+
     gapi.client.analytics.data.ga
-      .get({ids: 'ga:' + id, dimensions: 'ga:fullReferrer', metrics: "ga:sessions", "max-results": 5, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
+      .get({ids: 'ga:' + id, dimensions: 'ga:source', metrics: "ga:pageviews", "max-results": 5, 'start-date': days, 'end-date': 'today', sort: "-ga:pageviews" })
       .execute(function(resp) {
 
 
@@ -153,7 +172,7 @@ gapi.analytics.ready(function() {
       });
 
     gapi.client.analytics.data.ga
-      .get({ids: 'ga:' + id, dimensions: 'ga:pagePath', metrics: "ga:sessions", "max-results": 10, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
+      .get({ids: 'ga:' + id, dimensions: 'ga:pagePath', metrics: "ga:pageviews", "max-results": 10, 'start-date': days, 'end-date': 'today', sort: "-ga:pageviews" })
       .execute(function(resp) {
 
 
@@ -220,6 +239,26 @@ gapi.analytics.ready(function() {
     });
 
     operating.execute();
+
+    var channel = new gapi.analytics.googleCharts.DataChart({
+      reportType: 'ga',
+      query: {
+        'ids': 'ga:' + id,
+        'metrics': 'ga:sessions',
+        'dimensions': 'ga:channelGrouping',
+        'start-date': days,
+        'end-date': 'today'
+      },
+      chart: {
+        container: 'channels',
+        type: 'PIE',
+        options: {
+          width: '100%'
+        }
+      }
+    });
+
+    channel.execute();
 
 
     var region = new gapi.analytics.googleCharts.DataChart({
