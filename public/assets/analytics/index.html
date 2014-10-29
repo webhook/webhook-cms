@@ -9,10 +9,14 @@
 
 <!-- Step 1: Create the containing elements. -->
 
-
   <section id="auth-button"></section>
-  <section id="error" style="display: none; color: red;">This user does not have permission to view this information.</section>
-  <section id="logout-button" style="display: none;"><button>Logout</button></section>
+  <section id="error" style="display: none;">
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title">Permission denied.</div>
+      You do not have permission to access analytics for this account. Please contact your site administrator and let him or her know.
+    </div>
+  </section>
+  <section id="logout-button" style="display: none;"><button class="btn btn-neutral btn-small">Logout</button></section>
   Active Users: <section id="active-users" style="display: inline-block;"></section>
   <section id="view-selector"></section>
 
@@ -20,26 +24,24 @@
   <a href="#" id="7daysago">7 Days</a>
   <a href="#" id="1daysago">1 Days</a>
 
-  <section id="realtime">
-  </section>
-  <section id="traffic">
-  </section>
-  <section id="referrer">
-  </section>
-  <section id="pageviews">
-  </section>
+  <div class="container wh-analytics-tables">
+    <section id="realtime"> </section>
+    <section id="traffic"> </section>
+    <section id="referrer"> </section>
+    <section id="pageviews"></section>
+  </div>
 
-  Page Views Over Time:
-  <section id="timeline" style="width: 100%;"></section>
+  <hr style="clear:both">
 
-  Operating System Break Down:
-  <section id="operating" style="width: 100%;"></section>
+  <div class="container wh-analytics-graph">
+    <section id="timeline"></section>
 
-  Region Break Down:
-  <section id="region" style="width: 100%;"></section>
+    <section id="operating"></section>
 
-  Channel Break Down:
-  <section id="channels" style="width: 100%;"></section>
+    <section id="region"></section>
+
+    <section id="channels"></section>
+  </div>
 
 
 <!-- Step 2: Load the library. -->
