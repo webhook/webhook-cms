@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html class="wh-analytics">
 <head>
   <title>Embed API Demo</title>
   <link rel="stylesheet" href="/assets/app.css">
@@ -10,31 +10,32 @@
 <!-- Step 1: Create the containing elements. -->
 
 
-<section id="auth-button"></section>
-<section id="error" style="display: none; color: red;">This user does not have permission to view this information.</section>
-<section id="logout-button" style="display: none;"><button>Logout</button></section>
-Active Users: <section id="active-users" style="display: inline-block;"></section>
-<section id="view-selector"></section>
+  <section id="auth-button"></section>
+  <section id="error" style="display: none; color: red;">This user does not have permission to view this information.</section>
+  <section id="logout-button" style="display: none;"><button>Logout</button></section>
+  Active Users: <section id="active-users" style="display: inline-block;"></section>
+  <section id="view-selector"></section>
 
-<a href="#" id="30daysago">30 Days</a>
-<a href="#" id="7daysago">7 Days</a>
-<a href="#" id="1daysago">1 Days</a>
+  <a href="#" id="30daysago">30 Days</a>
+  <a href="#" id="7daysago">7 Days</a>
+  <a href="#" id="1daysago">1 Days</a>
 
-<section id="realtime">
-</section>
-<section id="referrer">
-</section>
-<section id="pageviews">
-</section>
+  <section id="realtime">
+  </section>
+  <section id="referrer">
+  </section>
+  <section id="pageviews">
+  </section>
 
-Page Views Over Time:
-<section id="timeline" style="width: 100%;"></section>
+  Page Views Over Time:
+  <section id="timeline" style="width: 100%;"></section>
 
-Operating System Break Down:
-<section id="operating" style="width: 100%;"></section>
+  Operating System Break Down:
+  <section id="operating" style="width: 100%;"></section>
 
-Region Break Down:
-<section id="region" style="width: 100%;"></section>
+  Region Break Down:
+  <section id="region" style="width: 100%;"></section>
+
 
 <!-- Step 2: Load the library. -->
 
@@ -51,8 +52,8 @@ Region Break Down:
 
 
 <script type="text/template" id="realtimeTemplate">
-  Realtime Page Views:
-  <table class="wy-table wh-content">
+  <h3>Realtime page views</h3>
+  <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
     <tr>
       <td>{{ this.path }}</td>
@@ -63,24 +64,28 @@ Region Break Down:
 </script>
 
 <script type="text/template" id="referrerTemplate">
-  Referrals:
-  <ul>
+  <h3>Referrels</h3>
+  <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
-      <li>{{ this.referrer }}</li>
-      <li>{{ this.count }}</li>
+    <tr>
+      <td>{{ this.referrer }}</td>
+      <td>{{ this.count }}</td>
+    </tr>
     {{/each}}
-  </ul>
+  </table>
 </script>
 
 
 <script type="text/template" id="pageviewsTemplate">
-  Top Page Views:
-  <ul>
+  <h3>Top pages views</h3>
+  <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
-      <li>{{ this.path }}</li>
-      <li>{{ this.count }}</li>
+    <tr>
+      <td>{{ this.path }}</td>
+      <td>{{ this.count }}</td>
+    </tr>
     {{/each}}
-  </ul>
+  </table>
 </script>
 
 
