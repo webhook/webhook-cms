@@ -1,90 +1,3 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Embed API Demo</title>
-  <link rel="stylesheet" href="/assets/app.css">
-</head>
-<body>
-
-<!-- Step 1: Create the containing elements. -->
-
-
-<section id="auth-button"></section>
-<section id="error" style="display: none; color: red;">This user does not have permission to view this information.</section>
-<section id="logout-button" style="display: none;"><button>Logout</button></section>
-Active Users: <section id="active-users" style="display: inline-block;"></section>
-<section id="view-selector"></section>
-
-<a href="#" id="30daysago">30 Days</a>
-<a href="#" id="7daysago">7 Days</a>
-<a href="#" id="1daysago">1 Days</a>
-
-<section id="realtime">
-</section>
-<section id="referrer">
-</section>
-<section id="pageviews">
-</section>
-
-Page Views Over Time:
-<section id="timeline" style="width: 100%;"></section>
-
-Operating System Break Down:
-<section id="operating" style="width: 100%;"></section>
-
-Region Break Down:
-<section id="region" style="width: 100%;"></section>
-
-<!-- Step 2: Load the library. -->
-
-<script>
-(function(w,d,s,g,js,fjs){
-  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
-  js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
-  js.src='https://apis.google.com/js/platform.js';
-  fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
-}(window,document,'script'));
-</script>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-
-<script type="text/template" id="realtimeTemplate">
-  Realtime Page Views:
-  <table>
-    {{#each datapoints}}
-    <tr>
-      <td>{{ this.path }}</td>
-      <td>{{ this.count }}</td>
-    </tr>
-    {{/each}}
-  </table>
-</script>
-
-<script type="text/template" id="referrerTemplate">
-  Referrals:
-  <ul>
-    {{#each datapoints}}
-      <li>{{ this.referrer }}</li>
-      <li>{{ this.count }}</li>
-    {{/each}}
-  </ul>
-</script>
-
-
-<script type="text/template" id="pageviewsTemplate">
-  Top Page Views:
-  <ul>
-    {{#each datapoints}}
-      <li>{{ this.path }}</li>
-      <li>{{ this.count }}</li>
-    {{/each}}
-  </ul>
-</script>
-
-
-<script>
 gapi.analytics.ready(function() {
 
   gapi.analytics.createComponent('ActiveUsers', {
@@ -164,27 +77,8 @@ gapi.analytics.ready(function() {
   });
 
 });
-</script>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -432,8 +326,4 @@ $(document).ready(function() {
     }
   });
 });
-</script>
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" />
-</body>
-</html>
