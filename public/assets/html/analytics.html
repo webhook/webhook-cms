@@ -21,33 +21,10 @@ Active Users: <section id="active-users" style="display: inline-block;"></sectio
 <a href="#" id="1daysago">1 Days</a>
 
 <section id="realtime">
-  Realtime Page Views:
-  <table style="display: none;">
-    {{#each datapoints}}
-    <tr>
-      <td>{{ this.path }}</td>
-      <td>{{ this.count }}</td>
-    </tr>
-    {{/each}}
-  </table>
 </section>
 <section id="referrer">
-  Referrals:
-  <ul style="display: none;">
-    {{#each datapoints}}
-      <li>{{ this.referrer }}</li>
-      <li>{{ this.count }}</li>
-    {{/each}}
-  </ul>
 </section>
 <section id="pageviews">
-  Top Page Views:
-  <ul style="display: none;">
-    {{#each datapoints}}
-      <li>{{ this.path }}</li>
-      <li>{{ this.count }}</li>
-    {{/each}}
-  </ul>
 </section>
 
 Page Views Over Time:
@@ -71,6 +48,40 @@ Region Break Down:
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+<script type="text/template" id="realtimeTemplate">
+  Realtime Page Views:
+  <table>
+    {{#each datapoints}}
+    <tr>
+      <td>{{ this.path }}</td>
+      <td>{{ this.count }}</td>
+    </tr>
+    {{/each}}
+  </table>
+</script>
+
+<script type="text/template" id="referrerTemplate">
+  Referrals:
+  <ul>
+    {{#each datapoints}}
+      <li>{{ this.referrer }}</li>
+      <li>{{ this.count }}</li>
+    {{/each}}
+  </ul>
+</script>
+
+
+<script type="text/template" id="pageviewsTemplate">
+  Top Page Views:
+  <ul>
+    {{#each datapoints}}
+      <li>{{ this.path }}</li>
+      <li>{{ this.count }}</li>
+    {{/each}}
+  </ul>
+</script>
 
 
 <script>
@@ -193,13 +204,13 @@ var days = "30daysAgo";
 
 gapi.analytics.ready(function() {
 
-  var realTimesource = $('#realtime').html().replace('style="display: none;"', '');
+  var realTimesource = $('#realtimeTemplate').html();
   var realTimeTemplate = Handlebars.compile(realTimesource);
 
-  var referrerSource = $('#referrer').html().replace('style="display: none;"', '');
+  var referrerSource = $('#referrerTemplate').html();
   var referrerTemplate = Handlebars.compile(referrerSource);
 
-  var pageViewSource = $('#pageviews').html().replace('style="display: none;"', '');
+  var pageViewSource = $('#pageviewsTemplate').html();
   var pageViewTemplate = Handlebars.compile(pageViewSource);
   // Step 3: Authorize the user.
 
