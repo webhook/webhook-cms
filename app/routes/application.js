@@ -163,10 +163,11 @@ export default Ember.Route.extend({
       return Ember.RSVP.Promise.resolve();
     }
 
+    route.set('session.supportedMessages', Ember.Object.create());
+
     return new Ember.RSVP.Promise(function (resolve, reject) {
 
       var localSocket = route.get('buildEnvironment.localSocket');
-      window.console.log(localSocket);
       if (!localSocket || !localSocket.connected) {
 
         Ember.$.ajax({
@@ -184,16 +185,12 @@ export default Ember.Route.extend({
       }
 
     }).then(function (messages) {
-
-      window.console.log(messages);
-
-      route.set('session.supportedMessages', Ember.Object.create());
       messages.forEach(function (message) {
         route.get('session.supportedMessages').set(message, true);
       });
       Ember.Logger.info('Server Messages Supported:', messages.join(', '));
     }, function (error) {
-      Ember.Logger.error(error);
+      Ember.Logger.warn('Failed to retrieve supported grunt messages.');
     });
   },
 
@@ -209,7 +206,7 @@ export default Ember.Route.extend({
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
 
-      var valid = function (snapshot) {
+      var getToken = function (snapshot) {
         var token = snapshot.val();
         session.set('site.token', token);
 
@@ -223,7 +220,7 @@ export default Ember.Route.extend({
         resolve(user);
       };
 
-      managementSiteRef.child('key').once('value', valid, function (error) {
+      managementSiteRef.child('key').once('value', getToken, function (error) {
 
         if (error.code === 'PERMISSION_DENIED') {
           var escapedEmail = user.email.replace(/\./g, ',1');
@@ -233,7 +230,7 @@ export default Ember.Route.extend({
               // Try to delete self from potential user list
               managementSiteRef.child('potential_users').child(escapedEmail).remove(function () {
                 // Redo original authorization call
-                managementSiteRef.child('key').once('value', valid, reject);
+                managementSiteRef.child('key').once('value', getToken, reject);
               }, reject);
             });
           }, reject);
