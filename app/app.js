@@ -75,7 +75,7 @@ Ember.Route.reopen({
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
         Ember.Logger.warn('Attempting to access protected route without permission. Aborting.');
         this.set('session.transition', transition);
-        transition.abort();
+        // transition.abort();
         this.transitionTo('wh.index');
       }
 

@@ -1,10 +1,16 @@
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
   email    : null,
   password : null,
   isLoading: false,
 
   userChanged: function () {
+    Ember.Logger.log('LoginController::userChanged');
     this.set('isLoading', false);
+    if (this.get('session.transition')) {
+      this.get('session.transition').retry();
+    } else {
+      this.transitionToRoute('index');
+    }
   }.observes('session.user'),
 
   errorChanged: function () {

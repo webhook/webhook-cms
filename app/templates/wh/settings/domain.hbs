@@ -2,7 +2,7 @@
   <h1>{{t 'wh.settings.domain.title'}}</h1>
 </section>
 <section class="wh-content-subhead">
-  {{t 'wh.settings.domain.description' siteNameBinding="buildEnvironment.siteName"}}
+  {{t 'wh.settings.domain.description' siteNameBinding="session.site.name"}}
   {{#if domain}}{{t 'wh.settings.domain.descriptionDomain' domainBinding="domain"}}{{/if}}
 </section>
 <section class="wh-content-edit">
