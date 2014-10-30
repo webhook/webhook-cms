@@ -186,6 +186,58 @@ gapi.analytics.ready(function() {
         $('#pageviews').html(pageViewTemplate({ datapoints: data }));
       });
 
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, metrics: "ga:pageviews", 'start-date': days, 'end-date': 'today' })
+      .execute(function(resp) {
+
+        var total = 0;
+
+        if(resp.rows.length > 0) {
+          total = resp.rows[0];
+        }
+
+        $('#totalPageviews').text(total);
+      });
+
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, metrics: "ga:sessions", 'start-date': days, 'end-date': 'today' })
+      .execute(function(resp) {
+
+        var total = 0;
+
+        if(resp.rows.length > 0) {
+          total = resp.rows[0];
+        }
+
+        $('#totalSessions').text(total);
+      });
+
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, metrics: "ga:users", 'start-date': days, 'end-date': 'today' })
+      .execute(function(resp) {
+
+        var total = 0;
+
+        if(resp.rows.length > 0) {
+          total = resp.rows[0];
+        }
+
+        $('#totalUsers').text(total);
+      });
+
+
+    gapi.client.analytics.data.ga
+      .get({ids: 'ga:' + id, metrics: "ga:pageviewsPerSession", 'start-date': days, 'end-date': 'today' })
+      .execute(function(resp) {
+
+        var total = 0;
+
+        if(resp.rows.length > 0) {
+          total = resp.rows[0];
+        }
+
+        $('#totalPagesPer').text(total);
+      });
 
     if(oldActiveUser) {
       oldActiveUser.stop();
