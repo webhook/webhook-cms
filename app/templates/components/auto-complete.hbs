@@ -1,6 +1,6 @@
-<span>
+<span class="current-selection">
   {{#each currentSelection}}
-    <span class="wy-tag">{{itemData.name}}<a href="" class="wy-tag-remove" {{action "removeItem" this}}></a></span>
+    <span class="wy-tag" style="cursor: move">{{itemData.name}}<a href="" class="wy-tag-remove" {{action "removeItem" this}}></a></span>
   {{/each}}
 </span>
 

@@ -13,6 +13,8 @@ export default Ember.Component.extend({
   currentSelection: Ember.arrayComputed('control.value', {
     addedItem: function (array, valueItem, changeMeta) {
 
+      var insertPosition = this.get('control.value').indexOf(valueItem);
+
       var contentTypeId = valueItem.split(' ')[0];
       var itemId = valueItem.split(' ')[1];
 
@@ -44,7 +46,7 @@ export default Ember.Component.extend({
             component.store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (reverseValueModel) {
 
               if (window.confirm('The `%@` content type only allows one `%@` to be attached. Do you want to replace `%@` in the current relation with `%@`?'.fmt(contentType.get('name'), editType.get('name'), reverseValueModel.get('itemData.name'), editController.get('controls').findBy('name', 'name').get('value') || 'unnamed item'))) {
-                array.pushObject(model);
+                array.insertAt(insertPosition, model);
               } else {
                 component.get('control.value').removeObject(valueItem);
               }
@@ -52,7 +54,7 @@ export default Ember.Component.extend({
             });
 
           } else {
-            array.pushObject(model);
+            array.insertAt(insertPosition, model);
           }
 
         }, function (error) {
@@ -66,10 +68,36 @@ export default Ember.Component.extend({
       return array;
     },
     removedItem: function (array, item) {
-      array.removeObject(array.findBy('id', item.split(' ')[1]));
-      return array;
+      return array.removeObject(array.findBy('id', item.split(' ')[1]));
     }
   }),
+
+  didInsertElement: function () {
+
+    var component = this;
+    var originalIndex;
+
+    this.$('.current-selection').sortable({
+      items: '.wy-tag',
+      helper: 'clone',
+      start: function (event, ui) {
+
+        originalIndex = ui.item.parent().children('.wy-tag').index(ui.item);
+
+      },
+      update: function (event, ui) {
+
+        var newIndex = ui.item.parent().children('.wy-tag').index(ui.item);
+
+        $(this).sortable('cancel');
+
+        var array = component.get('control.value');
+        var relation = array.objectAt(originalIndex);
+        array.removeAt(originalIndex);
+        array.insertAt(newIndex, relation);
+      }
+    });
+  },
 
   actions: {
     addToSelection: function (result) {
