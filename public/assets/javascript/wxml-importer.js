@@ -422,6 +422,27 @@ var WXMLImporter = (function() {
     parseAuthors();
   }
 
+  function addTag(id, name) {
+    var pushId = getKey();
+    tagsToId[id] = pushId;
+
+    var now = Date.now();
+    var newTag = {
+     "_sort_create_date": Math.floor(now / 1000),
+     "_sort_last_updated": Math.floor(now / 1000),
+     "_sort_publish_date": Math.floor(now / 1000),
+     "create_date": formattedDate(now),
+     "last_updated": formattedDate(now),
+     "name": name,
+     "preview_url": guid(),
+     "articles" : [],
+     "publish_date": formattedDate(now)
+    }
+
+    console.log('adding tag');
+    structuredData.tags[pushId] = newTag;
+  }
+
   var authorsToIds = {};
 
   var parseAuthors = function() {
@@ -557,6 +578,10 @@ var WXMLImporter = (function() {
           continue;
         }
 
+        if(!structuredData.tags[tagId]) {
+          addTag(tag, postData.data.tags[tag]);
+        }
+
         var tagId = tagsToId[tag];
         var tagObj = structuredData.tags[tagId];
 
@@ -572,6 +597,7 @@ var WXMLImporter = (function() {
     structuredData.articles = articles;
 
     self.onImporterUpdated({ event: 'posts', class: 'complete', running: false });
+
     parsePages();
   }
 
@@ -849,7 +875,6 @@ var WXMLImporter = (function() {
   }
 
   function uploadImage(url, callback) {
-
     $.ajax({
       url: window.ENV.uploadUrl + 'upload-url/',
       type: 'POST',
