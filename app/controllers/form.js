@@ -101,6 +101,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       }
     });
 
+    this.get('controls').filterBy('name', 'id').forEach(function (control) {
+      control.set('widgetIsValid', false);
+      control.get('widgetErrors').addObject('`id` is a reserved name. Please choose another.');
+    });
+
     // this.get('controls').filterBy('name', 'slug').forEach(function (control) {
     //   control.set('widgetIsValid', false);
     //   control.get('widgetErrors').addObject('Slug is a reserved name. Please choose another label.');
