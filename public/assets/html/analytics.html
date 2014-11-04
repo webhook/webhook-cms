@@ -19,9 +19,33 @@ Active Users: <section id="active-users" style="display: inline-block;"></sectio
 <a href="#" id="7daysago">7 Days</a>
 <a href="#" id="1daysago">1 Days</a>
 
-<section id="realtime"></section>
-<section id="referrer"></section>
-<section id="pageviews"></section>
+<section id="realtime">
+  Realtime Page Views:
+  <ul style="display: none;">
+    {{#each datapoints}}
+      <li>{{ this.path }}</li>
+      <li>{{ this.count }}</li>
+    {{/each}}
+  </ul>
+</section>
+<section id="referrer">
+  Referrals:
+  <ul style="display: none;">
+    {{#each datapoints}}
+      <li>{{ this.referrer }}</li>
+      <li>{{ this.count }}</li>
+    {{/each}}
+  </ul>
+</section>
+<section id="pageviews">
+  Top Page Views:
+  <ul style="display: none;">
+    {{#each datapoints}}
+      <li>{{ this.path }}</li>
+      <li>{{ this.count }}</li>
+    {{/each}}
+  </ul>
+</section>
 
 Page Views Over Time:
 <section id="timeline" style="width: 100%;"></section>
@@ -44,6 +68,7 @@ Region Break Down:
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 
 <script>
 gapi.analytics.ready(function() {
@@ -145,13 +170,6 @@ gapi.analytics.ready(function() {
 
 
 
-
-
-
-
-
-
-
 <script>
 
 function getParameterByName(name) {
@@ -172,6 +190,14 @@ var days = "30daysAgo";
 
 gapi.analytics.ready(function() {
 
+  var realTimesource = $('#realtime').html().replace('style="display: none;"', '');
+  var realTimeTemplate = Handlebars.compile(realTimesource);
+
+  var referrerSource = $('#referrer').html().replace('style="display: none;"', '');
+  var referrerTemplate = Handlebars.compile(referrerSource);
+
+  var pageViewSource = $('#pageviews').html().replace('style="display: none;"', '');
+  var pageViewTemplate = Handlebars.compile(pageViewSource);
   // Step 3: Authorize the user.
 
   var CLIENT_ID = '188556106710-kt1h5l0k9f0kpei5h4o60ouf009f9nm4.apps.googleusercontent.com';
@@ -190,17 +216,16 @@ gapi.analytics.ready(function() {
 
     gapi.client.analytics.data.realtime
       .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 5, sort: "-rt:pageviews"})
-      .execute(function(resp) {
-        var ul = 'Realtime Page Views: <ul>';
+      .execute(function(resp) { 
+
+        var data = [];
 
         resp.rows.forEach(function(item) {
-          ul += "<li>" + item[0] + "</li>";
-          ul += "<li>" + item[1] + "</li>";
-        });
+          data.push({path: item[0], count: item[1] });
+        })
 
-        ul += '</ul>';
 
-        $('#realtime').html(ul);
+        $('#realtime').html(realTimeTemplate({ datapoints: data }));
         // resp.rows is what I want, probably need to poll here
       });
 
@@ -208,32 +233,30 @@ gapi.analytics.ready(function() {
       .get({ids: 'ga:' + id, dimensions: 'ga:fullReferrer', metrics: "ga:sessions", "max-results": 5, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
       .execute(function(resp) {
 
-        var ul = 'Referrals: <ul>';
+
+        var data = [];
 
         resp.rows.forEach(function(item) {
-          ul += "<li>" + item[0] + "</li>";
-          ul += "<li>" + item[1] + "</li>";
-        });
+          data.push({referrer: item[0], count: item[1] });
+        })
 
-        ul += '</ul>';
 
-        $('#referrer').html(ul);
+        $('#referrer').html(referrerTemplate({ datapoints: data }));
       });
 
     gapi.client.analytics.data.ga
       .get({ids: 'ga:' + id, dimensions: 'ga:pagePath', metrics: "ga:sessions", "max-results": 10, 'start-date': days, 'end-date': 'today', sort: "-ga:sessions" })
       .execute(function(resp) {
 
-        var ul = 'Top Page Views: <ul>';
+
+        var data = [];
 
         resp.rows.forEach(function(item) {
-          ul += "<li>" + item[0] + "</li>";
-          ul += "<li>" + item[1] + "</li>";
-        });
+          data.push({path: item[0], count: item[1] });
+        })
 
-        ul += '</ul>';
 
-        $('#pageviews').html(ul);
+        $('#pageviews').html(pageViewTemplate({ datapoints: data }));
       });
 
 
@@ -397,5 +420,6 @@ $(document).ready(function() {
 });
 </script>
 
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" />
 </body>
 </html>
