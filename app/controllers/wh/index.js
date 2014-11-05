@@ -4,10 +4,19 @@ export default Ember.Controller.extend({
   serverMessagesPerPage: 10,
 
   contentTypes: null,
+  generalSettings: null,
 
   noTypesLive: function () {
     return Ember.isEmpty(this.get('contentTypes')) && !this.get('buildEnvironment.local');
   }.property('contentTypes.length', 'buildEnvironment.local'),
+
+  analyticsIframeUrl: function () {
+    if (Ember.isEmpty(this.get('generalSettings.analyticsId'))) {
+      return null;
+    } else {
+      return "/assets/analytics/?googleId=" + this.get('generalSettings.analyticsId');
+    }
+  }.property('generalSettings.analyticsId'),
 
   moreServerMessages: function () {
     return this.get('session.serverMessages.length') === 10;
@@ -51,6 +60,14 @@ export default Ember.Controller.extend({
         });
       });
 
+    },
+
+    setAnalyticsId: function () {
+
+      this.set('generalSettings.analyticsId', this.get('analyticsId'));
+      this.get('generalSettings').save();
+
+      this.set('analyticsId', null);
     }
   }
 
