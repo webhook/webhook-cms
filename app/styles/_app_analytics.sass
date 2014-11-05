@@ -82,13 +82,22 @@
       margin: auto
       margin-bottom: $base-line-height / 2
       line-height: 75px
+  .wh-content-head
+    position: relative
   .wh-analytics-time
     display: inline-block
-    float: right
+    position: absolute
+    bottom: -1px
+    right: $base-line-height / 2
   .wh-analytics-time li
     display: inline-block
     a
       display: inline-block
       color: $text-invert
       font-size: 90%
+      padding: $base-line-height / 4 $base-line-height / 2
+      +border-top-radius(2px)
+    &.active a
+      background: $white
+      color: $text-color
 
