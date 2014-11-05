@@ -1,3 +1,14 @@
+Handlebars.registerHelper('format-number', function(number, options) {
+  if (!number) {
+    return "";
+  }
+  if (options.hash.format) {
+    return numeral(number).format(options.hash.format);
+  } else {
+    return numeral(number).format();
+  }
+});
+
 gapi.analytics.ready(function() {
 
   gapi.analytics.createComponent('ActiveUsers', {
@@ -196,7 +207,7 @@ gapi.analytics.ready(function() {
           total = resp.rows[0];
         }
 
-        $('#totalPageviews').text(total);
+        $('#totalPageviews').text(numeral(total).format());
       });
 
     gapi.client.analytics.data.ga
@@ -417,4 +428,3 @@ $(document).ready(function() {
     }
   });
 });
-

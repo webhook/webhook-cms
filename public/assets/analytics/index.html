@@ -124,14 +124,15 @@
     {{#each datapoints}}
     <tr>
       <td>{{ this.path }}</td>
-      <td>{{ this.count }}</td>
+      <td>{{ format-number this.count }}</td>
     </tr>
     {{/each}}
   </table>
 </script>
 
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js" ></script>
-  <script src="analytics.js" ></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
+  <script src="analytics.js"></script>
 </body>
 </html>
