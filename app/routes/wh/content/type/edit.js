@@ -93,8 +93,12 @@ export default Ember.Route.extend({
 
     return Ember.RSVP.Promise.all(promises).catch(function (error) {
       window.alert(error.message);
-      transition.abort();
-      this.transitionTo('wh.content.type', this.modelFor('wh.content.type'));
+      var contentType = this.modelFor('wh.content.type');
+      if (contentType.get('oneOff')) {
+        this.transitionTo('wh');
+      } else {
+        this.transitionTo('wh.content.type', contentType);
+      }
     }.bind(this));
   },
 

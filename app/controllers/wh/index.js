@@ -3,6 +3,12 @@ export default Ember.Controller.extend({
 
   serverMessagesPerPage: 10,
 
+  contentTypes: null,
+
+  noTypesLive: function () {
+    return Ember.isEmpty(this.get('contentTypes')) && !this.get('buildEnvironment.local');
+  }.property('contentTypes.length', 'buildEnvironment.local'),
+
   moreServerMessages: function () {
     return this.get('session.serverMessages.length') === 10;
   }.property('session.serverMessages.@each'),
