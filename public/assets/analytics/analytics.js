@@ -63,8 +63,8 @@ gapi.analytics.ready(function() {
           this.container.innerHTML = value;
 
           if (this.polling = true) {
-            this.timeout = setTimeout(this.getActiveUsers.bind(this),
-                pollingInterval);
+         /*   this.timeout = setTimeout(this.getActiveUsers.bind(this),
+                pollingInterval);*/
           }
         }.bind(this));
     },
@@ -304,74 +304,15 @@ gapi.analytics.ready(function() {
     });
 
     timeline.execute();
-
-
-    var operating = new gapi.analytics.googleCharts.DataChart({
-      reportType: 'ga',
-      query: {
-        'ids': 'ga:' + id,
-        'metrics': 'ga:sessions',
-        'dimensions': 'ga:operatingSystem',
-        'start-date': days,
-        'end-date': 'today'
-      },
-      chart: {
-        container: 'operating',
-        type: 'PIE',
-        options: {
-          width: '100%'
-        }
-      }
-    });
-
-    operating.execute();
-
-    var channel = new gapi.analytics.googleCharts.DataChart({
-      reportType: 'ga',
-      query: {
-        'ids': 'ga:' + id,
-        'metrics': 'ga:sessions',
-        'dimensions': 'ga:channelGrouping',
-        'start-date': days,
-        'end-date': 'today'
-      },
-      chart: {
-        container: 'channels',
-        type: 'PIE',
-        options: {
-          width: '100%'
-        }
-      }
-    });
-
-    channel.execute();
-
-
-    var region = new gapi.analytics.googleCharts.DataChart({
-      reportType: 'ga',
-      query: {
-        'ids': 'ga:' + id,
-        'metrics': 'ga:sessions',
-        'dimensions': 'ga:country',
-        'start-date': days,
-        'end-date': 'today'
-      },
-      chart: {
-        container: 'region',
-        type: 'GEO',
-        options: {
-          width: '100%'
-        }
-      }
-    });
-
-    region.execute();
   }
 
   $('#30daysago').on('click', function(e) {
     e.preventDefault();
 
     days = "30daysAgo";
+
+    $(this).parents('ul').first().find('li').removeClass('active');
+    $(this).parent().addClass('active');
 
     createCharts(realId);
   });
@@ -381,6 +322,9 @@ gapi.analytics.ready(function() {
 
     days = "7daysAgo";
 
+    $(this).parents('ul').first().find('li').removeClass('active');
+    $(this).parent().addClass('active');
+
     createCharts(realId);
   });
 
@@ -388,6 +332,9 @@ gapi.analytics.ready(function() {
     e.preventDefault();
 
     days = "1daysAgo";
+
+    $(this).parents('ul').first().find('li').removeClass('active');
+    $(this).parent().addClass('active');
 
     createCharts(realId);
   });

@@ -108,7 +108,6 @@ function resizeIframe(iframe) {
   setInterval(function() {
     var newHeight = div.height();
 
-    console.log(newHeight);
     if(oldHeight !== newHeight) {
       iframe.height = newHeight + 50 + 'px';
     }
