@@ -353,6 +353,10 @@ export default Ember.Route.extend({
 
       var firebaseAuth = new FirebaseSimpleLogin(window.ENV.firebaseRoot, function (error, user) {
 
+        if (route.get('isDestroyed')) {
+          return;
+        }
+
         if (user) {
           // Logged in
           route.validateUser(user).then(route.initializeUser.bind(route)).then(resolve);
