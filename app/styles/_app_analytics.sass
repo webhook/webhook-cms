@@ -1,7 +1,9 @@
 .wh-analytics
   html, body
     background: transparent
-  .wh-analytics-tables
+  hr
+    clear: both
+  .wh-analytics-realtime
     +display(flex)
     +flex-flow(row wrap)
     div
@@ -13,21 +15,37 @@
     h3
       font-family: $base-font-family
       margin: 0
-      font-size: 100%
-      font-weight: normal
-      border-bottom: solid 2px $table-border-color
-      line-height: 1.5
+      font-size: 80%
+      border-bottom: solid 1px $table-border-color
+      line-height: $base-line-height
       text-transform: uppercase
-      color: $text-light
     table
       margin-bottom: 0
       tr td:last-child
         text-align: center
         background: $table-stripe-color
         width: 75px
+      tr td:first-child
+        color: $text-medium
       tr:hover
         background: transparent
-        cursor: normal
+        cursor: normal !important
+  .wh-analytics-numbers
+    +display(flex)
+    +flex-flow(row wrap)
+    li
+      +span-columns(3)
+      +omega-type(4n)
+      text-align: center
+    p
+      font-size: 200%
+      font-weight: 300
+      margin-bottom: $base-line-height / 2
+    span
+      font-weight: bold
+      text-transform: uppercase
+      font-size: 80%
+
   .wh-analytics-btns
     > span
       +span-columns(6)
@@ -36,15 +54,28 @@
       font-size: 90%
     > span:last-child
       text-align: right
+      padding-bottom: $base-line-height / 2
   .wh-analytics-now
     text-align: center
-    border-right: solid 2px $table-border-color
+    border-right: solid 1px $table-border-color
+    p.now
+      font-weight: bold
+      text-transform: uppercase
+    p.users
+      color: $text-medium
     p
-      font-size: 90%
+      font-size: 80%
+      margin-bottom: $base-line-height / 2
     p.big
       font-size: 300%
       font-weight: 300
-      color: $text-color
+      width: 75px
+      height: 75px
+      border-radius: 100px
+      border: solid 2px $gray-dark
+      margin: auto
+      margin-bottom: $base-line-height / 2
+      line-height: 75px
   .wh-analytics-time
     width: 100%
     text-align: right

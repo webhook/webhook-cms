@@ -8,10 +8,15 @@
 <body>
 
 <!-- Step 1: Create the containing elements. -->
+<section class="wh-content-head">
+  Real-time stats
+</section>
+
+<section class="wh-content-edit">
 
   <div class="wh-analytics-btns">
     <span id="auth-button"></span>
-    <span id="logout-button" style="display: none;"><button class="btn btn-neutral btn-small">Logout</button></span>
+    <span id="logout-button" style="display: none;"><button class="btn btn-neutral btn-small">Logout of Google</button></span>
   </div>
   <div id="error" style="display: none;">
     <div class="wy-alert wy-alert-danger">
@@ -22,7 +27,7 @@
 
   <hr>
 
-  <div class="container wh-analytics-tables">
+  <div class="container wh-analytics-tables wh-analytics-realtime">
     <div class="wh-analytics-now">
       <p class="now">Right now</p>
       <p id="active-users" class="big"></p>
@@ -32,37 +37,59 @@
     <div id="traffic"> </div>
   </div>
 
-  <hr>
+</section>
 
+<section class="wh-content-head wh-content-head-again">
+  Historical stats
+</section>
+
+<section class="wh-content-edit">
   <div id="view-selector"></div>
 
-  <ul class="wh-analytics-time">
-    <li><a href="#" id="30daysago">This month</a></li>
-    <li><a href="#" id="7daysago">This week</a></li>
-    <li><a href="#" id="1daysago">Yesterday</a></li>
+
+  <ul class="wh-analytics-numbers">
+    <li>
+      <p id="totalPageviews"></p>
+      <span>Pageviews</span>
+    </li>
+    <li>
+      <p id="totalSessions"></p>
+      <span>Sessions</span>
+    </li>
+    <li>
+      <p id="totalUsers"></p>
+      <span>Uniques</span>
+    </li>
+    <li>
+      <p id="totalPagesPer"></p>
+      <span>Pages per session</span>
+    </li>
   </ul>
 
+  <hr>
 
-  PageViews: <section id="totalPageviews"></section>
-  Sessions: <section id="totalSessions"></section>
-  Users: <section id="totalUsers"></section>
-  Pages/Session: <section id="totalPagesPer"></section>
+  <div id="timeline"></div>
 
-  <div class="container wh-analytics-tables">
-    <div id="referrer"> </div>
+  <div class="container wh-analytics-tables wh-analytics-realtime">
+    <div>
+      <ul>
+        <li><a href="#" id="30daysago">This month</a></li>
+        <li><a href="#" id="7daysago">This week</a></li>
+        <li><a href="#" id="1daysago">Yesterday</a></li>
+      </ul>
+    </div>
     <div id="pageviews"></div>
+    <div id="referrer"> </div>
   </div>
 
-  <hr style="clear:both">
+</section>
 
   <div class="container wh-analytics-graph">
-    <div id="timeline"></div>
 
     <div id="operating"></div>
 
-    <div id="region"></div>
-
     <div id="channels"></div>
+
   </div>
 
 
@@ -87,7 +114,7 @@
     {{#each datapoints}}
     <tr>
       <td>{{ this.path }}</td>
-      <td>{{ this.count }}</td>
+      <td>{{ format-number this.count }}</td>
     </tr>
     {{/each}}
   </table>
@@ -99,7 +126,7 @@
     {{#each datapoints}}
     <tr>
       <td>{{ this.path }}</td>
-      <td>{{ this.count }}</td>
+      <td>{{ format-number this.count }}</td>
     </tr>
     {{/each}}
   </table>
@@ -111,7 +138,7 @@
     {{#each datapoints}}
     <tr>
       <td>{{ this.referrer }}</td>
-      <td>{{ this.count }}</td>
+      <td>{{ format-number this.count }}</td>
     </tr>
     {{/each}}
   </table>

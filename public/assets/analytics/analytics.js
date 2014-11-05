@@ -220,7 +220,7 @@ gapi.analytics.ready(function() {
           total = resp.rows[0];
         }
 
-        $('#totalSessions').text(total);
+        $('#totalSessions').text(numeral(total).format());
       });
 
     gapi.client.analytics.data.ga
@@ -233,7 +233,7 @@ gapi.analytics.ready(function() {
           total = resp.rows[0];
         }
 
-        $('#totalUsers').text(total);
+        $('#totalUsers').text(numeral(total).format());
       });
 
 
@@ -247,7 +247,7 @@ gapi.analytics.ready(function() {
           total = resp.rows[0];
         }
 
-        $('#totalPagesPer').text(total);
+        $('#totalPagesPer').text(numeral(total).format());
       });
 
     if(oldActiveUser) {
