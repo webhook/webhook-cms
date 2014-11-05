@@ -373,7 +373,7 @@ gapi.analytics.ready(function() {
   // Step 6: Hook up the components to work together.
 
   gapi.analytics.auth.on('success', function(response) {
-    $('body').addClass('logged-in');
+    $('body').addClass('google-logged-in');
     $('#logout-button').show();
     token = response.access_token;
 
