@@ -137,6 +137,20 @@ gapi.analytics.ready(function() {
 
   var createCharts = function(id) {
 
+    var finished = 8;
+
+    $('#loader').show();
+    $('#mainContent').hide();
+
+    var checkFinished = function() {
+      finished--;
+
+      if(finished === 0) {
+        $('#loader').hide();
+        $('#mainContent').show();
+      }
+    }
+
     gapi.client.analytics.data.realtime
       .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 10, sort: "-rt:pageviews"})
       .execute(function(resp) {
@@ -149,6 +163,8 @@ gapi.analytics.ready(function() {
 
 
         $('#realtime').html(realTimeTemplate({ datapoints: data }));
+
+        checkFinished();
         // resp.rows is what I want, probably need to poll here
       });
 
@@ -164,6 +180,7 @@ gapi.analytics.ready(function() {
 
 
         $('#traffic').html(trafficTemplate({ datapoints: data }));
+        checkFinished();
         // resp.rows is what I want, probably need to poll here
       });
 
@@ -180,6 +197,7 @@ gapi.analytics.ready(function() {
 
 
         $('#referrer').html(referrerTemplate({ datapoints: data }));
+        checkFinished();
       });
 
     gapi.client.analytics.data.ga
@@ -195,6 +213,7 @@ gapi.analytics.ready(function() {
 
 
         $('#pageviews').html(pageViewTemplate({ datapoints: data }));
+        checkFinished();
       });
 
     gapi.client.analytics.data.ga
@@ -208,6 +227,7 @@ gapi.analytics.ready(function() {
         }
 
         $('#totalPageviews').text(numeral(total).format());
+        checkFinished();
       });
 
     gapi.client.analytics.data.ga
@@ -221,6 +241,7 @@ gapi.analytics.ready(function() {
         }
 
         $('#totalSessions').text(numeral(total).format());
+        checkFinished();
       });
 
     gapi.client.analytics.data.ga
@@ -234,6 +255,7 @@ gapi.analytics.ready(function() {
         }
 
         $('#totalUsers').text(numeral(total).format());
+        checkFinished();
       });
 
 
@@ -248,6 +270,7 @@ gapi.analytics.ready(function() {
         }
 
         $('#totalPagesPer').text(numeral(total).format());
+        checkFinished();
       });
 
     if(oldActiveUser) {
@@ -375,6 +398,7 @@ gapi.analytics.ready(function() {
   gapi.analytics.auth.on('success', function(response) {
     $('body').addClass('google-logged-in');
     $('#logout-button').show();
+    $('#loader').show();
     token = response.access_token;
 
     gapi.client.analytics.management.accountSummaries

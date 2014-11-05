@@ -7,82 +7,85 @@
 </head>
 <body>
 
-<div class="wh-analytics-btns">
-  <span id="auth-button"></span>
-  <span id="logout-button" style="display: none;"><button class="btn btn-info btn-small">Logout of Google</button></span>
-</div>
-
-<div id="error" style="display: none;">
-  <div class="wy-alert wy-alert-danger">
-    <div class="wy-alert-title">Permission denied.</div>
-    You do not have permission to access analytics for this account. Please contact your site administrator and let him or her know.
+<div>
+  <div class="wh-analytics-btns">
+    <span id="auth-button"></span>
+    <span id="logout-button" style="display: none;"><button class="btn btn-info btn-small">Logout of Google</button></span>
   </div>
-</div>
 
-<div class="google-content">
+  <div id="error" style="display: none;">
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title">Permission denied.</div>
+      You do not have permission to access analytics for this account. Please contact your site administrator and let him or her know.
+    </div>
+  </div>
 
-  <!-- Step 1: Create the containing elements. -->
-  <section class="wh-content-head">
-    Real-time traffic
-  </section>
+  <span id="loader" class="wy-spinner wy-spinner-large" style="display: none;"></span>
 
-  <section class="wh-content-edit">
+  <div id="mainContent" class="google-content" style="display: none;">
 
-    <div class="container wh-analytics-tables wh-analytics-realtime">
-      <div class="wh-analytics-now">
-        <p class="now">Right now</p>
-        <p id="active-users" class="big"></p>
-        <p class="users">active users</p>
+    <!-- Step 1: Create the containing elements. -->
+    <section class="wh-content-head">
+      Real-time traffic
+    </section>
+
+    <section class="wh-content-edit">
+
+      <div class="container wh-analytics-tables wh-analytics-realtime">
+        <div class="wh-analytics-now">
+          <p class="now">Right now</p>
+          <p id="active-users" class="big"></p>
+          <p class="users">active users</p>
+        </div>
+        <div id="realtime"> </div>
+        <div id="traffic"> </div>
       </div>
-      <div id="realtime"> </div>
-      <div id="traffic"> </div>
-    </div>
 
-  </section>
+    </section>
 
-  <section class="wh-content-head wh-content-head-again">
-    Previous traffic
-    <ul class="wh-analytics-time">
-      <li class="active"><a id="30daysago">This month</a></li>
-      <li><a id="7daysago">This week</a></li>
-      <li><a id="1daysago">Yesterday</a></li>
-    </ul>
-  </section>
+    <section class="wh-content-head wh-content-head-again">
+      Previous traffic
+      <ul class="wh-analytics-time">
+        <li class="active"><a id="30daysago">This month</a></li>
+        <li><a id="7daysago">This week</a></li>
+        <li><a id="1daysago">Yesterday</a></li>
+      </ul>
+    </section>
 
-  <section class="wh-content-edit">
-    <div id="view-selector"></div>
+    <section class="wh-content-edit">
+      <div id="view-selector"></div>
 
 
-    <ul class="wh-analytics-numbers">
-      <li>
-        <p id="totalPageviews"></p>
-        <span>Pageviews</span>
-      </li>
-      <li>
-        <p id="totalSessions"></p>
-        <span>Sessions</span>
-      </li>
-      <li>
-        <p id="totalUsers"></p>
-        <span>Uniques</span>
-      </li>
-      <li>
-        <p id="totalPagesPer"></p>
-        <span>Pages per session</span>
-      </li>
-    </ul>
+      <ul class="wh-analytics-numbers">
+        <li>
+          <p id="totalPageviews"></p>
+          <span>Pageviews</span>
+        </li>
+        <li>
+          <p id="totalSessions"></p>
+          <span>Sessions</span>
+        </li>
+        <li>
+          <p id="totalUsers"></p>
+          <span>Uniques</span>
+        </li>
+        <li>
+          <p id="totalPagesPer"></p>
+          <span>Pages per session</span>
+        </li>
+      </ul>
 
-    <hr>
+      <hr>
 
-    <div id="timeline"></div>
+      <div id="timeline"></div>
 
-    <div class="container wh-analytics-tables wh-analytics-historical">
-      <div id="pageviews"></div>
-      <div id="referrer"> </div>
-    </div>
+      <div class="container wh-analytics-tables wh-analytics-historical">
+        <div id="pageviews"></div>
+        <div id="referrer"> </div>
+      </div>
 
-  </section>
-
+    </section>
+  </div>
 </div>
 
 <!-- Step 2: Load the library. -->

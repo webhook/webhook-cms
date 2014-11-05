@@ -1,5 +1,5 @@
 {{#if analyticsIframeUrl}}
-  <iframe onload="resizeIframe(this)" {{ bind-attr src=analyticsIframeUrl }} id="wh-analytics" seamless="seamless" frameborder="0"  scrolling="no" height="5000px" width="100%"></iframe>
+  <iframe onload="resizeIframe(this)" {{ bind-attr src=analyticsIframeUrl }} id="wh-analytics" seamless="seamless" frameborder="0"  scrolling="no" width="100%"></iframe>
 {{else}}
   {{input value=analyticsId}}
   <button type="button" {{ action "setAnalyticsId"}}>Save</button>
