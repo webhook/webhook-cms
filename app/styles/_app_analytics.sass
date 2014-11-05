@@ -3,6 +3,12 @@
     background: transparent
   hr
     clear: both
+  .wh-analytics-historical
+    +display(flex)
+    +flex-flow(row wrap)
+    div
+      +span-columns(6)
+      +omega-type(2n)
   .wh-analytics-realtime
     +display(flex)
     +flex-flow(row wrap)
@@ -77,14 +83,12 @@
       margin-bottom: $base-line-height / 2
       line-height: 75px
   .wh-analytics-time
-    width: 100%
-    text-align: right
+    display: inline-block
+    float: right
   .wh-analytics-time li
     display: inline-block
     a
       display: inline-block
-      padding: $base-line-height / 4 $base-line-height / 2
-      background: $gray-dark
       color: $text-invert
       font-size: 90%
 
