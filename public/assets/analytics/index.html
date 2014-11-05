@@ -9,45 +9,62 @@
 
 <!-- Step 1: Create the containing elements. -->
 
-  <section id="auth-button"></section>
-  <section id="error" style="display: none;">
+  <div class="wh-analytics-btns">
+    <span id="auth-button"></span>
+    <span id="logout-button" style="display: none;"><button class="btn btn-neutral btn-small">Logout</button></span>
+  </div>
+  <div id="error" style="display: none;">
     <div class="wy-alert wy-alert-danger">
       <div class="wy-alert-title">Permission denied.</div>
       You do not have permission to access analytics for this account. Please contact your site administrator and let him or her know.
     </div>
-  </section>
-  <section id="logout-button" style="display: none;"><button class="btn btn-neutral btn-small">Logout</button></section>
-  Active Users: <section id="active-users" style="display: inline-block;"></section>
-  <section id="view-selector"></section>
+  </div>
 
-  <a href="#" id="30daysago">30 Days</a>
-  <a href="#" id="7daysago">7 Days</a>
-  <a href="#" id="1daysago">1 Days</a>
+  <hr>
 
-  Totals:
+  <div class="container wh-analytics-tables">
+    <div class="wh-analytics-now">
+      <p class="now">Right now</p>
+      <p id="active-users" class="big"></p>
+      <p class="users">active users</p>
+    </div>
+    <div id="realtime"> </div>
+    <div id="traffic"> </div>
+  </div>
+
+  <hr>
+
+  <div id="view-selector"></div>
+
+  <ul class="wh-analytics-time">
+    <li><a href="#" id="30daysago">This month</a></li>
+    <li><a href="#" id="7daysago">This week</a></li>
+    <li><a href="#" id="1daysago">Yesterday</a></li>
+  </ul>
+
+
   PageViews: <section id="totalPageviews"></section>
   Sessions: <section id="totalSessions"></section>
   Users: <section id="totalUsers"></section>
   Pages/Session: <section id="totalPagesPer"></section>
-  
+
   <div class="container wh-analytics-tables">
-    <section id="realtime"> </section>
-    <section id="traffic"> </section>
-    <section id="referrer"> </section>
-    <section id="pageviews"></section>
+    <div id="referrer"> </div>
+    <div id="pageviews"></div>
   </div>
 
   <hr style="clear:both">
 
   <div class="container wh-analytics-graph">
-    <section id="timeline"></section>
+    <div id="timeline"></div>
 
-    <section id="operating"></section>
+    <div id="operating"></div>
 
-    <section id="region"></section>
+    <div id="region"></div>
 
-    <section id="channels"></section>
+    <div id="channels"></div>
   </div>
+
 
 
 <!-- Step 2: Load the library. -->
@@ -65,7 +82,7 @@
 
 
 <script type="text/template" id="realtimeTemplate">
-  <h3>Realtime page views</h3>
+  <h3>Top pages (30 mins)</h3>
   <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
     <tr>
@@ -77,7 +94,7 @@
 </script>
 
 <script type="text/template" id="trafficTemplate">
-  <h3>Realtime traffice sources</h3>
+  <h3>Referrals (30 mins)</h3>
   <table class="wy-table wy-table-bordered-rows wh-content">
     {{#each datapoints}}
     <tr>

@@ -127,7 +127,7 @@ gapi.analytics.ready(function() {
   var createCharts = function(id) {
 
     gapi.client.analytics.data.realtime
-      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 5, sort: "-rt:pageviews"})
+      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:pagePath', "max-results": 10, sort: "-rt:pageviews"})
       .execute(function(resp) {
 
         var data = [];
@@ -142,7 +142,7 @@ gapi.analytics.ready(function() {
       });
 
     gapi.client.analytics.data.realtime
-      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:source', "max-results": 5, sort: "-rt:pageviews"})
+      .get({ids: 'ga:' + id, metrics:'rt:pageviews', dimensions: 'rt:source', "max-results": 10, sort: "-rt:pageviews"})
       .execute(function(resp) {
 
         var data = [];
@@ -157,7 +157,7 @@ gapi.analytics.ready(function() {
       });
 
     gapi.client.analytics.data.ga
-      .get({ids: 'ga:' + id, dimensions: 'ga:source', metrics: "ga:pageviews", "max-results": 5, 'start-date': days, 'end-date': 'today', sort: "-ga:pageviews" })
+      .get({ids: 'ga:' + id, dimensions: 'ga:source', metrics: "ga:pageviews", "max-results": 10, 'start-date': days, 'end-date': 'today', sort: "-ga:pageviews" })
       .execute(function(resp) {
 
 

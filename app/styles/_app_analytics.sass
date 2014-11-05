@@ -1,7 +1,59 @@
 .wh-analytics
   html, body
     background: transparent
+  .wh-analytics-tables
+    +display(flex)
+    +flex-flow(row wrap)
+    div
+      +span-columns(5)
+      +omega-type(3n)
+    div:first-child
+      +span-columns(2)
   .wh-analytics-tables, .wh-analytics-graph
-    section
+    h3
+      font-family: $base-font-family
+      margin: 0
+      font-size: 100%
+      font-weight: normal
+      border-bottom: solid 2px $table-border-color
+      line-height: 1.5
+      text-transform: uppercase
+      color: $text-light
+    table
+      margin-bottom: 0
+      tr td:last-child
+        text-align: center
+        background: $table-stripe-color
+        width: 75px
+      tr:hover
+        background: transparent
+        cursor: normal
+  .wh-analytics-btns
+    > span
       +span-columns(6)
       +omega-type(2n)
+    > span:first-child
+      font-size: 90%
+    > span:last-child
+      text-align: right
+  .wh-analytics-now
+    text-align: center
+    border-right: solid 2px $table-border-color
+    p
+      font-size: 90%
+    p.big
+      font-size: 300%
+      font-weight: 300
+      color: $text-color
+  .wh-analytics-time
+    width: 100%
+    text-align: right
+  .wh-analytics-time li
+    display: inline-block
+    a
+      display: inline-block
+      padding: $base-line-height / 4 $base-line-height / 2
+      background: $gray-dark
+      color: $text-invert
+      font-size: 90%
+
