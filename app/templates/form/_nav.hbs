@@ -38,7 +38,7 @@
               <label for="check-example">{{t 'form.info.required'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.requiredTitle"}}></i></label>
               <div class="wy-control">
                 <label class="wy-checkbox">
-                  {{view Ember.Checkbox checkedBinding="editingControl.required"}}
+                  {{input type="checkbox" checkedBinding="editingControl.required"}}
                   {{t 'form.info.requiredCheckbox'}}
                 </label>
               </div>

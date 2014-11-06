@@ -623,7 +623,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 // update search index
                 snapshot.forEach(function (childSnapshot) {
                   SearchIndex.indexItem(Ember.Object.create({
-                    id: childSnapshot.name(),
+                    id: childSnapshot.key(),
                     data: childSnapshot.val()
                   }), Ember.Object.create({
                     oneOff: contentType.get('oneOff'),

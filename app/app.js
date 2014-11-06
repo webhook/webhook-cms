@@ -90,7 +90,7 @@ Ember.TextField.reopen({
     var view = this;
     if (this.get('type') === 'number') {
       this.addBeforeObserver('value', function (obj, key) {
-        view['value'] = parseFloat(view.get('value')) || null;
+        view.set('value', parseFloat(view.get('value')) || null);
       });
     }
     return this._super.apply(this, arguments);

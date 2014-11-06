@@ -1,9 +1,12 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.ArrayController.extend({
-  sortProperties : ['itemData.publish_date'],
-  sortAscending  : false,
+  // sortProperties : ['itemData.publish_date'],
+  // sortAscending  : false,
   sortedByPublish: true,
+
+  orderBy: null,
+  orderAscending: false,
 
   contentType: null,
   lockedItems: Ember.A([]),
@@ -117,25 +120,45 @@ export default Ember.ArrayController.extend({
       this.get('cmsControls').setEach('isSortAscending', false);
       this.get('cmsControls').setEach('isSortDescending', false);
 
-      var field = 'itemData.' + control.get('name');
+      // var field = 'itemData.' + control.get('name');
 
-      var sortProperties = this.get('sortProperties');
+      // var sortProperties = this.get('sortProperties');
 
-      if (sortProperties.get('firstObject') === field) {
-        this.toggleProperty('sortAscending');
-      } else {
-        this.set('sortAscending', true);
+      // if (sortProperties.get('firstObject') === field) {
+      //   this.toggleProperty('sortAscending');
+      // } else {
+      //   this.set('sortAscending', true);
+      // }
+
+      var orderBy = control.get('name');
+
+      if (control.get('controlType.widget') === 'datetime') {
+        orderBy = '_sort_' + control.get('name');
       }
 
-      control.set('isSortAscending', this.get('sortAscending'));
-      control.set('isSortDescending', !this.get('sortAscending'));
+      if (this.get('orderBy') === orderBy) {
+        this.toggleProperty('orderAscending');
+      } else {
+        this.set('orderAscending', true);
+      }
 
-      sortProperties.insertAt(0, field);
-      sortProperties = sortProperties.uniq();
+      this.set('orderBy', orderBy);
 
-      Ember.Logger.info('Sorting by', sortProperties);
+      control.set('isSortAscending', this.get('orderAscending'));
+      control.set('isSortDescending', !this.get('orderAscending'));
 
-      this.set('sortProperties', sortProperties);
+      this.set('model', this.store.find(this.get('itemModelName'), {
+        limit: this.get('recordLimit'),
+        orderBy: orderBy,
+        desc: !this.get('orderAscending')
+      }));
+
+      // sortProperties.insertAt(0, field);
+      // sortProperties = sortProperties.uniq();
+
+      // Ember.Logger.info('Sorting by', sortProperties);
+      //
+      // this.set('sortProperties', sortProperties);
 
     },
 

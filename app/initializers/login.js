@@ -17,7 +17,7 @@ var setupMessageListener = function(siteName, buildEnv) {
     listener = ref.on('child_added', function(snap) {
       var now = Date.now();
       var message = snap.val();
-      var id = snap.name();
+      var id = snap.key();
 
       if(!initialIds[id]) {
         if(message.code === 'BUILD') {

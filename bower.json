@@ -13,7 +13,7 @@
     "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2",
     "webhook-js": "*",
     "webhook-redactor": "webhook/webhook-redactor",
-    "firebase": "1.1.x",
+    "firebase": "2.0.x",
     "firebase-simple-login": "1.6.x",
     "embedly-jquery": "~3.1.1",
     "FileSaver.js": "eligrey/FileSaver.js",
