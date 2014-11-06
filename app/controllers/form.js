@@ -285,7 +285,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             item.set('itemData', itemData);
 
             return item.save().then(function (savedItem) {
-              Ember.Logger.log('- Relation data removed from `$@`'.fmt(savedItem.get('id')));
+              Ember.Logger.log('- Relation data removed from `%@`'.fmt(savedItem.get('id')));
               SearchIndex.indexItem(savedItem, contentType);
             });
 
@@ -421,6 +421,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     // Filter out relation controls that are related to their parent content type.
     var relationControls = this.get('changedRelationTypeControls');
+
+    if (Ember.isEmpty(relationControls)) {
+      return Ember.RSVP.Promise.resolve();
+    }
 
     Ember.Logger.log('Updating data for %@ changed relationship types.'.fmt(relationControls.get('length')));
 
