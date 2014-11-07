@@ -10,11 +10,18 @@ export default Ember.Route.extend({
       this.transitionTo('wh.content.type.edit', contentType.get('id'));
     }
     this.set('contentType', contentType);
+
+    // make sure all control types are available
+    return this.store.find('control-type');
   },
   model: function () {
     var itemModelName = getItemModelName(this.modelFor('wh.content.type'));
     this.set('itemModelName', itemModelName);
-    return this.store.find(itemModelName, { limit: this.get('recordLimit') });
+    return this.store.find(itemModelName, {
+      limit: this.get('recordLimit'),
+      orderBy: '_sort_publish_date',
+      desc: true
+    });
   },
   setupController: function (controller, model) {
 
@@ -32,11 +39,11 @@ export default Ember.Route.extend({
     var lockMap = Ember.Object.create();
 
     var lockedItem = function (snapshot) {
-      lockMap.set(snapshot.name(), Ember.Object.create({
-        id: snapshot.name(),
+      lockMap.set(snapshot.key(), Ember.Object.create({
+        id: snapshot.key(),
         email: snapshot.val().email
       }));
-      return lockMap.get(snapshot.name());
+      return lockMap.get(snapshot.key());
     };
 
     lockedRef.on('child_added', function (snapshot) {
@@ -50,7 +57,7 @@ export default Ember.Route.extend({
     });
 
     lockedRef.on('child_removed', function (snapshot) {
-      lockedItems.removeObject(lockMap.get(snapshot.name()));
+      lockedItems.removeObject(lockMap.get(snapshot.key()));
     });
 
     controller.set('lockedItems', lockedItems);

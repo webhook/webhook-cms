@@ -3,6 +3,11 @@ import MetaWithOptions from 'appkit/utils/meta-options';
 export default Ember.Route.extend({
   beforeModel: function (transition) {
 
+    if (!this.get('buildEnvironment.local')) {
+      this.transitionTo('wh');
+    }
+    this._super.apply(this, arguments);
+
     var formRoute = this;
 
     var promises = [this.store.find('control-type')];

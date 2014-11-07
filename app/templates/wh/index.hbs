@@ -1,6 +1,13 @@
 <article>
   <h1>{{t 'wh.index.welcome.title'}}</h1>
 
+  {{#if noTypesLive}}
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title">No content types</div>
+      <p>To use the deployed CMS you must add one or more content types in your local development environment and redeploy.</p>
+    </div>
+  {{/if}}
+
   <p>{{t 'wh.index.welcome.description'}}</p>
 
   <ul>

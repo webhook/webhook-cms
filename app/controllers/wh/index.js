@@ -3,6 +3,12 @@ export default Ember.Controller.extend({
 
   serverMessagesPerPage: 10,
 
+  contentTypes: null,
+
+  noTypesLive: function () {
+    return Ember.isEmpty(this.get('contentTypes')) && !this.get('buildEnvironment.local');
+  }.property('contentTypes.length', 'buildEnvironment.local'),
+
   moreServerMessages: function () {
     return this.get('session.serverMessages.length') === 10;
   }.property('session.serverMessages.@each'),
@@ -17,7 +23,7 @@ export default Ember.Controller.extend({
     var controller = this;
 
     messagePage.on('child_added', function (snapshot) {
-      var message = Ember.$.extend({}, snapshot.val(), { id: snapshot.name() });
+      var message = Ember.$.extend({}, snapshot.val(), { id: snapshot.key() });
 
       // We want to see if the website has ever been deployed
       if (typeof message.status !== 'undefined' && message.status === 0) {

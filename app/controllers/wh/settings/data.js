@@ -146,7 +146,7 @@ export default Ember.Controller.extend({
         contentType: null,
         settings: null
       }, function () {
-        window.ENV.sendBuildSignal();
+        dataController.send('buildSignal');
         dataController.set('isDeleting', false);
         dataController.transitionToRoute('start');
       });
@@ -213,7 +213,7 @@ export default Ember.Controller.extend({
       window.ENV.firebase.update(dataController.get('dataBackup'), function () {
         dataController.send('notify', 'success', 'Backup applied!');
         dataController.set('dataBackup', null);
-        window.ENV.sendBuildSignal();
+        dataController.send('buildSignal');
         SearchIndex.reindex();
       });
 

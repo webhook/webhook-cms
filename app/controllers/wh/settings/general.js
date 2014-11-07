@@ -1,10 +1,11 @@
 export default Ember.ObjectController.extend({
   actions: {
     saveSettings: function () {
-      this.get('model').save().then(function () {
-        this.send('notify', 'success', 'Settings saved!');
-        window.ENV.sendBuildSignal();
-      }.bind(this));
+      var controller = this;
+      controller.get('model').save().then(function () {
+        controller.send('notify', 'success', 'Settings saved!');
+        controller.send('buildSignal');
+      });
     }
   }
 });

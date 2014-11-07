@@ -37,7 +37,7 @@ export default Ember.Route.extend({
       window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/messages/').limit(10).once('value', function (snapshot) {
 
         snapshot.forEach(function (childSnapshot) {
-          var message = Ember.$.extend({}, childSnapshot.val(), { id: childSnapshot.name() });
+          var message = Ember.$.extend({}, childSnapshot.val(), { id: childSnapshot.key() });
           if (typeof message.status !== 'undefined' && message.status === 0) {
             controller.set('session.isDeployed', true);
           }

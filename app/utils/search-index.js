@@ -88,10 +88,17 @@ export default {
 
     // Simplify search indexing by storing all objects as strings.
     Ember.$.each(item.get('itemData'), function (key, value) {
-      if (typeof value === 'object') {
-        searchData[key] = JSON.stringify(value);
-      } else {
-        searchData[key] = value;
+      if (value === null) {
+        return;
+      }
+      if (item.get('itemData').hasOwnProperty(key)) {
+        if (typeof value === 'object') {
+          if (JSON.stringify(value) !== '{}') {
+            searchData[key] = JSON.stringify(value);
+          }
+        } else {
+          searchData[key] = value;
+        }
       }
     });
 
@@ -102,7 +109,7 @@ export default {
       oneOff: contentType.get('oneOff')
     });
 
-    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('id')));
+    Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('itemData.name')));
 
     return Ember.$.ajax({
       url: this.baseUrl + 'index/',
