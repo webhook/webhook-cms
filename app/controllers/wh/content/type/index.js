@@ -8,13 +8,15 @@ export default Ember.ArrayController.extend({
   contentType: null,
   lockedItems: Ember.A([]),
 
+  searchQuery: null,
   isSearchResults: false,
 
   recordLimit: 0,
   originalRecordLimit: 0,
-  limited: function () {
-    return this.get('content.length') >= this.get('recordLimit');
-  }.property('content.@each', 'recordLimit'),
+
+  isLimited: function () {
+    return this.get('content.length') >= this.get('recordLimit') && !this.get('isSearchResults');
+  }.property('content.@each', 'recordLimit', 'isSearchResults'),
 
   filterQuery: '',
 
@@ -71,10 +73,8 @@ export default Ember.ArrayController.extend({
 
   refreshContent: function () {
     this.set('isLoading', true);
-
-    this.set('content', Ember.A([]));
-
     this.set('isSearchResults', false);
+    this.set('content', Ember.A([]));
 
     var controller = this;
     this.store.find(this.get('itemModelName'), {
@@ -99,32 +99,39 @@ export default Ember.ArrayController.extend({
     }
 
     this.set('isLoading', true);
+    this.set('isSearchresults', true);
     this.set('content', Ember.A([]));
+
+    this.get('cmsControls').setEach('isSortAscending', false);
+    this.get('cmsControls').setEach('isSortDescending', false);
 
     var controller = this;
 
-    SearchIndex.search(this.get('searchQuery'), 1, this.get('contentType.id')).then(function (results) {
+    var pushResults = function (results) {
 
       var records = results.getEach('id').map(function (recordId) {
         return controller.store.find(controller.get('itemModelName'), recordId);
       });
 
-      Ember.RSVP.Promise.all(records).then(function (records) {
+      Ember.RSVP.allSettled(records).then(function (settled) {
+
         controller.set('isLoading', false);
-        records = records.sortBy(controller.get('sortProperties.firstObject'));
-        if (!controller.get('sortAscending')) {
-          records.reverse();
-        }
-        controller.set('content', records);
-        controller.set('isSearchresults', true);
+
+        var records = settled.rejectBy('state', 'rejected').map(function (query) {
+          return query.value;
+        });
+
+        controller.get('content').pushObjects(records);
+
       });
+    }
 
-    }, function (error) {
-      controller.set('isLoading', false);
-      controller.set('content', Ember.A([]));
-    });
+    var searchQuery = this.get('searchQuery');
+    var contentTypeId = this.get('contentType.id');
 
-  }, 'searchQuery', 200),
+    SearchIndex.search(searchQuery, 1, contentTypeId).then(pushResults);
+
+  }, 'searchQuery', 500),
 
   actions: {
 

@@ -33,10 +33,10 @@ export default {
         return Ember.RSVP.reject('No results.');
       } else {
 
-        var items = [];
+        var items = Ember.A([]);
 
         Ember.$.each(data.hits, function(index, value) {
-          var highlights = [];
+          var highlights = Ember.A([]);
 
           var name = value.fields.name ? value.fields.name[0] : '';
 
@@ -45,7 +45,10 @@ export default {
               if(key === 'name') {
                 name = value.highlight[key][0];
               } else {
-                highlights.push({ key: key, highlight: value.highlight[key][0] });
+                highlights.push({
+                  key: key,
+                  highlight: value.highlight[key][0]
+                });
               }
             }
           }
