@@ -1,4 +1,5 @@
 import getItemModelName from 'appkit/utils/model';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ArrayController.extend({
   sortProperties : ['itemData._sort_create_date'],
@@ -6,6 +7,8 @@ export default Ember.ArrayController.extend({
 
   contentType: null,
   lockedItems: Ember.A([]),
+
+  isSearchResults: false,
 
   recordLimit: 0,
   originalRecordLimit: 0,
@@ -71,6 +74,8 @@ export default Ember.ArrayController.extend({
 
     this.set('content', Ember.A([]));
 
+    this.set('isSearchResults', false);
+
     var controller = this;
     this.store.find(this.get('itemModelName'), {
       limit: this.get('recordLimit'),
@@ -81,6 +86,45 @@ export default Ember.ArrayController.extend({
       controller.set('content', records);
     });
   },
+
+  searchPlaceholder: function () {
+    return 'Search ' + this.get('contentType.name');
+  }.property('contentType'),
+
+  debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
+
+    if (!this.get('searchQuery')) {
+      this.refreshContent();
+      return;
+    }
+
+    this.set('isLoading', true);
+    this.set('content', Ember.A([]));
+
+    var controller = this;
+
+    SearchIndex.search(this.get('searchQuery'), 1, this.get('contentType.id')).then(function (results) {
+
+      var records = results.getEach('id').map(function (recordId) {
+        return controller.store.find(controller.get('itemModelName'), recordId);
+      });
+
+      Ember.RSVP.Promise.all(records).then(function (records) {
+        controller.set('isLoading', false);
+        records = records.sortBy(controller.get('sortProperties.firstObject'));
+        if (!controller.get('sortAscending')) {
+          records.reverse();
+        }
+        controller.set('content', records);
+        controller.set('isSearchresults', true);
+      });
+
+    }, function (error) {
+      controller.set('isLoading', false);
+      controller.set('content', Ember.A([]));
+    });
+
+  }, 'searchQuery', 200),
 
   actions: {
 
