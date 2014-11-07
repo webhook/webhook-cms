@@ -30,5 +30,8 @@
     "ember-qunit": "~0.1.8",
     "wyrm": "~0.0.x",
     "ember-testing-httpRespond": "~0.1.1"
+  },
+  "resolutions": {
+    "firebase": "2.0.x"
   }
 }
