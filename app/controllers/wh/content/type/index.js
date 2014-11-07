@@ -1,7 +1,7 @@
 import getItemModelName from 'appkit/utils/model';
 
 export default Ember.ArrayController.extend({
-  sortProperties : ['itemData._sort_publish_date'],
+  sortProperties : ['itemData._sort_create_date'],
   sortAscending  : false,
 
   contentType: null,
@@ -20,7 +20,11 @@ export default Ember.ArrayController.extend({
   }.property('contentType.controls.@each'),
 
   cmsControls: function () {
-    return this.get('contentType.controls').filterBy('showInCms');
+    var controls = this.get('contentType.controls').filterBy('showInCms');
+    controls.forEach(function (control) {
+      control.set('isSortable', control.get('controlType.valueType') === 'string');
+    });
+    return controls;
   }.property('contentType.controls.@each.showInCms'),
 
   _updateItemControls: function (item) {

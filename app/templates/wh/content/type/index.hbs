@@ -34,10 +34,14 @@
       <tr>
         {{#each control in cmsControls}}
           <th>
-            <span class="wh-content-sort" {{action "sortToggle" control}}>
+            {{#if control.isSortable}}
+              <span class="wh-content-sort" {{action "sortToggle" control}}>
+                {{control.label}}
+                <span {{bind-attr class=":icon control.isSortDescending:icon-caret-up control.isSortAscending:icon-caret-down"}}></span>
+              </span>
+            {{else}}
               {{control.label}}
-              <span {{bind-attr class=":icon control.isSortDescending:icon-caret-up control.isSortAscending:icon-caret-down"}}></span>
-            </span>
+            {{/if}}
           </th>
         {{/each}}
         <th></th>

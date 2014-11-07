@@ -19,7 +19,7 @@ export default Ember.Route.extend({
     this.set('itemModelName', itemModelName);
     return this.store.find(itemModelName, {
       limit: this.get('recordLimit'),
-      orderBy: '_sort_publish_date',
+      orderBy: '_sort_create_date',
       desc: true
     });
   },

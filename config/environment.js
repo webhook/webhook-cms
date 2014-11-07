@@ -109,7 +109,8 @@ window.ENV = {
         {
           name     : 'Checkbox',
           widget   : 'checkbox',
-          iconClass: 'icon-checkbox-checked'
+          iconClass: 'icon-checkbox-checked',
+          valueType: 'array'
         },
         {
           name     : 'Multiple choice',
@@ -134,7 +135,8 @@ window.ENV = {
         {
           name     : 'Gallery',
           widget   : 'gallery',
-          iconClass: 'icon-images'
+          iconClass: 'icon-images',
+          valueType: 'array'
         },
         {
           name     : 'Audio file',
@@ -231,7 +233,8 @@ window.ENV = {
         {
           name     : 'Relationship',
           widget   : 'relation',
-          iconClass: 'icon-tags'
+          iconClass: 'icon-tags',
+          valueType: 'array'
         },
         {
           name: 'Page Layout',
