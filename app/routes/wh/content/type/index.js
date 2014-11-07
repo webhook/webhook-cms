@@ -30,7 +30,7 @@ export default Ember.Route.extend({
     controller.set('itemModelName', this.get('itemModelName'));
 
     controller.set('searchQuery', null);
-    controller.set('isSearchResults', false)
+    controller.set('isSearchResults', false);
 
     controller.set('contentType', this.get('contentType'));
 

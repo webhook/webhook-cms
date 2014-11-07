@@ -45,7 +45,7 @@ export default Ember.ArrayController.extend({
     return item;
   },
 
-  cmsItems: Ember.arrayComputed('model.@each.itemData', 'cmsControls.@each.showInCms', {
+  cmsItems: Ember.arrayComputed('content.@each.itemData', 'cmsControls.@each.showInCms', {
     addedItem: function (array, item, changeMeta) {
 
       if (item.constructor.typeKey === 'control') {
@@ -99,7 +99,7 @@ export default Ember.ArrayController.extend({
     }
 
     this.set('isLoading', true);
-    this.set('isSearchresults', true);
+    this.set('isSearchResults', true);
     this.set('content', Ember.A([]));
 
     this.get('cmsControls').setEach('isSortAscending', false);
@@ -124,7 +124,7 @@ export default Ember.ArrayController.extend({
         controller.get('content').pushObjects(records);
 
       });
-    }
+    };
 
     var searchQuery = this.get('searchQuery');
     var contentTypeId = this.get('contentType.id');
@@ -166,7 +166,15 @@ export default Ember.ArrayController.extend({
       control.set('isSortAscending', this.get('sortAscending'));
       control.set('isSortDescending', !this.get('sortAscending'));
 
-      this.refreshContent();
+      if (this.get('isSearchResults')) {
+        var sortedContent = this.get('content').sortBy(this.get('sortProperties.firstObject'));
+        if (!this.get('sortAscending')) {
+          sortedContent.reverse();
+        }
+        this.set('content', sortedContent);
+      } else {
+        this.refreshContent();
+      }
 
     },
 
