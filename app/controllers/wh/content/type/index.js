@@ -59,30 +59,28 @@ export default Ember.ArrayController.extend({
     }
   }),
 
-  sortedCmsItems: function () {
-
-    var sortedCmsItems = this.get('cmsItems').sortBy.apply(this, this.get('sortProperties'));
-
-    if (!this.get('sortAscending')) {
-      sortedCmsItems.reverse();
-    }
-
-    var filterQuery = this.get('filterQuery');
-    if (filterQuery) {
-      sortedCmsItems = sortedCmsItems.filter(function (item) {
-        return (new RegExp(filterQuery, 'ig')).test(item.get('itemData.name'));
-      });
-    }
-
-    return sortedCmsItems;
-  }.property('cmsItems.@each', 'sortProperties', 'sortAscending', 'filterQuery'),
-
   locksChanged: function () {
     this.get('cmsItems').setEach('lockedBy', null);
     this.get('lockedItems').forEach(function (lock) {
       this.get('cmsItems').findBy('id', lock.get('id')).set('lockedBy', lock.get('email'));
     }, this);
   }.observes('lockedItems.@each'),
+
+  refreshContent: function () {
+    this.set('isLoading', true);
+
+    this.set('content', Ember.A([]));
+
+    var controller = this;
+    this.store.find(this.get('itemModelName'), {
+      limit: this.get('recordLimit'),
+      orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
+      desc: !this.get('sortAscending')
+    }).then(function (records) {
+      controller.set('isLoading', false);
+      controller.set('content', records);
+    });
+  },
 
   actions: {
 
@@ -117,11 +115,7 @@ export default Ember.ArrayController.extend({
       control.set('isSortAscending', this.get('sortAscending'));
       control.set('isSortDescending', !this.get('sortAscending'));
 
-      this.set('model', this.store.find(this.get('itemModelName'), {
-        limit: this.get('recordLimit'),
-        orderBy: orderBy,
-        desc: !this.get('sortAscending')
-      }));
+      this.refreshContent();
 
     },
 
@@ -130,16 +124,8 @@ export default Ember.ArrayController.extend({
     },
 
     moreRecords: function () {
-      this.set('isLoading', true);
       this.set('recordLimit', this.get('recordLimit') + this.get('originalRecordLimit'));
-
-      this.set('content', Ember.A([]));
-
-      var controller = this;
-      this.store.find(this.get('itemModelName'), { limit: this.get('recordLimit') }).then(function (records) {
-        controller.set('isLoading', false);
-        controller.set('content', records);
-      });
+      this.refreshContent();
     }
   }
 
