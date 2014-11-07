@@ -243,7 +243,7 @@ export default Ember.Controller.extend({
 
       if (dataController.get('deleteOption') === 'everything') {
         // delete files first
-        window.ENV.sendGruntCommand('reset_files', function (error) {
+        dataController.send('gruntCommand', 'reset_files', function (error) {
 
           if (error) {
             Ember.Logger.error(error);

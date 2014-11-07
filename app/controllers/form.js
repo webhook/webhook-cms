@@ -823,7 +823,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           Ember.Logger.log('Checking scaffolding MD5s.');
 
-          window.ENV.sendGruntCommand('check_scaffolding:' + contentType.get('id'), function (data) {
+          controller.send('gruntCommand', 'check_scaffolding:' + contentType.get('id'), function (data) {
 
             if (isMD5Equal(contentType, data)) {
               resolve();
@@ -853,7 +853,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
 
-      window.ENV.sendGruntCommand('scaffolding_force:' + contentType.get('id'), function (data) {
+      formController.send('gruntCommand', 'scaffolding_force:' + contentType.get('id'), function (data) {
 
         Ember.Logger.info('Scaffolding built for', contentType.get('id'));
 
@@ -865,6 +865,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
         formController.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
         Ember.run(null, resolve);
+
       });
 
     });

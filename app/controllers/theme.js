@@ -12,13 +12,15 @@ export default Ember.ObjectController.extend({
       data = { contentType: data };
     }
 
+    var controller = this;
+
     window.ENV.firebase.update(data, function(err) {
-      window.ENV.sendGruntCommand('build', function() {
-        this.set('isSending', false);
-        this.send('notify', 'success', 'Theme installation complete.');
-        this.transitionToRoute('wh');
-      }.bind(this));
-    }.bind(this));
+      controller.send('gruntCommand', 'build', function() {
+        controller.set('isSending', false);
+        controller.send('notify', 'success', 'Theme installation complete.');
+        controller.transitionToRoute('wh');
+      });
+    });
   },
 
   actions: {
@@ -35,7 +37,7 @@ export default Ember.ObjectController.extend({
       }
 
       this.set('isSending', true);
-      window.ENV.sendGruntCommand('preset:' + theme.url, this.presetReady.bind(this));
+      this.send('gruntCommand', 'preset:' + theme.url, this.presetReady.bind(this));
     },
 
     downloadCustom: function () {
@@ -51,7 +53,7 @@ export default Ember.ObjectController.extend({
       }
 
       this.set('isSending', true);
-      window.ENV.sendGruntCommand('preset:' + this.get('customUrl'), this.presetReady.bind(this));
+      this.send('gruntCommand', 'preset:' + this.get('customUrl'), this.presetReady.bind(this));
     },
 
     localThemeSelected: function (file) {
@@ -75,7 +77,7 @@ export default Ember.ObjectController.extend({
         // strip off 'data:application/zip;base64,'
         var base64Data = e.target.result.split(',').slice(1).join(',');
 
-        window.ENV.sendGruntCommand('preset_local:' + base64Data, this.presetReady.bind(this));
+        this.send('gruntCommand', 'preset_local:' + base64Data, this.presetReady.bind(this));
 
       }.bind(this);
 
