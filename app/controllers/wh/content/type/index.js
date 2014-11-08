@@ -13,10 +13,11 @@ export default Ember.ArrayController.extend({
 
   recordLimit: 0,
   originalRecordLimit: 0,
+  endReached: false,
 
   isLimited: function () {
-    return this.get('content.length') >= this.get('recordLimit') && !this.get('isSearchResults');
-  }.property('content.@each', 'recordLimit', 'isSearchResults'),
+    return !this.get('endReached') && !this.get('isSearchResults');
+  }.property('endReached', 'isSearchResults'),
 
   filterQuery: '',
 
@@ -75,6 +76,7 @@ export default Ember.ArrayController.extend({
     this.set('isLoading', true);
     this.set('isSearchResults', false);
     this.set('content', Ember.A([]));
+    this.set('endReached', false);
 
     var controller = this;
     this.store.find(this.get('itemModelName'), {
@@ -82,6 +84,9 @@ export default Ember.ArrayController.extend({
       orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
       desc: !this.get('sortAscending')
     }).then(function (records) {
+      if (records.get('length') < controller.get('recordLimit')) {
+        controller.set('endReached', true);
+      }
       controller.set('isLoading', false);
       controller.set('content', records);
     });
@@ -183,8 +188,33 @@ export default Ember.ArrayController.extend({
     },
 
     moreRecords: function () {
-      this.set('recordLimit', this.get('recordLimit') + this.get('originalRecordLimit'));
-      this.refreshContent();
+
+      this.set('isLoading', true);
+
+      var controller = this;
+
+      var query = {
+        limit: this.get('recordLimit') + 1,
+        orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
+        desc: !this.get('sortAscending')
+      };
+
+      var lastValue = this.get('content.lastObject').get(this.get('sortProperties.firstObject'));
+
+      if (this.get('sortAscending')) {
+        query.startAt = lastValue;
+      } else {
+        query.endAt = lastValue;
+      }
+
+      this.store.find(this.get('itemModelName'), query).then(function (records) {
+        if (records.get('length') < controller.get('recordLimit')) {
+          controller.set('endReached', true);
+        }
+        controller.set('isLoading', false);
+        controller.get('content').addObjects(records);
+      });
+
     }
   }
 
