@@ -64,9 +64,9 @@
         <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.noRecords' nameBinding="contentType.name"}}
       </div>
     {{/unless}}
+    {{#if isLimited}}
+      <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
+    {{/if}}
   {{/if}}
 
-  {{#if isLimited}}
-    <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
-  {{/if}}
 </section>
