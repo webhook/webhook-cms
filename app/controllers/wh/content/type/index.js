@@ -15,7 +15,6 @@ export default Ember.ArrayController.extend({
   endReached: false,
 
   isLimited: function () {
-    window.console.log(this.get('content.length'), this.get('recordLimit'), !this.get('endReached'), !this.get('isSearchResults'));
     return this.get('content.length') >= this.get('recordLimit') && !this.get('endReached') && !this.get('isSearchResults');
   }.property('content.length', 'endReached', 'isSearchResults'),
 
