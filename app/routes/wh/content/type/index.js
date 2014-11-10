@@ -28,6 +28,7 @@ export default Ember.Route.extend({
     controller.set('recordLimit', this.get('recordLimit'));
     controller.set('originalRecordLimit', this.get('recordLimit'));
     controller.set('itemModelName', this.get('itemModelName'));
+    controller.set('endReached', this.get('model.length') < this.get('recordLimit'));
 
     controller.set('searchQuery', null);
     controller.set('isSearchResults', false);
