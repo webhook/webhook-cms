@@ -65,7 +65,7 @@ export default function dataFromControls (controls) {
 
     case 'relation':
       if (control.get('meta.isSingle')) {
-        if (value.length) {
+        if (Ember.isArray(value)) {
           value = value.pop();
         } else {
           value = null;
