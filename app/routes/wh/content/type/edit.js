@@ -86,16 +86,15 @@ export default Ember.Route.extend({
     // make sure `create_date`, `last_updated` and `publish_date` controls exist
     promises.push(this.fixControlType(this.modelFor('wh.content.type')));
 
-    return Ember.RSVP.Promise.all(promises);
-    // .catch(function (error) {
-    //   window.alert(error.message);
-    //   var contentType = this.modelFor('wh.content.type');
-    //   if (contentType.get('oneOff')) {
-    //     this.transitionTo('wh');
-    //   } else {
-    //     this.transitionTo('wh.content.type', contentType);
-    //   }
-    // }.bind(this));
+    return Ember.RSVP.Promise.all(promises).catch(function (error) {
+      window.alert(error.message);
+      var contentType = this.modelFor('wh.content.type');
+      if (contentType.get('oneOff')) {
+        this.transitionTo('wh');
+      } else {
+        this.transitionTo('wh.content.type', contentType);
+      }
+    }.bind(this));
   },
 
   updateLock: function () {
