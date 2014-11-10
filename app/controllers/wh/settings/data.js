@@ -137,7 +137,9 @@ export default Ember.Controller.extend({
 
     // first delete all search indexes
     dataController.store.find('content-type').then(function (contentTypes) {
-      contentTypes.forEach(SearchIndex.deleteType);
+      return Ember.RSVP.allSettled(contentTypes.map(function (contentType) {
+        return SearchIndex.deleteType(contentType);
+      }));
     }).then(function () {
 
       // delete all site data
