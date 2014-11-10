@@ -19,7 +19,7 @@
     "FileSaver.js": "eligrey/FileSaver.js",
     "filereader.js": "bgrins/filereader.js",
     "moment": "2.8.x",
-    "emberfire": "1.2.7",
+    "emberfire": "1.3.x",
     "fluidbox": "webhook/Fluidbox#1.3.5",
     "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.5.x",
     "leaflet": "~0.7.3",
@@ -32,6 +32,7 @@
     "ember-testing-httpRespond": "~0.1.1"
   },
   "resolutions": {
-    "firebase": "2.0.x"
+    "firebase": "2.0.x",
+    "emberfire": "1.3.x"
   }
 }
