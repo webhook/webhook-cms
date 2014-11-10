@@ -11,6 +11,19 @@ export default DS.Model.extend({
   oneOffMD5    : DS.attr('string'),
 
   // custom urls
-  customUrls: DS.attr('json')
+  customUrls: DS.attr('json'),
+
+  deleteModel: function (contentType) {
+
+    var formattedTypeName = Ember.String.singularize(contentType.get('id')),
+        modelName = formattedTypeName.charAt(0).toUpperCase() + formattedTypeName.slice(1);
+
+    if (!contentType.get('oneOff')) {
+      window.App[modelName] = null;
+      window.App[modelName + 'Adapter'] = null;
+      window.App[modelName + 'Serializer'] = null;
+    }
+
+  }.on('didDelete')
 
 });
