@@ -138,7 +138,9 @@ export default Ember.Controller.extend({
     // first delete all search indexes
     dataController.store.find('content-type').then(function (contentTypes) {
       return Ember.RSVP.allSettled(contentTypes.map(function (contentType) {
-        return SearchIndex.deleteType(contentType);
+        return SearchIndex.deleteType(contentType).then(function () {
+          return contentType.destroyRecord();
+        });
       }));
     }).then(function () {
 
