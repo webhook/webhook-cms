@@ -12,11 +12,10 @@ export default Ember.ArrayController.extend({
   isSearchResults: false,
 
   recordLimit: 0,
-  originalRecordLimit: 0,
   endReached: false,
 
   isLimited: function () {
-    return !this.get('endReached') && !this.get('isSearchResults');
+    return this.get('content.length') === this.get('recordLimit') && !this.get('endReached') && !this.get('isSearchResults');
   }.property('endReached', 'isSearchResults'),
 
   filterQuery: '',
@@ -84,9 +83,7 @@ export default Ember.ArrayController.extend({
       orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
       desc: !this.get('sortAscending')
     }).then(function (records) {
-      if (records.get('length') < controller.get('recordLimit')) {
-        controller.set('endReached', true);
-      }
+      controller.set('endReached', records.get('length') < controller.get('recordLimit'));
       controller.set('isLoading', false);
       controller.set('content', records);
     });
@@ -208,9 +205,7 @@ export default Ember.ArrayController.extend({
       }
 
       this.store.find(this.get('itemModelName'), query).then(function (records) {
-        if (records.get('length') < controller.get('recordLimit')) {
-          controller.set('endReached', true);
-        }
+        controller.set('endReached', records.get('length') - 1 < controller.get('recordLimit'));
         controller.set('isLoading', false);
         controller.get('content').addObjects(records);
       });
