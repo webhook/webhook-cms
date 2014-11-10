@@ -54,13 +54,8 @@ export default Ember.Route.extend({
           if (this.modelFor('wh.content.type').get('oneOff')) {
 
             // hack to overwrite empty state model that is being put in store from find method
-            this.store.push(modelName, {
-              id: contentType.get('id'),
-              itemData: { name: "" }
-            });
-
-            // use the item we just put in the store
             var item = this.store.getById(modelName, contentType.get('id'));
+            item.loadedData();
 
             this.set('itemModel', item);
 
@@ -91,15 +86,16 @@ export default Ember.Route.extend({
     // make sure `create_date`, `last_updated` and `publish_date` controls exist
     promises.push(this.fixControlType(this.modelFor('wh.content.type')));
 
-    return Ember.RSVP.Promise.all(promises).catch(function (error) {
-      window.alert(error.message);
-      var contentType = this.modelFor('wh.content.type');
-      if (contentType.get('oneOff')) {
-        this.transitionTo('wh');
-      } else {
-        this.transitionTo('wh.content.type', contentType);
-      }
-    }.bind(this));
+    return Ember.RSVP.Promise.all(promises);
+    // .catch(function (error) {
+    //   window.alert(error.message);
+    //   var contentType = this.modelFor('wh.content.type');
+    //   if (contentType.get('oneOff')) {
+    //     this.transitionTo('wh');
+    //   } else {
+    //     this.transitionTo('wh.content.type', contentType);
+    //   }
+    // }.bind(this));
   },
 
   updateLock: function () {
