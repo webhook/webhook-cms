@@ -64,7 +64,9 @@ export default Ember.Route.extend({
     buildEnv.set('siteDisplayName', window.ENV.selfHosted ? siteName.replace('/,1/g', '.') : siteName);
     buildEnv.set('selfHosted', window.ENV.selfHosted);
 
-    window.ENV.siteDNS = siteName + '.webhook.org';
+    if (!window.ENV.selfHosted) {
+      window.ENV.siteDNS = siteName + '.webhook.org';
+    }
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function (snap) {
       if (snap.val()) {
         window.ENV.siteDNS = snap.val();
