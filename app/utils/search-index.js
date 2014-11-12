@@ -1,14 +1,3 @@
-// import getItemModelName from 'appkit/utils/model';
-// avoid circular dependency by just getting the modelName
-// the models should be created by now
-var getItemModelName = function (contentType) {
-  if (contentType.get('oneOff')) {
-    return 'data';
-  } else {
-    return Ember.String.singularize(contentType.get('id'));
-  }
-};
-
 export default {
   baseUrl: window.ENV.uploadUrl + 'search/',
 
@@ -136,7 +125,7 @@ export default {
     Ember.Logger.log("SearchIndex::indexType::%@".fmt(contentType.get('id')));
 
     var SearchIndex = this;
-    var modelName = contentType.get('oneOff') ? 'data' : getItemModelName(contentType);
+    var modelName = contentType.get('itemModelName');
     var store = contentType.store;
 
     if (contentType.get('oneOff')) {

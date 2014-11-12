@@ -1,4 +1,3 @@
-import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({
@@ -49,11 +48,10 @@ export default Ember.Route.extend({
 
           // We have to get the contentType to get the itemModel.
           route.store.find('content-type', relatedContentTypeId).then(function (relatedContentType) {
-            var relatedItemModelName = getItemModelName(relatedContentType);
 
             // loop through all the related items and remove deleted item from relationship
             relatedItemIds.forEach(function (relatedItemId) {
-              route.store.find(relatedItemModelName, relatedItemId).then(function (relatedItem) {
+              route.store.find(relatedContentType.get('itemModelName'), relatedItemId).then(function (relatedItem) {
                 var itemData = relatedItem.get('itemData');
 
                 if (Ember.isEmpty(itemData[relatedControlName])) {
@@ -71,7 +69,7 @@ export default Ember.Route.extend({
                   relatedItem.set('itemData', itemData);
 
                   relatedItem.save().then(function () {
-                    Ember.Logger.log('`%@:%@` relations updated.'.fmt(relatedItemModelName, relatedItem.get('id')));
+                    Ember.Logger.log('`%@:%@` relations updated.'.fmt(relatedContentType.get('itemModelName'), relatedItem.get('id')));
                   });
 
                 }

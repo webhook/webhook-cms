@@ -1,5 +1,4 @@
 /*globals ga*/
-import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 import downcode from 'appkit/utils/downcode';
 import MetaWithOptions from 'appkit/utils/meta-options';
@@ -274,7 +273,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }).then(function (contentType) {
 
           // remove relation data from related content types
-          var relatedContentTypeItemModelName = getItemModelName(contentType);
+          var relatedContentTypeItemModelName = contentType.get('itemModelName');
 
           var removeData = function (item) {
 
@@ -428,7 +427,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     Ember.Logger.log('Updating data for %@ changed relationship types.'.fmt(relationControls.get('length')));
 
     // Change data in every item for this content type
-    return controller.store.find(getItemModelName(controller.get('model'))).then(function (items) {
+    return controller.store.find(controller.get('model.itemModelName')).then(function (items) {
 
       var itemUpdates = items.map(function (item) {
 
@@ -450,7 +449,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
               if (Ember.isArray(controlValue)) {
                 controlValue.forEach(function (relationKey) {
                   controller.store.find('content-type', relationKey.split(' ')[0]).then(function (contentType) {
-                    controller.store.find(getItemModelName(contentType), relationKey.split(' ')[1]).then(function (reverseItem) {
+                    controller.store.find(contentType.get('itemModelName'), relationKey.split(' ')[1]).then(function (reverseItem) {
                       var reverseItemData = reverseItem.get('itemData');
                       var reverseItemControlData = reverseItemData[control.get('meta.reverseName')];
                       var updatedReverseItemControlData = null;
@@ -511,7 +510,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       return;
     }
 
-    var itemModelName = getItemModelName(contentType);
+    var itemModelName = contentType.get('itemModelName');
 
     Ember.Logger.log('Updating `%@` item data and search indices for %@ removed controls, %@ renamed controls, and %@ changed radio controls.'.fmt(itemModelName, removedControls.get('length'), changedNameControls.get('length'), changedRadioControls.get('length')));
 
@@ -647,7 +646,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 Ember.Logger.log('`%@` relation controls updated with new contentTypeId'.fmt(relatedTypeId));
               });
 
-              var relatedItemModelName = getItemModelName(relatedType);
+              var relatedItemModelName = relatedType.get('itemModelName');
               formController.store.find(relatedItemModelName).then(function (items) {
                 items.forEach(function (item) {
 

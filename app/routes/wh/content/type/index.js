@@ -1,5 +1,3 @@
-import getItemModelName from 'appkit/utils/model';
-
 export default Ember.Route.extend({
 
   recordLimit: 50,
@@ -15,7 +13,7 @@ export default Ember.Route.extend({
     return this.store.find('control-type');
   },
   model: function () {
-    var itemModelName = getItemModelName(this.modelFor('wh.content.type'));
+    var itemModelName = this.modelFor('wh.content.type').get('itemModelName');
     this.set('itemModelName', itemModelName);
     return this.store.find(itemModelName, {
       limit: this.get('recordLimit'),

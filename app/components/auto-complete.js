@@ -1,5 +1,3 @@
-import getItemModelName from 'appkit/utils/model';
-
 export default Ember.Component.extend({
   classNames:  ["wy-tag-input-group"],
 
@@ -22,12 +20,10 @@ export default Ember.Component.extend({
 
       this.store.find('contentType', contentTypeId).then(function (contentType) {
 
-        var modelName = getItemModelName(contentType);
-
         var reverseName = component.get('control.meta.reverseName');
         var reverseIsSingle = contentType.get('controls').findBy('name', reverseName).get('meta.isSingle');
 
-        component.store.find(modelName, itemId).then(function (model) {
+        component.store.find(contentType.get('itemModelName'), itemId).then(function (model) {
 
           // this feels like a hacky way to get the type and item from the edit controller
           var editController = component.get('parentView.parentView.context');
