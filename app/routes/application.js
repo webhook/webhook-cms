@@ -258,7 +258,7 @@ export default Ember.Route.extend({
 
     var managementSiteRef = window.ENV.firebaseRoot.child('management/sites/' + siteName);
 
-    if (route.get('buildEnvironment.local') === false) {
+    if (!route.get('buildEnvironment.local')) {
       setupMessageListener(siteName, route.get('buildEnvironment'));
     }
 
