@@ -33,6 +33,7 @@
   },
   "resolutions": {
     "firebase": "2.0.x",
-    "emberfire": "1.3.x"
+    "emberfire": "1.3.x",
+    "ember": "1.8.1"
   }
 }
