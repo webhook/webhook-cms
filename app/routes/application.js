@@ -468,7 +468,7 @@ export default Ember.Route.extend({
 
       var user = route.get('session.user.email');
 
-      if (route.get('buildEnvironment.local') === false) {
+      if (!route.get('buildEnvironment.local')) {
 
         var data = {
           userid: user,
