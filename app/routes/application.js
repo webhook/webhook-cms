@@ -81,7 +81,7 @@ export default Ember.Route.extend({
     }
 
     var req = new XMLHttpRequest();
-    req.open('GET', document.location.origin, false);
+    req.open('GET', document.location, false);
     req.send(null);
     var headers = req.getAllResponseHeaders().toLowerCase();
 
