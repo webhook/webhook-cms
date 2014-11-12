@@ -5,41 +5,6 @@ function uniqueId() {
   });
 }
 
-var listener = null;
-var setupMessageListener = function(siteName, buildEnv) {
-  var ref = window.ENV.firebase.root().child('management/sites/' + siteName + '/messages');
-  if(listener) {
-    ref.off('child_added', listener);
-    listener = null;
-  }
-
-  var initialIds = {};
-  ref.once('value', function(totalData) {
-    var val = totalData.val();
-
-    for(var key in val) {
-      initialIds[key] = true;
-    }
-
-    listener = ref.on('child_added', function(snap) {
-      var now = Date.now();
-      var message = snap.val();
-      var id = snap.name();
-
-      if(!initialIds[id]) {
-        if(message.code === 'BUILD') {
-          if(message.status === 0) {
-            window.ENV.notify('success', 'Site build complete', { icon: 'refresh' });
-          } else {
-            window.ENV.notify('danger', 'Site build failed', { icon: 'remove' });
-          }
-          buildEnv.set('building', false);
-        }
-      }
-    });
-  });
-};
-
 export default Ember.Route.extend({
   notifications: [],
 
@@ -259,7 +224,7 @@ export default Ember.Route.extend({
     var managementSiteRef = window.ENV.firebaseRoot.child('management/sites/' + siteName);
 
     if (!route.get('buildEnvironment.local')) {
-      setupMessageListener(siteName, route.get('buildEnvironment'));
+      this.setupMessageListener();
     }
 
     Ember.Logger.info('Logged in as ' + user.email);
@@ -416,6 +381,50 @@ export default Ember.Route.extend({
         localSocket.doneCallback = callback;
       }
     }
+  },
+
+  messageListener: null,
+  setupMessageListener: function () {
+
+    var route = this;
+    var listener = this.get('messageListener');
+    var siteName = this.get('session.site.name');
+    var buildEnv = this.get('buildEnvironment');
+
+    var ref = window.ENV.firebase.root().child('management/sites/' + siteName + '/messages');
+    if (listener) {
+      ref.off('child_added', listener);
+      listener = null;
+    }
+
+    var initialIds = {};
+    ref.once('value', function(totalData) {
+      var val = totalData.val();
+
+      for(var key in val) {
+        initialIds[key] = true;
+      }
+
+      listener = ref.on('child_added', function(snap) {
+        var now = Date.now();
+        var message = snap.val();
+        var id = snap.name();
+
+        if(!initialIds[id]) {
+          if(message.code === 'BUILD') {
+            if(message.status === 0) {
+              route.send('notify', 'success', 'Site build complete', { icon: 'refresh' });
+            } else {
+              route.send('notify', 'danger', 'Site build failed', { icon: 'remove' });
+            }
+            buildEnv.set('building', false);
+          }
+        }
+      });
+
+      route.set('messageListener', listener);
+
+    });
   },
 
   actions: {
