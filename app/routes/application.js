@@ -219,6 +219,8 @@ export default Ember.Route.extend({
           firebase: window.ENV.firebase
         });
 
+        Ember.Logger.log('ApplicationRoute::validateUser::✓');
+
         resolve(user);
       };
 
