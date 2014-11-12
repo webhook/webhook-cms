@@ -1,4 +1,13 @@
-import getItemModelName from 'appkit/utils/model';
+// import getItemModelName from 'appkit/utils/model';
+// avoid circular dependency by just getting the modelName
+// the models should be created by now
+var getItemModelName = function (contentType) {
+  if (contentType.get('oneOff')) {
+    return 'data';
+  } else {
+    return Ember.String.singularize(contentType.get('id'));
+  }
+};
 
 export default {
   baseUrl: window.ENV.uploadUrl + 'search/',
