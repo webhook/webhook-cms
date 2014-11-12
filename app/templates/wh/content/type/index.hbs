@@ -3,7 +3,7 @@
   <h1>{{contentType.name}}</h1>
 </section>
 <section class="wh-content-subhead">
-  {{input type="search" placeholder="Filter" value=filterQuery}}
+  {{input type="search" placeholder=searchPlaceholder value=searchQuery}}
 
   <div class="wy-dropdown wy-dropdown-display-options float-right">
     <span class="btn btn-neutral btn-small icon icon-table"> {{t 'wh.content.display'}} <span class="caret"></span></span>
@@ -21,28 +21,26 @@
 </section>
 <section class="wh-content-list">
 
-  {{#if limited}}
-  <div class="wy-alert wy-alert-warning">
-    <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.limited' recordLimitBinding="recordLimit"}}
-  </div>
-  {{/if}}
-
   <table class="wy-table wy-table-bordered-rows wh-content">
     <thead>
       <tr>
         {{#each control in cmsControls}}
           <th>
-            <span class="wh-content-sort" {{action "sortToggle" control}}>
+            {{#if control.isSortable}}
+              <span class="wh-content-sort" {{action "sortToggle" control}}>
+                {{control.label}}
+                <span {{bind-attr class=":icon control.isSortDescending:icon-caret-up control.isSortAscending:icon-caret-down"}}></span>
+              </span>
+            {{else}}
               {{control.label}}
-              <span {{bind-attr class=":icon control.isSortDescending:icon-caret-up control.isSortAscending:icon-caret-down"}}></span>
-            </span>
+            {{/if}}
           </th>
         {{/each}}
         <th></th>
       </tr>
     </thead>
     <tbody>
-      {{#each sortedCmsItems itemView='item-row'}}
+      {{#each cmsItems itemView='item-row'}}
         {{#each cmsControls itemView='item-cell'}}
           {{partial controlType.valuePartialPath}}
         {{/each}}
@@ -66,9 +64,9 @@
         <span class="icon icon-exclamation-circle"></span> {{t 'wh.content.noRecords' nameBinding="contentType.name"}}
       </div>
     {{/unless}}
+    {{#if isLimited}}
+      <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
+    {{/if}}
   {{/if}}
 
-  {{#if limited}}
-    <button type="button" class="btn btn-small btn-neutral icon icon-plus-sign" {{action 'moreRecords'}}> {{t 'wh.content.moreRecords'}}</button>
-  {{/if}}
 </section>

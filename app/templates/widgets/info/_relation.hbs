@@ -4,7 +4,7 @@
   <div class="wy-form-full">
     <label for="Options">Relationships to allow <i class="icon icon-question-sign" data-toggle="tooltip" title="Only this content type will be searchable in the form widget."></i></label>
     <div class="wy-control">
-      {{view Ember.Select
+      {{view "select"
         content=contentTypes
         optionValuePath="content.id"
         optionLabelPath="content.name"

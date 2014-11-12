@@ -1,6 +1,8 @@
 export default Ember.Route.extend({
   beforeModel: function () {
 
+    this._super.apply(this, arguments);
+
     var route = this;
 
     this.store.find('content-type').then(function (types) {

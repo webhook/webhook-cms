@@ -27,7 +27,7 @@ export default function validateControls (contentType) {
 
     control.set('widgetErrors', Ember.A([]));
 
-    if (!value) {
+    if (Ember.isEmpty(value)) {
       if (control.get('required')) {
         invalidate(control, 'This field is required');
       }

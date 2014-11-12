@@ -90,8 +90,8 @@ export default Ember.Route.extend({
       // remove item from firebase
       return item.destroyRecord().then(function () {
         Ember.Logger.log('Item successfully destroyed.');
-        window.ENV.sendBuildSignal();
         route.send('notify', 'success', 'Item removed!');
+        route.send('buildSignal');
         route.transitionTo('wh.content.type', contentType);
       });
 

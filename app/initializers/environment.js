@@ -2,6 +2,15 @@ export default {
   name: 'environment',
 
   initialize: function (container, application) {
+
+    var buildEnv = Ember.Object.create();
+
+    application.register('environment:current', buildEnv, { instantiate: false, singleton: true });
+    Ember.A(['model', 'controller', 'view', 'route', 'helper', 'component']).forEach(function (component) {
+      application.inject(component, 'buildEnvironment', 'environment:current');
+    });
+
+    /*
     application.deferReadiness();
 
     var self     = this,
@@ -58,6 +67,11 @@ export default {
 
       localSocket.socket.onopen = function () {
         localSocket.set('connected', true);
+        Ember.run(application, application.advanceReadiness);
+      };
+
+      localSocket.socket.onerror = function () {
+        Ember.run(application, application.advanceReadiness);
       };
 
       if (!$('meta[name=suppressAlert]').attr('content')) {
@@ -95,15 +109,12 @@ export default {
       }
     });
 
-    application.set('buildEnvironment', buildEnv);
-
     if (window.ENV.uploadUrl.indexOf('http://') !== 0) {
       window.ENV.uploadUrl = 'http://' + window.ENV.uploadUrl;
     }
     if (window.ENV.uploadUrl.substr(-1) !== '/') {
       window.ENV.uploadUrl = window.ENV.uploadUrl + '/';
     }
-
-    Ember.run(application, application.advanceReadiness);
+    */
   }
 };

@@ -286,7 +286,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
             return item.save().then(function (savedItem) {
               Ember.Logger.log('- Relation data removed from `%@`'.fmt(savedItem.get('id')));
-              SearchIndex.indexItem(savedItem, contentType);
             });
 
           };
@@ -538,7 +537,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       item.save().then(function (savedItem) {
         Ember.Logger.info('Data updates applied to', savedItem.get('id'));
-        SearchIndex.indexItem(savedItem, contentType);
       });
     };
 
@@ -601,7 +599,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 Ember.Logger.log('Copied content type to `%@` from `%@`.'.fmt(newId, oldId));
 
                 // delete old search index
-                window.ENV.deleteTypeIndex(oldId);
+                SearchIndex.deleteType(oldId);
 
                 // kill old content type
                 contentTypeRef.child(oldId).remove(function () {
@@ -619,17 +617,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
             dataRef.child(oldId).once('value', function (snapshot) {
               dataRef.child(newId).set(snapshot.val(), function () {
                 Ember.Logger.log('Copied data to `%@` from `%@`.'.fmt(newId, oldId));
-
-                // update search index
-                snapshot.forEach(function (childSnapshot) {
-                  SearchIndex.indexItem(Ember.Object.create({
-                    id: childSnapshot.name(),
-                    data: childSnapshot.val()
-                  }), Ember.Object.create({
-                    oneOff: contentType.get('oneOff'),
-                    id: newId
-                  }));
-                });
 
                 // kill old data
                 dataRef.child(oldId).remove(function () {
@@ -719,7 +706,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           });
 
           Ember.RSVP.Promise.all([contentTypePromise, dataPromise]).then(function () {
-            formController.transitionToRoute('wh.content.type.index', newId);
+            formController.store.find('content-type', newId).then(function (contentType) {
+              SearchIndex.indexType(contentType);
+              formController.transitionToRoute('wh.content.type.index', contentType);
+            });
           });
 
           return;
@@ -833,7 +823,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           Ember.Logger.log('Checking scaffolding MD5s.');
 
-          window.ENV.sendGruntCommand('check_scaffolding:' + contentType.get('id'), function (data) {
+          controller.send('gruntCommand', 'check_scaffolding:' + contentType.get('id'), function (data) {
 
             if (isMD5Equal(contentType, data)) {
               resolve();
@@ -863,7 +853,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     return new Ember.RSVP.Promise(function (resolve, reject) {
 
-      window.ENV.sendGruntCommand('scaffolding_force:' + contentType.get('id'), function (data) {
+      formController.send('gruntCommand', 'scaffolding_force:' + contentType.get('id'), function (data) {
 
         Ember.Logger.info('Scaffolding built for', contentType.get('id'));
 
@@ -875,6 +865,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         }
         formController.send('notify', 'success', 'Scaffolding for ' + contentType.get('name') + ' built.');
         Ember.run(null, resolve);
+
       });
 
     });

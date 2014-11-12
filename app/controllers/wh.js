@@ -1,3 +1,5 @@
+import SearchIndex from 'appkit/utils/search-index';
+
 export default Ember.Controller.extend({
   sortProperties: ['name'],
   searchQuery: '',
@@ -56,12 +58,19 @@ export default Ember.Controller.extend({
     if (!this.get('searchQuery')) {
       return;
     }
+
     this.set('debouncedQuery', this.get('searchQuery'));
     this.set('searchLoading', true);
-    window.ENV.search(this.get('searchQuery'), 1, function(err, data) {
-      this.set('searchResults', data);
-      this.set('searchLoading', false);
-    }.bind(this));
+
+    var controller = this;
+
+    SearchIndex.search(this.get('searchQuery'), 1).then(function (results) {
+      controller.set('searchResults', results);
+      controller.set('searchLoading', false);
+    }, function (error) {
+      controller.set('searchResults', Ember.A([]));
+      controller.set('searchLoading', false);
+    });
 
   }, 'searchQuery', 200),
 

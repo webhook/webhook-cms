@@ -9,7 +9,7 @@ export default Ember.Route.extend({
   },
   setupController: function (controller) {
 
-    var siteName = this.get('buildEnvironment.siteName');
+    var siteName = this.get('session.site.name');
 
     window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns").once('value', function(snapshot) {
       controller.set('domain', snapshot.val());

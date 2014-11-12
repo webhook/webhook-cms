@@ -8,7 +8,7 @@ export default DS.FirebaseSerializer.extend({
       if (relationship.options.embedded && Ember.isArray(payload[key])) {
         var payloadKeyObject = {};
         payload[key].forEach(function (embed, index) {
-          payloadKeyObject[window.ENV.firebase.push().name()] = embed;
+          payloadKeyObject[window.ENV.firebase.push().key()] = embed;
         });
         payload[key] = payloadKeyObject;
       }

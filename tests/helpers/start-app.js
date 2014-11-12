@@ -15,8 +15,6 @@ function startApp(attrs) {
     location: 'none'
   });
 
-  Ember.Logger.info('TESTING START APP');
-
   Ember.run(function(){
     App = Application.create(attributes);
     App.setupForTesting();

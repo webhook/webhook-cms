@@ -104,7 +104,7 @@ export default Ember.ArrayController.extend({
               });
             }
 
-            window.ENV.firebaseRoot.child("management/commands/dns/" + controller.get('buildEnvironment.siteName')).set({
+            window.ENV.firebaseRoot.child("management/commands/dns/" + controller.get('session.site.name')).set({
               dnsname: controller.get('domain'),
               id: uniqueId()
             }, function(error) {

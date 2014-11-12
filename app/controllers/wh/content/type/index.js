@@ -1,18 +1,22 @@
 import getItemModelName from 'appkit/utils/model';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ArrayController.extend({
-  sortProperties : ['itemData.publish_date'],
+  sortProperties : ['itemData._sort_create_date'],
   sortAscending  : false,
-  sortedByPublish: true,
 
   contentType: null,
   lockedItems: Ember.A([]),
 
+  searchQuery: null,
+  isSearchResults: false,
+
   recordLimit: 0,
-  originalRecordLimit: 0,
-  limited: function () {
-    return this.get('content.length') >= this.get('recordLimit');
-  }.property('content.@each', 'recordLimit'),
+  endReached: false,
+
+  isLimited: function () {
+    return this.get('content.length') >= this.get('recordLimit') && !this.get('endReached') && !this.get('isSearchResults');
+  }.property('content.length', 'endReached', 'isSearchResults'),
 
   filterQuery: '',
 
@@ -21,7 +25,11 @@ export default Ember.ArrayController.extend({
   }.property('contentType.controls.@each'),
 
   cmsControls: function () {
-    return this.get('contentType.controls').filterBy('showInCms');
+    var controls = this.get('contentType.controls').filterBy('showInCms');
+    controls.forEach(function (control) {
+      control.set('isSortable', control.get('controlType.valueType') === 'string');
+    });
+    return controls;
   }.property('contentType.controls.@each.showInCms'),
 
   _updateItemControls: function (item) {
@@ -37,28 +45,7 @@ export default Ember.ArrayController.extend({
     return item;
   },
 
-  sortedByChanged: function () {
-    this.setProperties({
-      sortedByPublish: false,
-      sortedByCreated: false,
-      sortedByAlpha: false
-    });
-
-    switch (this.get('sortProperties.firstObject')) {
-    case 'itemData.publish_date':
-      this.set('sortedByPublish', true);
-      break;
-    case 'itemData.create_date':
-      this.set('sortedByCreated', true);
-      break;
-    case 'itemData.name':
-      this.set('sortedByAlpha', true);
-      break;
-    }
-
-  }.observes('sortProperties'),
-
-  cmsItems: Ember.arrayComputed('model.@each.itemData', 'cmsControls.@each.showInCms', {
+  cmsItems: Ember.arrayComputed('content.@each.itemData', 'cmsControls.@each.showInCms', {
     addedItem: function (array, item, changeMeta) {
 
       if (item.constructor.typeKey === 'control') {
@@ -77,33 +64,76 @@ export default Ember.ArrayController.extend({
     }
   }),
 
-  sortedCmsItems: function () {
-
-    var filterQuery = this.get('filterQuery');
-
-    var sortedCmsItems = this.get('cmsItems').sortBy.apply(this, this.get('sortProperties'));
-
-    if (!this.get('sortAscending')) {
-      sortedCmsItems.reverse();
-    }
-
-    sortedCmsItems = sortedCmsItems.filter(function (item) {
-      if (!filterQuery) {
-        return true;
-      } else {
-        return (new RegExp(filterQuery, 'ig')).test(item.get('itemData.name'));
-      }
-    });
-
-    return sortedCmsItems;
-  }.property('cmsItems.@each', 'sortProperties', 'sortAscending', 'filterQuery'),
-
   locksChanged: function () {
     this.get('cmsItems').setEach('lockedBy', null);
     this.get('lockedItems').forEach(function (lock) {
       this.get('cmsItems').findBy('id', lock.get('id')).set('lockedBy', lock.get('email'));
     }, this);
   }.observes('lockedItems.@each'),
+
+  refreshContent: function () {
+    this.set('isLoading', true);
+    this.set('isSearchResults', false);
+    this.set('content', Ember.A([]));
+    this.set('endReached', false);
+
+    var controller = this;
+    this.store.find(this.get('itemModelName'), {
+      limit: this.get('recordLimit'),
+      orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
+      desc: !this.get('sortAscending')
+    }).then(function (records) {
+      controller.set('endReached', records.get('length') < controller.get('recordLimit'));
+      controller.set('isLoading', false);
+      controller.set('content', records);
+    });
+  },
+
+  searchPlaceholder: function () {
+    return 'Search ' + this.get('contentType.name');
+  }.property('contentType'),
+
+  debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
+
+    if (!this.get('searchQuery')) {
+      this.refreshContent();
+      return;
+    }
+
+    this.set('isLoading', true);
+    this.set('isSearchResults', true);
+    this.set('content', Ember.A([]));
+
+    this.get('cmsControls').setEach('isSortAscending', false);
+    this.get('cmsControls').setEach('isSortDescending', false);
+
+    var controller = this;
+
+    var pushResults = function (results) {
+
+      var records = results.getEach('id').map(function (recordId) {
+        return controller.store.find(controller.get('itemModelName'), recordId);
+      });
+
+      Ember.RSVP.allSettled(records).then(function (settled) {
+
+        controller.set('isLoading', false);
+
+        var records = settled.rejectBy('state', 'rejected').map(function (query) {
+          return query.value;
+        });
+
+        controller.get('content').pushObjects(records);
+
+      });
+    };
+
+    var searchQuery = this.get('searchQuery');
+    var contentTypeId = this.get('contentType.id');
+
+    SearchIndex.search(searchQuery, 1, contentTypeId).then(pushResults);
+
+  }, 'searchQuery', 500),
 
   actions: {
 
@@ -117,25 +147,36 @@ export default Ember.ArrayController.extend({
       this.get('cmsControls').setEach('isSortAscending', false);
       this.get('cmsControls').setEach('isSortDescending', false);
 
-      var field = 'itemData.' + control.get('name');
+      var orderBy = control.get('name');
+
+      if (control.get('controlType.widget') === 'datetime') {
+        orderBy = '_sort_' + control.get('name');
+      }
 
       var sortProperties = this.get('sortProperties');
 
-      if (sortProperties.get('firstObject') === field) {
+      if (sortProperties.get('firstObject').replace('itemData.', '') === orderBy) {
         this.toggleProperty('sortAscending');
       } else {
         this.set('sortAscending', true);
       }
 
+      // this.set('orderBy', orderBy);
+      sortProperties.insertAt(0, 'itemData.' + orderBy);
+      this.set('sortProperties', sortProperties.uniq());
+
       control.set('isSortAscending', this.get('sortAscending'));
       control.set('isSortDescending', !this.get('sortAscending'));
 
-      sortProperties.insertAt(0, field);
-      sortProperties = sortProperties.uniq();
-
-      Ember.Logger.info('Sorting by', sortProperties);
-
-      this.set('sortProperties', sortProperties);
+      if (this.get('isSearchResults')) {
+        var sortedContent = this.get('content').sortBy(this.get('sortProperties.firstObject'));
+        if (!this.get('sortAscending')) {
+          sortedContent.reverse();
+        }
+        this.set('content', sortedContent);
+      } else {
+        this.refreshContent();
+      }
 
     },
 
@@ -144,16 +185,31 @@ export default Ember.ArrayController.extend({
     },
 
     moreRecords: function () {
-      this.set('isLoading', true);
-      this.set('recordLimit', this.get('recordLimit') + this.get('originalRecordLimit'));
 
-      this.set('content', Ember.A([]));
+      this.set('isLoading', true);
 
       var controller = this;
-      this.store.find(this.get('itemModelName'), { limit: this.get('recordLimit') }).then(function (records) {
+
+      var query = {
+        limit: this.get('recordLimit') + 1,
+        orderBy: this.get('sortProperties.firstObject').replace('itemData.', ''),
+        desc: !this.get('sortAscending')
+      };
+
+      var lastValue = this.get('content.lastObject').get(this.get('sortProperties.firstObject'));
+
+      if (this.get('sortAscending')) {
+        query.startAt = lastValue;
+      } else {
+        query.endAt = lastValue;
+      }
+
+      this.store.find(this.get('itemModelName'), query).then(function (records) {
+        controller.set('endReached', records.get('length') - 1 < controller.get('recordLimit'));
         controller.set('isLoading', false);
-        controller.set('content', records);
+        controller.get('content').addObjects(records);
       });
+
     }
   }
 

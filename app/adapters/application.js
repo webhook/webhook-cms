@@ -6,7 +6,12 @@ export default DS.FirebaseAdapter.extend({
     this._findQueryMapForType = {};
   },
 
-  // basic support for firebase's limit(), startAt(), and endAt() queries
+  // basic support for Firebase queries
+  // - orderBy
+  // - limitToFirst
+  // - limitToLast
+  // - startAt
+  // - endAt
   findQuery: function(store, type, query) {
 
     var adapter = this;
@@ -14,8 +19,16 @@ export default DS.FirebaseAdapter.extend({
 
     query = query || {};
 
+    if (query.orderBy) {
+      ref = ref.orderByChild(query.orderBy);
+    }
+
     if (query.limit) {
-      ref = ref.limit(query.limit);
+      if (query.desc) {
+        ref = ref.limitToLast(query.limit);
+      } else {
+        ref = ref.limitToFirst(query.limit);
+      }
     }
 
     if (query.startAt) {
@@ -34,7 +47,7 @@ export default DS.FirebaseAdapter.extend({
         valueEventTriggered = adapter._findQueryAddEventListeners(store, type, ref, query);
       }
       ref.once('value', function(snapshot) {
-        var results = [];
+        var results = Ember.A([]);
         if (valueEventTriggered) {
           Ember.run(null, valueEventTriggered.resolve);
         }
@@ -47,6 +60,9 @@ export default DS.FirebaseAdapter.extend({
             adapter._updateRecordCacheForType(type, payload);
             results.push(payload);
           });
+          if (query.desc) {
+            results.reverse();
+          }
           adapter._enqueue(resolve, [results]);
         }
       }, function(error) {
@@ -97,18 +113,19 @@ export default DS.FirebaseAdapter.extend({
       adapter._handleChildValue(store, type, serializer, snapshot);
     });
 
-    // We cannot tell the difference between when a record is removed from firebase
-    // and when it is pushed off the end of a limit() query
-
-    // ref.on('child_removed', function(snapshot) {
-    //   if (!valueEventTriggered) { return; }
-    //   var record = store.getById(type, snapshot.name());
-    //   if (record && !record.get('isDeleted')) {
-    //     adapter._enqueue(function() {
-    //       store.deleteRecord(record);
-    //     });
-    //   }
-    // });
+    ref.on('child_removed', function(snapshot) {
+      if (!valueEventTriggered) { return; }
+      snapshot.ref().once('value', function (snapshot) {
+        if (snapshot.val() === null) {
+          var record = store.getById(type, snapshot.key());
+          if (record && !record.get('isDeleted')) {
+            adapter._enqueue(function() {
+              store.deleteRecord(record);
+            });
+          }
+        }
+      });
+    });
 
     return deferred;
   }

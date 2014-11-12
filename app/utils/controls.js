@@ -2,16 +2,11 @@ export default function dataFromControls (controls) {
 
   var data = {};
 
-  // gather data for storage
-  // emberfire uses the update() method when saving so we need to explicitly set every key
-  controls.forEach(function (control) {
-    data[control.get('name')] = control.get('value');
-  });
-
   Ember.Logger.log('Extracting data from %@ controls.'.fmt(controls.get('length')));
 
   // normalize data for storage
-  controls.filterBy('value').forEach(function (control) {
+  // emberfire uses the update() method when saving so we need to explicitly set every key
+  controls.forEach(function (control) {
 
     var value = control.get('value');
 
@@ -58,9 +53,9 @@ export default function dataFromControls (controls) {
 
     // add timezone to datetime values
     case 'datetime':
-      value = moment(value).format();
+      value = value ? moment(value).format() : null;
       // add extra data for sorting
-      data['_sort_' + control.get('name')] = moment(value).unix();
+      data['_sort_' + control.get('name')] = value ? moment(value).unix() : null;
       break;
 
     // Make sure we don't try to save `undefined` for checkbox values
@@ -70,7 +65,7 @@ export default function dataFromControls (controls) {
 
     case 'relation':
       if (control.get('meta.isSingle')) {
-        if (value.length) {
+        if (Ember.isArray(value)) {
           value = value.pop();
         } else {
           value = null;

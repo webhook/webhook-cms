@@ -62,7 +62,7 @@ export default Ember.ObjectController.extend({
         // Mark the user as existing, queue up confirmation email
         var token = user.token;
         var fireRoot = window.ENV.firebaseRoot;
-        fireRoot.auth(token, function() {
+        fireRoot.authWithCustomToken(token, function() {
 
           fireRoot.child('management/users/' + user.email.replace(/\./g, ',1') + '/exists').set(true, function(err) {
             if(!window.ENV.selfHosted) {

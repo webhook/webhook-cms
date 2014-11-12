@@ -131,30 +131,17 @@ export default Ember.Controller.extend({
 
   },
 
-  indexItem: function (data, id, contentType) {
-
-    Ember.Logger.info('Updating search index:', contentType.get('id'), id);
-
-    var searchData = {};
-    Ember.$.each(data, function (key, value) {
-      if (typeof value === 'object') {
-        searchData[key] = JSON.stringify(value);
-      } else {
-        searchData[key] = value;
-      }
-    });
-    window.ENV.indexItem(id, searchData, contentType.get('oneOff'), contentType.get('id'));
-  },
-
   deleteData: function () {
 
     var dataController = this;
 
     // first delete all search indexes
     dataController.store.find('content-type').then(function (contentTypes) {
-      contentTypes.forEach(function (contentType) {
-        window.ENV.deleteTypeIndex(contentType.get('id'));
-      });
+      return Ember.RSVP.allSettled(contentTypes.map(function (contentType) {
+        return SearchIndex.deleteType(contentType).then(function () {
+          return contentType.destroyRecord();
+        });
+      }));
     }).then(function () {
 
       // delete all site data
@@ -163,7 +150,7 @@ export default Ember.Controller.extend({
         contentType: null,
         settings: null
       }, function () {
-        window.ENV.sendBuildSignal();
+        dataController.send('buildSignal');
         dataController.set('isDeleting', false);
         dataController.transitionToRoute('start');
       });
@@ -225,38 +212,15 @@ export default Ember.Controller.extend({
 
     confirm: function () {
 
-      var store = this.store;
       var dataController = this;
 
-      // Remove search index info for every type type
-      store.find('content-type').then(function (contentTypes) {
-        contentTypes.forEach(function (contentType) {
-          window.ENV.deleteTypeIndex(contentType.get('id'));
-        });
-      }).then(function () {
-
-        window.ENV.firebase.update(dataController.get('dataBackup'), function () {
-          dataController.send('notify', 'success', 'Backup applied!');
-          dataController.set('dataBackup', null);
-          window.ENV.sendBuildSignal();
-        }.bind(this));
-
-        // Update the search index with the new data.
-        Ember.$.each(dataController.get('dataBackup.data'), function (contentTypeId, items) {
-          store.find('content-type', contentTypeId).then(function (contentType) {
-            if (contentType.get('oneOff')) {
-              dataController.indexItem(items, contentTypeId, contentType);
-            } else {
-              Ember.$.each(items, function (id, item) {
-                dataController.indexItem(item, id, contentType);
-              });
-            }
-          }).catch(function (error) {
-            Ember.Logger.error(error);
-          });
-        });
-
+      window.ENV.firebase.update(dataController.get('dataBackup'), function () {
+        dataController.send('notify', 'success', 'Backup applied!');
+        dataController.set('dataBackup', null);
+        dataController.send('buildSignal');
+        SearchIndex.reindex();
       });
+
     },
 
     reset: function () {
@@ -283,7 +247,7 @@ export default Ember.Controller.extend({
 
       if (dataController.get('deleteOption') === 'everything') {
         // delete files first
-        window.ENV.sendGruntCommand('reset_files', function (error) {
+        dataController.send('gruntCommand', 'reset_files', function (error) {
 
           if (error) {
             Ember.Logger.error(error);
