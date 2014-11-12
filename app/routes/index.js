@@ -3,6 +3,10 @@ export default Ember.Route.extend({
 
     this._super.apply(this, arguments);
 
+    if (Ember.isEmpty(this.get('session.user'))) {
+      return;
+    }
+
     var route = this;
 
     this.store.find('content-type').then(function (types) {
@@ -12,5 +16,6 @@ export default Ember.Route.extend({
         route.transitionTo('start');
       }
     });
+
   }
 });

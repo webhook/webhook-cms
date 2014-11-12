@@ -48,7 +48,6 @@ Ember.Route.reopen({
     // Logged in, but account is inactive. Redirect to expired route.
     if (this.get('session.user') && this.get('session.billing.active') === false && transition.targetName !== 'expired') {
       Ember.Logger.warn('Site is not active, redirecting to expired route.');
-      transition.abort();
       this.transitionTo('expired');
     }
 
@@ -56,7 +55,6 @@ Ember.Route.reopen({
     else if (Ember.$.inArray(transition.targetName, openRoutes) === -1 && !this.get('session.user')) {
       Ember.Logger.warn('Attempting to access protected route when not logged in. Aborting.');
       this.set('session.transition', transition);
-      transition.abort();
       this.transitionTo('login');
     }
 
@@ -75,7 +73,6 @@ Ember.Route.reopen({
       if (Ember.$.inArray(transition.targetName, ownerRoutes) !== -1 && !this.get('session.isOwner')) {
         Ember.Logger.warn('Attempting to access protected route without permission. Aborting.');
         this.set('session.transition', transition);
-        // transition.abort();
         this.transitionTo('wh.index');
       }
 
