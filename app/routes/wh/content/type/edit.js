@@ -1,4 +1,3 @@
-import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({
@@ -11,7 +10,7 @@ export default Ember.Route.extend({
     var itemId = transition.params['wh.content.type.edit'] && transition.params['wh.content.type.edit'].item_id;
 
     var contentType = this.modelFor('wh.content.type');
-    var modelName = getItemModelName(contentType);
+    var modelName = contentType.get('itemModelName');
 
     if (itemId) {
       var lockRef   = window.ENV.firebase.child('presence/locked').child(modelName).child(itemId);

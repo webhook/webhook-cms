@@ -1,5 +1,4 @@
 /*globals ga*/
-import getItemModelName from 'appkit/utils/model';
 import validateControls from 'appkit/utils/validators';
 import dataFromControls from 'appkit/utils/controls';
 import uuid from 'appkit/utils/uuid';
@@ -150,7 +149,7 @@ export default Ember.ObjectController.extend({
         var relatedValue = controller.get('type.id') + ' ' + itemModel.get('id');
 
         return controller.store.find('contentType', contentTypeId).then(function (contentType) {
-          var modelName = getItemModelName(contentType);
+          var modelName = contentType.get('itemModelName');
           var foreignControls = contentType.get('controls');
           var reverseControl = control.get('meta.reverseName') && foreignControls.findBy('name', control.get('meta.reverseName'));
 
@@ -207,7 +206,7 @@ export default Ember.ObjectController.extend({
         }).then(function (contentType) {
 
           // Find and update reverse item.
-          return controller.store.find(getItemModelName(contentType), itemId).then(function (reverseItem) {
+          return controller.store.find(contentType.get('itemModelName'), itemId).then(function (reverseItem) {
 
             var reverseName = control.get('meta.reverseName');
             var reverseControl = contentType.get('controls').findBy('name', reverseName);
@@ -338,7 +337,7 @@ export default Ember.ObjectController.extend({
     }
 
     if (Ember.isEmpty(this.get('itemModel'))) {
-      this.set('itemModel', this.store.createRecord(getItemModelName(this.get('model'))));
+      this.set('itemModel', this.store.createRecord(this.get('model.itemModelName')));
     }
 
     // if all controls are valid update relationships then commit the item

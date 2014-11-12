@@ -1,4 +1,3 @@
-import getItemModelName from 'appkit/utils/model';
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.ArrayController.extend({
