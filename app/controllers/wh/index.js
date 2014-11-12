@@ -18,7 +18,7 @@ export default Ember.Controller.extend({
     var siteName = Ember.$('meta[name="siteName"]').attr('content');
     this.set('messageRef', window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/messages'));
 
-    var messagePage = this.get('messageRef').limit(this.get('serverMessagesPerPage'));
+    var messagePage = this.get('messageRef').limitToLast(this.get('serverMessagesPerPage'));
 
     var controller = this;
 
