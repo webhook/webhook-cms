@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
 
   var productionBucket = 'cms.webhook.com';
-  var productionVersion = 'ordering';
+  var productionVersion = 'v2';
   var distDir = 'dist/assets/';
 
   grunt.registerTask('push-prod', function() {
