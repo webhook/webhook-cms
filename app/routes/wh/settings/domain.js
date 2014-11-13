@@ -2,7 +2,7 @@ export default Ember.Route.extend({
 
   setupController: function (controller) {
 
-    var siteName = this.get('buildEnvironment').siteName;
+    var siteName = this.get('session.site.name');
 
     controller.setProperties({
       domain : "",

@@ -9,7 +9,7 @@ export default Ember.ObjectController.extend({
   actions: {
     updateDns: function() {
       var domain = this.get('domain');
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       if(domain.indexOf('http://') === 0) {
         domain = domain.replace('http://');
