@@ -80,7 +80,21 @@ export default DS.Model.extend({
   }.property('indexingTotal', 'indexingComplete'),
 
   isIndexing: function () {
-    return this.get('indexingPercent') < 100;
+    var percent = this.get('indexingPercent');
+    return percent > 0 && percent < 100;
+  }.property('indexingPercent'),
+
+  indexingClass: function () {
+    var percent = this.get('indexingPercent');
+    if (percent === 0) {
+      return 'pending';
+    }
+    if (percent < 100) {
+      return 'active';
+    }
+    if (percent === 100) {
+      return 'complete';
+    }
   }.property('indexingPercent')
 
 });
