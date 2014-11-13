@@ -278,18 +278,6 @@ export default Ember.Controller.extend({
         var blob = new window.Blob([data], { type: "text/plain;charset=utf-8" });
         window.saveAs(blob, backup.fileName);
       });
-    },
-
-    reindex: function (contentType) {
-
-      var controller = this;
-
-      if (contentType) {
-        SearchIndex.indexType(contentType);
-      } else {
-        SearchIndex.indexSite();
-      }
-
     }
   }
 });

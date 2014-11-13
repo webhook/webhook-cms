@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('start');
   this.route('theme');
   this.route('wordpress');
+  this.route('reindex');
 
   this.route('expired');
 

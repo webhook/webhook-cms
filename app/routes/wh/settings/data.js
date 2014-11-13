@@ -27,8 +27,13 @@ export default Ember.Route.extend({
 
     controller.set('downloadLink', window.ENV.uploadUrl + 'download/?site=' +this.get('session.site.name') + '&token=' + this.get('session.site.token'));
     controller.set('downloadFileName', this.get('buildEnvironment').siteName);
-    controller.set('contentTypes', this.modelFor('wh'));
 
     return this._super.apply(this, arguments);
+  },
+
+  actions: {
+    reindex: function () {
+      this.transitionTo('reindex');
+    }
   }
 });
