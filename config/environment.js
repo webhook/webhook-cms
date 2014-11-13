@@ -48,6 +48,14 @@ window.ENV = {
       description: 'This theme will automatically add popular CSS and JS preprocessors to your site. Once installed, you\'ll need to restart your runserver.'
     },
     {
+      name:  'Foundation',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-foundation/master/static/images/theme-screenshot.png',
+      url:   'https://github.com/webhook/webhook-theme-foundation/archive/master.zip',
+      demo:  'http://foundation.zurb.com',
+      code:  'https://github.com/webhook/webhook-theme-foundation',
+      description: 'Loads the Foundation 5 source JS and SASS files and sets up a simple watch command to build new CSS.'
+    },
+    {
       name:  'Bootstrap',
       image: 'https://raw.githubusercontent.com/webhook/webhook-theme-bootstrap/master/theme-screenshot.png',
       url:   'https://github.com/webhook/webhook-theme-bootstrap/archive/master.zip',
