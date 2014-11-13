@@ -16,7 +16,7 @@ export default Ember.ObjectController.extend({
   }.property('inviteEmail'),
 
   sendInviteSignal: function(inviteEmail) {
-    var siteName = this.get('buildEnvironment').siteName;
+    var siteName = this.get('session.site.name');
     var currentEmail = this.get('session.user.email');
 
 
@@ -70,7 +70,7 @@ export default Ember.ObjectController.extend({
       // If they are on the owner list... they must be verified (unless they are the original owner, in which case.. whoops)
       var escapedEmail = user.key;
       var email = user.email;
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       if(this.get('owners').length === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
@@ -106,7 +106,7 @@ export default Ember.ObjectController.extend({
       // If they are on the user list... they must be verified (unless they are the original owner, in which case.. whoops)
       var escapedEmail = user.key;
       var email = user.email;
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(email, function(err) {
 
@@ -134,7 +134,7 @@ export default Ember.ObjectController.extend({
     removeUser: function(user) {
       var escapedEmail = user.key;
       var email = user.email;
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       if(this.get('owners').length === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
@@ -167,7 +167,7 @@ export default Ember.ObjectController.extend({
     removePotential: function(user) {
       var escapedEmail = user.key;
       var email = user.email;
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(null, function(err) {
         if(err) {
@@ -188,7 +188,7 @@ export default Ember.ObjectController.extend({
       }
 
       var escapedEmail = email.replace(/\./g, ',1');
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       // Make sure they arent already on the list
       var inList = false;

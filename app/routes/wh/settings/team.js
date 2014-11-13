@@ -66,7 +66,7 @@ export default Ember.Route.extend({
 
   actions: {
     willTransition: function(transition) {
-      var siteName = this.get('buildEnvironment').siteName;
+      var siteName = this.get('session.site.name');
 
       if(this.get('ownerListner')) {
         window.ENV.firebaseRoot.child("management/sites/" + siteName + "/owners").off('value', this.get('ownerListner'));
