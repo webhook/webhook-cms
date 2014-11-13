@@ -66,7 +66,7 @@ export default function dataFromControls (controls) {
     case 'relation':
       if (control.get('meta.isSingle')) {
         if (Ember.isArray(value)) {
-          value = value.pop();
+          value = value.get('lastObject');
         } else {
           value = null;
         }
