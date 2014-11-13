@@ -11,6 +11,8 @@ export default Ember.Controller.extend({
   downloadLink: '',
   downloadFileName: '',
 
+  contentTypes: null,
+
   isDeleteData: function () {
     return this.get('deleteOption') === 'data';
   }.property('deleteOption'),
@@ -278,12 +280,16 @@ export default Ember.Controller.extend({
       });
     },
 
-    reindex: function () {
+    reindex: function (contentType) {
 
-      this.set('isIndexing', true);
-      SearchIndex.reindex().then(function () {
-        this.set('isIndexing', false);
-      }.bind(this));
+      var controller = this;
+
+      if (contentType) {
+        SearchIndex.indexType(contentType);
+      } else {
+        SearchIndex.indexSite();
+      }
+
     }
   }
 });

@@ -123,6 +123,12 @@
 
   <p>{{t 'wh.settings.data.search.instruction'}}</p>
 
+  <ul class="wy-plain-list-disc">
+    {{#each contentType in contentTypes}}
+      <li {{action "reindex" contentType}}>{{contentType.name}}{{#if contentType.isIndexing}} {{contentType.indexingComplete}} / {{contentType.indexingTotal}} = {{contentType.indexingPercent}}%{{/if}}</li>
+    {{/each}}
+  </ul>
+
   <button class="btn btn-neutral icon icon-refresh" {{action "reindex"}} {{bind-attr disabled=isIndexing}}> {{#if isIndexing}}{{t 'wh.settings.data.search.indexing'}} <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.search.action'}}{{/if}}</button>
 
 </section>
