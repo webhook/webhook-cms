@@ -68,8 +68,8 @@ export default {
 
   indexItem: function (item) {
 
-    if (Ember.isEmpty(item)) {
-      return Ember.RSVP.reject('Cannot index without an item.');
+    if (Ember.isEmpty(item) || !Ember.keys(item.get('itemData')).get('length')) {
+      return Ember.RSVP.reject('Cannot index without an item data.');
     }
 
     var typeKey = item.constructor.typeKey;
@@ -128,19 +128,45 @@ export default {
     var modelName = contentType.get('itemModelName');
     var store = contentType.store;
 
-    if (contentType.get('oneOff')) {
-      return store.find(modelName, contentType.get('id')).then(SearchIndex.indexItem.bind(SearchIndex), function (error) {
-        Ember.Logger.warn('SearchIndex::indexType::Could not find %@, continuing.'.fmt(contentType.get('id')));
-      });
-    } else {
-      return store.find(modelName).then(function (items) {
-        return items.reduce(function (cur, next) {
-          return cur.then(function () {
-            return SearchIndex.indexItem(next);
+    contentType.set('indexingComplete', 0);
+    contentType.set('indexingTotal', Infinity);
+
+    return SearchIndex.deleteType(contentType).then(function () {
+
+      if (contentType.get('oneOff')) {
+
+        return store.find(modelName, contentType.get('id')).then(function (item) {
+
+          contentType.set('indexingTotal', 1);
+
+          return SearchIndex.indexItem(item).then(function () {
+            contentType.incrementProperty('indexingComplete');
           });
-        }, Ember.RSVP.resolve());
-      });
-    }
+
+        }, function (error) {
+          contentType.set('indexingTotal', 0);
+          Ember.Logger.warn('SearchIndex::indexType::Could not find %@, continuing.'.fmt(contentType.get('id')));
+        });
+
+      } else {
+
+        return store.find(modelName).then(function (items) {
+
+          contentType.set('indexingTotal', items.get('length'));
+
+          var indexItems = items.map(function (item) {
+            return SearchIndex.indexItem(item).then(function () {
+              contentType.incrementProperty('indexingComplete');
+            });
+          });
+
+          return Ember.RSVP.allSettled(indexItems);
+
+        });
+
+      }
+
+    });
 
   },
 
@@ -164,6 +190,9 @@ export default {
   },
 
   deleteItem: function (item, contentType) {
+
+    Ember.Logger.log("SearchIndex::deleteItem::%@::%@".fmt(contentType.get('id'), item.get('itemData.name')));
+
     return Ember.$.ajax({
       url: this.baseUrl + 'delete/',
       type: 'POST',
@@ -176,6 +205,9 @@ export default {
 
   // contentType can be id or model
   deleteType: function (contentType) {
+
+    Ember.Logger.log("SearchIndex::deleteType::%@".fmt(contentType.get('id')));
+
     return Ember.$.ajax({
       url: this.baseUrl + 'delete/type/',
       type: 'POST',
@@ -195,9 +227,7 @@ export default {
   },
 
   reindex: function () {
-
-    return this.deleteSite().then(this.indexSite.bind(this));
-
+    return this.indexSite();
   },
 
   siteAndToken: function () {
