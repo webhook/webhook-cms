@@ -67,6 +67,34 @@ export default DS.Model.extend({
 
     Ember.Logger.log('`%@` model deleted.'.fmt(modelNamespace));
 
-  }.on('didDelete')
+  }.on('didDelete'),
+
+  indexingTotal: 0,
+  indexingComplete: 0,
+
+  indexingPercent: function () {
+    if (this.get('indexingTotal') === 0) {
+      return 100;
+    }
+    return Math.floor(this.get('indexingComplete') / this.get('indexingTotal') * 100);
+  }.property('indexingTotal', 'indexingComplete'),
+
+  isIndexing: function () {
+    var percent = this.get('indexingPercent');
+    return percent > 0 && percent < 100;
+  }.property('indexingPercent'),
+
+  indexingClass: function () {
+    var percent = this.get('indexingPercent');
+    if (percent === 0) {
+      return 'pending';
+    }
+    if (percent < 100) {
+      return 'active';
+    }
+    if (percent === 100) {
+      return 'complete';
+    }
+  }.property('indexingPercent')
 
 });

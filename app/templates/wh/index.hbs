@@ -1,51 +1,53 @@
-<article>
-  <h1>{{t 'wh.index.welcome.title'}}</h1>
+{{#if noTypesLive}}
+  <div class="wy-alert wy-alert-danger">
+    <div class="wy-alert-title">{{t 'wh.index.welcome.noTypesTitle'}}</div>
+    <p>{{t 'wh.index.welcome.noTypesMessage'}}</p>
+  </div>
+{{else}}
 
-  {{#if noTypesLive}}
-    <div class="wy-alert wy-alert-danger">
-      <div class="wy-alert-title">No content types</div>
-      <p>To use the deployed CMS you must add one or more content types in your local development environment and redeploy.</p>
-    </div>
-  {{/if}}
+  <article>
+    <h1>{{t 'wh.index.welcome.title'}}</h1>
 
-  <p>{{t 'wh.index.welcome.description'}}</p>
+    <p>{{t 'wh.index.welcome.description'}}</p>
 
-  <ul>
-    <li><a href="http://www.webhook.com/docs/">{{t 'wh.index.welcome.docs'}}</a></li>
-    <li><a href="http://www.webhook.com/help/">{{t 'wh.index.welcome.support'}}</a></li>
-    <li><a href="https://github.com/webhook/webhook/issues?state=open">{{t 'wh.index.welcome.issues'}}</a></li>
-    <li><a href="http://forums.webhook.com/">{{t 'wh.index.welcome.forums'}}</a></li>
-  </ul>
+    <ul>
+      <li><a href="http://www.webhook.com/docs/">{{t 'wh.index.welcome.docs'}}</a></li>
+      <li><a href="http://www.webhook.com/help/">{{t 'wh.index.welcome.support'}}</a></li>
+      <li><a href="https://github.com/webhook/webhook/issues?state=open">{{t 'wh.index.welcome.issues'}}</a></li>
+      <li><a href="http://forums.webhook.com/">{{t 'wh.index.welcome.forums'}}</a></li>
+    </ul>
 
-</article>
+  </article>
 
-<hr>
+  <hr>
 
-{{webhook-blog}}
+  {{webhook-blog}}
 
-{{#if session.serverMessages}}
-  <section>
-    <h2>{{t 'wh.index.history'}}</h2>
+  {{#if session.serverMessages}}
+    <section>
+      <h2>{{t 'wh.index.history'}}</h2>
 
-    <table class="wy-table wy-table-bordered-rows full-width">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Message</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each session.serverMessages}}
+      <table class="wy-table wy-table-bordered-rows full-width">
+        <thead>
           <tr>
-            <td>{{code}}</td>
-            <td>{{message}}</td>
-            <td>{{format-time timestamp}}</td>
+            <th>Type</th>
+            <th>Message</th>
+            <th>Date</th>
           </tr>
-        {{/each}}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {{#each session.serverMessages}}
+            <tr>
+              <td>{{code}}</td>
+              <td>{{message}}</td>
+              <td>{{format-time timestamp}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
 
-    {{#if moreServerMessages}}<a {{action "moreServerMessages"}}>{{t 'wh.index.moreHistory'}}</a>{{/if}}
-  </section>
+      {{#if moreServerMessages}}<a {{action "moreServerMessages"}}>{{t 'wh.index.moreHistory'}}</a>{{/if}}
+    </section>
+  {{/if}}
 {{/if}}
+

@@ -29,5 +29,11 @@ export default Ember.Route.extend({
     controller.set('downloadFileName', this.get('buildEnvironment').siteName);
 
     return this._super.apply(this, arguments);
+  },
+
+  actions: {
+    reindex: function () {
+      this.transitionTo('reindex');
+    }
   }
 });
