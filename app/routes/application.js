@@ -340,7 +340,11 @@ export default Ember.Route.extend({
 
         if (user) {
           // Logged in
-          route.validateUser(user).then(route.initializeUser.bind(route)).then(resolve, function (error) {
+          route.validateUser(user).then(route.initializeUser.bind(route), function (error) {
+            session.set('user', null);
+            session.set('site.token', null);
+            session.set('error', error);
+          }).then(resolve, function (error) {
             session.set('user', null);
             session.set('site.token', null);
             session.set('error', error);
