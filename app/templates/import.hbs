@@ -1,6 +1,6 @@
 <div class="wh-login">
-  <div {{bind-attr class=":wh-logo isImporting:wh-logo-spinner"}}></div>
-  <p>Importing can take several minutes. Please do not close your browser until complete.</p>
+  <div {{bind-attr class=":wh-logo isIndexing:wh-logo-spinner"}}></div>
+  <p>Importing can take several minutes while we add your content to the CMS search engine. Please do not close your browser until complete.</p>
   <ul class="wh-wp-import">
     {{#each contentType in arrangedContent}}
       <li {{bind-attr class="contentType.indexingClass"}}>

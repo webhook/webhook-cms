@@ -5,6 +5,7 @@ export default Ember.Route.extend({
   controllerName: 'reindex',
 
   beforeModel: function () {
+
     var data = this.controllerFor('wh.settings.data').get('dataBackup');
 
     if (Ember.isEmpty(data)) {
@@ -13,22 +14,18 @@ export default Ember.Route.extend({
       this.set('data', data);
     }
 
-  },
-
-  model: function () {
-    return this.store.find('content-type');
-  },
-
-  afterModel: function (model) {
-
-    var route = this;
-
-    var removeContentTypes = model.map(function (contentType) {
+    var removeContentTypes = this.modelFor('wh').map(function (contentType) {
       return contentType.destroyRecord();
     });
 
+    var removeSettings = this.store.find('settings').then(function (settings) {
+      return settings.map(function (setting) {
+        return setting.destroyRecord();
+      });
+    });
+
     var removeRef = function (ref) {
-      return new Ember.RSVP.Promise(function (resolve, reject) {
+      new Ember.RSVP.Promise(function (resolve, reject) {
         window.ENV.firebase.child(ref).remove(function (error) {
           if (error) {
             reject(error);
@@ -39,19 +36,29 @@ export default Ember.Route.extend({
       });
     };
 
-    Ember.RSVP.all([
+    return Ember.RSVP.all([
       removeContentTypes,
-      removeRef('data'),
-      removeRef('settings')
-    ]).then(function () {
-      return new Ember.RSVP.Promise(function (resolve, reject) {
-        window.ENV.firebase.update(route.get('data'), function (error) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
+      removeRef('settings'),
+      removeRef('data')
+    ]);
+
+  },
+
+  model: function () {
+    return this.modelFor('wh');
+  },
+
+  afterModel: function (model) {
+
+    var data = this.get('data');
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+      window.ENV.firebase.update(data, function (error) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
       });
     }).then(function () {
       SearchIndex.indexSite();
