@@ -28,6 +28,10 @@ export default function validateControls (contentType) {
     control.set('widgetErrors', Ember.A([]));
 
     if (Ember.isEmpty(value)) {
+      // Browsers will invalidate [type=number] inputs with non numeric values and return "" as the value.
+      if (control.get('controlType.widget') === 'number' && Ember.$('[name=' + control.get('name') + ']').is(':invalid')) {
+        invalidate(control, 'This field must be a number.');
+      }
       if (control.get('required')) {
         invalidate(control, 'This field is required');
       }
