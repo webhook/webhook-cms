@@ -213,16 +213,7 @@ export default Ember.Controller.extend({
     },
 
     confirm: function () {
-
-      var dataController = this;
-
-      window.ENV.firebase.update(dataController.get('dataBackup'), function () {
-        dataController.send('notify', 'success', 'Backup applied!');
-        dataController.set('dataBackup', null);
-        dataController.send('buildSignal');
-        SearchIndex.reindex();
-      });
-
+      this.transitionToRoute('import');
     },
 
     reset: function () {
