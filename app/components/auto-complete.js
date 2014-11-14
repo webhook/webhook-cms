@@ -81,7 +81,7 @@ export default Ember.Component.extend({
         originalIndex = ui.item.parent().children('.wy-tag').index(ui.item);
 
       },
-      update: function (event, ui) {
+      stop: function (event, ui) {
 
         var newIndex = ui.item.parent().children('.wy-tag').index(ui.item);
 
