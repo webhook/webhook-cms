@@ -194,15 +194,27 @@ export default Ember.Route.extend({
         if (error.code === 'PERMISSION_DENIED') {
           var escapedEmail = user.email.replace(/\./g, ',1');
           // Try to add to user list, if this is allowed they were a potential user
-          managementSiteRef.child('users').child(escapedEmail).set(user.email, function () {
+          managementSiteRef.child('users').child(escapedEmail).set(user.email, function (error) {
+            if (error) {
+              reject(error);
+              return;
+            }
             managementSiteRef.root().child('management/users').child(escapedEmail).child('sites/user').child(siteName).set(true, function (error) {
+              if (error) {
+                reject(error);
+                return;
+              }
               // Try to delete self from potential user list
-              managementSiteRef.child('potential_users').child(escapedEmail).remove(function () {
+              managementSiteRef.child('potential_users').child(escapedEmail).remove(function (error) {
+                if (error) {
+                  reject(error);
+                  return;
+                }
                 // Redo original authorization call
                 managementSiteRef.child('key').once('value', getToken, reject);
-              }, reject);
+              });
             });
-          }, reject);
+          });
         } else {
           reject(error);
         }
