@@ -81,19 +81,6 @@ Ember.Route.reopen({
   }
 });
 
-// Coerce number type values when using input[type=number]
-Ember.TextField.reopen({
-  init: function () {
-    var view = this;
-    if (this.get('type') === 'number') {
-      this.addBeforeObserver('value', function (obj, key) {
-        view.set('value', parseFloat(view.get('value')) || null);
-      });
-    }
-    return this._super.apply(this, arguments);
-  }
-});
-
 // Add translatable attributes to textfield.
 Ember.TextField.reopen(Em.I18n.TranslateableAttributes);
 
