@@ -377,7 +377,9 @@ export default Ember.Route.extend({
     return this.getBuildEnvironment().then(function () {
       return Ember.RSVP.Promise.all([
         route.getSession(),
-        route.getMessageSuport()
+        route.getMessageSuport(),
+        // control types are fixtures, throw them in the store
+        route.store.find('control-type')
       ]);
     });
   },

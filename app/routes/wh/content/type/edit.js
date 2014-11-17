@@ -41,25 +41,23 @@ export default Ember.Route.extend({
 
         EditRoute.set('lockUntil', moment().add(2, 'minutes').format());
 
-        return this.store.find(modelName, itemId).then(function (item) {
-
-          Ember.Logger.log('itemModel set');
+        return EditRoute.store.find(modelName, itemId).then(function (item) {
 
           // item found
-          this.set('itemModel', item);
+          EditRoute.set('itemModel', item);
 
-        }.bind(this), function (message) {
+        }, function (message) {
 
           // item does not exist
 
           // create the item if we're a one-off
-          if (this.modelFor('wh.content.type').get('oneOff')) {
+          if (EditRoute.modelFor('wh.content.type').get('oneOff')) {
 
             // hack to overwrite empty state model that is being put in store from find method
-            var item = this.store.getById(modelName, contentType.get('id'));
+            var item = EditRoute.store.getById(modelName, contentType.get('id'));
             item.loadedData();
 
-            this.set('itemModel', item);
+            EditRoute.set('itemModel', item);
 
             return Ember.RSVP.resolve(item);
 
@@ -70,9 +68,9 @@ export default Ember.Route.extend({
 
           }
 
-        }.bind(this));
+        });
 
-      }.bind(this));
+      });
 
       promises.push(lockCheck);
 
@@ -80,10 +78,6 @@ export default Ember.Route.extend({
       this.set('itemId', itemId);
 
     }
-
-    // need to make sure all the content types are in the store
-    // basically a hack
-    promises.push(this.store.find('control-type'));
 
     // make sure `create_date`, `last_updated` and `publish_date` controls exist
     promises.push(this.fixControlType(this.modelFor('wh.content.type')));
@@ -182,6 +176,7 @@ export default Ember.Route.extend({
 
     controller.set('showSchedule', false);
     controller.set('itemModel', this.get('itemModel'));
+    controller.set('isNew', !this.get('itemId'));
     controller.set('initialRelations', Ember.Object.create());
 
     var data = this.getWithDefault('itemModel.itemData', {});
