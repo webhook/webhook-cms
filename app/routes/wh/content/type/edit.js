@@ -211,6 +211,10 @@ export default Ember.Route.extend({
         });
       }
 
+      if (['image', 'audio', 'file'].indexOf(control.get('controlType.widget')) >= 0) {
+        value = Ember.Object.create(value || {});
+      }
+
       // remove offset so datetime input can display
       if (value && control.get('controlType.widget') === 'datetime') {
         value = moment(value).format('YYYY-MM-DDTHH:mm');
