@@ -61,7 +61,7 @@ window.ENV = {
       url:   'https://github.com/webhook/webhook-theme-bootstrap/archive/master.zip',
       demo:  'http://getbootstrap.com',
       code:  'https://github.com/webhook/webhook-theme-bootstrap',
-      description: 'Loads Bootstrap CSS and JS from a CDN so you can start designing immediately. Does not include source files.'
+      description: 'Loads the Bootstrap source JS and LESS files and sets up a simple watch command to build new CSS.'
     },
     {
       name:  'Wyrm sass',
