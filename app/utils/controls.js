@@ -60,7 +60,11 @@ export default function dataFromControls (controls) {
 
     // Make sure we don't try to save `undefined` for checkbox values
     case 'checkbox':
-      value.rejectBy('value').setEach('value', false);
+      if (Ember.isArray(value)) {
+        value.rejectBy('value').setEach('value', false);
+      } else {
+        value = [];
+      }
       break;
 
     case 'relation':
