@@ -445,7 +445,7 @@ export default Ember.ObjectController.extend({
 
     changePublishDate: function () {
       this.set('isDraft', null);
-      this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
+      this.set('publishDate', moment(this.get('type.controls').findBy('name', 'publish_date').get('value')).format('YYYY-MM-DDTHH:mm'));
       this.set('showSchedule', true);
     },
 
