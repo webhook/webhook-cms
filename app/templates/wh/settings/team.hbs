@@ -1,5 +1,10 @@
+
+
 <section class="wh-content-head">
-  <h1>{{t 'wh.settings.team.invite.title'}}</h1>
+  <h1>{{t 'wh.settings.team.current.title'}}</h1>
+</section>
+<section class="wh-content-subhead">
+  {{t 'wh.settings.team.current.description'}}
 </section>
 
 <section class="wh-content-edit">
@@ -30,18 +35,6 @@
     {{/if}}
 
   </form>
-
-</section>
-
-
-<section class="wh-content-head wh-content-head-again">
-  <h1>{{t 'wh.settings.team.current.title'}}</h1>
-</section>
-<section class="wh-content-subhead">
-  {{t 'wh.settings.team.current.description'}}
-</section>
-
-<section class="wh-content-edit">
 
   <table class="wy-table wy-table-bordered-rows full-width">
     <thead>
@@ -83,3 +76,91 @@
     </tbody>
   </table>
 </section>
+
+<section class="wh-content-head wh-content-head-again">
+  Manage group permissions
+  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign"> Add new group</a>
+  <!-- TODO: Remove this tran 'wh.settings.team.invite.title'}} -->
+</section>
+
+<section class="wh-content-edit">
+
+  <ul class="wh-group">
+    <li>
+      <span class="wh-group-name">Owners</span>
+      <span class="wh-group-info">Full permissions</span>
+    </li>
+    <li>
+      <span class="wh-group-name">Contributors</span>
+      <span class="wh-group-info">Full permissions, minus configuration.</span>
+    </li>
+    <li>
+      <span class="wh-group-name">News editors</span>
+      <span class="wh-group-info">Click to edit permissions.</span>
+    </li>
+    <li>
+      <input type="name" value="Sports editors">
+
+      <table class="wy-table">
+        <thead>
+          <tr>
+            <td></td>
+            <td>Hidden</td>
+            <td>Viewable</td>
+            <td>Can draft</td>
+            <td>Can publish</td>
+            <td>Can delete</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Content type A</td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+          </tr>
+          <tr>
+            <td>Content type A</td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+          </tr>
+          <tr>
+            <td>Content type A</td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+          </tr>
+          <tr>
+            <td>Content type A</td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+          </tr>
+          <tr>
+            <td>Content type A</td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+            <td><input type="radio"></td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+    <li>
+      <span class="wh-group-name">Sports editors</span>
+      <span class="wh-group-info">Click to edit permissions.</span>
+    </li>
+  </ul>
+
+</section>
+
