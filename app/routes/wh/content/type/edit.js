@@ -20,6 +20,7 @@ export default Ember.Route.extend({
       var lockCheck = new Ember.RSVP.Promise(function (resolve, reject) {
         lockRef.once('value', function (snapshot) {
           var lock = snapshot.val();
+          Ember.Logger.log('lockCheck done');
           if (lock && typeof lock === 'object' && lock.email !== userEmail) {
             // check for expired lock
             if (moment(lock.time).diff(moment()) > 0) {
@@ -41,6 +42,8 @@ export default Ember.Route.extend({
         EditRoute.set('lockUntil', moment().add(2, 'minutes').format());
 
         return this.store.find(modelName, itemId).then(function (item) {
+
+          Ember.Logger.log('itemModel set');
 
           // item found
           this.set('itemModel', item);
@@ -270,72 +273,69 @@ export default Ember.Route.extend({
 
   fixControlType: function (contentType) {
 
-    return this.store.find('control-type', 'datetime').then(function (controlType) {
+    var datetimeDefaults = {
+      controlType: this.store.getById('control-type', 'dateType'),
+      locked     : true,
+      showInCms  : true,
+      required   : true,
+      hidden     : true
+    };
 
-      var datetimeDefaults = {
-        controlType: controlType,
-        locked     : true,
-        showInCms  : true,
-        required   : true,
-        hidden     : true
-      };
+    var controls = contentType.get('controls'),
+        save = false;
 
-      var controls = contentType.get('controls'),
-          save = false;
+    var addControl = function (data) {
+      var control = this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data));
+      control.set('widgetIsValid', true);
+      controls.pushObject(control);
+      save = true;
+    }.bind(this);
 
-      var addControl = function (data) {
-        var control = this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data));
-        control.set('widgetIsValid', true);
-        controls.pushObject(control);
-        save = true;
-      }.bind(this);
+    if (!controls.isAny('name', 'create_date')) {
+      addControl({
+        name : 'create_date',
+        label: 'Create Date'
+      });
+    }
 
-      if (!controls.isAny('name', 'create_date')) {
-        addControl({
-          name : 'create_date',
-          label: 'Create Date'
-        });
-      }
+    if (!controls.isAny('name', 'last_updated')) {
+      addControl({
+        name : 'last_updated',
+        label: 'Last Updated'
+      });
+    }
 
-      if (!controls.isAny('name', 'last_updated')) {
-        addControl({
-          name : 'last_updated',
-          label: 'Last Updated'
-        });
-      }
+    if (!controls.isAny('name', 'publish_date')) {
+      addControl({
+        name : 'publish_date',
+        label: 'Publish Date',
+        required: false
+      });
+    }
 
-      if (!controls.isAny('name', 'publish_date')) {
-        addControl({
-          name : 'publish_date',
-          label: 'Publish Date',
-          required: false
-        });
-      }
+    if (!controls.isAny('name', 'preview_url')) {
+      addControl({
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'preview_url',
+        label      : 'Preview URL',
+        showInCms  : false
+      });
+    }
 
-      if (!controls.isAny('name', 'preview_url')) {
-        addControl({
-          controlType: this.store.getById('control-type', 'textfield'),
-          name       : 'preview_url',
-          label      : 'Preview URL',
-          showInCms  : false
-        });
-      }
+    if (!controls.isAny('name', 'slug')) {
+      addControl({
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'slug',
+        label      : 'Slug',
+        showInCms  : false,
+        required   : false
+      });
+    }
 
-      if (!controls.isAny('name', 'slug')) {
-        addControl({
-          controlType: this.store.getById('control-type', 'textfield'),
-          name       : 'slug',
-          label      : 'Slug',
-          showInCms  : false,
-          required   : false
-        });
-      }
+    if (save) {
+      contentType.save();
+    }
 
-      if (save) {
-        contentType.save();
-      }
-
-    }.bind(this));
   },
 
   actions: {
