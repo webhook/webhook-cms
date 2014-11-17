@@ -39,7 +39,7 @@ export default Ember.Component.extend({
     var url   = window.ENV.uploadUrl,
         site  = this.get('session.site.name'),
         token = this.get('session.site.token');
-    
+
     this.uploader = new Webhook.Uploader(url, site, token, { data: this.get('postParams') });
 
     // when a file is selected, upload
@@ -137,8 +137,15 @@ export default Ember.Component.extend({
     this.$uploadBtn.data('selectFile').$fileinput.remove();
   },
 
+  clearValue: function () {
+    var value = this.get('control.value');
+    Ember.keys(value).forEach(function (property) {
+      value.set(property, null);
+    });
+  },
+
   beforeUpload: function (file) {
-    this.set('control.value', {});
+    this.clearValue();
     this.set('wantUploadButton', true);
     this.set('wantUrlInput', false);
     this.$uploadBtn.hide();
@@ -159,14 +166,14 @@ export default Ember.Component.extend({
 
   doneUpload: function (file, response) {
 
-    var value = { url: response.url };
+    var value = Ember.Object.create({ url: response.url });
 
     if (file && file.type) {
-      value.type = file.type;
+      value.set('type', file.type);
     }
 
     if (file && file.size) {
-      value.size = file.size;
+      value.set('size', file.size);
     }
 
     this.set('control.value', value);
@@ -184,7 +191,7 @@ export default Ember.Component.extend({
 
   actions: {
     clear: function () {
-      this.set('control.value', {});
+      this.clearValue();
     },
     toggleMethod: function () {
       this.toggleProperty('wantUrlInput');

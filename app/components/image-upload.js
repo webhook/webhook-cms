@@ -13,13 +13,12 @@ export default FileUploadComponent.extend({
   },
 
   hasPreview: function () {
-    return this.get('control.value.resize_url') || this.get('tempUrl');
+    return !!(this.get('control.value.resize_url') || this.get('tempUrl'));
   }.property('control.value.resize_url', 'tempUrl'),
 
   // Show preview of file
   beforeUpload: function (file) {
     this._super.apply(this, arguments);
-
     this.set('tempUrl', typeof file === 'string' ? file : (window.URL || window.webkitURL).createObjectURL(file));
   },
 
