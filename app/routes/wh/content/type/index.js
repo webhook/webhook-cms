@@ -8,9 +8,6 @@ export default Ember.Route.extend({
       this.transitionTo('wh.content.type.edit', contentType.get('id'));
     }
     this.set('contentType', contentType);
-
-    // make sure all control types are available
-    return this.store.find('control-type');
   },
   model: function () {
     var itemModelName = this.modelFor('wh.content.type').get('itemModelName');

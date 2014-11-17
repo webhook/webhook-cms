@@ -10,7 +10,7 @@ export default Ember.Route.extend({
 
     var formRoute = this;
 
-    var promises = [this.store.find('control-type')];
+    var promises = Ember.A([]);
 
     promises.push(this.store.find('control-type-group').then(function (controlTypeGroups) {
       formRoute.set('controlTypeGroups', controlTypeGroups);
