@@ -1,5 +1,3 @@
-
-
 <section class="wh-content-head">
   <h1>{{t 'wh.settings.team.current.title'}}</h1>
 </section>
@@ -45,7 +43,7 @@
     </thead>
     <tbody>
 
-      {{#each user in allUsers }}
+      {{#each user in filteredContent}}
         <tr>
           <td>{{ user.email }}</td>
           <td>
@@ -73,6 +71,7 @@
           </td>
         </tr>
       {{/each}}
+
     </tbody>
   </table>
 </section>
@@ -136,4 +135,3 @@
   </ul>
 
 </section>
-
