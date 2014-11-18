@@ -68,7 +68,7 @@ export default {
 
   indexItem: function (item) {
 
-    if (Ember.isEmpty(item) || !Ember.keys(item.get('itemData')).get('length')) {
+    if (Ember.isEmpty(item) || Ember.isEmpty(item.get('itemData')) || !Ember.keys(item.get('itemData')).get('length')) {
       return Ember.RSVP.reject('Cannot index without an item data.');
     }
 
@@ -206,13 +206,15 @@ export default {
   // contentType can be id or model
   deleteType: function (contentType) {
 
-    Ember.Logger.log("SearchIndex::deleteType::%@".fmt(contentType.get('id')));
+    var id = typeof contentType === 'string' ? contentType : contentType.get('id');
+
+    Ember.Logger.log("SearchIndex::deleteType::%@".fmt(id));
 
     return Ember.$.ajax({
       url: this.baseUrl + 'delete/type/',
       type: 'POST',
       data: Ember.$.extend(this.siteAndToken(), {
-        typeName: typeof contentType === 'string' ? contentType : contentType.get('id')
+        typeName: id
       })
     });
   },
