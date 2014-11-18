@@ -498,6 +498,11 @@ pre code
     border-top: solid 1px $table-border-color
     font-size: 80%
     padding: $base-line-height / 2 $base-line-height / 4
+  > li.active
+    border-right: solid 1px $table-border-color
+    border-left: solid 1px $table-border-color
+    padding: 0
+    padding-bottom: $base-line-height / 2
   .wh-group-info
     color: $gray-light
   .wh-group-name
@@ -510,29 +515,41 @@ pre code
   input[type="text"]
     border: none
     font-size: 200%
+  .wh-group-edit
+    padding: $base-line-height / 4
+    padding-left: $base-line-height / 2
+    font-size: 16px
+    +clearfix
+    div
+      font-weight: bold
+      line-height: 34px
+      display: inline-block
+    div span
+      font-size: 12px
+      font-weight: normal
   li ul
     margin-bottom: $base-line-height
+  li ul.wh-group-labels li
+    height: $base-line-height * 3
+    line-height: $base-line-height * 3
   li li
     width: 20%
     display: inline-block
-    border-bottom: solid 4px $gray-lighter
-    height: $base-line-height * 3
-    line-height: $base-line-height * 3
+    border-bottom: solid 1px $gray-lighter
     text-align: center
     position: relative
-    color: $gray-lighter
     &:before
       position: absolute
-      height: $base-line-height
-      width: $base-line-height
-      line-height: $base-line-height
+      height: 16px
+      width: 16px
+      line-height: 16px
       background: $gray-lighter
       border-radius: 50px
       color: $white
       text-align: center
-      bottom: -($base-line-height / 2) - 2
+      bottom: -8px
       left: 50%
-      margin-left: -$base-line-height / 2
+      margin-left: -8px
       @extend .icon
       @extend .icon-remove
   li li:first-child
@@ -544,16 +561,16 @@ pre code
       background: transparent
     span
       position: absolute
-      bottom: -($base-line-height / 2) - 2
+      bottom: -8px
       left: 0
       height: $base-line-height
       line-height: $base-line-height
       font-size: 14px
       width: 100%
       display: block
-      text-align: center
+      text-align: left
+      padding-left: $base-line-height / 2
   li li.active
-    color: $text-color
     border-color: $gray-dark
     &:before
       background: $gray-dark
