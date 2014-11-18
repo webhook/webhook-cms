@@ -493,7 +493,7 @@ pre code
 // GROUP MANAGEMENT
 
 .wh-group
-  li
+  > li
     border-top: solid 1px $table-border-color
     font-size: 80%
     padding: $base-line-height / 2 $base-line-height / 4
@@ -502,14 +502,27 @@ pre code
   .wh-group-name
     display: inline-block
     width: 25%
-  table td
-    font-size: 12px
-  table
-    width: 100%
-  table .icon
-    color: $text-light
-  table .icon.active
-    color: $text-color
+  li li
+    width: 25%
+    display: inline-block
+    border-bottom: solid 3px $gray-light
+    height: $base-line-height * 2
+    line-height: $base-line-height * 2
+    text-align: center
+    position: relative
+    &:after
+      position: absolute
+      height: $base-line-height
+      width: $base-line-height
+      line-height: $base-line-height
+      background: $gray-light
+      text-align: center
+      bottom: -$base-line-height
+      left: 50%
+      margin-left: -$base-line-height / 2
+      @extend .icon
+      @extend .icon-remove-sign
+
 
 
 // RESPONSIVE STYLES HERE
