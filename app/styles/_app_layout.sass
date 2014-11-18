@@ -493,6 +493,7 @@ pre code
 // GROUP MANAGEMENT
 
 .wh-group
+  +clearfix
   > li
     border-top: solid 1px $table-border-color
     font-size: 80%
@@ -502,26 +503,62 @@ pre code
   .wh-group-name
     display: inline-block
     width: 25%
+  p
+    color: $gray-light
+    font-size: 90%
+    margin-bottom: 0
+  input[type="text"]
+    border: none
+    font-size: 200%
+  li ul
+    margin-bottom: $base-line-height
   li li
-    width: 25%
+    width: 20%
     display: inline-block
-    border-bottom: solid 3px $gray-light
-    height: $base-line-height * 2
-    line-height: $base-line-height * 2
+    border-bottom: solid 4px $gray-lighter
+    height: $base-line-height * 3
+    line-height: $base-line-height * 3
     text-align: center
     position: relative
-    &:after
+    color: $gray-lighter
+    &:before
       position: absolute
       height: $base-line-height
       width: $base-line-height
       line-height: $base-line-height
-      background: $gray-light
+      background: $gray-lighter
+      border-radius: 50px
+      color: $white
       text-align: center
-      bottom: -$base-line-height
+      bottom: -($base-line-height / 2) - 2
       left: 50%
       margin-left: -$base-line-height / 2
       @extend .icon
-      @extend .icon-remove-sign
+      @extend .icon-remove
+  li li:first-child
+    border-color: transparent
+    color: $text-color
+    font-weight: bold
+    &:before
+      content: ""
+      background: transparent
+    span
+      position: absolute
+      bottom: -($base-line-height / 2) - 2
+      left: 0
+      height: $base-line-height
+      line-height: $base-line-height
+      font-size: 14px
+      width: 100%
+      display: block
+      text-align: center
+  li li.active
+    color: $text-color
+    border-color: $gray-dark
+    &:before
+      background: $gray-dark
+      @extend .icon-ok
+
 
 
 
