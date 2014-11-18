@@ -24,6 +24,9 @@ export default Ember.ObjectController.extend({
   initialRelations: Ember.Object.create(),
   initialValues: Ember.A([]),
 
+  // if this is a new item, we want to redirect after save
+  isNew: true,
+
   nameControl: null,
   slugControl: null,
 
@@ -400,8 +403,10 @@ export default Ember.ObjectController.extend({
         sendNotify('Saved, will go live later.');
       }
 
-      if (!this.get('itemModel')) {
+      if (this.get('isNew')) {
+
         this.transitionToRoute('wh.content.type.edit', itemModel.get('id'));
+
       } else {
 
         // reset the initialRelations
