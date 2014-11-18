@@ -39,7 +39,7 @@ module.exports = {
     tasks: ['lock', 'buildDocs', 'unlock']
   },
   other: {
-    files: [other, '!'+scripts, '!'+templates, '!'+styles, '!'+indexHTML, bowerFile, npmFile],
+    files: [other, '!'+scripts, '!'+templates, '!'+styles[0], '!'+styles[1], '!'+indexHTML, bowerFile, npmFile],
     tasks: ['lock', 'build:debug', 'unlock']
   },
 
