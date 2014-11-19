@@ -1,0 +1,89 @@
+// GROUP MANAGEMENT ON THE TEAMS PAGE
+
+.wh-group
+  +clearfix
+  > li
+    border-top: solid 1px $table-border-color
+    font-size: 80%
+    padding: $base-line-height / 2 $base-line-height / 4
+  > li.active
+    border: solid 5px $table-border-color
+    padding: $base-line-height
+  .wh-group-info
+    color: $gray-light
+  .wh-group-name
+    display: inline-block
+    width: 25%
+  input[type="text"]
+    border: none
+    font-size: 200%
+  .wh-group-edit
+    padding: $base-line-height / 4 0 $base-line-height $base-line-height / 2
+    font-size: 16px
+    border-bottom: dotted 1px $table-border-color
+    +clearfix
+    div
+      font-weight: bold
+      line-height: 34px
+      display: inline-block
+    div span
+      font-size: 12px
+      font-weight: normal
+  li ul
+    margin-bottom: $base-line-height
+  li ul.wh-group-labels
+    margin: $base-line-height 0 $base-line-height / 2 0
+  li ul.wh-group-labels li
+    height: $base-line-height
+    line-height: $base-line-height
+    width: 20%
+    display: inline-block
+    text-align: center
+  li ul.wh-group-perms li
+    width: 20%
+    display: inline-block
+    border-bottom: dotted 2px $gray-lighter
+    text-align: center
+    position: relative
+    &:before
+      position: absolute
+      height: 16px
+      width: 16px
+      line-height: 16px
+      background: $gray-lighter
+      border-radius: 50px
+      color: $white
+      text-align: center
+      bottom: -9px
+      right: -8px
+      z-index: 2
+      cursor: pointer
+      @extend .icon
+      @extend .icon-remove
+    &:first-child
+      border-color: transparent
+      color: $text-color
+      font-weight: bold
+      &:before
+        content: ""
+        background: transparent
+      span
+        position: absolute
+        bottom: -8px
+        left: 0
+        height: $base-line-height
+        line-height: $base-line-height
+        font-size: 14px
+        width: 100%
+        display: block
+        text-align: left
+        padding-left: $base-line-height / 2
+    &:nth-child(2)
+      border-color: transparent !important
+      width: 10%
+    &.active
+      border-bottom: solid 2px lighten($green, 20%)
+      &:before
+        background: $green
+        @extend .icon-ok
+
