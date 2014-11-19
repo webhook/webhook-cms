@@ -529,10 +529,15 @@ pre code
       font-weight: normal
   li ul
     margin-bottom: $base-line-height
+  li ul.wh-group-labels
+    margin: $base-line-height / 2 0
   li ul.wh-group-labels li
-    height: $base-line-height * 3
-    line-height: $base-line-height * 3
-  li li
+    height: $base-line-height
+    line-height: $base-line-height
+    width: 20%
+    display: inline-block
+    text-align: center
+  li ul.wh-group-perms li
     width: 20%
     display: inline-block
     border-bottom: solid 1px $gray-lighter
@@ -552,29 +557,29 @@ pre code
       margin-left: -8px
       @extend .icon
       @extend .icon-remove
-  li li:first-child
-    border-color: transparent
-    color: $text-color
-    font-weight: bold
-    &:before
-      content: ""
-      background: transparent
-    span
-      position: absolute
-      bottom: -8px
-      left: 0
-      height: $base-line-height
-      line-height: $base-line-height
-      font-size: 14px
-      width: 100%
-      display: block
-      text-align: left
-      padding-left: $base-line-height / 2
-  li li.active
-    border-color: $gray-dark
-    &:before
-      background: $gray-dark
-      @extend .icon-ok
+    &:first-child
+      border-color: transparent
+      color: $text-color
+      font-weight: bold
+      &:before
+        content: ""
+        background: transparent
+      span
+        position: absolute
+        bottom: -8px
+        left: 0
+        height: $base-line-height
+        line-height: $base-line-height
+        font-size: 14px
+        width: 100%
+        display: block
+        text-align: left
+        padding-left: $base-line-height / 2
+    &.active
+      border-color: $gray-dark
+      &:before
+        background: $gray-dark
+        @extend .icon-ok
 
 
 
