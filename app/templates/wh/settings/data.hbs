@@ -3,7 +3,6 @@
 </section>
 
 <section class="wh-content-edit">
-
   {{# if dataBackup}}
     <p>{{t 'wh.settings.data.importExport.import.found'}}</p>
 
@@ -79,6 +78,15 @@
 
 </section>
 
+<section class="wh-content-head wh-content-head-again">
+  <h1>API Key</h1>
+</section>
+
+<section class="wh-content-edit">
+  <p>You can use this API key to build your site without the CMS or import/delete data into your site.</p>
+
+  <pre>{{ apiKey }}</pre>
+</section>
 
 <section class="wh-content-head wh-content-head-again">
   <h1>{{t 'wh.settings.data.backups.title'}}</h1>

@@ -10,6 +10,7 @@ export default Ember.Controller.extend({
   isIndexing: false,
   downloadLink: '',
   downloadFileName: '',
+  apiKey: 'Loading...',
 
   contentTypes: null,
 
