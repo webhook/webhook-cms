@@ -38,6 +38,7 @@
     <thead>
       <tr>
         <th>{{t 'wh.settings.team.current.email'}}</th>
+        <th></th>
         <th>{{t 'wh.settings.team.current.permissions'}}</th>
       </tr>
     </thead>
@@ -45,7 +46,14 @@
 
       {{#each user in filteredContent}}
         <tr>
-          <td>{{ user.email }}</td>
+          <td>
+            {{ user.email }}
+          </td>
+          <td>
+            {{#if user.potential }}
+              {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
+            {{/if}}
+          </td>
           <td>
 
             <div class="wy-dropdown wy-dropdown-bubble">
@@ -73,9 +81,6 @@
                   <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
                 {{/unless}}
               </dl>
-              {{#if user.potential }}
-                {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
-              {{/if}}
             </div>
 
           </td>
