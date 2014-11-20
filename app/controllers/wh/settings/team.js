@@ -10,6 +10,10 @@ export default Ember.ArrayController.extend({
 
   emailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 
+  groupsRef: function () {
+    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name').child('groups');
+  }.property('session.site.name'),
+
   // we only want to show users that are 'owner', 'user', or 'potential'
   // set in the router
   filteredContent: function () {
@@ -224,30 +228,36 @@ export default Ember.ArrayController.extend({
       this.set('inviteEmail', '');
     },
 
+    openGroup: function (group) {
+      group.set('isOpen', true);
+    },
+
+    closeGroup: function (group) {
+      group.set('isOpen', false);
+    },
+
     createGroup: function (groupName) {
       if (typeof groupName !== 'string' || Ember.isEmpty(groupName)) {
         return;
       }
 
       var siteName = this.get('session.site.name');
-      var escapedGroupName = groupName.replace(/\./g, ',1');
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/groups/' + escapedGroupName + '/name').set(groupName, function (error) {
-        if (error) {
-
-        } else {
-
-        }
-      });
+      var escapedGroupName = groupName.replace(/\./g, ',1').replace(/\#/g, ',2').replace(/\$/g, ',3').replace(/\[/g, ',5').replace(/\]/g, ',5');
+      this.get('groupsRef').child(escapedGroupName).child('name').set(groupName);
     },
 
     changePermission: function (group, contentType, permission) {
       var permissions = ['view', 'draft', 'publish', 'delete'];
       var siteName = this.get('session.site.name');
       var currentPermission = group.get('permissions').get(contentType.get('id'));
+
+      // If you select the current permission, bump down one level
       if (permission === currentPermission) {
         permission = permissions[permissions.indexOf(permission) - 1] || null;
       }
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/groups/' + group.get('key') + '/permissions/' + contentType.get('id')).set(permission);
+
+      this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission);
+
     }
   }
 });

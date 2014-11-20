@@ -432,11 +432,17 @@ export default Ember.Route.extend({
     var Group = Ember.Object.extend({
       key: null,
       name: null,
-      permissions: null
+      permissions: null,
+      isOpen: false
     });
     var groups = Ember.A([]);
 
     var addGroup = function (childSnapshot) {
+
+      if (groups.findBy('key', childSnapshot.key())) {
+        return;
+      }
+
       var group = new Group();
       var groupData = childSnapshot.val();
       group.set('name', groupData.name);
@@ -463,6 +469,11 @@ export default Ember.Route.extend({
 
         snapshot.forEach(addGroup);
         snapshot.ref().on('child_added', addGroup);
+        snapshot.ref().on('child_removed', function (snapshot) {
+          var groupKey = snapshot.key();
+          var group = groups.findBy('key', groupKey);
+          groups.removeObject(group);
+        });
 
         resolve();
       }, reject);

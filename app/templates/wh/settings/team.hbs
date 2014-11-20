@@ -91,7 +91,6 @@
 
   {{input action="createGroup"}}
 
-
   <ul class="wh-group">
     <li>
       <span class="wh-group-name">Owners</span>
@@ -101,70 +100,24 @@
       <span class="wh-group-name">Contributors</span>
       <span class="wh-group-info">Full permissions, minus configuration.</span>
     </li>
-    <li>
-      <span class="wh-group-name">A closed group name</span>
-      <span class="wh-group-info">Mixed permissions. <a>Click to edit</a></span>
-    </li>
 
     {{#each group in groups}}
-      <li class="active">
-        <div class="wh-group-edit">
-          <div>{{group.name}} <span>(<a>Edit name</a>)</span></div>
-          <a class="btn btn-small btn-neutral icon icon-ok-sign float-right"> Save / close</a>
-        </div>
-        <ul class="wh-group-labels">
-          <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
-        </ul>
-        {{view 'group-permissions' content=contentTypes group=group}}
+      <li {{ bind-attr class="group.isOpen:active"}}>
+        {{#if group.isOpen}}
+          <div class="wh-group-edit">
+            <div>{{group.name}} <span>(<a>Edit name</a>)</span></div>
+            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> Close</a>
+          </div>
+          <ul class="wh-group-labels">
+            <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
+          </ul>
+          {{view 'group-permissions' content=contentTypes group=group}}
+        {{else}}
+          <span class="wh-group-name">{{group.name}}</span>
+          <span class="wh-group-info">Mixed permissions. <a {{action "openGroup" group}}>Click to edit</a></span>
+        {{/if}}
       </li>
     {{/each}}
-  </ul>
-
-  <ul class="wh-group">
-    <li>
-      <span class="wh-group-name">Owners</span>
-      <span class="wh-group-info">Full permissions</span>
-    </li>
-    <li>
-      <span class="wh-group-name">Editors</span>
-      <span class="wh-group-info">Full permissions, minus configuration.</span>
-    </li>
-    <li class="active">
-      <div class="wh-group-edit">
-        <div>Sports editors <span>(<a>Edit name</a>)</span></div>
-        <a class="btn btn-small btn-neutral icon icon-ok-sign float-right"> Save / close</a>
-      </div>
-      <ul class="wh-group-labels">
-        <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
-      </ul>
-      <ul class="wh-group-perms">
-        <li><span>Articles</span></li><li class="active"></li><li class="active"></li><li class="active"></li><li></li>
-      </ul>
-      <ul class="wh-group-perms">
-        <li><span>Videos</span></li><li></li><li></li><li></li><li></li>
-      </ul>
-      <ul class="wh-group-perms">
-        <li><span>Promos</span></li><li class="active"></li><li class="active"></li><li></li><li></li>
-      </ul>
-
-      <ul class="wh-group-labels">
-        <li></li><li>Can view</li><li>Can edit</li>
-      </ul>
-      <ul class="wh-group-perms">
-        <li><span>Single item form</span></li><li class="active"></li><li class="active"></li>
-      </ul>
-      <ul class="wh-group-perms">
-        <li><span>Another single item</span></li><li></li><li></li>
-      </ul>
-    </li>
-    <li>
-      <span class="wh-group-name">News editors</span>
-      <span class="wh-group-info">Mixed permissions. <a>Click to edit</a></span>
-    </li>
-    <li>
-      <span class="wh-group-name">Random group</span>
-      <span class="wh-group-info">Mixed permissions. <a>Click to edit</a></span>
-    </li>
   </ul>
 
 </section>
