@@ -56,23 +56,6 @@ export default DS.Model.extend({
 
   deleteModel: function () {
 
-    var siteName = this.get('session.site.name');
-    var contentTypeId = this.get('id');
-
-    // remove permissions from groups
-    // this should cascade to users
-    this.get('team.groups').forEach(function (group) {
-      var groupKey = group.get('key');
-      window.ENV.firebaseRoot
-        .child('management/sites')
-        .child(siteName)
-        .child('groups')
-        .child(groupKey)
-        .child('permissions')
-        .child(contentTypeId)
-        .remove();
-    });
-
     if (this.get('oneOff')) {
       return;
     }
@@ -84,6 +67,44 @@ export default DS.Model.extend({
 
     Ember.Logger.log('`%@` model deleted.'.fmt(modelNamespace));
 
+  }.on('didDelete'),
+
+  addPermissions: function () {
+    var siteName = this.get('session.site.name');
+    var contentTypeId = this.get('id');
+
+    // remove permissions from groups
+    // this should cascade to users
+    this.get('team.groups').forEach(function (group) {
+      var groupKey = group.get('key');
+      window.ENV.firebaseRoot
+      .child('management/sites')
+      .child(siteName)
+      .child('groups')
+      .child(groupKey)
+      .child('permissions')
+      .child(contentTypeId)
+      .set('none');
+    });
+  }.on('didCreate'),
+
+  removePermissions: function () {
+    var siteName = this.get('session.site.name');
+    var contentTypeId = this.get('id');
+
+    // remove permissions from groups
+    // this should cascade to users
+    this.get('team.groups').forEach(function (group) {
+      var groupKey = group.get('key');
+      window.ENV.firebaseRoot
+      .child('management/sites')
+      .child(siteName)
+      .child('groups')
+      .child(groupKey)
+      .child('permissions')
+      .child(contentTypeId)
+      .remove();
+    });
   }.on('didDelete'),
 
   indexingTotal: 0,
@@ -112,10 +133,6 @@ export default DS.Model.extend({
     if (percent === 100) {
       return 'complete';
     }
-  }.property('indexingPercent'),
-
-  getGroupPermission: function (group) {
-    return group.get('permissions').get(this.get('id'));
-  }
+  }.property('indexingPercent')
 
 });

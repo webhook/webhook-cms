@@ -270,7 +270,15 @@ export default Ember.ArrayController.extend({
 
       var siteName = this.get('session.site.name');
       var escapedGroupName = groupName.replace(/\./g, ',1').replace(/\#/g, ',2').replace(/\$/g, ',3').replace(/\[/g, ',5').replace(/\]/g, ',5');
-      this.get('groupsRef').child(escapedGroupName).child('name').set(groupName);
+
+      var contentTypePermissions = {};
+      this.get('contentTypes').forEach(function (contentType) {
+        contentTypePermissions[contentType.get('id')] = 'none';
+      });
+      this.get('groupsRef').child(escapedGroupName).set({
+        name: groupName,
+        permissions: contentTypePermissions
+      });
     },
 
     changePermission: function (group, contentType, permission) {
@@ -280,7 +288,7 @@ export default Ember.ArrayController.extend({
 
       // If you select the current permission, bump down one level
       if (permission === currentPermission) {
-        permission = permissions[permissions.indexOf(permission) - 1] || null;
+        permission = permissions[permissions.indexOf(permission) - 1] || 'none';
       }
 
       this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission);
