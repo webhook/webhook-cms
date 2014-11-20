@@ -6,7 +6,7 @@ export default Ember.CollectionView.extend({
     permission: null,
 
     setPermission: function () {
-      this.set('permission', this.get('parentView.group.permissions').get(this.get('content.id')))
+      this.set('permission', this.get('parentView.group.permissions').get(this.get('content.id')));
     },
 
     willInsertElement: function () {
