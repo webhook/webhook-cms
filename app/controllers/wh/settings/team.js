@@ -222,6 +222,32 @@ export default Ember.ArrayController.extend({
       });
 
       this.set('inviteEmail', '');
+    },
+
+    createGroup: function (groupName) {
+      if (typeof groupName !== 'string' || Ember.isEmpty(groupName)) {
+        return;
+      }
+
+      var siteName = this.get('session.site.name');
+      var escapedGroupName = groupName.replace(/\./g, ',1');
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/groups/' + escapedGroupName + '/name').set(groupName, function (error) {
+        if (error) {
+
+        } else {
+
+        }
+      });
+    },
+
+    changePermission: function (group, contentType, permission) {
+      var permissions = ['view', 'draft', 'publish', 'delete'];
+      var siteName = this.get('session.site.name');
+      var currentPermission = group.get('permissions').get(contentType.get('id'));
+      if (permission === currentPermission) {
+        permission = permissions[permissions.indexOf(permission) - 1] || null;
+      }
+      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/groups/' + group.get('key') + '/permissions/' + contentType.get('id')).set(permission);
     }
   }
 });

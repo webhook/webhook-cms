@@ -309,6 +309,7 @@ export default Ember.Route.extend({
     });
 
     return Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck, endTrialCheck]).then(function () {
+      Ember.Logger.log('ApplicationRoute::initializeUser::✓');
       session.set('user', user);
     });
 
@@ -344,6 +345,10 @@ export default Ember.Route.extend({
             session.set('user', null);
             session.set('site.token', null);
             session.set('error', error);
+          }).then(route.getTeam.bind(route), function (error) {
+            session.set('user', null);
+            session.set('site.token', null);
+            session.set('error', error);
           }).then(resolve, function (error) {
             session.set('user', null);
             session.set('site.token', null);
@@ -367,6 +372,108 @@ export default Ember.Route.extend({
       session.set('auth', firebaseAuth);
 
     });
+  },
+
+  // Need team for permissions
+  getTeam: function () {
+
+    Ember.Logger.log('ApplicationRoute::getTeam');
+
+    var siteName = this.get('session.site.name');
+    var siteManagementRef = window.ENV.firebaseRoot.child('management/sites').child(siteName);
+
+    var route = this;
+    var User = Ember.Object.extend({
+      key: null,
+      email: null,
+      owner: false,
+      user: false,
+      potential: false,
+      isUser: function () {
+        return this.get('owner') || this.get('user') || this.get('potential');
+      }.property('owner', 'user', 'potential')
+    });
+    var users = Ember.A([]);
+
+    var addToUsers = function (rawUsers, type) {
+      Ember.$.each(rawUsers, function (key, email) {
+        var user = users.findBy('key', key);
+        if (Ember.isEmpty(user)) {
+          user = new User();
+          user.set('key', key);
+          user.set('email', email);
+          users.pushObject(user);
+        }
+        user.set(type, true);
+      });
+    };
+
+    var addOwners = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('owners').once('value', function (snapshot) {
+        addToUsers(snapshot.val(), 'owner');
+        resolve();
+      }, reject);
+    });
+
+    var addUsers = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('users').once('value', function (snapshot) {
+        addToUsers(snapshot.val(), 'user');
+        resolve();
+      }, reject);
+    });
+
+    var addPotentialUsers = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('potential_users').once('value', function (snapshot) {
+        addToUsers(snapshot.val(), 'potential');
+        resolve();
+      }, reject);
+    });
+
+    var Group = Ember.Object.extend({
+      key: null,
+      name: null,
+      permissions: null
+    });
+    var groups = Ember.A([]);
+
+    var addGroup = function (childSnapshot) {
+      var group = new Group();
+      var groupData = childSnapshot.val();
+      group.set('name', groupData.name);
+      group.set('key', childSnapshot.key());
+      group.set('permissions', Ember.Object.create());
+      groups.pushObject(group);
+
+      // watch for changes
+      childSnapshot.ref().child('permissions').on('child_changed', function (snapshot) {
+        group.get('permissions').set(snapshot.key(), snapshot.val());
+      });
+
+      childSnapshot.ref().child('permissions').on('child_added', function (snapshot) {
+        group.get('permissions').set(snapshot.key(), snapshot.val());
+      });
+
+      childSnapshot.ref().child('permissions').on('child_removed', function (snapshot) {
+        group.get('permissions').set(snapshot.key(), null);
+      });
+    };
+
+    var addGroups = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('groups').once('value', function (snapshot) {
+
+        snapshot.forEach(addGroup);
+        snapshot.ref().on('child_added', addGroup);
+
+        resolve();
+      }, reject);
+    });
+
+    return Ember.RSVP.all([addOwners, addUsers, addPotentialUsers, addGroups]).then(function () {
+      route.set('team.users', users);
+      route.set('team.groups', groups);
+      Ember.Logger.log('ApplicationRoute::getTeam::✓');
+    });
+
   },
 
   beforeModel: function () {

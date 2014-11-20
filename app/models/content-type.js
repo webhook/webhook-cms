@@ -95,6 +95,10 @@ export default DS.Model.extend({
     if (percent === 100) {
       return 'complete';
     }
-  }.property('indexingPercent')
+  }.property('indexingPercent'),
+
+  getGroupPermission: function (group) {
+    return group.get('permissions').get(this.get('id'));
+  }
 
 });

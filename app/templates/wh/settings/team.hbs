@@ -84,9 +84,42 @@
 
 <section class="wh-content-edit">
 
+
   <div class="wy-alert">
     Use groups to restrict access to portions of your CMS. Webhook's two default groups (owners and editors) can not be edited.</p>
   </div>
+
+  {{input action="createGroup"}}
+
+
+  <ul class="wh-group">
+    <li>
+      <span class="wh-group-name">Owners</span>
+      <span class="wh-group-info">Full permissions</span>
+    </li>
+    <li>
+      <span class="wh-group-name">Contributors</span>
+      <span class="wh-group-info">Full permissions, minus configuration.</span>
+    </li>
+    <li>
+      <span class="wh-group-name">A closed group name</span>
+      <span class="wh-group-info">Mixed permissions. <a>Click to edit</a></span>
+    </li>
+
+    {{#each group in groups}}
+      <li class="active">
+        <div class="wh-group-edit">
+          <div>{{group.name}} <span>(<a>Edit name</a>)</span></div>
+          <a class="btn btn-small btn-neutral icon icon-ok-sign float-right"> Save / close</a>
+        </div>
+        <ul class="wh-group-labels">
+          <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
+        </ul>
+        {{view 'group-permissions' content=contentTypes group=group}}
+      </li>
+    {{/each}}
+  </ul>
+
   <ul class="wh-group">
     <li>
       <span class="wh-group-name">Owners</span>
