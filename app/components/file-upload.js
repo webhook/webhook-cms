@@ -139,9 +139,13 @@ export default Ember.Component.extend({
 
   clearValue: function () {
     var value = this.get('control.value');
-    Ember.keys(value).forEach(function (property) {
-      value.set(property, null);
-    });
+    if (typeof value === 'object') {
+      Ember.keys(value).forEach(function (property) {
+        value.set(property, null);
+      });
+    } else {
+      this.set('control.value', {});
+    }
   },
 
   beforeUpload: function (file) {
