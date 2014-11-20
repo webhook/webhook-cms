@@ -374,7 +374,7 @@ export default Ember.Route.extend({
     });
   },
 
-  // Need team for permissions
+  // Need team (users & groups) for permissions
   getTeam: function () {
 
     Ember.Logger.log('ApplicationRoute::getTeam');
@@ -383,6 +383,7 @@ export default Ember.Route.extend({
     var siteManagementRef = window.ENV.firebaseRoot.child('management/sites').child(siteName);
 
     var route = this;
+
     var User = Ember.Object.extend({
       key: null,
       email: null,
@@ -396,7 +397,7 @@ export default Ember.Route.extend({
     var users = Ember.A([]);
 
     var addToUsers = function (rawUsers, type) {
-      Ember.$.each(rawUsers, function (key, email) {
+      Ember.$.each(rawUsers || [], function (key, email) {
         var user = users.findBy('key', key);
         if (Ember.isEmpty(user)) {
           user = new User();
@@ -437,30 +438,46 @@ export default Ember.Route.extend({
     });
     var groups = Ember.A([]);
 
-    var addGroup = function (childSnapshot) {
+    var addGroup = function (groupSnapshot) {
 
-      if (groups.findBy('key', childSnapshot.key())) {
+      if (groups.findBy('key', groupSnapshot.key())) {
         return;
       }
 
       var group = new Group();
-      var groupData = childSnapshot.val();
+      var groupData = groupSnapshot.val();
       group.set('name', groupData.name);
-      group.set('key', childSnapshot.key());
+      group.set('key', groupSnapshot.key());
       group.set('permissions', Ember.Object.create());
+      group.set('users', Ember.Object.create());
       groups.pushObject(group);
 
-      // watch for changes
-      childSnapshot.ref().child('permissions').on('child_changed', function (snapshot) {
+      // watch for permission changes
+      var groupPermissionsRef = groupSnapshot.ref().child('permissions');
+
+      groupPermissionsRef.on('child_changed', function (snapshot) {
         group.get('permissions').set(snapshot.key(), snapshot.val());
       });
 
-      childSnapshot.ref().child('permissions').on('child_added', function (snapshot) {
+      groupPermissionsRef.on('child_added', function (snapshot) {
         group.get('permissions').set(snapshot.key(), snapshot.val());
       });
 
-      childSnapshot.ref().child('permissions').on('child_removed', function (snapshot) {
+      groupPermissionsRef.on('child_removed', function (snapshot) {
         group.get('permissions').set(snapshot.key(), null);
+      });
+
+      // watch for user changes
+      var groupUsersRef = groupSnapshot.ref().child('users');
+
+      groupUsersRef.on('child_added', function (snapshot) {
+        users.findBy('key', snapshot.key()).set('group', group);
+        group.get('users').set(snapshot.key(), snapshot.val());
+      });
+
+      groupUsersRef.on('child_removed', function (snapshot) {
+        users.findBy('key', snapshot.key()).set('group', null);
+        group.get('users').set(snapshot.key(), null);
       });
     };
 
@@ -479,7 +496,7 @@ export default Ember.Route.extend({
       }, reject);
     });
 
-    return Ember.RSVP.all([addOwners, addUsers, addPotentialUsers, addGroups]).then(function () {
+    return Ember.RSVP.all([addOwners, addUsers, addPotentialUsers]).then(addGroups).then(function () {
       route.set('team.users', users);
       route.set('team.groups', groups);
       Ember.Logger.log('ApplicationRoute::getTeam::✓');

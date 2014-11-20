@@ -11,7 +11,11 @@ export default Ember.ArrayController.extend({
   emailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 
   groupsRef: function () {
-    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name').child('groups');
+    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name')).child('groups');
+  }.property('session.site.name'),
+
+  permissionsRef: function () {
+    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name')).child('permissions');
   }.property('session.site.name'),
 
   // we only want to show users that are 'owner', 'user', or 'potential'
@@ -234,6 +238,24 @@ export default Ember.ArrayController.extend({
 
     closeGroup: function (group) {
       group.set('isOpen', false);
+    },
+
+    userToGroup: function (user, group) {
+
+      // window.console.log(user.group.get('key'));
+
+      if (user.group) {
+        this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
+      }
+
+      if (group === 'owner') {
+
+      } else if (group === 'user') {
+
+      } else if (typeof group === 'object') {
+        this.get('groupsRef').child(group.get('key')).child('users').child(user.get('key')).set(true);
+      }
+
     },
 
     createGroup: function (groupName) {

@@ -47,27 +47,34 @@
         <tr>
           <td>{{ user.email }}</td>
           <td>
-            {{#if user.owner }}
-            <div class="wy-dropdown wy-dropdown-bubble">
-              <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.owner'}} <span class="caret"></span</span>
-              <dl class="wy-dropdown-menu">
-                <dd><a href="" {{ action "makeUser" user }}>{{t 'wh.settings.team.current.toContributor'}}</a></dd>
-                <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
-              </dl>
-            </div>
-            {{/if}}
-            {{#if user.user }}
+
+            {{#if user.potential }}
+              {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
+            {{else}}
               <div class="wy-dropdown wy-dropdown-bubble">
-                <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.contributor'}} <span class="caret"></span</span>
+                <span class="btn btn-neutral icon icon-lock">
+                  {{#if user.owner}}
+                    {{t 'wh.settings.team.current.owner'}}
+                  {{else}}
+                    {{#if user.group}}
+                      {{user.group.name}}
+                    {{else}}
+                      {{t 'wh.settings.team.current.contributor'}}
+                    {{/if}}
+                  {{/if}}
+                  <span class="caret"></span>
+                </span>
                 <dl class="wy-dropdown-menu">
-                  <dd><a href="" {{ action "makeOwner" user }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
+                  <dd><a href="" {{ action "userToGroup" user "owner" }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
+                  <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toContributor'}}</a></dd>
+                  {{#each group in groups}}
+                    <dd><a href="" {{ action "userToGroup" user group }}>Change to {{group.name}}</a></dd>
+                  {{/each}}
                   <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
                 </dl>
               </div>
             {{/if}}
-            {{#if user.potential }}
-              {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
-            {{/if}}
+
           </td>
         </tr>
       {{/each}}
