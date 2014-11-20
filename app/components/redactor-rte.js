@@ -74,7 +74,7 @@ export default Ember.Component.extend({
     this.set('cursorElement', this.get('whRedactor').getBlock() || this.get('whRedactor').getCurrent());
 
     // fake a control
-    this.set('fakeImageControl', Ember.Object.create());
+    this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
 
     // show image upload widget
     this.set('showImageModal', true);
