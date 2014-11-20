@@ -252,8 +252,12 @@ export default Ember.ArrayController.extend({
 
     userToGroup: function (user, group) {
 
-      if (user.group) {
+      if (user.get('group')) {
         this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
+      }
+
+      if (user.get('owner') && group !== 'owner' && !window.confirm('Moving an owner to another group will reduce permissions.')) {
+        return;
       }
 
       if (group === 'owner') {
