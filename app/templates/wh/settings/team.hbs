@@ -104,7 +104,7 @@
       <span class="wh-group-info">Full permissions</span>
     </li>
     <li>
-      <span class="wh-group-name">Contributors</span>
+      <span class="wh-group-name">Editors</span>
       <span class="wh-group-info">Full permissions, minus configuration.</span>
     </li>
 
@@ -122,6 +122,7 @@
         {{else}}
           <span class="wh-group-name">{{group.name}}</span>
           <span class="wh-group-info">Mixed permissions. <a {{action "openGroup" group}}>Click to edit</a></span>
+          <span><a {{action "deleteGroup" group}}>Delete</a></span>
         {{/if}}
       </li>
     {{/each}}

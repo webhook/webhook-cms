@@ -140,6 +140,10 @@ export default Ember.ArrayController.extend({
         return;
       }
 
+      if (user.group) {
+        this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
+      }
+
       var controller = this;
 
       var escapedEmail = user.key;
@@ -271,14 +275,23 @@ export default Ember.ArrayController.extend({
       var siteName = this.get('session.site.name');
       var escapedGroupName = groupName.replace(/\./g, ',1').replace(/\#/g, ',2').replace(/\$/g, ',3').replace(/\[/g, ',5').replace(/\]/g, ',5');
 
+      // default permissions are 'none'
       var contentTypePermissions = {};
       this.get('contentTypes').forEach(function (contentType) {
         contentTypePermissions[contentType.get('id')] = 'none';
       });
+
       this.get('groupsRef').child(escapedGroupName).set({
         name: groupName,
         permissions: contentTypePermissions
       });
+    },
+
+    deleteGroup: function (group) {
+      if (!window.confirm('Are you sure you want to remove %@?'.fmt(group.get('name')))) {
+        return;
+      }
+      this.get('groupsRef').child(group.get('key')).remove();
     },
 
     changePermission: function (group, contentType, permission) {
