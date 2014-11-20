@@ -306,7 +306,7 @@ export default Ember.ArrayController.extend({
     },
 
     deleteGroup: function (group) {
-      if (!window.confirm('Are you sure you want to remove %@?'.fmt(group.get('name')))) {
+      if (!window.confirm('Are you sure you want to remove %@? All users in this group will become editors.'.fmt(group.get('name')))) {
         return;
       }
       this.get('groupsRef').child(group.get('key')).remove();
