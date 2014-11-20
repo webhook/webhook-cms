@@ -56,6 +56,23 @@ export default DS.Model.extend({
 
   deleteModel: function () {
 
+    var siteName = this.get('session.site.name');
+    var contentTypeId = this.get('id');
+
+    // remove permissions from groups
+    // this should cascade to users
+    this.get('team.groups').forEach(function (group) {
+      var groupKey = group.get('key');
+      window.ENV.firebaseRoot
+        .child('management/sites')
+        .child(siteName)
+        .child('groups')
+        .child(groupKey)
+        .child('permissions')
+        .child(contentTypeId)
+        .remove();
+    });
+
     if (this.get('oneOff')) {
       return;
     }

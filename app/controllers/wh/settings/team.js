@@ -248,8 +248,6 @@ export default Ember.ArrayController.extend({
 
     userToGroup: function (user, group) {
 
-      // window.console.log(user.group.get('key'));
-
       if (user.group) {
         this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
       }
@@ -259,6 +257,7 @@ export default Ember.ArrayController.extend({
       } else if (group === 'user') {
         this.send('makeUser', user);
       } else if (typeof group === 'object') {
+        this.send('makeUser', user);
         this.get('groupsRef').child(group.get('key')).child('users').child(user.get('key')).set(true);
       }
 

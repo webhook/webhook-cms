@@ -5,12 +5,17 @@ export default Ember.CollectionView.extend({
 
     permission: null,
 
+    setPermission: function () {
+      this.set('permission', this.get('parentView.group.permissions').get(this.get('content.id')))
+    },
+
     willInsertElement: function () {
-      var view = this;
-      this.get('parentView.group').addObserver('permissions.' + this.get('content.id'), function () {
-        view.set('permission', view.get('content').getGroupPermission(view.get('parentView.group')));
-      });
-      view.set('permission', view.get('content').getGroupPermission(view.get('parentView.group')));
+      this.get('parentView.group').addObserver('permissions.' + this.get('content.id'), this.setPermission.bind(this));
+      this.setPermission();
+    },
+
+    willDestroyElement: function () {
+      this.get('parentView.group').removeObserver('permissions.' + this.get('content.id'), this.setPermission.bind(this));
     },
 
     canView: function () {

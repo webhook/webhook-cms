@@ -487,18 +487,31 @@ export default Ember.Route.extend({
       groups.pushObject(group);
 
       // watch for permission changes
+
+      var setPermission = function (contentTypeId, permission) {
+        group.get('permissions').set(contentTypeId, permission);
+
+        siteManagementRef.child('permissions').once('value', function (usersSnapshot) {
+          usersSnapshot.forEach(function (userSnapshot) {
+            if (group.get('users').get(userSnapshot.key())) {
+              userSnapshot.ref().child(contentTypeId).set(permission);
+            }
+          });
+        });
+      };
+
       var groupPermissionsRef = groupSnapshot.ref().child('permissions');
 
       groupPermissionsRef.on('child_changed', function (snapshot) {
-        group.get('permissions').set(snapshot.key(), snapshot.val());
+        setPermission(snapshot.key(), snapshot.val());
       });
 
       groupPermissionsRef.on('child_added', function (snapshot) {
-        group.get('permissions').set(snapshot.key(), snapshot.val());
+        setPermission(snapshot.key(), snapshot.val());
       });
 
       groupPermissionsRef.on('child_removed', function (snapshot) {
-        group.get('permissions').set(snapshot.key(), null);
+        setPermission(snapshot.key(), null);
       });
 
       // watch for user changes
@@ -507,12 +520,20 @@ export default Ember.Route.extend({
       groupUsersRef.on('child_added', function (snapshot) {
         users.findBy('key', snapshot.key()).set('group', group);
         group.get('users').set(snapshot.key(), snapshot.val());
+
+        var permissions = {};
+        Ember.keys(group.get('permissions') || {}).forEach(function (key) {
+          permissions[key] = group.get('permissions').get(key);
+        });
+        siteManagementRef.child('permissions').child(snapshot.key()).set(permissions);
       });
 
       groupUsersRef.on('child_removed', function (snapshot) {
         users.findBy('key', snapshot.key()).set('group', null);
         group.get('users').set(snapshot.key(), null);
+        siteManagementRef.child('permissions').child(snapshot.key()).remove();
       });
+
     };
 
     var addGroups = new Ember.RSVP.Promise(function (resolve, reject) {
