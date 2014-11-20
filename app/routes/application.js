@@ -396,36 +396,70 @@ export default Ember.Route.extend({
     });
     var users = Ember.A([]);
 
-    var addToUsers = function (rawUsers, type) {
-      Ember.$.each(rawUsers || [], function (key, email) {
-        var user = users.findBy('key', key);
-        if (Ember.isEmpty(user)) {
-          user = new User();
-          user.set('key', key);
-          user.set('email', email);
-          users.pushObject(user);
-        }
-        user.set(type, true);
-      });
+    var addToUsers = function (addedUser, type) {
+      var user = users.findBy('key', addedUser.key);
+      if (Ember.isEmpty(user)) {
+        user = new User();
+        user.set('key', addedUser.key);
+        user.set('email', addedUser.email);
+        users.pushObject(user);
+      }
+      user.set(type, true);
     };
 
     var addOwners = new Ember.RSVP.Promise(function (resolve, reject) {
       siteManagementRef.child('owners').once('value', function (snapshot) {
-        addToUsers(snapshot.val(), 'owner');
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'owner');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'owner');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('owner', false);
+        });
+
         resolve();
       }, reject);
     });
 
     var addUsers = new Ember.RSVP.Promise(function (resolve, reject) {
       siteManagementRef.child('users').once('value', function (snapshot) {
-        addToUsers(snapshot.val(), 'user');
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'user');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'user');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('user', false);
+        });
+
         resolve();
       }, reject);
     });
 
     var addPotentialUsers = new Ember.RSVP.Promise(function (resolve, reject) {
       siteManagementRef.child('potential_users').once('value', function (snapshot) {
-        addToUsers(snapshot.val(), 'potential');
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'potential');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'potential');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('potential', false);
+        });
+
         resolve();
       }, reject);
     });

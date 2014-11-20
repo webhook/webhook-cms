@@ -10,19 +10,35 @@ export default Ember.ArrayController.extend({
 
   emailRegex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 
-  groupsRef: function () {
-    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name')).child('groups');
-  }.property('session.site.name'),
-
-  permissionsRef: function () {
-    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name')).child('permissions');
-  }.property('session.site.name'),
-
   // we only want to show users that are 'owner', 'user', or 'potential'
   // set in the router
   filteredContent: function () {
     return this.get('arrangedContent').filterBy('isUser');
   }.property('arrangedContent.@each.isUser'),
+
+  managementRef: function () {
+    return window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name'));
+  }.property(),
+
+  groupsRef: function () {
+    return this.get('managementRef').child('groups');
+  }.property(),
+
+  permissionsRef: function () {
+    return this.get('managementRef').child('permissions');
+  }.property(),
+
+  ownersRef: function () {
+    return this.get('managementRef').child('owners');
+  }.property(),
+
+  usersRef: function () {
+    return this.get('managementRef').child('users');
+  }.property(),
+
+  potentialsRef: function () {
+    return this.get('managementRef').child('potentials');
+  }.property(),
 
   isInvalidEmail: function () {
     return !this.get('emailRegex').test(this.get('inviteEmail'));
@@ -66,29 +82,27 @@ export default Ember.ArrayController.extend({
       var email = user.email;
       var siteName = this.get('session.site.name');
 
-      window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true, function (err) {
-        window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function (err) {
-          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).set(email, function (err) {
+      controller.get('usersRef').child(escapedEmail).set(email, function (err) {
+        if (err) {
+          controller.set('error', err);
+          return;
+        }
+        controller.get('ownersRef').child(escapedEmail).remove(function (err) {
+          if (err) {
+            controller.set('error', err);
+            return;
+          }
 
-            if (err) {
-              controller.set('error', err);
-              return;
-            }
+          // Hey if this was you.. kick you out of this page now
+          if (controller.get('session.user.email') === email) {
+            controller.transitionToRoute('wh');
+          }
 
-            window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).remove(function (err) {
-              if (err) {
-                controller.set('error', err);
-                return;
-              }
-
-              // Hey if this was you.. kick you out of this page now
-              if (controller.get('session.user.email') === email) {
-                controller.transitionToRoute('wh');
-              }
-            });
-
-          });
+          // Update your user list
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(true);
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).remove();
         });
+
       });
     },
 
@@ -101,25 +115,20 @@ export default Ember.ArrayController.extend({
       var email = user.email;
       var siteName = this.get('session.site.name');
 
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(email, function (err) {
-
+      controller.get('ownersRef').child(escapedEmail).set(email, function (err) {
         if (err) {
           controller.set('error', err);
           return;
         }
-
-        window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function (err) {
-
+        controller.get('usersRef').child(escapedEmail).remove(function (err) {
           if (err) {
             controller.set('error', err);
             return;
           }
 
           // Update your user list
-          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function (err) {
-            window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(true, function (err) {
-            });
-          });
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).remove();
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(true);
         });
       });
     },
@@ -137,26 +146,27 @@ export default Ember.ArrayController.extend({
       var email = user.email;
       var siteName = this.get('session.site.name');
 
-      window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).set(null, function (err) {
-        window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).set(null, function (err) {
-          window.ENV.firebaseRoot.child('management/sites/' + siteName + '/users/' + escapedEmail).remove(function (err) {
-            if (err) {
-              controller.set('error', err);
-              return;
-            }
+      controller.get('usersRef').child(escapedEmail).remove(function (err) {
+        if (err) {
+          controller.set('error', err);
+          return;
+        }
 
-            window.ENV.firebaseRoot.child('management/sites/' + siteName + '/owners/' + escapedEmail).set(null, function (err) {
-              if (err) {
-                controller.set('error', err);
-                return;
-              }
+        controller.get('ownersRef').child(escapedEmail).remove(function (err) {
+          if (err) {
+            controller.set('error', err);
+            return;
+          }
 
-              // removed self, log out.
-              if (controller.get('session.user.email') === email) {
-                controller.get('session.auth.auth').logout();
-              }
-            });
-          });
+          // removed self, log out.
+          if (controller.get('session.user.email') === email) {
+            controller.get('session.auth.auth').logout();
+          }
+
+          // Update your user list
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/owners/' + siteName).remove();
+          window.ENV.firebaseRoot.child('management/users/' + escapedEmail + '/sites/users/' + siteName).remove();
+
         });
       });
     },
@@ -165,11 +175,7 @@ export default Ember.ArrayController.extend({
 
       var controller = this;
 
-      var escapedEmail = user.key;
-      var email = user.email;
-      var siteName = this.get('session.site.name');
-
-      window.ENV.firebaseRoot.child('management/sites/' + siteName + '/potential_users/' + escapedEmail).set(null, function (err) {
+      controller.get('potentialsRef').child(user.key).remove(function (err) {
         if (err) {
           controller.set('error', err);
         }
@@ -249,9 +255,9 @@ export default Ember.ArrayController.extend({
       }
 
       if (group === 'owner') {
-
+        this.send('makeOwner', user);
       } else if (group === 'user') {
-
+        this.send('makeUser', user);
       } else if (typeof group === 'object') {
         this.get('groupsRef').child(group.get('key')).child('users').child(user.get('key')).set(true);
       }
