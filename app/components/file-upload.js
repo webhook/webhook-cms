@@ -144,7 +144,7 @@ export default Ember.Component.extend({
         value.set(property, null);
       });
     } else {
-      this.set('control.value', {});
+      this.set('control.value', Ember.Object.create({}));
     }
   },
 
