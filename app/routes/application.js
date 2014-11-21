@@ -474,7 +474,7 @@ export default Ember.Route.extend({
       key: null,
       name: null,
       permissions: Ember.Object.create(),
-      users: Ember.Object.create(),
+      users: Ember.A([]),
       isOpen: false,
       isEditingName: false
     });
@@ -496,14 +496,6 @@ export default Ember.Route.extend({
 
       var setPermission = function (contentTypeId, permission) {
         group.get('permissions').set(contentTypeId, permission);
-
-        siteManagementRef.child('permissions').once('value', function (usersSnapshot) {
-          usersSnapshot.forEach(function (userSnapshot) {
-            if (group.get('users').get(userSnapshot.key())) {
-              userSnapshot.ref().child(contentTypeId).set(permission);
-            }
-          });
-        });
       };
 
       var groupPermissionsRef = groupSnapshot.ref().child('permissions');
@@ -524,18 +516,10 @@ export default Ember.Route.extend({
       var groupUsersRef = groupSnapshot.ref().child('users');
 
       groupUsersRef.on('child_added', function (snapshot) {
-
         var escapedEmail = snapshot.key();
-        var email = snapshot.val();
-        users.findBy('key', escapedEmail).set('group', group);
-        group.get('users').set(escapedEmail, email);
-
-        var permissions = {};
-        Ember.keys(group.get('permissions') || {}).forEach(function (key) {
-          permissions[key] = group.get('permissions').get(key);
-        });
-        siteManagementRef.child('permissions').child(escapedEmail).set(permissions);
-
+        var user = users.findBy('key', escapedEmail);
+        user.set('group', group);
+        group.get('users').addObject(user);
       });
 
       groupUsersRef.on('child_removed', function (snapshot) {

@@ -283,6 +283,16 @@ export default Ember.ArrayController.extend({
         this.get('groupsRef').child(group.get('key')).child('users').child(user.get('key')).set(true);
       }
 
+      if (typeof group === 'object') {
+        var permissions = {};
+        Ember.keys(group.get('permissions') || {}).forEach(function (key) {
+          permissions[key] = group.get('permissions').get(key);
+        });
+        this.get('permissionsRef').child(user.get('key')).set(permissions);
+      } else {
+        this.get('permissionsRef').child(user.get('key')).remove();
+      }
+
     },
 
     createGroup: function (groupName) {
@@ -327,6 +337,11 @@ export default Ember.ArrayController.extend({
       }
 
       this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission);
+
+      var controller = this;
+      group.get('users').forEach(function (user) {
+        controller.get('permissionsRef').child(user.get('key')).child(contentType.get('id')).set(permission);
+      });
 
     }
   }
