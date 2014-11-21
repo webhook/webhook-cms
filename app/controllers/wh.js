@@ -52,6 +52,8 @@ export default Ember.ArrayController.extend({
 
     this.set('session.serverMessages', Ember.A([]));
 
+    this._super.apply(this, arguments);
+
   },
 
   debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
