@@ -133,6 +133,26 @@ export default DS.Model.extend({
     if (percent === 100) {
       return 'complete';
     }
-  }.property('indexingPercent')
+  }.property('indexingPercent'),
+
+  canView: function () {
+    var permissions = this.get('session.user.permissions');
+    if (Ember.isEmpty(permissions)) {
+      return true;
+    }
+    return permissions.get(this.get('id')) !== 'none';
+  }.property('session.user.permissions'),
+
+  canDraft: function () {
+    return ['draft', 'publish', 'delete'].contains(this.get('session.user.permissions').get(this.get('id')));
+  }.property('session.user.permissions'),
+
+  canPublish: function () {
+    return ['publish', 'delete'].contains(this.get('session.user.permissions').get(this.get('id')));
+  }.property('session.user.permissions'),
+
+  canDelete: function () {
+    return this.get('session.user.permissions').get(this.get('id')) === 'delete';
+  }.property('session.user.permissions')
 
 });
