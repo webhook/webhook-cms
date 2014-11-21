@@ -403,6 +403,12 @@ export default Ember.Route.extend({
         user.set('key', addedUser.key);
         user.set('email', addedUser.email);
         users.pushObject(user);
+        if (addedUser.email === route.get('session.user.email')) {
+          // window.alert('hey', addedUser.email);
+          user.addObserver('group.permissions', function () {
+            route.set('session.user.permissions', user.get('group.permissions'));
+          });
+        }
       }
       user.set(type, true);
     };
@@ -467,8 +473,10 @@ export default Ember.Route.extend({
     var Group = Ember.Object.extend({
       key: null,
       name: null,
-      permissions: null,
-      isOpen: false
+      permissions: Ember.Object.create(),
+      users: Ember.Object.create(),
+      isOpen: false,
+      isEditingName: false
     });
     var groups = Ember.A([]);
 
@@ -482,8 +490,6 @@ export default Ember.Route.extend({
       var groupData = groupSnapshot.val();
       group.set('name', groupData.name);
       group.set('key', groupSnapshot.key());
-      group.set('permissions', Ember.Object.create());
-      group.set('users', Ember.Object.create());
       groups.pushObject(group);
 
       // watch for permission changes
@@ -518,20 +524,25 @@ export default Ember.Route.extend({
       var groupUsersRef = groupSnapshot.ref().child('users');
 
       groupUsersRef.on('child_added', function (snapshot) {
-        users.findBy('key', snapshot.key()).set('group', group);
-        group.get('users').set(snapshot.key(), snapshot.val());
+
+        var escapedEmail = snapshot.key();
+        var email = snapshot.val();
+        users.findBy('key', escapedEmail).set('group', group);
+        group.get('users').set(escapedEmail, email);
 
         var permissions = {};
         Ember.keys(group.get('permissions') || {}).forEach(function (key) {
           permissions[key] = group.get('permissions').get(key);
         });
-        siteManagementRef.child('permissions').child(snapshot.key()).set(permissions);
+        siteManagementRef.child('permissions').child(escapedEmail).set(permissions);
+
       });
 
       groupUsersRef.on('child_removed', function (snapshot) {
-        users.findBy('key', snapshot.key()).set('group', null);
-        group.get('users').set(snapshot.key(), null);
-        siteManagementRef.child('permissions').child(snapshot.key()).remove();
+        var escapedEmail = snapshot.key();
+        users.findBy('key', escapedEmail).set('group', null);
+        group.get('users').set(escapedEmail, null);
+        siteManagementRef.child('permissions').child(escapedEmail).remove();
       });
 
     };
