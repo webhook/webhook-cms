@@ -18,7 +18,11 @@
   <div {{bind-attr class="isNameAndSlugValid::wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
     <label>Name</label>
     <div class="wy-control">
-      {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
+      {{#if nameControl.placeholder}}
+        {{input class="big-name" placeholder=nameControl.placeholder value=nameControl.value autofocus="true"}}
+      {{else}}
+        {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
+      {{/if}}
 
       {{#if nameControl.widgetErrors}}
         <ul>
