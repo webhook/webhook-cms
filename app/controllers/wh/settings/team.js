@@ -319,7 +319,11 @@ export default Ember.ArrayController.extend({
 
       // If you select the current permission, bump down one level
       if (permission === currentPermission) {
-        permission = permissions[permissions.indexOf(permission) - 1] || 'none';
+        if (contentType.get('oneOff') && permission === 'publish') {
+          permission = 'view';
+        } else {
+          permission = permissions[permissions.indexOf(permission) - 1] || 'none';
+        }
       }
 
       this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission);
