@@ -144,15 +144,27 @@ export default DS.Model.extend({
   }.property('session.user.permissions'),
 
   canDraft: function () {
-    return ['draft', 'publish', 'delete'].contains(this.get('session.user.permissions').get(this.get('id')));
+    var permissions = this.get('session.user.permissions');
+    if (Ember.isEmpty(permissions)) {
+      return true;
+    }
+    return ['draft', 'publish', 'delete'].contains(permissions.get(this.get('id')));
   }.property('session.user.permissions'),
 
   canPublish: function () {
-    return ['publish', 'delete'].contains(this.get('session.user.permissions').get(this.get('id')));
+    var permissions = this.get('session.user.permissions');
+    if (Ember.isEmpty(permissions)) {
+      return true;
+    }
+    return ['publish', 'delete'].contains(permissions.get(this.get('id')));
   }.property('session.user.permissions'),
 
   canDelete: function () {
-    return this.get('session.user.permissions').get(this.get('id')) === 'delete';
+    var permissions = this.get('session.user.permissions');
+    if (Ember.isEmpty(permissions)) {
+      return true;
+    }
+    return permissions.get(this.get('id')) === 'delete';
   }.property('session.user.permissions'),
 
   // make sure `create_date`, `last_updated`, `publish_date`, `preview_url`, `slug` controls exist
