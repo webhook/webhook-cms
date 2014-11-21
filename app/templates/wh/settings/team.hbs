@@ -123,10 +123,16 @@
             <div>{{group.name}} <span>(<a>Edit name</a>)</span></div>
             <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> Close</a>
           </div>
+
           <ul class="wh-group-labels">
             <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
           </ul>
-          {{view 'group-permissions' content=contentTypes group=group}}
+          {{view 'group-permissions' content=multiContentTypes group=group}}
+
+          <ul class="wh-group-labels">
+            <li></li><li>Can view</li><li>Can edit</li>
+          </ul>
+          {{view 'group-permissions' content=singleContentTypes group=group}}
         {{else}}
           <span class="wh-group-name">{{group.name}}</span>
           <span class="wh-group-info">Mixed permissions. <a {{action "openGroup" group}}>Click to edit</a></span>

@@ -1,7 +1,11 @@
 <ul class="wh-group-perms">
   <li><span>{{view.content.name}}</span></li>
   <li {{bind-attr class="view.canView:active"}} {{action "changePermission" view.parentView.group view.content "view"}}></li>
-  <li {{bind-attr class="view.canDraft:active"}} {{action "changePermission" view.parentView.group view.content "draft"}}></li>
+  {{#unless view.content.oneOff}}
+    <li {{bind-attr class="view.canDraft:active"}} {{action "changePermission" view.parentView.group view.content "draft"}}></li>
+  {{/unless}}
   <li {{bind-attr class="view.canPublish:active"}} {{action "changePermission" view.parentView.group view.content "publish"}}></li>
-  <li {{bind-attr class="view.canDelete:active"}} {{action "changePermission" view.parentView.group view.content "delete"}}></li>
+  {{#unless view.content.oneOff}}
+    <li {{bind-attr class="view.canDelete:active"}} {{action "changePermission" view.parentView.group view.content "delete"}}></li>
+  {{/unless}}
 </ul>

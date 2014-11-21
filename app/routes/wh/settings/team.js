@@ -38,6 +38,8 @@ export default Ember.Route.extend({
   setupController: function (controller) {
     controller.set('groups', this.get('team.groups'));
     controller.set('contentTypes', this.modelFor('wh'));
+    controller.set('multiContentTypes', this.modelFor('wh').rejectBy('oneOff'));
+    controller.set('singleContentTypes', this.modelFor('wh').filterBy('oneOff'));
 
     this._super.apply(this, arguments);
   }
