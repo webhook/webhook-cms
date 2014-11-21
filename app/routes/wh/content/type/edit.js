@@ -273,7 +273,7 @@ export default Ember.Route.extend({
   fixControlType: function (contentType) {
 
     var datetimeDefaults = {
-      controlType: this.store.getById('control-type', 'dateType'),
+      controlType: this.store.getById('control-type', 'datetime'),
       locked     : true,
       showInCms  : true,
       required   : true,
