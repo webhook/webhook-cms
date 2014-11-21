@@ -1,7 +1,8 @@
 import SearchIndex from 'appkit/utils/search-index';
 
-export default Ember.Controller.extend({
+export default Ember.ArrayController.extend({
   sortProperties: ['name'],
+
   searchQuery: '',
   searchLoading: false,
   debouncedQuery: '',

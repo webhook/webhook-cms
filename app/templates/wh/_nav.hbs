@@ -31,9 +31,11 @@
         {{#if model}}
           <hr>
           <header>{{t 'wh.navContent'}}</header>
-          {{#collection 'animate-collection' content=model}}
-            {{#link-to 'wh.content.type' id}}{{name}}{{/link-to}}
-          {{/collection}}
+          <ul>
+            {{#each contentType in arrangedContent}}
+              <li>{{#link-to 'wh.content.type' contentType.id}}{{contentType.name}}{{/link-to}}</li>
+            {{/each}}
+          </ul>
         {{/if}}
 
         {{# if session.isOwner }}

@@ -1,11 +1,32 @@
 export default Ember.Route.extend({
   model: function () {
 
-    // "A record can also enter the empty state if the adapter is unable to locate the record."
-    // We do not want to show those records so filter them out.
-    // Unfortunately our adapter doesn't support queries so we can't do live filtering.
-    // todo: live filtering.
-    return this.store.find('content-type');
+    var permissions = this.get('session.user.permissions');
+
+    if (Ember.isEmpty(permissions) || (typeof permissions === 'object' && !Ember.keys(permissions).length)) {
+      return this.store.find('content-type');
+    } else {
+      var route = this;
+      var promises = [];
+
+      Ember.keys(permissions).forEach(function (contentTypeId) {
+        if (permissions.get(contentTypeId) !== 'none') {
+          promises.push(route.store.find('content-type', contentTypeId));
+        }
+      });
+
+      return Ember.RSVP.allSettled(promises).then(function (promises) {
+        promises = Ember.A(promises);
+        promises.filterBy('state', 'rejected').forEach(function(promise) {
+          var recordId = promise.reason.recordId;
+          if (route.store.hasRecordForId('content-type', recordId)) {
+            var record = route.store.getById('content-type', recordId);
+            route.store.dematerializeRecord(record);
+          }
+        });
+        return Ember.A(promises.filterBy('state', 'fulfilled')).mapBy('value');
+      });
+    }
 
   }
 });
