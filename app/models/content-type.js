@@ -153,6 +153,102 @@ export default DS.Model.extend({
 
   canDelete: function () {
     return this.get('session.user.permissions').get(this.get('id')) === 'delete';
-  }.property('session.user.permissions')
+  }.property('session.user.permissions'),
+
+  // make sure `create_date`, `last_updated`, `publish_date`, `preview_url`, `slug` controls exist
+  verifyControls: function () {
+
+    var controls = this.get('controls');
+    var newControls = Ember.A([]);
+
+    if (!controls.isAny('name', 'create_date')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'create_date',
+        label      : 'Create Date',
+        locked     : true,
+        showInCms  : true,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'last_updated')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'last_updated',
+        label      : 'Last Updated',
+        locked     : true,
+        showInCms  : true,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'publish_date')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'publish_date',
+        label      : 'Publish Date',
+        locked     : true,
+        showInCms  : true,
+        required   : false,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'preview_url')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'preview_url',
+        label      : 'Preview URL',
+        locked     : true,
+        showInCms  : false,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'slug')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'slug',
+        label      : 'Slug',
+        locked     : true,
+        showInCms  : false,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (newControls.get('length')) {
+
+      var contentTypeModel = this.store.modelFor('content-type');
+      var contentTypeAdapter = this.store.adapterFor('content-type');
+      var controlsRef = contentTypeAdapter._getRef(contentTypeModel, this.get('id')).child('controls');
+
+      var controlsCount = controls.get('length');
+      var data = {};
+
+      newControls.forEach(function (control, index) {
+        data[controlsCount + index] = control.serialize();
+        controls.addObject(control);
+      });
+
+      return new Ember.RSVP.Promise(function (resolve, reject) {
+        controlsRef.update(data, function (error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+
+    } else {
+      return Ember.RSVP.resolve();
+    }
+
+  }
 
 });
