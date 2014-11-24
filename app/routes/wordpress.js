@@ -1,15 +1,4 @@
 export default Ember.Route.extend({
-  beforeModel: function (transition) {
-
-    var xml = this.controllerFor('wh.settings.data').get('wordpressXml');
-
-    if (xml) {
-      this.set('xml', xml);
-    } else {
-      this.transitionTo('wh');
-    }
-
-  },
   setupController: function (controller) {
 
     controller.set('wxmlDoneClass', 'pending');
@@ -28,7 +17,7 @@ export default Ember.Route.extend({
 
     controller.set('isComplete', false);
 
-    controller.convertXml(this.get('xml'));
+    controller.convertXml();
 
     return this._super.apply(this, arguments);
   }
