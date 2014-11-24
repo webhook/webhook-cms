@@ -72,7 +72,7 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('session.site.name');
 
-      if(this.get('owners').length === 1) {
+      if (user.owner && this.get('owners.length') === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
         return;
       }
@@ -136,7 +136,7 @@ export default Ember.ObjectController.extend({
       var email = user.email;
       var siteName = this.get('session.site.name');
 
-      if(this.get('owners').length === 1) {
+      if (user.owner && this.get('owners.length') === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
         return;
       }
