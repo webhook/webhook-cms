@@ -513,6 +513,7 @@ export default Ember.Route.extend({
       });
 
       // watch for user changes
+
       var groupUsersRef = groupSnapshot.ref().child('users');
 
       Ember.keys(groupData.users || {}).forEach(function (escapedEmail) {

@@ -67,6 +67,10 @@ export default Ember.ArrayController.extend({
     }.bind(this));
   },
 
+  escapeForFirebase: function (firebaseKey) {
+    return firebaseKey.replace(/\./g, ',1').replace(/\#/g, ',2').replace(/\$/g, ',3').replace(/\[/g, ',5').replace(/\]/g, ',5');
+  },
+
   actions: {
     makeUser: function (user) {
 
@@ -300,8 +304,7 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      var siteName = this.get('session.site.name');
-      var escapedGroupName = groupName.replace(/\./g, ',1').replace(/\#/g, ',2').replace(/\$/g, ',3').replace(/\[/g, ',5').replace(/\]/g, ',5');
+      var escapedGroupName = this.escapeForFirebase(groupName);
 
       // default permissions are 'none'
       var contentTypePermissions = {};
@@ -313,6 +316,31 @@ export default Ember.ArrayController.extend({
         name: groupName,
         permissions: contentTypePermissions
       });
+    },
+
+    // copy old data to new key, remove old data
+    changeGroupName: function (group) {
+
+      var oldKey = group.get('key');
+      var groupsRef = this.get('groupsRef');
+
+      var newName = group.get('name');
+      var newKey = this.escapeForFirebase(newName);
+      var users = this.get('session.team.users');
+
+      groupsRef.child(oldKey).once('value', function (oldsnapshot) {
+        var oldData = oldsnapshot.val();
+        oldData.name = newName;
+
+        oldsnapshot.ref().remove(function () {
+          groupsRef.child(newKey).set(oldData);
+        });
+      });
+
+    },
+
+    toggleGroupNameEdit: function (group) {
+      group.toggleProperty('isEditingName');
     },
 
     deleteGroup: function (group) {

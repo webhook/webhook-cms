@@ -118,7 +118,11 @@
       <li {{ bind-attr class="group.isOpen:active"}}>
         {{#if group.isOpen}}
           <div class="wh-group-edit">
-            <div>{{group.name}} <span>(<a>Edit name</a>)</span></div>
+            {{#if group.isEditingName}}
+              {{input value=group.name}} <button class="btn" type="button" {{action "changeGroupName" group}}>Save</button>
+            {{else}}
+              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>Edit name</a>)</span></div>
+            {{/if}}
             <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> Close</a>
           </div>
 
