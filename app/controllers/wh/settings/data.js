@@ -4,7 +4,7 @@ export default Ember.Controller.extend({
 
   needs: ['application'],
 
-  dataBackup: null,
+  // dataBackup: null,
   dataError: null,
 
   deleteOption: 'data',
@@ -135,6 +135,10 @@ export default Ember.Controller.extend({
     });
 
   },
+
+  dataBackup: function () {
+    return this.get('controllers.application.importData');
+  }.property('controllers.application.importData'),
 
   deleteData: function () {
 
