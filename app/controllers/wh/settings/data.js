@@ -1,7 +1,10 @@
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Controller.extend({
-  dataBackup: null,
+
+  needs: ['application'],
+
+  // dataBackup: null,
   dataError: null,
 
   deleteOption: 'data',
@@ -133,6 +136,10 @@ export default Ember.Controller.extend({
 
   },
 
+  dataBackup: function () {
+    return this.get('controllers.application.importData');
+  }.property('controllers.application.importData'),
+
   deleteData: function () {
 
     var dataController = this;
@@ -163,10 +170,6 @@ export default Ember.Controller.extend({
   wordpressXml: null,
 
   actions: {
-    wordpressFileSelected: function(file) {
-      this.set('wordpressXml', file);
-      this.transitionToRoute('wordpress');
-    },
 
     download: function () {
 
@@ -184,32 +187,6 @@ export default Ember.Controller.extend({
         var blob = new window.Blob([JSON.stringify(dataWhiteList, null, 2)], { type: "text/plain;charset=utf-8" });
         window.saveAs(blob, fileName);
       });
-    },
-
-    upload: function () {
-
-      var dataController = this;
-
-      dataController.set('dataError', null);
-
-      Ember.$('<input type="file">').fileReaderJS({
-        readAsDefault: 'Text',
-        on: {
-          load: function (event, file) {
-            var rawData;
-            try {
-              rawData = JSON.parse(event.target.result);
-            } catch (error) {
-              Ember.Logger.error(error);
-              dataController.set('dataError', error);
-            }
-
-            dataController.setData.call(dataController, rawData);
-
-          }
-        }
-      }).trigger('click');
-
     },
 
     confirm: function () {

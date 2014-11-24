@@ -177,7 +177,7 @@ export default {
     var SearchIndex = this;
     var store = window.App.__container__.lookup('store:main');
 
-    store.find('content-type').then(function (contentTypes) {
+    return store.find('content-type').then(function (contentTypes) {
 
       var contentTypePromises = contentTypes.map(function (contentType) {
         return SearchIndex.indexType(contentType);
