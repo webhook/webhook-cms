@@ -4,26 +4,23 @@
 
   <section>
     <center>
-      <h4>{{t 'start.theme.title'}}</h4>
-      <img src="http://cms.webhook.com/v1/assets/images/wizard.png">
-      {{#link-to 'theme' class="btn btn-neutral icon icon-rocket"}} {{t 'start.theme.action'}}{{/link-to}}
-    </center>
-    <hr>
-    {{t 'start.theme.instruction'}}
-  </section>
-  <section class="wh-start-or">
-    Or
-  </section>
-  <section>
-    <center>
-      <h4>{{t 'start.empty.title'}}</h4>
-      <img src="http://cms.webhook.com/v1/assets/images/dragon.png">
       {{#link-to 'wh.content.all-types' class="btn btn-neutral icon icon-leaf"}} {{t 'start.empty.action'}}{{/link-to}}
     </center>
     <hr>
     {{t 'start.empty.instruction'}}
   </section>
+  <section>
+    <center>
+      {{#link-to 'theme' class="btn btn-neutral icon icon-rocket"}} {{t 'start.theme.action'}}{{/link-to}}
+    </center>
+    <hr>
+    {{t 'start.theme.instruction'}}
+  </section>
+  <section>
+    <center>
+      {{#select-file action='importWordpressFile' accept='application/xml' class="icon icon-wordpress"}} {{t 'start.wordpress.action'}}{{/select-file}}
+    </center>
+    <hr>
+    {{t 'start.wordpress.instruction'}}
+  </section>
 </div>
-
-{{#select-file action='importData' accept='application/json' class="icon icon-upload"}} {{t 'wh.settings.data.importExport.action.import'}}{{/select-file}}
-{{#select-file action='importWordpressFile' accept='application/xml' class="icon icon-wordpress"}} {{t 'wh.settings.data.wordpress.action'}}{{/select-file}}
