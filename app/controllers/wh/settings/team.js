@@ -75,7 +75,7 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      if (this.get('content').filterBy('owner').get('length') === 1) {
+      if (user.get('owner') && this.get('content').filterBy('owner').get('length') === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
         return;
       }
@@ -145,7 +145,7 @@ export default Ember.ArrayController.extend({
 
     removeUser: function (user) {
 
-      if (this.get('content').get('length') === 1) {
+      if (user.get('owner') && this.get('owners.length') === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
         return;
       }
