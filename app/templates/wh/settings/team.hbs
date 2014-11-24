@@ -12,10 +12,8 @@
       <div class="wy-control-group">
         <label>{{t 'wh.settings.team.invite.instruction'}}</label>
         {{input type="email" required="required" value=inviteEmail }}
+        <button class="btn btn-info btn-small icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> {{t 'wh.settings.team.invite.action'}}</button>
         <div class="wy-form-message">{{t 'wh.settings.team.invite.help'}}</div>
-      </div>
-      <div class="wy-btn-group">
-        <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> {{t 'wh.settings.team.invite.action'}}</button>
       </div>
     {{else}}
       <div class="wy-alert wy-alert-danger">
