@@ -228,7 +228,7 @@ export default DS.Model.extend({
         label      : 'Slug',
         locked     : true,
         showInCms  : false,
-        required   : true,
+        required   : false,
         hidden     : true
       }));
     }
@@ -249,7 +249,13 @@ export default DS.Model.extend({
         controls.addObject(control);
 
         controlPromises.push(new Ember.RSVP.Promise(function (resolve, reject) {
-          controlsRef.child(controlsCount + index).set(control.serialize(), resolve);
+          controlsRef.child(controlsCount + index).set(control.serialize(), function (error) {
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
         }));
 
       });
