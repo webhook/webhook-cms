@@ -73,7 +73,7 @@
                 {{/unless}}
                 <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toEditor'}}</a></dd>
                 {{#each group in groups}}
-                  <dd><a href="" {{ action "userToGroup" user group }}>{{t wh.settings.team.current.change}} {{group.name}}</a></dd>
+                  <dd><a href="" {{ action "userToGroup" user group }}>{{t 'wh.settings.team.current.change'}} {{group.name}}</a></dd>
                 {{/each}}
                 {{#unless user.potential}}
                   <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
