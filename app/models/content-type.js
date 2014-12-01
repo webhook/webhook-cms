@@ -228,7 +228,7 @@ export default DS.Model.extend({
         label      : 'Slug',
         locked     : true,
         showInCms  : false,
-        required   : true,
+        required   : false,
         hidden     : true
       }));
     }
