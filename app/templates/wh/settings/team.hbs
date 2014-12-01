@@ -118,14 +118,14 @@
             {{#if group.isEditingName}}
               {{input value=group.name}} <button class="btn" type="button" {{action "changeGroupName" group}}>Save</button>
             {{else}}
-              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>Edit name</a>)</span></div>
+              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t wh.settings.team.groups.groupNameEdit}}</a>)</span></div>
             {{/if}}
-            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> Close</a>
+            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.close}}</a>
             {{#if group.isSaving}}
-              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> Saving</span>
+              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t wh.settings.team.groups.groupSaving}}</span>
             {{else}}
               {{#if group.isSaved}}
-                <span class="btn btn-small btn-link float-right">Saved</span>
+                <span class="btn btn-small btn-link float-right">{{t wh.settings.team.groups.groupSaved}}</span>
               {{/if}}
             {{/if}}
           </div>
@@ -137,17 +137,17 @@
           {{/if}}
 
           <ul class="wh-group-labels">
-            <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>
+            <li></li><li>{{t wh.settings.team.perms.view}}</li><li>{{t wh.settings.team.perms.draft}}</li><li>{{t wh.settings.team.perms.publish}}</li><li>{{t wh.settings.team.perms.delete}}</li>
           </ul>
           {{view 'group-permissions' content=multiContentTypes group=group}}
 
           <ul class="wh-group-labels">
-            <li></li><li>Can view</li><li>Can edit</li>
+            <li></li>{{t wh.settings.team.perms.view}}<li></li><li>{{t wh.settings.team.perms.edit}}</li>
           </ul>
           {{view 'group-permissions' content=singleContentTypes group=group}}
         {{else}}
           <span class="wh-group-name">{{group.name}}</span>
-          <span class="wh-group-info">Mixed permissions. (<a {{action "openGroup" group}}>edit</a>)</span>
+          <span class="wh-group-info">{{t wh.settings.team.perms.mixed}} (<a {{action "openGroup" group}}>{{t wh.settings.team.perms.editPerms}}</a>)</span>
           <span><a {{action "deleteGroup" group}} class="float-right icon icon-remove-sign"></a></span>
         {{/if}}
       </li>
