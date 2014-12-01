@@ -2,6 +2,16 @@
 
 .wh-group
   +clearfix
+  .has-custom-groups
+    border-bottom: solid 2px $table-border-color
+  .icon-remove-sign
+    margin-left: $base-line-height / 2
+    opacity: 0
+    color: $gray-light
+  .icon-remove-sign:hover
+    color: $red
+  > li:hover .icon-remove-sign
+    opacity: 1
   > li
     border-top: solid 1px $table-border-color
     font-size: 80%

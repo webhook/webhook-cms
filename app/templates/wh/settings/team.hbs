@@ -104,11 +104,11 @@
   <ul class="wh-group">
     <li>
       <span class="wh-group-name">Owners</span>
-      <span class="wh-group-info">Full permissions</span>
+      <span class="wh-group-info icon icon-lock"> Full permissions</span>
     </li>
-    <li>
+    <li  {{bind-attr class="groups:has-custom-groups"}}>
       <span class="wh-group-name">Editors</span>
-      <span class="wh-group-info">Full permissions, minus configuration.</span>
+      <span class="wh-group-info icon icon-lock"> Full permissions, minus configuration.</span>
     </li>
 
     {{#each group in groups}}
@@ -135,8 +135,8 @@
           {{view 'group-permissions' content=singleContentTypes group=group}}
         {{else}}
           <span class="wh-group-name">{{group.name}}</span>
-          <span class="wh-group-info">Mixed permissions. <a {{action "openGroup" group}}>Click to edit</a></span>
-          <span><a {{action "deleteGroup" group}}>Delete</a></span>
+          <span class="wh-group-info">Mixed permissions. (<a {{action "openGroup" group}}>edit</a>)</span>
+          <span><a {{action "deleteGroup" group}} class="float-right icon icon-remove-sign"></a></span>
         {{/if}}
       </li>
     {{/each}}
