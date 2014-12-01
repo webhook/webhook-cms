@@ -122,10 +122,10 @@
             {{/if}}
             <a class="btn btn-small btn-neutral icon icon-remove float-right" {{action "closeGroup" group}}> {{t 'wh.settings.team.groups.groupClose'}}</a>
             {{#if group.isSaving}}
-              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t 'wh.settings.team.groups.groupSaving'}}</span>
+              <span class="btn btn-small btn-link float-right">{{t 'wh.settings.team.groups.groupSaving'}}</span>
             {{else}}
               {{#if group.isSaved}}
-                <span class="btn btn-small btn-link float-right">{{t 'wh.settings.team.groups.groupSaved'}}</span>
+                <span class="btn btn-small btn-link float-right wy-text-success">{{t 'wh.settings.team.groups.groupSaved'}}</span>
               {{/if}}
             {{/if}}
           </div>
