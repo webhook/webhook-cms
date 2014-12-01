@@ -62,7 +62,7 @@
                   {{#if user.group}}
                     {{user.group.name}}
                   {{else}}
-                    {{t 'wh.settings.team.current.contributor'}}
+                    {{t 'wh.settings.team.current.editor'}}
                   {{/if}}
                 {{/if}}
                 <span class="caret"></span>
@@ -71,7 +71,7 @@
                 {{#unless user.potential}}
                   <dd><a href="" {{ action "userToGroup" user "owner" }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
                 {{/unless}}
-                <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toContributor'}}</a></dd>
+                <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toEditor'}}</a></dd>
                 {{#each group in groups}}
                   <dd><a href="" {{ action "userToGroup" user group }}>Change to {{group.name}}</a></dd>
                 {{/each}}
@@ -90,25 +90,25 @@
 </section>
 
 <section class="wh-content-head wh-content-head-again">
-  Manage group permissions
-  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign" {{action "createGroup"}}> Add new group</a>
+  {{t wh.settings.team.groups.title}}
+  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign" {{action "createGroup"}}> {{t wh.settings.team.groups.action}}</a>
   <!-- TODO: Remove this tran 'wh.settings.team.invite.title'}} -->
 </section>
 
 <section class="wh-content-edit">
 
   <div class="wy-alert">
-    Use groups to restrict access to portions of your CMS. Webhook's two default groups (owners and editors) can not be edited.</p>
+    {{t wh.settings.team.groups.help}}
   </div>
 
   <ul class="wh-group">
     <li>
-      <span class="wh-group-name">Owners</span>
-      <span class="wh-group-info icon icon-lock"> Full permissions</span>
+      <span class="wh-group-name">{{t wh.settings.team.groups.owners}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t wh.settings.team.groups.ownersPerm}}</span>
     </li>
     <li  {{bind-attr class="groups:has-custom-groups"}}>
-      <span class="wh-group-name">Editors</span>
-      <span class="wh-group-info icon icon-lock"> Full permissions, minus configuration.</span>
+      <span class="wh-group-name">{{t wh.settings.team.groups.editors}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t wh.settings.team.groups.editorsPerm}}</span>
     </li>
 
     {{#each group in groups}}
