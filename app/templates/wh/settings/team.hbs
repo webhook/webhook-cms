@@ -54,7 +54,7 @@
           </td>
           <td class="wy-text-right">
 
-            <div class="wy-dropdown wy-dropdown-bubble">
+            <div class="wy-dropdown wy-dropdown-left wy-dropdown-bubble">
               <span class="btn btn-neutral icon icon-lock">
                 {{#if user.owner}}
                   {{t 'wh.settings.team.current.owner'}}
@@ -73,7 +73,7 @@
                 {{/unless}}
                 <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toEditor'}}</a></dd>
                 {{#each group in groups}}
-                  <dd><a href="" {{ action "userToGroup" user group }}>Change to {{group.name}}</a></dd>
+                  <dd><a href="" {{ action "userToGroup" user group }}>{{t wh.settings.team.current.change}} {{group.name}}</a></dd>
                 {{/each}}
                 {{#unless user.potential}}
                   <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
@@ -116,11 +116,11 @@
         {{#if group.isOpen}}
           <div class="wh-group-edit">
             {{#if group.isEditingName}}
-              {{input value=group.name}} <button class="btn" type="button" {{action "changeGroupName" group}}>Save</button>
+              {{input value=group.name}} <a {{action "changeGroupName" group}} class="icon icon-ok"> {{t wh.settings.team.groups.groupNameSave}}</a>
             {{else}}
               <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t wh.settings.team.groups.groupNameEdit}}</a>)</span></div>
             {{/if}}
-            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.groupClose}}</a>
+            <a class="btn btn-small btn-neutral icon icon-remove float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.groupClose}}</a>
             {{#if group.isSaving}}
               <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t wh.settings.team.groups.groupSaving}}</span>
             {{else}}
