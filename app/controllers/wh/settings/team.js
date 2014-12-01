@@ -342,6 +342,8 @@ export default Ember.ArrayController.extend({
       var newName = group.get('name');
       var newKey = this.escapeForFirebase(newName);
 
+      group.set('error', null);
+
       if (Ember.isEmpty(newName)) {
         group.set('error', 'Group name cannot be empty.');
         return;
@@ -357,6 +359,7 @@ export default Ember.ArrayController.extend({
           oldsnapshot.ref().remove(function () {
             groupsRef.child(newKey).set(oldData);
           });
+
         });
       }
 
@@ -375,10 +378,14 @@ export default Ember.ArrayController.extend({
 
     changePermission: function (group, contentType, permission) {
 
+      group.set('error', null);
+
       if (Ember.isEmpty(group.get('key'))) {
         group.set('error', 'Group name cannot be empty.');
         return;
       }
+
+      group.incrementProperty('saveQueue');
 
       var permissions = ['view', 'draft', 'publish', 'delete'];
       var siteName = this.get('session.site.name');
@@ -393,7 +400,9 @@ export default Ember.ArrayController.extend({
         }
       }
 
-      this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission);
+      this.get('groupsRef').child(group.get('key')).child('permissions').child(contentType.get('id')).set(permission, function () {
+        group.decrementProperty('saveQueue');
+      });
 
       var controller = this;
       group.get('users').forEach(function (user) {
