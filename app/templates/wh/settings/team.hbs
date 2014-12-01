@@ -121,8 +121,20 @@
               <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>Edit name</a>)</span></div>
             {{/if}}
             <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> Close</a>
-            <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> Saving</span>
+            {{#if group.isSaving}}
+              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> Saving</span>
+            {{else}}
+              {{#if group.isSaved}}
+                <span class="btn btn-small btn-link float-right">Saved</span>
+              {{/if}}
+            {{/if}}
           </div>
+
+          {{#if group.error}}
+            <div class="wy-alert wy-alert-danger">
+              <p>{{group.error}}</p>
+            </div>
+          {{/if}}
 
           <ul class="wh-group-labels">
             <li></li><li>Can view</li><li>Can draft</li><li>Can publish</li><li>Can delete</li>

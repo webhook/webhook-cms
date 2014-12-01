@@ -242,20 +242,19 @@ export default DS.Model.extend({
       var controlsCount = controls.get('length');
       var data = {};
 
+      var controlPromises = Ember.A([]);
+
       newControls.forEach(function (control, index) {
-        data[controlsCount + index] = control.serialize();
+
         controls.addObject(control);
+
+        controlPromises.push(new Ember.RSVP.Promise(function (resolve, reject) {
+          controlsRef.child(controlsCount + index).set(control.serialize(), resolve);
+        }));
+
       });
 
-      return new Ember.RSVP.Promise(function (resolve, reject) {
-        controlsRef.update(data, function (error) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      });
+      return Ember.RSVP.Promise.all(controlPromises);
 
     } else {
       return Ember.RSVP.resolve();
