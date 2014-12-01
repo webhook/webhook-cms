@@ -120,7 +120,7 @@
             {{else}}
               <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t wh.settings.team.groups.groupNameEdit}}</a>)</span></div>
             {{/if}}
-            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.close}}</a>
+            <a class="btn btn-small btn-neutral icon icon-ok-sign float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.groupClose}}</a>
             {{#if group.isSaving}}
               <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t wh.settings.team.groups.groupSaving}}</span>
             {{else}}
@@ -142,7 +142,7 @@
           {{view 'group-permissions' content=multiContentTypes group=group}}
 
           <ul class="wh-group-labels">
-            <li></li>{{t wh.settings.team.perms.view}}<li></li><li>{{t wh.settings.team.perms.edit}}</li>
+            <li></li><li>{{t wh.settings.team.perms.view}}</li><li>{{t wh.settings.team.perms.edit}}</li>
           </ul>
           {{view 'group-permissions' content=singleContentTypes group=group}}
         {{else}}
