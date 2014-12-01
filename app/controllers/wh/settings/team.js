@@ -1,3 +1,5 @@
+import Group from 'appkit/models/group';
+
 export default Ember.ArrayController.extend({
 
   sortProperties: ['email'],
@@ -299,12 +301,18 @@ export default Ember.ArrayController.extend({
 
     },
 
-    createGroup: function (groupName) {
-      if (typeof groupName !== 'string' || Ember.isEmpty(groupName)) {
-        return;
-      }
+    createGroup: function () {
 
-      var escapedGroupName = this.escapeForFirebase(groupName);
+      var groupNamePrefix = 'New Group';
+      var groupName = groupNamePrefix;
+      var groupKey = this.escapeForFirebase(groupName);
+      var dupeNameCount = 0;
+
+      while (this.get('groups').isAny('key', groupKey)) {
+        dupeNameCount++;
+        groupName = groupNamePrefix + ' ' + dupeNameCount;
+        groupKey = this.escapeForFirebase(groupName);
+      }
 
       // default permissions are 'none'
       var contentTypePermissions = {};
@@ -312,10 +320,17 @@ export default Ember.ArrayController.extend({
         contentTypePermissions[contentType.get('id')] = 'none';
       });
 
-      this.get('groupsRef').child(escapedGroupName).set({
+      var route = this;
+
+      this.get('groupsRef').child(groupKey).set({
         name: groupName,
         permissions: contentTypePermissions
+      }, function () {
+        var newGroup = route.get('groups').findBy('key', groupKey);
+        newGroup.set('isOpen', true);
+        newGroup.set('isEditingName', true);
       });
+
     },
 
     // copy old data to new key, remove old data
@@ -326,16 +341,24 @@ export default Ember.ArrayController.extend({
 
       var newName = group.get('name');
       var newKey = this.escapeForFirebase(newName);
-      var users = this.get('session.team.users');
 
-      groupsRef.child(oldKey).once('value', function (oldsnapshot) {
-        var oldData = oldsnapshot.val();
-        oldData.name = newName;
+      if (Ember.isEmpty(newName)) {
+        group.set('error', 'Group name cannot be empty.');
+        return;
+      }
 
-        oldsnapshot.ref().remove(function () {
-          groupsRef.child(newKey).set(oldData);
+      if (Ember.isEmpty(oldKey)) {
+        groupsRef.child(newKey);
+      } else {
+        groupsRef.child(oldKey).once('value', function (oldsnapshot) {
+          var oldData = oldsnapshot.val();
+          oldData.name = newName;
+
+          oldsnapshot.ref().remove(function () {
+            groupsRef.child(newKey).set(oldData);
+          });
         });
-      });
+      }
 
     },
 
@@ -351,6 +374,12 @@ export default Ember.ArrayController.extend({
     },
 
     changePermission: function (group, contentType, permission) {
+
+      if (Ember.isEmpty(group.get('key'))) {
+        group.set('error', 'Group name cannot be empty.');
+        return;
+      }
+
       var permissions = ['view', 'draft', 'publish', 'delete'];
       var siteName = this.get('session.site.name');
       var currentPermission = group.get('permissions').get(contentType.get('id'));

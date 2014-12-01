@@ -91,18 +91,15 @@
 
 <section class="wh-content-head wh-content-head-again">
   Manage group permissions
-  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign"> Add new group</a>
+  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign" {{action "createGroup"}}> Add new group</a>
   <!-- TODO: Remove this tran 'wh.settings.team.invite.title'}} -->
 </section>
 
 <section class="wh-content-edit">
 
-
   <div class="wy-alert">
     Use groups to restrict access to portions of your CMS. Webhook's two default groups (owners and editors) can not be edited.</p>
   </div>
-
-  {{input action="createGroup"}}
 
   <ul class="wh-group">
     <li>

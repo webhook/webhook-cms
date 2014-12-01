@@ -1,3 +1,6 @@
+import Group from 'appkit/models/group';
+import User from 'appkit/models/user';
+
 function uniqueId() {
   return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
@@ -384,16 +387,6 @@ export default Ember.Route.extend({
 
     var route = this;
 
-    var User = Ember.Object.extend({
-      key: null,
-      email: null,
-      owner: false,
-      user: false,
-      potential: false,
-      isUser: function () {
-        return this.get('owner') || this.get('user') || this.get('potential');
-      }.property('owner', 'user', 'potential')
-    });
     var users = Ember.A([]);
 
     var addToUsers = function (addedUser, type) {
@@ -464,14 +457,6 @@ export default Ember.Route.extend({
       }, reject);
     });
 
-    var Group = Ember.Object.extend({
-      key: null,
-      name: null,
-      permissions: Ember.Object.create(),
-      users: Ember.A([]),
-      isOpen: false,
-      isEditingName: false
-    });
     var groups = Ember.A([]);
 
     var addGroup = function (groupSnapshot) {
