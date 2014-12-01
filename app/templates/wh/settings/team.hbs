@@ -90,25 +90,25 @@
 </section>
 
 <section class="wh-content-head wh-content-head-again">
-  {{t wh.settings.team.groups.title}}
-  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign" {{action "createGroup"}}> {{t wh.settings.team.groups.action}}</a>
+  {{t 'wh.settings.team.groups.title'}}
+  <a class="btn btn-small btn-preview btn-success icon icon-plus-sign" {{action "createGroup"}}> {{t 'wh.settings.team.groups.action'}}</a>
   <!-- TODO: Remove this tran 'wh.settings.team.invite.title'}} -->
 </section>
 
 <section class="wh-content-edit">
 
   <div class="wy-alert">
-    {{t wh.settings.team.groups.help}}
+    {{t 'wh.settings.team.groups.help'}}
   </div>
 
   <ul class="wh-group">
     <li>
-      <span class="wh-group-name">{{t wh.settings.team.groups.owners}}</span>
-      <span class="wh-group-info icon icon-lock"> {{t wh.settings.team.groups.ownersPerm}}</span>
+      <span class="wh-group-name">{{t 'wh.settings.team.groups.owners'}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t 'wh.settings.team.groups.ownersPerm'}}</span>
     </li>
     <li  {{bind-attr class="groups:has-custom-groups"}}>
-      <span class="wh-group-name">{{t wh.settings.team.groups.editors}}</span>
-      <span class="wh-group-info icon icon-lock"> {{t wh.settings.team.groups.editorsPerm}}</span>
+      <span class="wh-group-name">{{t 'wh.settings.team.groups.editors'}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t 'wh.settings.team.groups.editorsPerm'}}</span>
     </li>
 
     {{#each group in groups}}
@@ -116,16 +116,16 @@
         {{#if group.isOpen}}
           <div class="wh-group-edit">
             {{#if group.isEditingName}}
-              {{input value=group.name}} <a {{action "changeGroupName" group}} class="icon icon-ok"> {{t wh.settings.team.groups.groupNameSave}}</a>
+              {{input value=group.name}} <a {{action "changeGroupName" group}} class="icon icon-ok"> {{t 'wh.settings.team.groups.groupNameSave'}}</a>
             {{else}}
-              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t wh.settings.team.groups.groupNameEdit}}</a>)</span></div>
+              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t 'wh.settings.team.groups.groupNameEdit'}}</a>)</span></div>
             {{/if}}
-            <a class="btn btn-small btn-neutral icon icon-remove float-right" {{action "closeGroup" group}}> {{t wh.settings.team.groups.groupClose}}</a>
+            <a class="btn btn-small btn-neutral icon icon-remove float-right" {{action "closeGroup" group}}> {{t 'wh.settings.team.groups.groupClose'}}</a>
             {{#if group.isSaving}}
-              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t wh.settings.team.groups.groupSaving}}</span>
+              <span class="btn btn-small btn-link float-right"> <span class="wy-spinner"></span> {{t 'wh.settings.team.groups.groupSaving'}}</span>
             {{else}}
               {{#if group.isSaved}}
-                <span class="btn btn-small btn-link float-right">{{t wh.settings.team.groups.groupSaved}}</span>
+                <span class="btn btn-small btn-link float-right">{{t 'wh.settings.team.groups.groupSaved'}}</span>
               {{/if}}
             {{/if}}
           </div>
@@ -137,17 +137,17 @@
           {{/if}}
 
           <ul class="wh-group-labels">
-            <li></li><li>{{t wh.settings.team.perms.view}}</li><li>{{t wh.settings.team.perms.draft}}</li><li>{{t wh.settings.team.perms.publish}}</li><li>{{t wh.settings.team.perms.delete}}</li>
+            <li></li><li>{{t 'wh.settings.team.perms.view'}}</li><li>{{t 'wh.settings.team.perms.draft'}}</li><li>{{t 'wh.settings.team.perms.publish'}}</li><li>{{t 'wh.settings.team.perms.delete'}}</li>
           </ul>
           {{view 'group-permissions' content=multiContentTypes group=group}}
 
           <ul class="wh-group-labels">
-            <li></li><li>{{t wh.settings.team.perms.view}}</li><li>{{t wh.settings.team.perms.edit}}</li>
+            <li></li><li>{{t 'wh.settings.team.perms.view'}}</li><li>{{t 'wh.settings.team.perms.edit'}}</li>
           </ul>
           {{view 'group-permissions' content=singleContentTypes group=group}}
         {{else}}
           <span class="wh-group-name">{{group.name}}</span>
-          <span class="wh-group-info">{{t wh.settings.team.perms.mixed}} (<a {{action "openGroup" group}}>{{t wh.settings.team.perms.editPerms}}</a>)</span>
+          <span class="wh-group-info">{{t 'wh.settings.team.perms.mixed'}} (<a {{action "openGroup" group}}>{{t 'wh.settings.team.perms.editPerms'}}</a>)</span>
           <span><a {{action "deleteGroup" group}} class="float-right icon icon-remove-sign"></a></span>
         {{/if}}
       </li>
