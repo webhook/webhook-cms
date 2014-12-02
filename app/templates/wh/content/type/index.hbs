@@ -40,15 +40,15 @@
       </tr>
     </thead>
     <tbody>
-      {{#each cmsItems itemView='item-row'}}
-        {{#each cmsControls itemView='item-cell'}}
+      {{#each cmsItem in cmsItems itemView='item-row'}}
+        {{#each cmsItem.cmsControls itemView='item-cell'}}
           {{partial controlType.valuePartialPath}}
         {{/each}}
         <td class="wy-table-actions">
           {{#if lockedBy}}
             <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
           {{else}}
-            {{#if contentType.canDelete}}<button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>{{/if}}
+            {{#if contentType.canDelete}}<button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" cmsItem bubbles=false}}></button>{{/if}}
           {{/if}}
         </td>
       {{/each}}
