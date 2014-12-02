@@ -19,6 +19,23 @@ export default Ember.Component.extend({
 
     rte.one({
       'init.webhookRedactor': function (event, redactor) {
+
+        window.console.log(redactor);
+
+        if (self.get('disabled')) {
+          redactor.opts.buttons.forEach(function (button) {
+            redactor.buttonRemove(button);
+          });
+          redactor.opts.plugins.forEach(function (button) {
+            if (button === 'fullscreen') {
+              return;
+            }
+            redactor.buttonRemove(button);
+          });
+          redactor.$editor.removeAttr('contenteditable');
+          return;
+        }
+
         if (self.get('value')) {
           redactor.set(self.get('value'));
         }
@@ -46,6 +63,10 @@ export default Ember.Component.extend({
 
     var whRedactor = rte.webhookRedactor('getObject');
     this.set('whRedactor', whRedactor);
+
+    if (this.get('disabled')) {
+      return;
+    }
 
     whRedactor.buttonAddBefore('video', 'image', 'Image', this.imageButtonCallback.bind(this));
     whRedactor.buttonGet('image').addClass('redactor_btn_image');
