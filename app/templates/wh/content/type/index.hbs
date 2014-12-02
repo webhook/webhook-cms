@@ -48,7 +48,7 @@
           {{#if lockedBy}}
             <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
           {{else}}
-            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>
+            {{#if contentType.canDelete}}<button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>{{/if}}
           {{/if}}
         </td>
       {{/each}}
