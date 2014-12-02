@@ -39,7 +39,7 @@ export default Ember.ArrayController.extend({
   }.property(),
 
   potentialsRef: function () {
-    return this.get('managementRef').child('potentials');
+    return this.get('managementRef').child('potential_users');
   }.property(),
 
   isInvalidEmail: function () {
