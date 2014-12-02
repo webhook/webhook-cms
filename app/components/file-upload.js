@@ -134,7 +134,9 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement: function () {
-    this.$uploadBtn.data('selectFile').$fileinput.remove();
+    if (this.$uploadBtn && this.$uploadBtn.length) {
+      this.$uploadBtn.data('selectFile').$fileinput.remove();
+    }
   },
 
   clearValue: function () {
