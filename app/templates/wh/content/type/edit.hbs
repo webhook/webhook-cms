@@ -19,9 +19,9 @@
     <label>Name</label>
     <div class="wy-control">
       {{#if nameControl.placeholder}}
-        {{input class="big-name" placeholder=nameControl.placeholder value=nameControl.value autofocus="true"}}
+        {{input class="big-name" placeholder=nameControl.placeholder value=nameControl.value autofocus="true" disabled=nameControl.disabled}}
       {{else}}
-        {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
+        {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true" disabled=nameControl.disabled}}
       {{/if}}
 
       {{#if nameControl.widgetErrors}}
@@ -37,7 +37,11 @@
         {{#if isEditingSlug}}
           <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
         {{else}}
-          <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
+          {{#if slugControl.disabled}}
+            <span class="wy-form-message">This page will live at /{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/</span>
+          {{else}}
+            <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
+          {{/if}}
         {{/if}}
 
         {{#if slugControl.widgetErrors}}
@@ -56,7 +60,7 @@
     <fieldset>
       {{#each control in type.controls}}
         {{#unless control.hidden}}
-          {{view 'widget' context=control}}
+          {{view 'widget' context=control contentType=type}}
         {{/unless}}
       {{/each}}
     </fieldset>

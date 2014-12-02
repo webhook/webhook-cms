@@ -73,7 +73,7 @@
                 {{/unless}}
                 <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toEditor'}}</a></dd>
                 {{#each group in groups}}
-                  <dd><a href="" {{ action "userToGroup" user group }}>{{t wh.settings.team.current.change}} {{group.name}}</a></dd>
+                  <dd><a href="" {{ action "userToGroup" user group }}>{{t 'wh.settings.team.current.change'}} {{group.name}}</a></dd>
                 {{/each}}
                 {{#unless user.potential}}
                   <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
@@ -112,7 +112,7 @@
     </li>
 
     {{#each group in groups}}
-      <li {{ bind-attr class="group.isOpen:active"}}>
+      {{#view 'group-panel' group=group}}
         {{#if group.isOpen}}
           <div class="wh-group-edit">
             {{#if group.isEditingName}}
@@ -150,7 +150,7 @@
           <span class="wh-group-info">{{t 'wh.settings.team.perms.mixed'}} (<a {{action "openGroup" group}}>{{t 'wh.settings.team.perms.editPerms'}}</a>)</span>
           <span><a {{action "deleteGroup" group}} class="float-right icon icon-remove-sign"></a></span>
         {{/if}}
-      </li>
+      {{/view}}
     {{/each}}
   </ul>
 

@@ -135,6 +135,15 @@ export default DS.Model.extend({
     }
   }.property('indexingPercent'),
 
+  disableControls: function () {
+    var permissions = this.get('session.user.permissions');
+    if (Ember.isEmpty(permissions) || !['none', 'view'].contains(permissions.get(this.get('id')))) {
+      this.get('controls').setEach('disabled', false);
+    } else {
+      this.get('controls').setEach('disabled', true);
+    }
+  }.observes('session.user.permissions').on('didLoad'),
+
   canView: function () {
     var permissions = this.get('session.user.permissions');
     if (Ember.isEmpty(permissions)) {

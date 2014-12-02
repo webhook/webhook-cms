@@ -1,7 +1,7 @@
 export default Ember.Object.extend({
   key: null,
   name: null,
-  permissions: Ember.Object.create(),
+  permissions: null,
   users: Ember.A([]),
   isOpen: false,
   isEditingName: false,

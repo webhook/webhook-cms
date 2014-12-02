@@ -392,7 +392,7 @@ export default Ember.Route.extend({
     var addToUsers = function (addedUser, type) {
       var user = users.findBy('key', addedUser.key);
       if (Ember.isEmpty(user)) {
-        user = new User();
+        user = User.create();
         user.set('key', addedUser.key);
         user.set('email', addedUser.email);
         users.pushObject(user);
@@ -465,38 +465,38 @@ export default Ember.Route.extend({
         return;
       }
 
-      var group = new Group();
       var groupData = groupSnapshot.val();
-      group.set('name', groupData.name);
-      group.set('key', groupSnapshot.key());
-      groups.addObject(group);
+
+      var group = Group.create({
+        name: groupData.name,
+        key: groupSnapshot.key(),
+        permissions: Ember.Object.create({})
+      });
 
       // watch for permission changes
 
-      var setPermission = function (contentTypeId, permission) {
-        // window.console.log('OG setPermission', group.get('name'), contentTypeId, permission);
+      Ember.$.each(groupData.permissions || {}, function (contentTypeId, permission) {
         group.get('permissions').set(contentTypeId, permission);
-      };
+      });
 
-      Ember.$.each(groupData.permissions || {}, setPermission);
+      groups.addObject(group);
 
       var groupPermissionsRef = groupSnapshot.ref().child('permissions');
 
       groupPermissionsRef.on('child_changed', function (snapshot) {
-        setPermission(snapshot.key(), snapshot.val());
+        group.get('permissions').set(snapshot.key(), snapshot.val());
       });
 
       groupPermissionsRef.on('child_added', function (snapshot) {
         var contentTypeId = snapshot.key();
         var permission = snapshot.val();
-        // window.console.log('OG compare', group.get('name'), contentTypeId, group.get('permissions').get(contentTypeId), permission, group.get('permissions').get(contentTypeId) !== permission);
         if (group.get('permissions').get(contentTypeId) !== permission) {
-          setPermission(contentTypeId, permission);
+          group.get('permissions').set(contentTypeId, permission);
         }
       });
 
       groupPermissionsRef.on('child_removed', function (snapshot) {
-        setPermission(snapshot.key(), null);
+        group.get('permissions').set(snapshot.key(), null);
       });
 
       // watch for user changes
@@ -554,6 +554,7 @@ export default Ember.Route.extend({
       siteManagementRef.child('groups').once('value', function (snapshot) {
 
         snapshot.forEach(addGroup);
+
         snapshot.ref().on('child_added', addGroup);
         snapshot.ref().on('child_removed', function (snapshot) {
           var groupKey = snapshot.key();

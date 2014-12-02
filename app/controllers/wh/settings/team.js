@@ -263,6 +263,7 @@ export default Ember.ArrayController.extend({
     },
 
     openGroup: function (group) {
+      this.get('groups').setEach('isOpen', false);
       group.set('isOpen', true);
     },
 
@@ -342,10 +343,20 @@ export default Ember.ArrayController.extend({
       var newName = group.get('name');
       var newKey = this.escapeForFirebase(newName);
 
+      if (oldKey === newKey) {
+        group.set('isEditingName', false);
+        return;
+      }
+
       group.set('error', null);
 
       if (Ember.isEmpty(newName)) {
         group.set('error', 'Group name cannot be empty.');
+        return;
+      }
+
+      if (this.get('groups').isAny('key', newKey)) {
+        group.set('error', 'There is already a group with that name.');
         return;
       }
 
