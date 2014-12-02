@@ -20,8 +20,6 @@ export default Ember.Component.extend({
     rte.one({
       'init.webhookRedactor': function (event, redactor) {
 
-        window.console.log(redactor);
-
         if (self.get('disabled')) {
           redactor.opts.buttons.forEach(function (button) {
             redactor.buttonRemove(button);
