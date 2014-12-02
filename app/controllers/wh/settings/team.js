@@ -355,6 +355,11 @@ export default Ember.ArrayController.extend({
         return;
       }
 
+      if (this.get('groups').isAny('key', newKey)) {
+        group.set('error', 'There is already a group with that name.');
+        return;
+      }
+
       if (Ember.isEmpty(oldKey)) {
         groupsRef.child(newKey);
       } else {
