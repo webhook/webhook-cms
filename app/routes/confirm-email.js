@@ -32,7 +32,7 @@ export default Ember.Route.extend({
 
           setTimeout(function() {
             this.transitionTo('login');
-          }, 1000);
+          }.bind(this), 1000);
         } else {
           root.set({ verification_key_match: key, verified: true }, function(err) {
             if(err) {
@@ -51,7 +51,7 @@ export default Ember.Route.extend({
 
               setTimeout(function() {
                 this.transitionTo('login');
-              }, 1000);
+              }.bind(this), 1000);
             }
           }.bind(this));
         }
