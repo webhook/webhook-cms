@@ -52,10 +52,6 @@ export default Ember.Route.extend({
             contentType.get('controls').setEach('disabled', false);
           }
 
-          // if (item.get('itemData.publish_date')) {
-          //
-          // }
-
         }, function (message) {
 
           // item does not exist
