@@ -3,7 +3,11 @@ export default Ember.CollectionView.extend({
   classNames: ["wy-form-gallery"],
 
   didInsertElement : function () {
-    this.makeSortable();
+    if (!this.get('disabled')) {
+      this.makeSortable();
+    } else {
+      this.get('content').setEach('disabled', true);
+    }
   },
 
   makeSortable: function () {

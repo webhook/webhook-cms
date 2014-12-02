@@ -27,12 +27,12 @@
 {{#if items}}
   <p class="wy-form-gallery-instructions icon icon-circle-blank"> {{t 'form.control.gallery.instruction'}}</p>
 
-  {{#collection 'gallery' content=items images=control.value}}
+  {{#collection 'gallery' content=items images=control.value disabled=control.disabled}}
     {{#if editing}}
       <div class="wy-form-gallery-edit">
         <div class="wy-form-gallery-edit-img">{{resize-image image size="200"}}</div>
-        {{textarea value=image.caption placeholder="caption" disabled=control.disabled}}
-        {{#unless control.disabled}}<button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> {{t 'form.control.gallery.delete'}}</button>{{/unless}}
+        {{textarea value=image.caption placeholder="caption" disabled=disabled}}
+        {{#unless disabled}}<button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> {{t 'form.control.gallery.delete'}}</button>{{/unless}}
         <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> {{t 'form.control.gallery.close'}}</button>
         <span class="triangle"></span>
       </div>
