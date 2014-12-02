@@ -6,7 +6,8 @@ export default Ember.View.extend({
     "name",
     "type",
     "value",
-    "checked:checked:"
+    "checked:checked:",
+    "disabled:disabled"
   ],
 
   // we can't use .val() because it returns "on" when value isn't set.

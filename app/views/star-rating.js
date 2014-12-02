@@ -46,6 +46,12 @@ export default Ember.View.extend({
 
     rating.get('stars').appendTo(rating.$());
 
+    rating.set('value', rating.getWithDefault('control.value', rating.get('options.min')));
+
+    if (this.get('control.disabled')) {
+      return;
+    }
+
     rating.$().on('mousemove', function (event) {
       var number = event.offsetX / rating.$().width() * rating.get('options.max');
       var inverseStep = 1 / rating.get('options.step');
@@ -61,8 +67,6 @@ export default Ember.View.extend({
     rating.$().on('click', function () {
       rating.set('control.value', rating.get('value'));
     });
-
-    rating.set('value', rating.getWithDefault('control.value', rating.get('options.min')));
 
   },
 

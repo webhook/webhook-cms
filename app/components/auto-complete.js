@@ -5,8 +5,13 @@ export default Ember.Component.extend({
   results: Ember.A([]),
 
   showAutocomplete: function () {
-    return !this.get('control.meta.isSingle') || (!this.get('control.value.length') && this.get('control.meta.isSingle'));
-  }.property('control.value.@each', 'control.meta.isSingle'),
+
+    if (this.get('control.disabled')) {
+      return false;
+    }
+
+    return  !this.get('control.meta.isSingle') || (!this.get('control.value.length') && this.get('control.meta.isSingle'));
+  }.property('control.value.@each', 'control.meta.isSingle', 'control.disabled'),
 
   currentSelection: Ember.arrayComputed('control.value', {
     addedItem: function (array, valueItem, changeMeta) {
@@ -70,6 +75,10 @@ export default Ember.Component.extend({
 
   didInsertElement: function () {
 
+    if (this.get('control.disabled')) {
+      return;
+    }
+
     var component = this;
     var originalIndex;
 
@@ -93,6 +102,7 @@ export default Ember.Component.extend({
         array.insertAt(newIndex, relation);
       }
     });
+
   },
 
   actions: {

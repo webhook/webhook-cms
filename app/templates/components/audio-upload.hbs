@@ -2,28 +2,30 @@
 
   {{#if control.value.url}}
     <a {{ bind-attr href=control.value.url }} target="_blank" class="wy-file-location icon icon-paper-clip"> {{ control.value.url }}</a>
-    <span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}></span>
+    {{#unless control.disabled}}<span class="wy-file-remove icon icon-remove-sign" {{action "clear"}}></span>{{/unless}}
     {{audio-player src=control.value.url load="audioLoaded"}}
   {{/if}}
 
-  <div {{ bind-attr class=":wy-form-upload-container showUploadButton:on" }}>
-    <div class="wy-form-upload">
-      <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-music"> {{t 'form.control.audio.action'}}</button>
-        <div class="image-loading btn btn-info">
-          <div class="wy-spinner"></div>
-          <span></span>
+  {{#unless control.disabled}}
+    <div {{ bind-attr class=":wy-form-upload-container showUploadButton:on" }}>
+      <div class="wy-form-upload">
+        <div class="wy-form-upload-content">
+          <button type="button" class="btn btn-neutral icon icon-music"> {{t 'form.control.audio.action'}}</button>
+          <div class="image-loading btn btn-info">
+            <div class="wy-spinner"></div>
+            <span></span>
+          </div>
         </div>
       </div>
+
+      <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
-  </div>
-
-  <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix showUrlInput:on" }}>
-    <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
-    <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
-    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
-  </div>
+    <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix showUrlInput:on" }}>
+      <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
+      <button type="button" class="btn btn-neutral btn-small upload-url">Upload</button>
+      <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
+    </div>
+  {{/unless}}
 
 </div>
