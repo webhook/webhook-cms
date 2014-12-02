@@ -263,6 +263,7 @@ export default Ember.ArrayController.extend({
     },
 
     openGroup: function (group) {
+      this.get('groups').setEach('isOpen', false);
       group.set('isOpen', true);
     },
 
@@ -341,6 +342,11 @@ export default Ember.ArrayController.extend({
 
       var newName = group.get('name');
       var newKey = this.escapeForFirebase(newName);
+
+      if (oldKey === newKey) {
+        group.set('isEditingName', false);
+        return;
+      }
 
       group.set('error', null);
 
