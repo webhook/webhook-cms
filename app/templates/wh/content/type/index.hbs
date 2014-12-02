@@ -1,5 +1,5 @@
 <section class="wh-content-head">
-  {{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.addNewItem' nameBinding="contentType.name"}}{{/link-to}}
+  {{#if contentType.canDraft}}{{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.addNewItem' nameBinding="contentType.name"}}{{/link-to}}{{/if}}
   <h1>{{contentType.name}}</h1>
 </section>
 <section class="wh-content-subhead">
