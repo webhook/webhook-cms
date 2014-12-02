@@ -82,17 +82,20 @@
 
       {{#if type.canDraft}}
 
+
         <div class="wy-btn-group">
-          <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
-            <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
-            <dl class="wy-dropdown-menu">
-              <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
-              {{#if type.canPublish}}
+          {{#if type.canPublish}}
+            <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
+              <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
+              <dl class="wy-dropdown-menu">
+                <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
                 <dd><a {{action "publishNow"}}>Publish now</a></dd>
                 <dd><a {{action "changePublishDate"}}>Publish at a specific time</a></dd>
-              {{/if}}
-            </dl>
-          </div>
+              </dl>
+            </div>
+          {{else}}
+            <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "saveDraft"}}> Save</button>
+          {{/if}}
         </div>
 
       {{/if}}
