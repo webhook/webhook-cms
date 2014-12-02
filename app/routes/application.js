@@ -416,7 +416,10 @@ export default Ember.Route.extend({
         });
 
         resolve();
-      }, reject);
+      }, function (error) {
+        Ember.logger.warn(error);
+        resolve();
+      });
     });
 
     var addUsers = new Ember.RSVP.Promise(function (resolve, reject) {
@@ -435,7 +438,10 @@ export default Ember.Route.extend({
         });
 
         resolve();
-      }, reject);
+      }, function (error) {
+        Ember.logger.warn(error);
+        resolve();
+      });
     });
 
     var addPotentialUsers = new Ember.RSVP.Promise(function (resolve, reject) {
@@ -454,7 +460,10 @@ export default Ember.Route.extend({
         });
 
         resolve();
-      }, reject);
+      }, function (error) {
+        Ember.logger.warn(error);
+        resolve();
+      });
     });
 
     var groups = Ember.A([]);
@@ -563,7 +572,10 @@ export default Ember.Route.extend({
         });
 
         resolve();
-      }, reject);
+      }, function (error) {
+        Ember.logger.warn(error);
+        resolve();
+      });
     });
 
     return Ember.RSVP.all([addOwners, addUsers, addPotentialUsers]).then(addGroups).then(function () {
