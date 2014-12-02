@@ -46,6 +46,16 @@ export default Ember.Route.extend({
           // item found
           EditRoute.set('itemModel', item);
 
+          if (item.get('itemData.publish_date') && !contentType.get('canPublish')) {
+            contentType.get('controls').setEach('disabled', true);
+          } else if (Ember.isEmpty(item.get('itemData.publish_date')) && contentType.get('canDraft')) {
+            contentType.get('controls').setEach('disabled', false);
+          }
+
+          // if (item.get('itemData.publish_date')) {
+          //
+          // }
+
         }, function (message) {
 
           // item does not exist
