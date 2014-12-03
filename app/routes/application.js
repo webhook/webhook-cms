@@ -417,7 +417,7 @@ export default Ember.Route.extend({
 
         resolve();
       }, function (error) {
-        Ember.logger.warn(error);
+        Ember.Logger.warn(error);
         resolve();
       });
     });
@@ -439,7 +439,7 @@ export default Ember.Route.extend({
 
         resolve();
       }, function (error) {
-        Ember.logger.warn(error);
+        Ember.Logger.warn(error);
         resolve();
       });
     });
@@ -461,7 +461,7 @@ export default Ember.Route.extend({
 
         resolve();
       }, function (error) {
-        Ember.logger.warn(error);
+        Ember.Logger.warn(error);
         resolve();
       });
     });
@@ -573,7 +573,7 @@ export default Ember.Route.extend({
 
         resolve();
       }, function (error) {
-        Ember.logger.warn(error);
+        Ember.Logger.warn(error);
         resolve();
       });
     });
