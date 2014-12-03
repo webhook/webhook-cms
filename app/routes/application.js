@@ -574,6 +574,7 @@ export default Ember.Route.extend({
         resolve();
       }, function (error) {
         Ember.Logger.warn(error);
+        route.set('team.isGroupsDisabled', true);
         resolve();
       });
     });

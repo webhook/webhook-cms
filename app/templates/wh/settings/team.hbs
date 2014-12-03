@@ -89,6 +89,7 @@
   </table>
 </section>
 
+{{#unless team.isGroupsDisabled}}
 <section class="wh-content-head wh-content-head-again">
   <a class="btn btn-small btn-preview btn-info icon icon-plus-sign" {{action "createGroup"}}> {{t 'wh.settings.team.groups.action'}}</a>
   {{t 'wh.settings.team.groups.title'}}
@@ -160,3 +161,4 @@
   </ul>
 
 </section>
+{{/unless}}

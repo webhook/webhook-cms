@@ -76,14 +76,13 @@ export default Ember.ArrayController.extend({
   actions: {
     makeUser: function (user) {
 
-      // unverified users are stuck
-      if (user.get('potential')) {
-        return;
-      }
-
       if (user.get('owner') && this.get('content').filterBy('owner').get('length') === 1) {
         this.set('error', { code: 'Need owner', message: 'Can\'t remove owner, need at least one owner.'});
         return;
+      }
+
+      if (user.get('group')) {
+        this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
       }
 
       var controller = this;
@@ -122,6 +121,10 @@ export default Ember.ArrayController.extend({
       // unverified users are stuck
       if (user.get('potential')) {
         return;
+      }
+
+      if (user.get('group')) {
+        this.get('groupsRef').child(user.group.get('key')).child('users').child(user.get('key')).remove();
       }
 
       var controller = this;
