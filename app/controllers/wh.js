@@ -1,7 +1,8 @@
 import SearchIndex from 'appkit/utils/search-index';
 
-export default Ember.Controller.extend({
+export default Ember.ArrayController.extend({
   sortProperties: ['name'],
+
   searchQuery: '',
   searchLoading: false,
   debouncedQuery: '',
@@ -51,7 +52,13 @@ export default Ember.Controller.extend({
 
     this.set('session.serverMessages', Ember.A([]));
 
+    this._super.apply(this, arguments);
+
   },
+
+  filteredContent: function () {
+    return this.get('arrangedContent').filterBy('canView');
+  }.property('arrangedContent.@each.canView'),
 
   debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
 

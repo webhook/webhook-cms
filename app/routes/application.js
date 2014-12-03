@@ -1,3 +1,6 @@
+import Group from 'appkit/models/group';
+import User from 'appkit/models/user';
+
 function uniqueId() {
   return Date.now() + 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
@@ -309,6 +312,7 @@ export default Ember.Route.extend({
     });
 
     return Ember.RSVP.Promise.all([ownerCheck, activeCheck, statusCheck, endTrialCheck]).then(function () {
+      Ember.Logger.log('ApplicationRoute::initializeUser::✓');
       session.set('user', user);
     });
 
@@ -344,6 +348,10 @@ export default Ember.Route.extend({
             session.set('user', null);
             session.set('site.token', null);
             session.set('error', error);
+          }).then(route.getTeam.bind(route), function (error) {
+            session.set('user', null);
+            session.set('site.token', null);
+            session.set('error', error);
           }).then(resolve, function (error) {
             session.set('user', null);
             session.set('site.token', null);
@@ -367,6 +375,216 @@ export default Ember.Route.extend({
       session.set('auth', firebaseAuth);
 
     });
+  },
+
+  // Need team (users & groups) for permissions
+  getTeam: function () {
+
+    Ember.Logger.log('ApplicationRoute::getTeam');
+
+    var siteName = this.get('session.site.name');
+    var siteManagementRef = window.ENV.firebaseRoot.child('management/sites').child(siteName);
+
+    var route = this;
+
+    var users = Ember.A([]);
+
+    var addToUsers = function (addedUser, type) {
+      var user = users.findBy('key', addedUser.key);
+      if (Ember.isEmpty(user)) {
+        user = User.create();
+        user.set('key', addedUser.key);
+        user.set('email', addedUser.email);
+        users.pushObject(user);
+      }
+      user.set(type, true);
+    };
+
+    var addOwners = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('owners').once('value', function (snapshot) {
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'owner');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'owner');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('owner', false);
+        });
+
+        resolve();
+      }, function (error) {
+        Ember.Logger.warn(error);
+        resolve();
+      });
+    });
+
+    var addUsers = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('users').once('value', function (snapshot) {
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'user');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'user');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('user', false);
+        });
+
+        resolve();
+      }, function (error) {
+        Ember.Logger.warn(error);
+        resolve();
+      });
+    });
+
+    var addPotentialUsers = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('potential_users').once('value', function (snapshot) {
+
+        snapshot.forEach(function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'potential');
+        });
+
+        snapshot.ref().on('child_added', function (snapshot) {
+          addToUsers({ key: snapshot.key(), email: snapshot.val() }, 'potential');
+        });
+
+        snapshot.ref().on('child_removed', function (snapshot) {
+          users.findBy('key', snapshot.key()).set('potential', false);
+        });
+
+        resolve();
+      }, function (error) {
+        Ember.Logger.warn(error);
+        resolve();
+      });
+    });
+
+    var groups = Ember.A([]);
+
+    var addGroup = function (groupSnapshot) {
+
+      if (groups.findBy('key', groupSnapshot.key())) {
+        return;
+      }
+
+      var groupData = groupSnapshot.val();
+
+      var group = Group.create({
+        name: groupData.name,
+        key: groupSnapshot.key(),
+        permissions: Ember.Object.create({})
+      });
+
+      // watch for permission changes
+
+      Ember.$.each(groupData.permissions || {}, function (contentTypeId, permission) {
+        group.get('permissions').set(contentTypeId, permission);
+      });
+
+      groups.addObject(group);
+
+      var groupPermissionsRef = groupSnapshot.ref().child('permissions');
+
+      groupPermissionsRef.on('child_changed', function (snapshot) {
+        group.get('permissions').set(snapshot.key(), snapshot.val());
+      });
+
+      groupPermissionsRef.on('child_added', function (snapshot) {
+        var contentTypeId = snapshot.key();
+        var permission = snapshot.val();
+        if (group.get('permissions').get(contentTypeId) !== permission) {
+          group.get('permissions').set(contentTypeId, permission);
+        }
+      });
+
+      groupPermissionsRef.on('child_removed', function (snapshot) {
+        group.get('permissions').set(snapshot.key(), null);
+      });
+
+      // watch for user changes
+
+      var groupUsersRef = groupSnapshot.ref().child('users');
+
+      Ember.keys(groupData.users || {}).forEach(function (escapedEmail) {
+        var user = users.findBy('key', escapedEmail);
+        user.set('group', group);
+        group.get('users').addObject(user);
+
+        if (route.get('session.user.email') === user.get('email')) {
+          route.set('session.user.permissions', group.get('permissions'));
+        }
+      });
+
+      groupUsersRef.on('child_added', function (snapshot) {
+        var escapedEmail = snapshot.key();
+
+        if (group.get('users').findBy('key', escapedEmail)) {
+          return;
+        }
+
+        var user = users.findBy('key', escapedEmail);
+        user.set('group', group);
+        group.get('users').addObject(user);
+
+        if (route.get('session.user.email') === user.get('email')) {
+          route.set('session.user.permissions', group.get('permissions'));
+        }
+
+      });
+
+      groupUsersRef.on('child_removed', function (snapshot) {
+        var escapedEmail = snapshot.key();
+
+        if (!group.get('users').findBy('key', escapedEmail)) {
+          return;
+        }
+
+        var user = users.findBy('key', escapedEmail);
+        user.set('group', null);
+        group.get('users').removeObject(user);
+        siteManagementRef.child('permissions').child(escapedEmail).remove();
+
+        if (route.get('session.user.email') === user.get('email')) {
+          route.set('session.user.permissions', null);
+        }
+
+      });
+
+    };
+
+    var addGroups = new Ember.RSVP.Promise(function (resolve, reject) {
+      siteManagementRef.child('groups').once('value', function (snapshot) {
+
+        snapshot.forEach(addGroup);
+
+        snapshot.ref().on('child_added', addGroup);
+        snapshot.ref().on('child_removed', function (snapshot) {
+          var groupKey = snapshot.key();
+          var group = groups.findBy('key', groupKey);
+          groups.removeObject(group);
+        });
+
+        resolve();
+      }, function (error) {
+        Ember.Logger.warn(error);
+        route.set('team.isGroupsDisabled', true);
+        resolve();
+      });
+    });
+
+    return Ember.RSVP.all([addOwners, addUsers, addPotentialUsers]).then(addGroups).then(function () {
+      route.set('team.users', users);
+      route.set('team.groups', groups);
+      Ember.Logger.log('ApplicationRoute::getTeam::✓');
+    });
+
   },
 
   beforeModel: function () {
@@ -530,6 +748,36 @@ export default Ember.Route.extend({
 
     gruntCommand: function (command, callback) {
       this.gruntCommand.apply(this, arguments);
+    },
+
+    importWordpressFile: function (file) {
+      if (!Ember.isEmpty(file)) {
+        this.set('controller.wordpressXML', file);
+        this.transitionTo('wordpress');
+      }
+    },
+
+    importData: function (file) {
+
+      var route = this;
+      route.set('importDataError', null);
+
+      var reader = new window.FileReader();
+
+      reader.onload = function (e) {
+        var rawData;
+        try {
+          rawData = JSON.parse(reader.result);
+        } catch (error) {
+          Ember.Logger.error(error);
+          route.set('importDataError', error);
+        }
+        route.set('controller.importData', rawData);
+        route.transitionTo('wh.settings.data');
+      };
+
+      reader.readAsText(file);
+
     }
   }
 });

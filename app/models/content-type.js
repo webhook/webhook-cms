@@ -95,6 +95,187 @@ export default DS.Model.extend({
     if (percent === 100) {
       return 'complete';
     }
-  }.property('indexingPercent')
+  }.property('indexingPercent'),
+
+
+  // Permissions
+
+  addPermissions: function () {
+    var siteName = this.get('session.site.name');
+    var contentTypeId = this.get('id');
+
+    // remove permissions from groups
+    // this should cascade to users
+    this.get('team.groups').forEach(function (group) {
+      var groupKey = group.get('key');
+      window.ENV.firebaseRoot
+      .child('management/sites')
+      .child(siteName)
+      .child('groups')
+      .child(groupKey)
+      .child('permissions')
+      .child(contentTypeId)
+      .set('none');
+    });
+  }.on('didCreate'),
+
+  removePermissions: function () {
+    var siteName = this.get('session.site.name');
+    var contentTypeId = this.get('id');
+
+    // remove permissions from groups
+    // this should cascade to users
+    this.get('team.groups').forEach(function (group) {
+      var groupKey = group.get('key');
+      window.ENV.firebaseRoot
+      .child('management/sites')
+      .child(siteName)
+      .child('groups')
+      .child(groupKey)
+      .child('permissions')
+      .child(contentTypeId)
+      .remove();
+    });
+  }.on('didDelete'),
+
+  disableControls: function () {
+    if (this.get('canDraft')) {
+      this.get('controls').setEach('disabled', false);
+    } else {
+      this.get('controls').setEach('disabled', true);
+    }
+  }.observes('canDraft').on('didLoad'),
+
+  permission: null,
+
+  canView: function () {
+    var permission = this.get('permission');
+    return !permission || permission !== 'none';
+  }.property('permission'),
+
+  canDraft: function () {
+    var permission = this.get('permission');
+    return !permission || ['draft', 'publish', 'delete'].contains(permission);
+  }.property('permission'),
+
+  canPublish: function () {
+    var permission = this.get('permission');
+    return !permission || ['publish', 'delete'].contains(permission);
+  }.property('permission'),
+
+  canDelete: function () {
+    var permission = this.get('permission');
+    return !permission || permission === 'delete';
+  }.property('permission'),
+
+  observePermission: function () {
+    var model = this;
+    this.addObserver('session.user.permissions.' + this.get('id'), function () {
+      model.set('permission', model.get('session.user.permissions.' + this.get('id')));
+    });
+    model.set('permission', model.get('session.user.permissions.' + this.get('id')));
+  }.on('didLoad'),
+
+
+  // make sure `create_date`, `last_updated`, `publish_date`, `preview_url`, `slug` controls exist
+  verifyControls: function () {
+
+    var controls = this.get('controls');
+    var newControls = Ember.A([]);
+
+    if (!controls.isAny('name', 'create_date')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'create_date',
+        label      : 'Create Date',
+        locked     : true,
+        showInCms  : true,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'last_updated')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'last_updated',
+        label      : 'Last Updated',
+        locked     : true,
+        showInCms  : true,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'publish_date')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'datetime'),
+        name       : 'publish_date',
+        label      : 'Publish Date',
+        locked     : true,
+        showInCms  : true,
+        required   : false,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'preview_url')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'preview_url',
+        label      : 'Preview URL',
+        locked     : true,
+        showInCms  : false,
+        required   : true,
+        hidden     : true
+      }));
+    }
+
+    if (!controls.isAny('name', 'slug')) {
+      newControls.push(this.store.createRecord('control', {
+        controlType: this.store.getById('control-type', 'textfield'),
+        name       : 'slug',
+        label      : 'Slug',
+        locked     : true,
+        showInCms  : false,
+        required   : false,
+        hidden     : true
+      }));
+    }
+
+    if (newControls.get('length')) {
+
+      var contentTypeModel = this.store.modelFor('content-type');
+      var contentTypeAdapter = this.store.adapterFor('content-type');
+      var controlsRef = contentTypeAdapter._getRef(contentTypeModel, this.get('id')).child('controls');
+
+      var controlsCount = controls.get('length');
+      var data = {};
+
+      var controlPromises = Ember.A([]);
+
+      newControls.forEach(function (control, index) {
+
+        controls.addObject(control);
+
+        controlPromises.push(new Ember.RSVP.Promise(function (resolve, reject) {
+          controlsRef.child(controlsCount + index).set(control.serialize(), function (error) {
+            if (error) {
+              reject(error);
+            } else {
+              resolve();
+            }
+          });
+        }));
+
+      });
+
+      return Ember.RSVP.Promise.all(controlPromises);
+
+    } else {
+      return Ember.RSVP.resolve();
+    }
+
+  }
 
 });

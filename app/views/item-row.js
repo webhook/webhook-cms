@@ -2,7 +2,10 @@ export default Ember.View.extend({
   tagName: 'tr',
 
   click: function () {
-    this.get('controller')
-      .transitionToRoute('wh.content.type.edit', this.get('controller.itemModelName'), this.get('context.id'));
+    var controller = this.get('controller');
+    var modelName = controller.get('itemModelName');
+    var modelId = this.get('content.id');
+
+    controller.transitionToRoute('wh.content.type.edit', modelName, modelId);
   }
 });

@@ -1,36 +1,38 @@
-<div class="wy-control-group-file">
+{{#unless control.disabled}}
+  <div class="wy-control-group-file">
 
-  <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
-    <div class="wy-form-upload">
-      <div class="wy-form-upload-content">
-        <button type="button" class="btn btn-neutral icon icon-image"> {{t 'form.control.gallery.action'}}</button>
-        <div class="image-loading btn btn-info">
-          <div class="wy-spinner"></div>
-          <span></span>
+    <div {{ bind-attr class=":wy-form-upload-container wantUploadButton:on" }}>
+      <div class="wy-form-upload">
+        <div class="wy-form-upload-content">
+          <button type="button" class="btn btn-neutral icon icon-image"> {{t 'form.control.gallery.action'}}</button>
+          <div class="image-loading btn btn-info">
+            <div class="wy-spinner"></div>
+            <span></span>
+          </div>
         </div>
       </div>
+
+      <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
     </div>
 
-    <button type="button" class="btn btn-link btn-small upload-method-toggle" {{action "toggleMethod"}}>{{t 'form.control.file.url'}}</button>
-  </div>
+    <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix wantUrlInput:on" }}>
+      <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
+      <button type="button" class="btn btn-neutral btn-small upload-url">{{t 'form.control.file.upload'}}</button>
+      <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
+    </div>
 
-  <div {{ bind-attr class=":wy-form-upload-url :wy-input-prefix wantUrlInput:on" }}>
-    <span class="wy-input-context">{{t 'form.control.file.paste'}} <span class="icon icon-arrow-right"></span></span><input type="text">
-    <button type="button" class="btn btn-neutral btn-small upload-url">{{t 'form.control.file.upload'}}</button>
-    <button type="button" class="btn btn-small btn-link upload-method-toggle wy-text-danger icon icon-remove-sign" {{action "toggleMethod"}}> {{t 'form.control.file.cancel'}}</button>
   </div>
-
-</div>
+{{/unless}}
 
 {{#if items}}
   <p class="wy-form-gallery-instructions icon icon-circle-blank"> {{t 'form.control.gallery.instruction'}}</p>
 
-  {{#collection 'gallery' content=items images=control.value}}
+  {{#collection 'gallery' content=items images=control.value disabled=control.disabled}}
     {{#if editing}}
       <div class="wy-form-gallery-edit">
         <div class="wy-form-gallery-edit-img">{{resize-image image size="200"}}</div>
-        {{textarea value=image.caption placeholder="caption"}}
-        <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> {{t 'form.control.gallery.delete'}}</button>
+        {{textarea value=image.caption placeholder="caption" disabled=disabled}}
+        {{#unless disabled}}<button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{action "removeImage" this}}> {{t 'form.control.gallery.delete'}}</button>{{/unless}}
         <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "closeEdit" this}}> {{t 'form.control.gallery.close'}}</button>
         <span class="triangle"></span>
       </div>

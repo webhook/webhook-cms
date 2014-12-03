@@ -1,5 +1,8 @@
 <section class="wh-content-head">
-  <h1>{{t 'wh.settings.team.invite.title'}}</h1>
+  <h1>{{t 'wh.settings.team.current.title'}}</h1>
+</section>
+<section class="wh-content-subhead">
+  {{t 'wh.settings.team.current.description'}}
 </section>
 
 <section class="wh-content-edit">
@@ -9,10 +12,8 @@
       <div class="wy-control-group">
         <label>{{t 'wh.settings.team.invite.instruction'}}</label>
         {{input type="email" required="required" value=inviteEmail }}
+        <button class="btn btn-info btn-small icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> {{t 'wh.settings.team.invite.action'}}</button>
         <div class="wy-form-message">{{t 'wh.settings.team.invite.help'}}</div>
-      </div>
-      <div class="wy-btn-group">
-        <button class="btn btn-neutral icon icon-user" {{ bind-attr disabled=isInvalidEmail }} {{ action "sendInvite" }}> {{t 'wh.settings.team.invite.action'}}</button>
       </div>
     {{else}}
       <div class="wy-alert wy-alert-danger">
@@ -31,55 +32,133 @@
 
   </form>
 
-</section>
-
-
-<section class="wh-content-head wh-content-head-again">
-  <h1>{{t 'wh.settings.team.current.title'}}</h1>
-</section>
-<section class="wh-content-subhead">
-  {{t 'wh.settings.team.current.description'}}
-</section>
-
-<section class="wh-content-edit">
-
   <table class="wy-table wy-table-bordered-rows full-width">
     <thead>
       <tr>
         <th>{{t 'wh.settings.team.current.email'}}</th>
-        <th>{{t 'wh.settings.team.current.permissions'}}</th>
+        <th></th>
+        <th class="wy-text-right">{{t 'wh.settings.team.current.permissions'}}</th>
       </tr>
     </thead>
     <tbody>
 
-      {{#each user in allUsers }}
+      {{#each user in filteredContent}}
         <tr>
-          <td>{{ user.email }}</td>
           <td>
-            {{#if user.owner }}
-            <div class="wy-dropdown wy-dropdown-bubble">
-              <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.owner'}} <span class="caret"></span</span>
-              <dl class="wy-dropdown-menu">
-                <dd><a href="" {{ action "makeUser" user }}>{{t 'wh.settings.team.current.toContributor'}}</a></dd>
-                <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
-              </dl>
-            </div>
-            {{/if}}
-            {{#if user.user }}
-              <div class="wy-dropdown wy-dropdown-bubble">
-                <span class="btn btn-neutral icon icon-lock"> {{t 'wh.settings.team.current.contributor'}} <span class="caret"></span</span>
-                <dl class="wy-dropdown-menu">
-                  <dd><a href="" {{ action "makeOwner" user }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
-                  <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
-                </dl>
-              </div>
-            {{/if}}
+            {{ user.email }}
+          </td>
+          <td>
             {{#if user.potential }}
               {{t 'wh.settings.team.current.waiting'}} (<a href="" class="icon icon-remove-sign" {{ action "removePotential" user }}> {{t 'wh.settings.team.current.cancel'}}</a>)
             {{/if}}
           </td>
+          <td class="wy-text-right">
+
+            <div class="wy-dropdown wy-dropdown-left wy-dropdown-bubble">
+              <span class="btn btn-neutral icon icon-lock">
+                {{#if user.owner}}
+                  {{t 'wh.settings.team.current.owner'}}
+                {{else}}
+                  {{#if user.group}}
+                    {{user.group.name}}
+                  {{else}}
+                    {{t 'wh.settings.team.current.editor'}}
+                  {{/if}}
+                {{/if}}
+                <span class="caret"></span>
+              </span>
+              <dl class="wy-dropdown-menu">
+                {{#unless user.potential}}
+                  <dd><a href="" {{ action "userToGroup" user "owner" }}>{{t 'wh.settings.team.current.toOwner'}}</a></dd>
+                {{/unless}}
+                <dd><a href="" {{ action "userToGroup" user "user" }}>{{t 'wh.settings.team.current.toEditor'}}</a></dd>
+                {{#each group in groups}}
+                  <dd><a href="" {{ action "userToGroup" user group }}>{{t 'wh.settings.team.current.change'}} {{group.name}}</a></dd>
+                {{/each}}
+                {{#unless user.potential}}
+                  <dd><a href="" {{ action "removeUser" user }}>{{t 'wh.settings.team.current.remove'}}</a></dd>
+                {{/unless}}
+              </dl>
+            </div>
+
+          </td>
         </tr>
       {{/each}}
+
     </tbody>
   </table>
 </section>
+
+{{#unless team.isGroupsDisabled}}
+<section class="wh-content-head wh-content-head-again">
+  <a class="btn btn-small btn-preview btn-info icon icon-plus-sign" {{action "createGroup"}}> {{t 'wh.settings.team.groups.action'}}</a>
+  {{t 'wh.settings.team.groups.title'}}
+  <!-- TODO: Remove this tran 'wh.settings.team.invite.title'}} -->
+</section>
+
+<section class="wh-content-edit">
+
+  <div class="wy-alert">
+    {{t 'wh.settings.team.groups.help'}}
+  </div>
+
+  <ul class="wh-group">
+    <li>
+      <span class="wh-group-name">{{t 'wh.settings.team.groups.owners'}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t 'wh.settings.team.groups.ownersPerm'}}</span>
+    </li>
+    <li  {{bind-attr class="groups:has-custom-groups"}}>
+      <span class="wh-group-name">{{t 'wh.settings.team.groups.editors'}}</span>
+      <span class="wh-group-info icon icon-lock"> {{t 'wh.settings.team.groups.editorsPerm'}}</span>
+    </li>
+
+    {{#each group in groups}}
+      {{#view 'group-panel' group=group}}
+        {{#if group.isOpen}}
+          <div class="wh-group-edit">
+            {{#if group.isEditingName}}
+              {{input value=group.name}} <a {{action "changeGroupName" group}} class="btn btn-success float-right icon icon-ok btn-small"> {{t 'wh.settings.team.groups.groupNameSave'}}</a>
+            {{else}}
+              <div>{{group.name}} <span>(<a {{action "toggleGroupNameEdit" group}}>{{t 'wh.settings.team.groups.groupNameEdit'}}</a>)</span></div>
+            {{/if}}
+            <a class="btn btn-small btn-link icon icon-remove float-right" {{action "closeGroup" group}}> {{t 'wh.settings.team.groups.groupClose'}}</a>
+            {{#if group.isSaving}}
+              <span class="btn btn-small btn-link float-right">{{t 'wh.settings.team.groups.groupSaving'}}</span>
+            {{else}}
+              {{#if group.isSaved}}
+                <span class="btn btn-small btn-link float-right wy-text-success">{{t 'wh.settings.team.groups.groupSaved'}}</span>
+              {{/if}}
+            {{/if}}
+          </div>
+
+          {{#if group.error}}
+            <div class="wy-alert wy-alert-danger">
+              <p>{{group.error}}</p>
+            </div>
+          {{/if}}
+
+          {{#if multiContentTypes}}
+            <ul class="wh-group-labels">
+              <li></li><li>{{t 'wh.settings.team.perms.view'}}</li><li>{{t 'wh.settings.team.perms.draft'}}</li><li>{{t 'wh.settings.team.perms.publish'}}</li><li>{{t 'wh.settings.team.perms.delete'}}</li>
+            </ul>
+          {{/if}}
+          {{view 'group-permissions' content=multiContentTypes group=group}}
+
+          {{#if singleContentTypes}}
+            <ul class="wh-group-labels">
+              <li></li><li>{{t 'wh.settings.team.perms.view'}}</li><li>{{t 'wh.settings.team.perms.edit'}}</li>
+            </ul>
+          {{/if}}
+
+          {{view 'group-permissions' content=singleContentTypes group=group}}
+        {{else}}
+          <span class="wh-group-name">{{group.name}}</span>
+          <span class="wh-group-info">{{t 'wh.settings.team.perms.mixed'}} (<a {{action "openGroup" group}}>{{t 'wh.settings.team.perms.editPerms'}}</a>)</span>
+          <span><a {{action "deleteGroup" group}} class="float-right icon icon-remove-sign"></a></span>
+        {{/if}}
+      {{/view}}
+    {{/each}}
+  </ul>
+
+</section>
+{{/unless}}

@@ -73,7 +73,7 @@
     {{#download-backup classNames="btn btn-neutral icon icon-download" text=""}}
       {{t 'wh.settings.data.importExport.action.export'}}
     {{/download-backup}}
-    <button class="btn btn-neutral icon icon-upload" {{action "upload"}}> {{t 'wh.settings.data.importExport.action.import'}}</button>
+    {{#select-file action='importData' accept='application/json' class="icon icon-upload"}} {{t 'wh.settings.data.importExport.action.import'}}{{/select-file}}
   {{/if}}
 
 </section>
@@ -118,7 +118,7 @@
 
   <p>{{t 'wh.settings.data.wordpress.instruction'}}</p>
 
-  {{#select-file action='wordpressFileSelected' accept='application/xml' class="icon icon-wordpress"}} {{t 'wh.settings.data.wordpress.action'}}{{/select-file}}
+  {{#select-file action='importWordpressFile' accept='application/xml' class="icon icon-wordpress"}} {{t 'wh.settings.data.wordpress.action'}}{{/select-file}}
 
 </section>
 

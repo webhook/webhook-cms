@@ -4,19 +4,19 @@
       {{#each option in meta.options}}
         <th>{{option.value}}</th>
       {{/each}}
-      <th></th>
+      {{#unless disabled}}<th></th>{{/unless}}
     </tr>
   </thead>
   <tbody>
     {{#each row in value}}
       <tr>
         {{#each data in row}}
-          <td>{{input value=data.value}}</td>
+          <td>{{input value=data.value disabled=disabled}}</td>
         {{/each}}
-        <td><button type="button" class="btn btn-link icon icon-remove-sign" {{action "removeTabularRow" row this}}></button>
+        {{#unless disabled}}<td><button type="button" class="btn btn-link icon icon-remove-sign" {{action "removeTabularRow" row this}}></button>{{/unless}}
       </tr>
     {{/each}}
   </tbody>
 </table>
 
-<button type="button" class="btn btn-link btn-small icon icon-plus-sign" {{action "addTabularRow" this}}> {{t 'form.control.tabular.add'}}</button>
+{{#unless disabled}}<button type="button" class="btn btn-link btn-small icon icon-plus-sign" {{action "addTabularRow" this}}> {{t 'form.control.tabular.add'}}</button>{{/unless}}

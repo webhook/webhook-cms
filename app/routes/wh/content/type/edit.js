@@ -46,6 +46,12 @@ export default Ember.Route.extend({
           // item found
           EditRoute.set('itemModel', item);
 
+          if (item.get('itemData.publish_date') && !contentType.get('canPublish')) {
+            contentType.get('controls').setEach('disabled', true);
+          } else if (Ember.isEmpty(item.get('itemData.publish_date')) && contentType.get('canDraft')) {
+            contentType.get('controls').setEach('disabled', false);
+          }
+
         }, function (message) {
 
           // item does not exist
@@ -79,8 +85,7 @@ export default Ember.Route.extend({
 
     }
 
-    // make sure `create_date`, `last_updated` and `publish_date` controls exist
-    promises.push(this.fixControlType(this.modelFor('wh.content.type')));
+    promises.push(this.modelFor('wh.content.type').verifyControls());
 
     return Ember.RSVP.Promise.all(promises).catch(function (error) {
       window.alert(error.message);
@@ -268,73 +273,6 @@ export default Ember.Route.extend({
 
     // watch for value changes so we can prevent user from accidentally leaving
     controller.set('initialValues', type.get('controls').getEach('value'));
-  },
-
-  fixControlType: function (contentType) {
-
-    var datetimeDefaults = {
-      controlType: this.store.getById('control-type', 'dateType'),
-      locked     : true,
-      showInCms  : true,
-      required   : true,
-      hidden     : true
-    };
-
-    var controls = contentType.get('controls'),
-        save = false;
-
-    var addControl = function (data) {
-      var control = this.store.createRecord('control', Ember.$.extend({}, datetimeDefaults, data));
-      control.set('widgetIsValid', true);
-      controls.pushObject(control);
-      save = true;
-    }.bind(this);
-
-    if (!controls.isAny('name', 'create_date')) {
-      addControl({
-        name : 'create_date',
-        label: 'Create Date'
-      });
-    }
-
-    if (!controls.isAny('name', 'last_updated')) {
-      addControl({
-        name : 'last_updated',
-        label: 'Last Updated'
-      });
-    }
-
-    if (!controls.isAny('name', 'publish_date')) {
-      addControl({
-        name : 'publish_date',
-        label: 'Publish Date',
-        required: false
-      });
-    }
-
-    if (!controls.isAny('name', 'preview_url')) {
-      addControl({
-        controlType: this.store.getById('control-type', 'textfield'),
-        name       : 'preview_url',
-        label      : 'Preview URL',
-        showInCms  : false
-      });
-    }
-
-    if (!controls.isAny('name', 'slug')) {
-      addControl({
-        controlType: this.store.getById('control-type', 'textfield'),
-        name       : 'slug',
-        label      : 'Slug',
-        showInCms  : false,
-        required   : false
-      });
-    }
-
-    if (save) {
-      contentType.save();
-    }
-
   },
 
   actions: {

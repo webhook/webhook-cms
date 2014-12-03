@@ -18,7 +18,11 @@
   <div {{bind-attr class="isNameAndSlugValid::wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
     <label>Name</label>
     <div class="wy-control">
-      {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true"}}
+      {{#if nameControl.placeholder}}
+        {{input class="big-name" placeholder=nameControl.placeholder value=nameControl.value autofocus="true" disabled=nameControl.disabled}}
+      {{else}}
+        {{input class="big-name" placeholder="Fill me in!" value=nameControl.value autofocus="true" disabled=nameControl.disabled}}
+      {{/if}}
 
       {{#if nameControl.widgetErrors}}
         <ul>
@@ -33,7 +37,11 @@
         {{#if isEditingSlug}}
           <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
         {{else}}
-          <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
+          {{#if slugControl.disabled}}
+            <span class="wy-form-message">This page will live at /{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/</span>
+          {{else}}
+            <span class="wy-form-message">This page will live at <a href="#" {{action "editSlug"}}>/{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/ <span class="icon icon-pencil"></span></a></span>
+          {{/if}}
         {{/if}}
 
         {{#if slugControl.widgetErrors}}
@@ -52,7 +60,7 @@
     <fieldset>
       {{#each control in type.controls}}
         {{#unless control.hidden}}
-          {{view 'widget' context=control}}
+          {{view 'widget' context=control contentType=type}}
         {{/unless}}
       {{/each}}
     </fieldset>
@@ -62,41 +70,58 @@
 <div class="wh-save-item">
   {{#if type.oneOff}}
 
-    <div class="wy-btn-group">
-      <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
-    </div>
+    {{#if type.canPublish}}
+      <div class="wy-btn-group">
+        <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
+      </div>
+    {{/if}}
 
   {{else}}
 
     {{#if isDraft}}
 
-      <div class="wy-btn-group">
-        <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
-          <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
-          <dl class="wy-dropdown-menu">
-            <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
-            <dd><a {{action "publishNow"}}>Publish now</a></dd>
-            <dd><a {{action "changePublishDate"}}>Publish at a specific time</a></dd>
-          </dl>
+      {{#if type.canDraft}}
+
+
+        <div class="wy-btn-group">
+          {{#if type.canPublish}}
+            <div class="wy-dropdown wy-dropdown-bubble wy-dropdown-up">
+              <button type="button" class="btn btn-small btn-info icon icon-ok-sign"> Save... <span class="icon icon-caret-up"></span></button>
+              <dl class="wy-dropdown-menu">
+                <dd><a {{action "saveDraft"}}>Save it as a draft</a></dd>
+                <dd><a {{action "publishNow"}}>Publish now</a></dd>
+                <dd><a {{action "changePublishDate"}}>Publish at a specific time</a></dd>
+              </dl>
+            </div>
+          {{else}}
+            <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{action "saveDraft"}}> Save</button>
+          {{/if}}
         </div>
-      </div>
+
+      {{/if}}
 
     {{/if}}
 
     {{#if isScheduled}}
 
-      <button type="button" class="btn btn-small btn-link float-left" {{action "saveDraft"}}>Save as a draft instead?</button>
+      {{#if type.canPublish}}
 
-      <div class="wy-btn-group">
-        <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "publishFuture"}}> Publish at this time</button>
-      </div>
+        <button type="button" class="btn btn-small btn-link float-left" {{action "saveDraft"}}>Save as a draft instead?</button>
 
-      <div class="wy-control-group">
-        <div class="wy-control">
-          <button type="button" class="btn btn-small btn-link icon icon-clock" {{action "setPublishNow"}}> Set to now?</button>
-          {{input type="datetime-local" value=publishDate}}
+        <div class="wy-btn-group">
+          <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "publishFuture"}}> Publish at this time</button>
         </div>
-      </div>
+
+        <div class="wy-control-group">
+          <div class="wy-control">
+            <button type="button" class="btn btn-small btn-link icon icon-clock" {{action "setPublishNow"}}> Set to now?</button>
+            {{input type="datetime-local" value=publishDate}}
+          </div>
+        </div>
+
+      {{else}}
+        <span class="wh-save-info">Going live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
+      {{/if}}
 
     {{/if}}
 
@@ -104,14 +129,16 @@
 
       <span class="wh-save-info">Went live on {{format-time publishDate format="MM/DD/YYYY [at] hh:mmA"}}. </span>
 
-      <div class="wy-btn-group" data-toggle="wh-save-item-extra">
-        <span class="wh-save-item-more-options">
-          <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
-          <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
-        </span>
-        <button type="button" class="btn btn-small btn-link wh-save-item-extra-btn" data-toggle="wh-save-item-extra-btn">More options</button>
-        <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
-      </div>
+      {{#if type.canPublish}}
+        <div class="wy-btn-group" data-toggle="wh-save-item-extra">
+          <span class="wh-save-item-more-options">
+            <button type="button" class="btn btn-small btn-link icon icon-minus-sign" {{action "saveDraft"}}> Revert to draft</button>
+            <button type="button" class="btn btn-small btn-link icon icon-calendar" {{action "changePublishDate"}}> Change publish date?</button>
+          </span>
+          <button type="button" class="btn btn-small btn-link wh-save-item-extra-btn" data-toggle="wh-save-item-extra-btn">More options</button>
+          <button type="button" class="btn btn-small btn-success icon icon-ok-sign" {{action "saveItem"}}> Save</button>
+        </div>
+      {{/if}}
 
     {{/if}}
 

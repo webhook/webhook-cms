@@ -4,14 +4,16 @@ import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Controller.extend({
 
-  // needs: ['wh.settings.data'],
+  needs: ['application'],
 
   wxmlDoneClass: 'pending',
   wxmlStatus: null,
 
   isComplete: false,
 
-  convertXml: function (file) {
+  convertXml: function () {
+
+    var file = this.get('controllers.application.wordpressXML');
 
     var controller = this;
     var reader = new window.FileReader();
@@ -45,7 +47,11 @@ export default Ember.Controller.extend({
       });
     };
 
-    reader.readAsText(file);
+    if (Ember.isEmpty(file)) {
+      this.transitionToRoute('wh');
+    } else {
+      reader.readAsText(file);
+    }
 
   }
 });

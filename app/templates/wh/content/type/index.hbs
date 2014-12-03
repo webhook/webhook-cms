@@ -1,5 +1,5 @@
 <section class="wh-content-head">
-  {{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.addNewItem' nameBinding="contentType.name"}}{{/link-to}}
+  {{#if contentType.canDraft}}{{#link-to 'wh.content.type.new' contentType class="btn icon icon-plus-sign btn-preview btn-small btn-success"}} {{t 'wh.content.addNewItem' nameBinding="contentType.name"}}{{/link-to}}{{/if}}
   <h1>{{contentType.name}}</h1>
 </section>
 <section class="wh-content-subhead">
@@ -40,15 +40,15 @@
       </tr>
     </thead>
     <tbody>
-      {{#each cmsItems itemView='item-row'}}
-        {{#each cmsControls itemView='item-cell'}}
+      {{#each cmsItem in cmsItems itemView='item-row'}}
+        {{#each cmsItem.cmsControls itemView='item-cell'}}
           {{partial controlType.valuePartialPath}}
         {{/each}}
         <td class="wy-table-actions">
           {{#if lockedBy}}
             <button type="button" class="btn btn-link icon icon-lock" {{bind-attr title=lockedBy}}></button>
           {{else}}
-            <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" this bubbles=false}}></button>
+            {{#if contentType.canDelete}}<button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{action "deleteItem" cmsItem bubbles=false}}></button>{{/if}}
           {{/if}}
         </td>
       {{/each}}
