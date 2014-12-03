@@ -32,13 +32,13 @@
           <hr>
           <header>{{t 'wh.navContent'}}</header>
           <ul>
-            {{#each contentType in arrangedContent}}
+            {{#each contentType in filteredContent}}
               <li>{{#link-to 'wh.content.type' contentType.id}}{{contentType.name}}{{/link-to}}</li>
             {{/each}}
           </ul>
         {{/if}}
 
-        {{# if session.isOwner }}
+        {{# if session.isOwner}}
           <hr>
           <header>{{t 'wh.configuration.title'}}</header>
           <ul>

@@ -56,6 +56,10 @@ export default Ember.ArrayController.extend({
 
   },
 
+  filteredContent: function () {
+    return this.get('arrangedContent').filterBy('canView');
+  }.property('arrangedContent.@each.canView'),
+
   debouncedSearchQueryObserver: Ember.debouncedObserver(function() {
 
     if (!this.get('searchQuery')) {

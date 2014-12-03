@@ -69,6 +69,37 @@ export default DS.Model.extend({
 
   }.on('didDelete'),
 
+  indexingTotal: 0,
+  indexingComplete: 0,
+
+  indexingPercent: function () {
+    if (this.get('indexingTotal') === 0) {
+      return 100;
+    }
+    return Math.floor(this.get('indexingComplete') / this.get('indexingTotal') * 100);
+  }.property('indexingTotal', 'indexingComplete'),
+
+  isIndexing: function () {
+    var percent = this.get('indexingPercent');
+    return percent > 0 && percent < 100;
+  }.property('indexingPercent'),
+
+  indexingClass: function () {
+    var percent = this.get('indexingPercent');
+    if (percent === 0) {
+      return 'pending';
+    }
+    if (percent < 100) {
+      return 'active';
+    }
+    if (percent === 100) {
+      return 'complete';
+    }
+  }.property('indexingPercent'),
+
+
+  // Permissions
+
   addPermissions: function () {
     var siteName = this.get('session.site.name');
     var contentTypeId = this.get('id');
@@ -107,74 +138,44 @@ export default DS.Model.extend({
     });
   }.on('didDelete'),
 
-  indexingTotal: 0,
-  indexingComplete: 0,
-
-  indexingPercent: function () {
-    if (this.get('indexingTotal') === 0) {
-      return 100;
-    }
-    return Math.floor(this.get('indexingComplete') / this.get('indexingTotal') * 100);
-  }.property('indexingTotal', 'indexingComplete'),
-
-  isIndexing: function () {
-    var percent = this.get('indexingPercent');
-    return percent > 0 && percent < 100;
-  }.property('indexingPercent'),
-
-  indexingClass: function () {
-    var percent = this.get('indexingPercent');
-    if (percent === 0) {
-      return 'pending';
-    }
-    if (percent < 100) {
-      return 'active';
-    }
-    if (percent === 100) {
-      return 'complete';
-    }
-  }.property('indexingPercent'),
-
   disableControls: function () {
-    var permissions = this.get('session.user.permissions');
-    if (Ember.isEmpty(permissions) || !['none', 'view'].contains(permissions.get(this.get('id')))) {
+    if (this.get('canDraft')) {
       this.get('controls').setEach('disabled', false);
     } else {
       this.get('controls').setEach('disabled', true);
     }
-  }.observes('session.user.permissions').on('didLoad'),
+  }.observes('canDraft').on('didLoad'),
+
+  permission: null,
 
   canView: function () {
-    var permissions = this.get('session.user.permissions');
-    if (Ember.isEmpty(permissions)) {
-      return true;
-    }
-    return permissions.get(this.get('id')) !== 'none';
-  }.property('session.user.permissions'),
+    var permission = this.get('permission');
+    return !permission || permission !== 'none';
+  }.property('permission'),
 
   canDraft: function () {
-    var permissions = this.get('session.user.permissions');
-    if (Ember.isEmpty(permissions)) {
-      return true;
-    }
-    return ['draft', 'publish', 'delete'].contains(permissions.get(this.get('id')));
-  }.property('session.user.permissions'),
+    var permission = this.get('permission');
+    return !permission || ['draft', 'publish', 'delete'].contains(permission);
+  }.property('permission'),
 
   canPublish: function () {
-    var permissions = this.get('session.user.permissions');
-    if (Ember.isEmpty(permissions)) {
-      return true;
-    }
-    return ['publish', 'delete'].contains(permissions.get(this.get('id')));
-  }.property('session.user.permissions'),
+    var permission = this.get('permission');
+    return !permission || ['publish', 'delete'].contains(permission);
+  }.property('permission'),
 
   canDelete: function () {
-    var permissions = this.get('session.user.permissions');
-    if (Ember.isEmpty(permissions)) {
-      return true;
-    }
-    return permissions.get(this.get('id')) === 'delete';
-  }.property('session.user.permissions'),
+    var permission = this.get('permission');
+    return !permission || permission === 'delete';
+  }.property('permission'),
+
+  observePermission: function () {
+    var model = this;
+    this.addObserver('session.user.permissions.' + this.get('id'), function () {
+      model.set('permission', model.get('session.user.permissions.' + this.get('id')));
+    });
+    model.set('permission', model.get('session.user.permissions.' + this.get('id')));
+  }.on('didLoad'),
+
 
   // make sure `create_date`, `last_updated`, `publish_date`, `preview_url`, `slug` controls exist
   verifyControls: function () {
