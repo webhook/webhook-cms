@@ -88,6 +88,8 @@
   <p><a href="/">{{t 'wh.settings.data.api.docs'}}</a></p>
 
   <pre><code>{{t 'wh.settings.data.api.title'}}:    {{ apiKey }}</code></pre>
+
+  <button class="btn btn-danger icon icon-remove-sign" {{action "refreshApi"}} {{bind-attr disabled=isRefreshingApi}}> {{#if isRefreshingApi}}Resetting <span class="wy-spinner"></span>{{else}}Reset API Key{{/if}}</button>
 </section>
 
 <section class="wh-content-head wh-content-head-again">

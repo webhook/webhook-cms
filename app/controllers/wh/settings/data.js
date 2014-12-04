@@ -9,6 +9,7 @@ export default Ember.Controller.extend({
 
   deleteOption: 'data',
   isDeleting: false,
+  isRefreshingApi: false,
 
   isIndexing: false,
   downloadLink: '',
@@ -171,6 +172,22 @@ export default Ember.Controller.extend({
   wordpressXml: null,
 
   actions: {
+
+    refreshApi: function() {
+      var newKey = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c==='x'?r:r&0x3|0x8;return v.toString(16);});
+
+      var allow = confirm('Are you sure you want to reset your API Key?');
+
+      if(!allow) {
+        return;
+      }
+
+      this.set('isRefreshingApi', true);
+      window.ENV.firebaseRoot.child('management/sites').child(this.get('session.site.name')).child('api-key').set(newKey, function(err) {
+        this.set('apiKey', newKey);
+        this.set('isRefreshingApi', false);
+      }.bind(this));
+    },
 
     download: function () {
 
