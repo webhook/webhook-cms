@@ -48,7 +48,7 @@ export default function dataFromControls (controls) {
 
     // force numbers to be numbers
     case 'number':
-      value = parseFloat(value) || null;
+      value = isNaN(parseFloat(value)) ? null : parseFloat(value);
       break;
 
     // add timezone to datetime values
