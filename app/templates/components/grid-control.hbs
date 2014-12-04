@@ -1,0 +1,5 @@
+<button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
+
+{{#each subControl in control.controls}}
+  {{subControl.name}}<br>
+{{/each}}
