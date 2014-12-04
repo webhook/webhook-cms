@@ -176,7 +176,11 @@ export default Ember.Controller.extend({
     refreshApi: function() {
       var newKey = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c==='x'?r:r&0x3|0x8;return v.toString(16);});
 
-      var allow = confirm(Ember.I18n.translations['form']['widget']['wh.settings.data.api.warning']);
+      var allow = true;
+      if(Ember.I18n.translations.wh && Ember.I18n.translations.wh.settings && 
+         Ember.I18n.translations.wh.settings.data && Ember.I18n.translations.wh.settings.data.api) {
+        allow = window.confirm(Ember.I18n.translations['wh']['settings']['data']['api']['warning']);
+      }
 
       if(!allow) {
         return;
