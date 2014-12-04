@@ -85,6 +85,10 @@ window.ENV = {
       name: 'Text',
       controlTypes: [
         {
+          name: 'Grid',
+          widget: 'grid'
+        },
+        {
           name     : 'Single line text',
           iconClass: 'icon-font',
           widget   : 'textfield'

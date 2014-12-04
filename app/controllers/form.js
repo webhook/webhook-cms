@@ -726,7 +726,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
           this.isScaffoldingUnchanged().then(function () {
             formController.scaffoldType().then(function () {
-              formController.transitionToRoute('wh.content.type.index', contentType);
+              // commenting this to make it easier to work with the form for now - Mike (dec 4, 2014)
+              // formController.transitionToRoute('wh.content.type.index', contentType);
             });
           }, function (error) {
             Ember.Logger.warn('Scaffolding changed', error);

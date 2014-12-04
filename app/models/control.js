@@ -13,6 +13,9 @@ export default DS.Model.extend({
   hidden     : DS.attr('boolean'),
   meta       : DS.attr('json'),
 
+  // grid controls can have embedded sub controls
+  controls: DS.hasMany('control', { embedded: true, inverse: null }),
+
   setName: function () {
     // you cannot change the name of locked controls
     if (!this.get('locked')) {
