@@ -29,6 +29,10 @@ export default WidgetView.extend({
     this.$().height(0);
   }.observes('context.justDeleted'),
 
+  willInsertElement: function () {
+    this.set('context.isInFormbuilder', true);
+  },
+
   didInsertElement: function () {
 
     var collectionView = this.get('parentView');
@@ -58,7 +62,14 @@ export default WidgetView.extend({
   },
 
   click: function () {
-    this.get('controller').send('editControl', this.get('context'));
+
+    // kind of a hack to get to the controller of either nested grid control or top level control
+    var controller = this.get('parentView.parentView.parentView.parentView.controller') || this.get('controller');
+
+    controller.send('editControl', this.get('context'));
+
+    // do not bubble
+    return false;
   }
 
 });

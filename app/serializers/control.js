@@ -9,13 +9,9 @@ export default ApplicationSerializer.extend({
       serializedSubControls.push(control.serialize());
     });
 
-    // record.get('controls').clear();
-
     var json = this._super.apply(this, arguments);
 
     json.controls = serializedSubControls;
-
-    // window.console.log(JSON.stringify(json, null, 2));
 
     return json;
   }

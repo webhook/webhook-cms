@@ -1,4 +1,9 @@
 export default Ember.Component.extend({
+
+  willInsertElement: function () {
+    window.console.log('grid-control', this.get('control.value'));
+  },
+
   actions: {
     addControl: function (widget) {
 
@@ -11,10 +16,14 @@ export default Ember.Component.extend({
         controlType: controlType
       });
 
-      window.console.log(controlType, subControl);
-
       this.get('control.controls').pushObject(subControl);
 
+    },
+
+    addRow: function () {
+      window.console.log(this.get('control.value'));
+      this.get('control.value').pushObject({});
     }
   }
+
 });

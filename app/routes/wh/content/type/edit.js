@@ -186,8 +186,7 @@ export default Ember.Route.extend({
 
     var data = this.getWithDefault('itemModel.itemData', {});
 
-    type.get('controls').forEach(function (control) {
-
+    var setControlValue = function (control) {
       control.set('widgetErrors', Ember.A([]));
 
       var value = data[control.get('name')];
@@ -252,12 +251,19 @@ export default Ember.Route.extend({
         controller.get('initialRelations').set(control.get('name'), Ember.copy(value));
       }
 
+      if (control.get('controlType.widget') === 'grid') {
+        // window.console.log(value);
+        // control.get('controls').forEach(setControlValue);
+      }
+
       if (!value && control.get('controlType.valueType') === 'object') {
         value = {};
       }
 
       control.set('value', value);
-    });
+    };
+
+    type.get('controls').forEach(setControlValue);
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
 

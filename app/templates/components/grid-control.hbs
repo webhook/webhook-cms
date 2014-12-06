@@ -1,5 +1,20 @@
-<button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
+{{#if control.isInFormbuilder}}
 
-{{#each subControl in control.controls}}
-  {{subControl.name}}<br>
-{{/each}}
+  <button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
+  <button type="button" {{ action 'addControl' 'image' }}>Add image</button>
+
+  {{collection "formbuilder" content=control.controls}}
+
+{{else}}
+
+  {{control.value.length}}
+
+  {{#each row in control.value}}
+    {{#each control in control.controls}}
+      {{view 'grid-widget' context=control contentType=type values=row}}
+    {{/each}}
+  {{/each}}
+
+  <button type="button" {{ action 'addRow' }}>Add row</button>
+
+{{/if}}

@@ -77,6 +77,12 @@ export default function dataFromControls (controls) {
       }
       break;
 
+    case 'grid':
+      value = value.map(function () {
+        return dataFromControls(control.get('controls'));
+      });
+      break;
+
     }
 
     data[control.get('name')] = value;

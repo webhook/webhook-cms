@@ -86,7 +86,8 @@ window.ENV = {
       controlTypes: [
         {
           name: 'Grid',
-          widget: 'grid'
+          widget: 'grid',
+          valueType: 'array'
         },
         {
           name     : 'Single line text',
