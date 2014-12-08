@@ -349,8 +349,6 @@ export default Ember.ObjectController.extend({
       .then(this.commitItem.bind(this))
       .catch(function (error) {
 
-        Ember.Logger.error(error);
-
         if (window.trackJs) {
           window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
           window.trackJs.track(error);
