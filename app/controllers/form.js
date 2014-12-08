@@ -929,7 +929,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           }
         }
 
-
         if (control.get('controlType.widget') === 'relation' && !contentType.get('isNew')) {
 
           // See if related content type changed on relation widgets
@@ -946,10 +945,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         }
 
-
         // we don't want to store checkbox values to the db when we save
         if (control.get('controlType.widget') === 'checkbox') {
           control.get('meta.options').setEach('value', null);
+          control.get('meta.options').forEach(function (option) {
+            if (Ember.isEmpty(option.defaultValue)) {
+              option.defaultValue = false;
+            }
+          });
         }
 
         // force dirty state on all controls so they will save.
