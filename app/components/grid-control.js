@@ -1,10 +1,8 @@
 export default Ember.Component.extend({
 
-  willInsertElement: function () {
-    window.console.log('grid-control', this.get('control.value'));
-  },
-
   actions: {
+
+    // formbuilder
     addControl: function (widget) {
 
       var store = this.get('store');
@@ -20,10 +18,11 @@ export default Ember.Component.extend({
 
     },
 
+    // For edit page
     addRow: function () {
-      window.console.log(this.get('control.value'));
-      this.get('control.value').pushObject({});
+      this.get('control.value').pushObject(Ember.Object.create({}));
     }
+
   }
 
 });

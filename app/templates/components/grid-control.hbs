@@ -7,11 +7,9 @@
 
 {{else}}
 
-  {{control.value.length}}
-
-  {{#each row in control.value}}
-    {{#each control in control.controls}}
-      {{view 'grid-widget' context=control contentType=type values=row}}
+  {{#each rowValues in control.value}}
+    {{#each rowControl in control.controls}}
+      {{view 'grid-widget' rowControl=rowControl contentType=type values=rowValues gridControl=control}}
     {{/each}}
   {{/each}}
 

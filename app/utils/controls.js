@@ -78,9 +78,20 @@ export default function dataFromControls (controls) {
       break;
 
     case 'grid':
-      value = value.map(function () {
-        return dataFromControls(control.get('controls'));
-      });
+      if (Ember.isArray(value)) {
+
+        value = value.map(function (row) {
+
+          Ember.keys(row).forEach(function (keyName) {
+            control.get('controls').findBy('name', keyName).set('value', row.get(keyName));
+          });
+
+          return dataFromControls(control.get('controls'));
+        });
+
+      } else {
+        value = [];
+      }
       break;
 
     }

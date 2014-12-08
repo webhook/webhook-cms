@@ -252,8 +252,13 @@ export default Ember.Route.extend({
       }
 
       if (control.get('controlType.widget') === 'grid') {
-        // window.console.log(value);
-        // control.get('controls').forEach(setControlValue);
+        if (Ember.isEmpty(value) || !Ember.isArray(value)) {
+          value = Ember.A([]);
+        } else {
+          value = value.map(function (controlRow) {
+            return Ember.Object.create(controlRow);
+          });
+        }
       }
 
       if (!value && control.get('controlType.valueType') === 'object') {
