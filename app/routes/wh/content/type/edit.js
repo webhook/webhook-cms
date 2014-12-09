@@ -186,10 +186,8 @@ export default Ember.Route.extend({
 
     var data = this.getWithDefault('itemModel.itemData', {});
 
-    var setControlValue = function (control) {
+    var setControlValue = function (control, value) {
       control.set('widgetErrors', Ember.A([]));
-
-      var value = data[control.get('name')];
 
       // Use search to check for duplicate names
       if (control.get('name') === 'name') {
@@ -256,7 +254,12 @@ export default Ember.Route.extend({
           value = Ember.A([]);
         } else {
           value = value.map(function (controlRow) {
-            return Ember.Object.create(controlRow);
+            var rowValue = Ember.Object.create({});
+            control.get('controls').forEach(function (gridControl) {
+              setControlValue(gridControl, controlRow[gridControl.get('name')]);
+              rowValue.set(gridControl.get('name'), gridControl.get('value'));
+            });
+            return rowValue;
           });
         }
       }
@@ -268,7 +271,9 @@ export default Ember.Route.extend({
       control.set('value', value);
     };
 
-    type.get('controls').forEach(setControlValue);
+    type.get('controls').forEach(function (control) {
+      setControlValue(control, data[control.get('name')]);
+    });
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
 
