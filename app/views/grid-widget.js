@@ -7,7 +7,12 @@ export default WidgetView.extend({
     var control = this.get('rowControl');
     var store = control.get('store');
 
-    var clone = store.createRecord('control', control);
+    // fighting with Ember to copy control
+    var controlData = control.serialize();
+    delete controlData.controls;
+    controlData.controlType = control.get('controlType');
+
+    var clone = store.createRecord('control', controlData);
 
     clone.set('value', this.get('values').get(control.get('name')));
 
