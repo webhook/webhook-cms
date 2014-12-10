@@ -3,7 +3,7 @@
   <button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
   <button type="button" {{ action 'addControl' 'image' }}>Add image</button>
 
-  {{collection "formbuilder" content=control.controls}}
+  {{collection "formbuilder" content=control.controls formController=formController isInGrid=true}}
 
 {{else}}
 

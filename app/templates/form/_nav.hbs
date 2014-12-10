@@ -52,7 +52,7 @@
 
         <div class="wy-btn-group">
           {{#unless editingControl.locked}}
-            <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl on="click"}}> {{t 'form.info.delete'}}</button>
+            <button type="button" class="btn btn-danger icon icon-remove-sign" {{action "deleteControl" editingControl editingControls}}> {{t 'form.info.delete'}}</button>
           {{/unless}}
         </div>
       </form>

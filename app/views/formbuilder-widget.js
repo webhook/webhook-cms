@@ -30,6 +30,7 @@ export default WidgetView.extend({
   }.observes('context.justDeleted'),
 
   willInsertElement: function () {
+    this._super.apply(this, arguments);
     this.set('context.isInFormbuilder', true);
   },
 
@@ -63,10 +64,11 @@ export default WidgetView.extend({
 
   click: function () {
 
-    // kind of a hack to get to the controller of either nested grid control or top level control
-    var controller = this.get('parentView.parentView.parentView.parentView.controller') || this.get('controller');
+    var controller = this.get('parentView.formController');
+    var control = this.get('context');
+    var controls = this.get('parentView.content');
 
-    controller.send('editControl', this.get('context'));
+    controller.send('editControl', control, controls);
 
     // do not bubble
     return false;

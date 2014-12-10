@@ -22,5 +22,10 @@ export default Ember.View.extend({
     if (this.get('context.name') === 'name') {
       this.$().hide();
     }
+  },
+
+  willInsertElement: function () {
+    this.set('context.isInGrid', this.get('parentView.isInGrid'));
   }
+
 });

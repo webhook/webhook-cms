@@ -6,6 +6,7 @@ import MetaWithOptions from 'appkit/utils/meta-options';
 export default Ember.ObjectController.extend(Ember.Evented, {
   controlTypeGroups: null,
   editingControl   : null,
+  editingControls  : Ember.A([]),
   isEditing        : false,
   contentTypes     : null,
   relationTypes    : null,
@@ -112,27 +113,24 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   },
 
-  updateOrder: function (originalIndex, newIndex) {
+  updateOrder: function (controls, originalIndex, newIndex) {
 
-    var controls = this.get('model.controls'),
-        control  = controls.objectAt(originalIndex);
+    var control  = controls.objectAt(originalIndex);
 
     controls.removeAt(originalIndex);
     controls.insertAt(newIndex, control);
 
   },
 
-  addControlAtIndex: function (controlTypeId, index) {
+  addControlAtIndex: function (controls, controlTypeId, index) {
     this.store.find('control-type', controlTypeId).then(function (controlType) {
-      this.addControl(controlType, index);
+      this.addControl(controls, controlType, index);
     }.bind(this));
   },
 
-  addControl: function (controlType, index) {
+  addControl: function (controls, controlType, index) {
 
-    var controls, control;
-
-    controls = this.get('model.controls');
+    var control;
 
     var dupeNamesCount = controls.filterBy('label', controlType.get('name')).get('length');
 
@@ -974,15 +972,16 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     addControl: function (controlType, index) {
-      this.addControl.apply(this, arguments);
+      this.addControl(this.get('model.controls'), controlType, index);
     },
 
-    deleteControl: function (control) {
+    deleteControl: function (control, controls) {
 
       if (control.get('controlType.id') === 'layout') {
         this.store.getById('control-type', 'layout').set('isHidden', false);
       }
 
+      // need to modify this so it works for grid controls
       if (this.get('addedControls').indexOf(control) >= 0) {
         this.get('addedControls').removeObject(control);
       } else {
@@ -992,7 +991,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       control.set('justDeleted', true);
 
       Ember.run.later(this, function () {
-        this.get('model.controls').removeObject(control);
+        controls.removeObject(control);
       }, 500);
 
       this.set('editingControl', null);
@@ -1000,13 +999,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     },
 
-    editControl: function (control) {
+    editControl: function (control, controls) {
 
       if (!control.get('meta')) {
         control.set('meta', Ember.Object.create());
       }
 
       this.set('editingControl', control);
+      this.set('editingControls', controls);
       this.set('isEditing', true);
       this.set('isEditingTypeId', false);
     },

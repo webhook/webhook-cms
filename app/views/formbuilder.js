@@ -5,6 +5,8 @@ export default Ember.CollectionView.extend({
   initialControlsAdded: 0,
   animationLength     : 500,
 
+  isInGrid: false,
+
   willInsertElement: function () {
     this.set('initialControlsLength', this.get('content.length'));
   },
@@ -15,9 +17,10 @@ export default Ember.CollectionView.extend({
 
   makeSortable: function () {
 
-    var controller = this.get('controller');
+    var view = this;
+    var controller = this.get('formController');
 
-    var originalindex;
+    var originalIndex;
 
     this.$().sortable({
       items      : '> li:not(.wy-control-group-hidden, .wy-control-name-name)',
@@ -30,12 +33,12 @@ export default Ember.CollectionView.extend({
         ui.helper.find('.wy-control-group-edit').removeClass('wy-control-group-edit');
         ui.helper.find('.wy-tooltip').remove();
 
-        originalindex = ui.item.parent().children('li').index(ui.item);
+        originalIndex = ui.item.parent().children('li').index(ui.item);
 
       },
       update: function  (event, ui) {
 
-        var newindex = ui.item.parent().children(':not(script)').index(ui.item);
+        var newIndex = ui.item.parent().children(':not(script)').index(ui.item);
 
         if (ui.item.hasClass('ui-draggable-dragging')) {
 
@@ -44,13 +47,13 @@ export default Ember.CollectionView.extend({
           $(this).sortable('cancel');
           ui.item.remove();
 
-          controller.addControlAtIndex(type, newindex);
+          controller.addControlAtIndex(view.get('content'), type, newIndex);
 
         } else {
 
           $(this).sortable('cancel');
 
-          controller.updateOrder(originalindex, newindex);
+          controller.updateOrder(view.get('content'), originalIndex, newIndex);
 
         }
 
