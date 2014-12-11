@@ -1,7 +1,6 @@
 import WidgetView from 'appkit/views/widget';
 
 export default WidgetView.extend({
-  tagName: 'li',
 
   // additional formbuilder classes
   classNameBindings: [
@@ -11,13 +10,9 @@ export default WidgetView.extend({
     'controlName'
   ],
 
-  controlClass: function () {
-    return 'wy-control-group-' + this.get('context.controlType.widget');
-  }.property(),
-
   controlName: function () {
-    return 'wy-control-name-' + this.get('context.name');
-  }.property('context.name'),
+    return 'wy-control-name-%@'.fmt(this.get('content.name'));
+  }.property('content.name'),
 
   isEditing: function () {
     return this.get('controller.isEditing') && this.get('context') === this.get('controller.editingControl');
@@ -27,11 +22,11 @@ export default WidgetView.extend({
     this.$().height(this.$().height());
     this.$().addClass('wy-control-group-removed');
     this.$().height(0);
-  }.observes('context.justDeleted'),
+  }.observes('content.justDeleted'),
 
   willInsertElement: function () {
     this._super.apply(this, arguments);
-    this.set('context.isInFormbuilder', true);
+    this.set('content.isInFormbuilder', true);
   },
 
   didInsertElement: function () {
@@ -47,7 +42,7 @@ export default WidgetView.extend({
       collectionView.incrementProperty('initialControlsAdded');
     }
 
-    if (this.get('context.hidden') && this.get('context.controlType.widget') !== 'relation') {
+    if (this.get('content.hidden') && this.get('content.controlType.widget') !== 'relation') {
       this.$().hide();
     } else {
       this.$(this.get('element')).tooltip({
@@ -64,11 +59,11 @@ export default WidgetView.extend({
 
   click: function () {
 
-    var controller = this.get('parentView.formController');
-    var control = this.get('context');
-    var controls = this.get('parentView.content');
+    var controller = this.get('controller');
+    var control = this.get('content');
+    var model = this.get('parentView.model');
 
-    controller.send('editControl', control, controls);
+    controller.send('editControl', control, model);
 
     // do not bubble
     return false;

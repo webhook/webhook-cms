@@ -2,7 +2,7 @@ import WidgetView from 'appkit/views/widget';
 
 export default WidgetView.extend({
 
-  context: function () {
+  content: function () {
 
     var control = this.get('rowControl');
     var store = control.get('store');
@@ -21,7 +21,7 @@ export default WidgetView.extend({
   }.property(),
 
   valueChanged: function () {
-    this.get('values').set(this.get('rowControl.name'), this.get('context.value'));
-  }.observes('context.value')
+    this.get('values').set(this.get('rowControl.name'), this.get('content.value'));
+  }.observes('content.value')
 
 });

@@ -1,11 +1,11 @@
-{{#each option in meta.options}}
+{{#each option in view.content.meta.options}}
 <label class="wy-radio">
   {{view "radio-button"
-    name=name
-    selection=value
-    value=option.value
-    defaultValue=meta.defaultValue
-    disabled=disabled
+    name=view.content.name
+    selection=view.content.value
+    value=view.content.option.value
+    defaultValue=view.content.meta.defaultValue
+    disabled=view.content.disabled
   }}
   {{option.value}}
 </label>

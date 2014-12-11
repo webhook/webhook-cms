@@ -1,12 +1,12 @@
 {{partial 'widgets/common/label'}}
 <div class="wy-control">
 
-  {{partial controlType.controlPartialPath}}
+  {{partial view.content.controlType.controlPartialPath}}
   {{partial 'widgets/common/help'}}
 
-  {{#if widgetErrors}}
+  {{#if view.content.widgetErrors}}
     <ul>
-      {{#each widgetErrors}}
+      {{#each view.content.widgetErrors}}
         <li><span class="wy-form-message">{{this}}</span></li>
       {{/each}}
     </ul>

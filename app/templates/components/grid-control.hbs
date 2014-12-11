@@ -2,8 +2,9 @@
 
   <button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
   <button type="button" {{ action 'addControl' 'image' }}>Add image</button>
+  <button type="button" {{ action 'addControl' 'relation' }}>Add relation</button>
 
-  {{collection "formbuilder" content=control.controls formController=formController isInGrid=true}}
+  {{view "formbuilder" model=control isInGrid=true controller=formController}}
 
 {{else}}
 

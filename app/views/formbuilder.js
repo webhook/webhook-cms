@@ -5,6 +5,10 @@ export default Ember.CollectionView.extend({
   initialControlsAdded: 0,
   animationLength     : 500,
 
+  content: function () {
+    return this.get('model.controls');
+  }.property(),
+
   isInGrid: false,
 
   willInsertElement: function () {
@@ -18,7 +22,7 @@ export default Ember.CollectionView.extend({
   makeSortable: function () {
 
     var view = this;
-    var controller = this.get('formController');
+    var controller = this.get('controller');
 
     var originalIndex;
 

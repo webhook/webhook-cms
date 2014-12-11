@@ -1,8 +1,8 @@
 <label>
-  {{#if label}}
-    {{label}}
+  {{#if view.content.label}}
+    {{view.content.label}}
   {{else}}
-    {{controlType.name}}
+    {{view.content.controlType.name}}
   {{/if}}
-  <span class="wh-template-var">{{name}}</span>
+  <span class="wh-template-var">{{view.templateVar}}</span>
 </label>

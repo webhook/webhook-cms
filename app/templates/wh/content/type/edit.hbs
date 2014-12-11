@@ -60,7 +60,7 @@
     <fieldset>
       {{#each control in type.controls}}
         {{#unless control.hidden}}
-          {{view 'widget' context=control contentType=type}}
+          {{view 'widget' content=control contentType=type}}
         {{/unless}}
       {{/each}}
     </fieldset>

@@ -999,14 +999,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     },
 
-    editControl: function (control, controls) {
+    editControl: function (control, model) {
 
       if (!control.get('meta')) {
         control.set('meta', Ember.Object.create());
       }
 
       this.set('editingControl', control);
-      this.set('editingControls', controls);
+      this.set('editingControls', model.get('controls'));
       this.set('isEditing', true);
       this.set('isEditingTypeId', false);
     },
