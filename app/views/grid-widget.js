@@ -2,10 +2,6 @@ import WidgetView from 'appkit/views/widget';
 
 export default WidgetView.extend({
 
-  didInsertElement: function () {
-    this.set('gridControlIndex', this.$().parents('.wy-control-group-grid').find('.wy-control-group').index(this.$()));
-  },
-
   content: function () {
 
     var control = this.get('rowControl');
@@ -29,7 +25,11 @@ export default WidgetView.extend({
   }.observes('content.value'),
 
   templateVar: function () {
-    return '{{ item.%@[%@].%@ }}'.fmt(this.get('gridControl.name'), this.get('gridControlIndex'), this.get('content.name'));
-  }.property('content.name', 'gridControl.name', 'gridControlIndex')
+
+    var index = this.get('gridControl.value').indexOf(this.get('values'));
+
+    return '{{ item.%@[%@].%@ }}'.fmt(this.get('gridControl.name'), index, this.get('content.name'));
+
+  }.property('content.name', 'gridControl.name', 'gridControl.value.length')
 
 });
