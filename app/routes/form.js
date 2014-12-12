@@ -120,5 +120,11 @@ export default Ember.Route.extend({
     }
 
     this._super.apply(this, arguments);
+  },
+
+  actions: {
+    willTransition: function () {
+      this.controllerFor('form').get('model').rollback();
+    }
   }
 });
