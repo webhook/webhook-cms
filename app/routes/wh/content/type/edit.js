@@ -251,7 +251,7 @@ export default Ember.Route.extend({
 
       if (control.get('controlType.widget') === 'grid') {
         if (Ember.isEmpty(value) || !Ember.isArray(value)) {
-          value = Ember.A([]);
+          value = Ember.A([Ember.Object.create({})]);
         } else {
           value = value.map(function (controlRow) {
             var rowValue = Ember.Object.create({});

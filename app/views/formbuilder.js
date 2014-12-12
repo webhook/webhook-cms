@@ -49,13 +49,13 @@ export default Ember.CollectionView.extend({
           $(this).sortable('cancel');
           ui.item.remove();
 
-          controller.addControlAtIndex(view.get('content'), type, newIndex);
+          controller.addControlAtIndex(view.get('model'), type, newIndex);
 
         } else {
 
           $(this).sortable('cancel');
 
-          controller.updateOrder(view.get('content'), originalIndex, newIndex);
+          controller.updateOrder(view.get('model'), originalIndex, newIndex);
 
         }
 

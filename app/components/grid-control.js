@@ -1,11 +1,5 @@
 export default Ember.Component.extend({
 
-  willInsertElement: function () {
-    if (Ember.isEmpty(this.get('control.value'))) {
-      this.send('addRow');
-    }
-  },
-
   actions: {
 
     // formbuilder
