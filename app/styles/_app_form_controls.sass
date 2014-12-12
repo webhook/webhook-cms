@@ -58,6 +58,54 @@
   &.on
     display: block
 
+.wy-control-group.wy-control-group-grid
+  padding: 0
+  > label
+    font-size: 125%
+    font-weight: bold
+    margin-bottom: $base-line-height
+    line-height: 1.5
+  .wh-grid-num
+    display: inline-block
+    background: $gray-dark
+    color: $text-invert
+    padding: 0 $base-line-height / 4
+    border-radius: 2px
+    margin-right: $base-line-height / 2
+  .wh-grid-value.active, .wh-grid-form.active
+    display: block
+  .wh-grid-value
+    background: $table-stripe-color
+    border: solid 1px $table-border-color
+    padding: $base-line-height / 2
+    display: none
+    cursor: pointer
+    &:hover .icon
+      opacity: 1
+  .wh-grid-form
+    border-right: solid 1px $table-border-color
+    border-left: solid 1px $table-border-color
+    display: none
+    .wy-control-group:first-child
+      padding-top: $base-line-height
+    .wy-control-group:last-child
+      margin-bottom: 0
+      border: none
+  .wy-btn-group
+    margin-bottom: 0
+    padding-bottom: $base-line-height
+  .icon-ellipsis-v:before
+    width: $base-line-height
+    text-align: center
+    margin-right: $base-line-height / 4
+    cursor: move
+  .icon-remove-sign, .icon-plus-sign
+    float: right
+    margin-left: $base-line-height / 2
+    opacity: 0
+    cursor: pointer
+
+
 .wh-table-tabular
   margin-bottom: 0
   .wh-tabular-input
