@@ -22,16 +22,8 @@ export default Ember.View.extend({
     }
   },
 
-  willInsertElement: function () {
-    // this.set('content.isInGrid', this.get('parentView.isInGrid'));
-  },
-
   templateVar: function () {
-    if (this.get('parentView.model.controlType.widget') === 'grid') {
-      return '{{ item.%@.%@ }}'.fmt(this.get('parentView.model.name'), this.get('content.name'));
-    } else {
-      return '{{ item.%@ }}'.fmt(this.get('content.name'));
-    }
-  }.property('content.name', 'parentView.model.name')
+    return '{{ item.%@ }}'.fmt(this.get('content.name'));
+  }.property('content.name')
 
 });

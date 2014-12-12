@@ -82,8 +82,8 @@ export default function dataFromControls (controls) {
 
         value = value.map(function (row) {
 
-          Ember.keys(row).forEach(function (keyName) {
-            control.get('controls').findBy('name', keyName).set('value', row.get(keyName));
+          control.get('controls').forEach(function (subControl) {
+            subControl.set('value', row.get(subControl.get('name')));
           });
 
           return dataFromControls(control.get('controls'));

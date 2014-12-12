@@ -958,13 +958,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         control.transitionTo('updated.uncommitted');
       });
 
-
       // Custom URLs
-      if (Ember.isEmpty(contentType.get('customUrls.individualUrl'))) {
-        contentType.set('customUrls.individualUrl', null);
-      }
-      if (Ember.isEmpty(contentType.get('customUrls.listUrl'))) {
-        contentType.set('customUrls.listUrl', null);
+      if (typeof contentType.get('customUrls') === 'object') {
+        if (Ember.isEmpty(contentType.get('customUrls.individualUrl'))) {
+          contentType.set('customUrls.individualUrl', null);
+        }
+        if (Ember.isEmpty(contentType.get('customUrls.listUrl'))) {
+          contentType.set('customUrls.listUrl', null);
+        }
       }
 
       this.promptConfirmChanges();

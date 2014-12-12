@@ -9,8 +9,6 @@ export default Ember.CollectionView.extend({
     return this.get('model.controls');
   }.property(),
 
-  isInGrid: false,
-
   willInsertElement: function () {
     this.set('initialControlsLength', this.get('content.length'));
   },

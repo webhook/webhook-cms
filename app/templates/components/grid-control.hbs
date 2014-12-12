@@ -1,22 +1,16 @@
 {{#if control.isInFormbuilder}}
 
-  <button type="button" {{ action 'addControl' 'textfield' }}>Add textfield</button>
-  <button type="button" {{ action 'addControl' 'image' }}>Add image</button>
-  <button type="button" {{ action 'addControl' 'relation' }}>Add relation</button>
-
-  {{view "formbuilder" model=control isInGrid=true controller=formController}}
+  {{view "formbuilder" model=control controller=formController}}
 
 {{else}}
 
-  <div>
-    {{#each rowValues in control.value}}
-      {{#each rowControl in control.controls}}
-        {{view 'grid-widget' rowControl=rowControl contentType=type values=rowValues gridControl=control}}
-      {{/each}}
-      <button type="button" {{ action 'removeRow' rowValues }}>Remove above row</button>
-      <hr>
+  {{#each rowValues in control.value}}
+    {{#each rowControl in control.controls}}
+      {{view 'grid-widget' rowControl=rowControl contentType=type values=rowValues gridControl=control}}
     {{/each}}
-  </div>
+    <button type="button" {{ action 'removeRow' rowValues }}>Remove above row</button>
+    <hr>
+  {{/each}}
 
   <button type="button" {{ action 'addRow' }}>Add row</button>
 
