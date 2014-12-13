@@ -15,7 +15,7 @@ export default WidgetView.extend({
   }.property('content.name'),
 
   isEditing: function () {
-    return this.get('controller.isEditing') && this.get('context') === this.get('controller.editingControl');
+    return this.get('controller.isEditing') && this.get('content') === this.get('controller.editingControl');
   }.property('controller.editingControl', 'controller.isEditing'),
 
   prepForDelete: function () {
