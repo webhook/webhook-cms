@@ -115,7 +115,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   updateOrder: function (model, originalIndex, newIndex) {
 
-    var control = model.get('controls').objectAt(originalIndex);
+    var controls = model.get('controls');
+    var control = controls.objectAt(originalIndex);
 
     controls.removeAt(originalIndex);
     controls.insertAt(newIndex, control);

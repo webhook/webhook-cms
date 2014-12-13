@@ -4,14 +4,6 @@
 
 {{else}}
 
-  {{#each rowValues in control.value}}
-    {{#each rowControl in control.controls}}
-      {{view 'grid-widget' rowControl=rowControl contentType=type values=rowValues gridControl=control}}
-    {{/each}}
-    <button type="button" {{ action 'removeRow' rowValues }}>Remove above row</button>
-    <hr>
-  {{/each}}
-
-  <button type="button" {{ action 'addRow' }}>Add row</button>
+  {{view "grid-rows" gridControl=control}}
 
 {{/if}}

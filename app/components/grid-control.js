@@ -1,5 +1,7 @@
 export default Ember.Component.extend({
 
+  activeRows: Ember.A([]),
+
   actions: {
 
     // formbuilder
@@ -19,12 +21,24 @@ export default Ember.Component.extend({
     },
 
     // For edit page
-    addRow: function () {
-      this.get('control.value').pushObject(Ember.Object.create({}));
+    addRow: function (index) {
+      if (index) {
+        this.get('control.value').insertAt(index, Ember.Object.create({}));
+      } else {
+        this.get('control.value').pushObject(Ember.Object.create({}));
+      }
     },
 
     removeRow: function (rowValues) {
       this.get('control.value').removeObject(rowValues);
+    },
+
+    activateRow: function (index) {
+      this.get('activeRows').addObject(index);
+    },
+
+    deactivateRow: function (index) {
+      this.get('activeRows').removeObject(index);
     }
 
   }
