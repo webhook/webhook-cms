@@ -1,7 +1,7 @@
 <div {{ bind-attr class=":wh-grid-item view.isActive:active" }}>
   <div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }}>
     <span class="icon icon-ellipsis-v"></span>
-    <span class="wh-grid-num">{{view.rowIndex1}}</span>
+    <span class="wh-grid-num">{{view.rowIndex}}</span>
     <span class="wh-grid-value-name">First field value</span>
     <span class="icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action 'removeRow' view.content bubbles=false }}></span>
     <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new row below this one." {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
