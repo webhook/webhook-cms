@@ -85,11 +85,6 @@ window.ENV = {
       name: 'Text',
       controlTypes: [
         {
-          name: 'Grid',
-          widget: 'grid',
-          valueType: 'array'
-        },
-        {
           name     : 'Single line text',
           iconClass: 'icon-font',
           widget   : 'textfield'
@@ -238,6 +233,12 @@ window.ENV = {
     }, {
       name: 'Advanced',
       controlTypes: [
+        {
+          name: 'Grid',
+          widget: 'grid',
+          valueType: 'array',
+          iconClass: 'icon-th-list'
+        },
         {
           name: 'Instructions',
           widget: 'instruction',
