@@ -39,6 +39,14 @@ export default Ember.Component.extend({
 
     deactivateRow: function (index) {
       this.get('activeRows').removeObject(index);
+    },
+
+    toggleRow: function (index) {
+      if (this.get('activeRows').contains(index)) {
+        this.send('deactivateRow', index);
+      } else {
+        this.send('activateRow', index);
+      }
     }
 
   }
