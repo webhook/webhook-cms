@@ -4,5 +4,7 @@
   {{else}}
     {{view.content.controlType.name}}
   {{/if}}
-  <span class="wh-template-var">{{view.templateVar}}</span>
+  {{#if buildEnvironment.local}}
+    <span class="wh-template-var">{{view.templateVar}}</span>
+  {{/#if}}
 </label>
