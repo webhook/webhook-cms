@@ -65,6 +65,11 @@
     font-weight: bold
     margin-bottom: $base-line-height
     line-height: 1.5
+  .wh-grid-item.active
+    box-shadow: 0px 2px 5px rgba(0,0,0,.1)
+    margin-bottom: $base-line-height
+    .wh-grid-form
+      display: block
   .wh-grid-num
     display: inline-block
     background: $gray-dark
@@ -72,23 +77,19 @@
     padding: 0 $base-line-height / 4
     border-radius: 2px
     margin-right: $base-line-height / 2
-  .wh-grid-form.active
-    display: block
   .wh-grid-value
-    background: $table-stripe-color
     border: solid 1px $table-border-color
+    background: $table-stripe-color
     border-bottom: none
     padding: $base-line-height / 2
     cursor: pointer
-    &:hover
-      background: lighten($table-stripe-color, 3%)
     &:hover .icon
       opacity: 1
     &.active
       border-bottom: solid 1px $table-border-color
   .wh-grid-form
-    border: solid 1px $table-border-color
     border-top: none
+    border: solid 1px $table-border-color
     display: none
     .wy-control-group:first-child
       padding-top: $base-line-height
