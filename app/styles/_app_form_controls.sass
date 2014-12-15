@@ -12,7 +12,7 @@
     +transition(all 0.5s ease-in)
 
 .wy-control-group:not(.wy-control-group-instruction)
-  &:hover .wh-template-var
+  &:hover > label .wh-template-var
     display: inline-block
     opacity: 1
 
@@ -72,18 +72,21 @@
     padding: 0 $base-line-height / 4
     border-radius: 2px
     margin-right: $base-line-height / 2
-  .wh-grid-value.active, .wh-grid-form.active
+  .wh-grid-form.active
     display: block
   .wh-grid-value
     background: $table-stripe-color
     border: solid 1px $table-border-color
+    border-bottom: none
     padding: $base-line-height / 2
-    display: none
     cursor: pointer
     &:hover .icon
       opacity: 1
+    &.active
+      border-bottom: solid 1px $table-border-color
   .wh-grid-form
     border: solid 1px $table-border-color
+    border-top: none
     display: none
     .wy-control-group:first-child
       padding-top: $base-line-height
