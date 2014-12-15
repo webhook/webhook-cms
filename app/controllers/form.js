@@ -299,6 +299,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         });
 
+      }, function (error) {
+        if (error.message && error.message.indexOf('no record was found') === 0) {
+          Ember.Logger.warn('- `%@` contentType does not exist.'.fmt(error.recordId));
+        } else {
+          Ember.RSVP.Promise.reject(error);
+        }
       });
 
     });
@@ -420,11 +426,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     // Filter out relation controls that are related to their parent content type.
     var relationControls = this.get('changedRelationTypeControls');
 
+    Ember.Logger.log('Updating data for %@ changed relationship types.'.fmt(relationControls.get('length')));
+
     if (Ember.isEmpty(relationControls)) {
       return Ember.RSVP.Promise.resolve();
     }
-
-    Ember.Logger.log('Updating data for %@ changed relationship types.'.fmt(relationControls.get('length')));
 
     // Change data in every item for this content type
     return controller.store.find(controller.get('model.itemModelName')).then(function (items) {
@@ -567,14 +573,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   // we have updated associated items, we're go for type saving.
   saveType: function () {
 
-    Ember.Logger.log('Saving contentType `%@`'.fmt(this.get('model.name')));
-
     var formController = this;
 
     var wasNew = this.get('model.isNew');
 
     // When all the foreign relationships are updated, save this contentType.
     this.updateForeignRelations().then(function () {
+
+      Ember.Logger.log('Saving contentType `%@`'.fmt(formController.get('model.name')));
 
       formController.get('model').save().then(function (contentType) {
 
