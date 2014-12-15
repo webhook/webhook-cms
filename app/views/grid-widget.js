@@ -2,6 +2,10 @@ import WidgetView from 'appkit/views/widget';
 
 export default WidgetView.extend({
 
+  didInsertElement: function () {
+    // override default so controls named `name` aren't hidden
+  },
+
   content: function () {
 
     var control = this.get('rowControl');
