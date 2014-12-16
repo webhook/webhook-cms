@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {{#each row in value}}
+    {{#each row in view.content.value}}
       <tr>
         {{#each data in row}}
           <td>{{input value=data.value disabled=view.content.disabled}}</td>
