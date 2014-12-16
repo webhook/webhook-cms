@@ -1,27 +1,25 @@
-<div {{ bind-attr class=":wh-grid-item view.isActive:active" }}>
-  <div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" title="Click to edit or close, drag to reorder.">
-    <span class="icon icon-ellipsis-v"></span>
-    <span class="wh-grid-num">{{view.rowIndex}}</span>
-    <span class="wh-grid-value-name">
-      {{#view 'item-cell' context=view.firstControl tagName='span'}}
-        {{partial controlType.valuePartialPath}}
-      {{/view}}
-    </span>
-    <span class="icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action 'removeRow' view.content bubbles=false }}></span>
-    <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new row below this one." {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
-  </div>
-  <div class="wh-grid-form">
-    {{#each rowControl in view.parentView.gridControl.controls}}
-      {{view 'grid-widget'
-        rowControl=rowControl
-        contentType=view.parentView.context.contentType
-        values=view.content
-        gridControl=view.parentView.gridControl
-      }}
-    {{/each}}
-    <div class="wy-btn-group">
-      <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{ action 'deactivateRow' view.rowIndex }}> Done / close</button>
-      <button type="button" class="btn btn-small btn-link" {{ action 'removeRow' view.content }}>Delete</button>
-    </div>
+<div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" title="Click to edit or close, drag to reorder.">
+  <span class="icon icon-ellipsis-v"></span>
+  <span class="wh-grid-num">{{view.rowIndex}}</span>
+  <span class="wh-grid-value-name">
+    {{#view 'item-cell' context=view.firstControl tagName='span'}}
+      {{partial controlType.valuePartialPath}}
+    {{/view}}
+  </span>
+  <span class="icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action 'removeRow' view.content bubbles=false }}></span>
+  <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new row below this one." {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
+</div>
+<div class="wh-grid-form">
+  {{#each rowControl in view.parentView.gridControl.controls}}
+    {{view 'grid-widget'
+      rowControl=rowControl
+      contentType=view.parentView.context.contentType
+      values=view.content
+      gridControl=view.parentView.gridControl
+    }}
+  {{/each}}
+  <div class="wy-btn-group">
+    <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{ action 'deactivateRow' view.rowIndex }}> Done / close</button>
+    <button type="button" class="btn btn-small btn-link" {{ action 'removeRow' view.content }}>Delete</button>
   </div>
 </div>

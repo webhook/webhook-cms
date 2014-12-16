@@ -7,6 +7,14 @@ export default Ember.CollectionView.extend({
   itemViewClass: Ember.View.extend({
     templateName: 'grid-row',
 
+    classNames: ['wh-grid-item'],
+
+    classNameBindings: [
+      'isActive:active',
+      'isFirstRow:first',
+      'isLastRow:last'
+    ],
+
     firstControl: function () {
       // {{#each rowControl in view.parentView.gridControl.controls}}
 
@@ -31,11 +39,19 @@ export default Ember.CollectionView.extend({
 
     rowIndex: function () {
       return this.get('parentView.gridControl.value').indexOf(this.get('content'));
-    }.property('parentView.gridControl.value.length'),
+    }.property('parentView.content.length'),
 
     rowIndex1: function () {
       return this.get('rowIndex') + 1;
-    }.property('rowIndex')
+    }.property('rowIndex'),
+
+    isFirstRow: function () {
+      return this.get('content') === this.get('parentView.content.firstObject');
+    }.property('parentView.gridControl.value.length'),
+
+    isLastRow: function () {
+      return this.get('content') === this.get('parentView.content.lastObject');
+    }.property('parentView.content.length')
 
   })
 
