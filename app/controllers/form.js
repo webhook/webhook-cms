@@ -134,12 +134,22 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     controls = this.get('model.controls');
 
-    var dupeNamesCount = controls.filterBy('label', controlType.get('name')).get('length');
-
     var label = controlType.get('name');
 
-    if (dupeNamesCount) {
-      label = label + ' ' + (dupeNamesCount + 1);
+    var dupeNameControls = controls.filter(function (control) {
+      return control.get('label').search(new RegExp('^' + label + '(?: \\d+)?$')) === 0;
+    });
+
+    if (dupeNameControls.get('length') > 0) {
+      var highestDupe = dupeNameControls.reduce(function (previousNumber, item) {
+        var currentNumber = parseInt(item.get('label').match(/\d+$/), 10);
+        if (isNaN(currentNumber)) {
+          return previousNumber;
+        } else {
+           return Math.max(previousNumber, currentNumber);
+        }
+      }, 1);
+      label = label + ' ' + (highestDupe + 1);
     }
 
     control = this.store.createRecord('control', {
