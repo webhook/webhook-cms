@@ -67,11 +67,19 @@
     .wh-template-var
       font-size: 14px
       font-weight: normal
+  .wh-grid-item
+    margin-bottom: -1px
+  .wh-grid-item.first
+    margin-top: $base-line-height
+    .wh-grid-value
+      border-top: solid 1px $table-border-color
   .wh-grid-item.active
     box-shadow: 0px 0px 5px rgba(0,0,0,.1)
     margin: $base-line-height 0
     .wh-grid-form
       display: block
+    .wh-grid-value
+      border-top: solid 1px $table-border-color
   .wh-grid-num
     display: inline-block
     background: $gray-dark
@@ -89,8 +97,6 @@
     font-size: 90%
     &:hover .icon
       opacity: 1
-    &.active
-      border-bottom: solid 1px $table-border-color
   .wh-grid-form
     border: solid 1px $table-border-color
     border-top: none
