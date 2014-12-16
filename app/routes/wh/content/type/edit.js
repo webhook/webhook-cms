@@ -221,11 +221,11 @@ export default Ember.Route.extend({
       }
 
       if (control.get('controlType.widget') === 'tabular') {
-        if (!value) {
+        if (Ember.isEmpty(value)) {
           value = Ember.A([]);
           var emptyRow = Ember.A([]);
           control.get('meta.options').forEach(function () {
-            emptyRow.pushObject("");
+            emptyRow.pushObject(Ember.Object.create());
           });
           value.pushObject(emptyRow);
         } else {
