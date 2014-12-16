@@ -17,6 +17,8 @@ export default Ember.CollectionView.extend({
     this.makeSortable();
   },
 
+  sortableItemsSelector: '> li:not(.wy-control-group-hidden, .wy-control-name-name)',
+
   makeSortable: function () {
 
     var view = this;
@@ -25,7 +27,7 @@ export default Ember.CollectionView.extend({
     var originalIndex;
 
     this.$().sortable({
-      items      : '> li:not(.wy-control-group-hidden, .wy-control-name-name)',
+      items      : this.get('sortableItemsSelector'),
       placeholder: 'wh-form-control-placeholder',
       helper     : 'clone',
       axis       : 'y',
