@@ -12,6 +12,8 @@ export default Ember.View.extend({
         var helper = $('<div class="wh-form-control-clone">'),
             icon = $('<span>').appendTo(helper);
 
+        helper.width(Ember.$('.wh-content-edit').width());
+
         helper.data('id', $(this).data('id'));
 
         icon.addClass($(this).find('a').attr('class')).text($(this).text());
