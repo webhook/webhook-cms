@@ -1,4 +1,4 @@
-<div {{ bind-attr class=":wh-grid-item view.isActive:active" }}>
+<div {{ bind-attr class=":wh-grid-item view.isActive:active" }} data-toggle="tooltip" title="Click to edit or close, drag to reorder.">
   <div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }}>
     <span class="icon icon-ellipsis-v"></span>
     <span class="wh-grid-num">{{view.rowIndex}}</span>
