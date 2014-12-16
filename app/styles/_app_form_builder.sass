@@ -25,6 +25,15 @@
   bottom: 0
   top: 0
 
+.wh-form-builder-empty
+  border: dashed 5px $table-border-color
+  text-align: center
+  padding: $base-line-height
+  position: relative
+  margin-top: -200px
+  p
+    margin-bottom: 0
+
 
 .wh-form-builder-list
   +outer-container
@@ -240,7 +249,7 @@
     border: solid 1px transparent
     position: relative
     opacity: 1
-    +transition(background .2s linear, height .2s linear, opacity .2s linear)
+    +transition(background .2s linear, height .2s linear, opacity .2s linear, margin-left .2s linear)
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
@@ -328,6 +337,7 @@
   padding: $base-line-height
   color: $gray-darker
   background: rgba(255,255,255,.8)
+  width: 50%
   border: dashed 1px $gray-lighter !important
   z-index: $z-index-tooltip + 1
   &:after

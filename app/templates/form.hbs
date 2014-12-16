@@ -40,7 +40,10 @@
             {{view "formbuilder" model=model}}
 
             {{#unless hasAddedControls}}
-              has not added controls
+            <div class="wh-form-builder-empty">
+              <h2>Start by dragging in some form elements.</h2>
+              <p>Interested in learning some best practices? Watch this 2 minute video.</p>
+            </div>
             {{/unless}}
 
           </fieldset>
