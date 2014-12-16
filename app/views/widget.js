@@ -24,6 +24,11 @@ export default Ember.View.extend({
 
   templateVar: function () {
     return '{{ item.%@ }}'.fmt(this.get('content.name'));
-  }.property('content.name')
+  }.property('content.name'),
+
+  setIsWidget: function () {
+    var widgetVar = 'is_%@_widget'.fmt(this.get('content.controlType.widget')).camelize();
+    this.set(widgetVar, true);
+  }.on('init')
 
 });

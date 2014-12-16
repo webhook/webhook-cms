@@ -2,8 +2,6 @@ import WidgetView from 'appkit/views/widget';
 
 export default WidgetView.extend({
 
-  isGridWidget: true,
-
   didInsertElement: function () {
     // override default so controls named `name` aren't hidden
   },
