@@ -35,6 +35,7 @@ export default Ember.CollectionView.extend({
       start: function (event, ui) {
 
         ui.helper.find('.wy-control-group-edit').removeClass('wy-control-group-edit');
+        ui.helper.addClass('wh-control-group-dragged');
         ui.helper.find('.wy-tooltip').remove();
 
         originalIndex = ui.item.parent().children('li').index(ui.item);
