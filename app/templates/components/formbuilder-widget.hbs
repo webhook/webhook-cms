@@ -1,7 +1,10 @@
 {{partial 'widgets/common/label'}}
 <div class="wy-control">
 
+  {{#if view.isGridWidget}} YOU'RE IN THE GRID {{/if}}
+
   {{partial view.content.controlType.controlPartialPath}}
+
   {{partial 'widgets/common/help'}}
 
   {{#if view.content.widgetErrors}}
