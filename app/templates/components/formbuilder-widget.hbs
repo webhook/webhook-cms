@@ -1,11 +1,17 @@
 {{partial 'widgets/common/label'}}
 <div class="wy-control">
 
-  {{#if view.isGridWidget}} YOU'RE IN THE GRID {{/if}}
+  {{!-- Grid widget help is above the control. --}}
+  {{#if view.isGridWidget}}
+    {{partial 'widgets/common/help'}}
+  {{/if}}
 
   {{partial view.content.controlType.controlPartialPath}}
 
-  {{partial 'widgets/common/help'}}
+  {{!-- All other widgets have the help below. --}}
+  {{#unless view.isGridWidget}}
+    {{partial 'widgets/common/help'}}
+  {{/unless}}
 
   {{#if view.content.widgetErrors}}
     <ul>
