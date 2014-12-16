@@ -37,7 +37,14 @@
               <span class="wy-form-message">{{this}}</span>
             {{/each}}
 
+            {{#if hasAddedControls}}
+              added controls
+            {{else}}
+              has not added controls
+            {{/if}}
+
             {{view "formbuilder" model=model}}
+
           </fieldset>
 
           <div class="wh-form-builder-save wy-btn-group">

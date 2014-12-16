@@ -23,6 +23,10 @@ export default Ember.ObjectController.extend(Ember.Evented, {
   isEditingTypeId: false,
   newTypeIdErrors: Ember.A([]),
 
+  hasAddedControls: function () {
+    return !!this.get('model.controls').rejectBy('hidden').rejectBy('name', 'name').get('length');
+  }.property('model.controls.length'),
+
   isValidTypeId: function () {
 
     var valid = true;
