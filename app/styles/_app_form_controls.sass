@@ -74,15 +74,17 @@
     display: inline-block
     background: $gray-dark
     color: $text-invert
-    padding: 0 $base-line-height / 4
-    border-radius: 2px
+    height: 30px
+    width: 30px
+    border-radius: 100px
+    text-align: center
+    line-height: 30px
     margin-right: $base-line-height / 2
   .wh-grid-value
     border: solid 1px $table-border-color
-    background: $table-stripe-color
-    border-bottom: none
     padding: $base-line-height / 2
     cursor: pointer
+    font-size: 90%
     &:hover .icon
       opacity: 1
     &.active
@@ -109,8 +111,10 @@
   .icon-remove-sign, .icon-plus-sign
     float: right
     margin-left: $base-line-height / 2
+    margin-top: 6px
     opacity: 0
     cursor: pointer
+    color: $gray-light
 
 
 .wh-table-tabular
