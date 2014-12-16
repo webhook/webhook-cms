@@ -4,6 +4,40 @@ export default Ember.CollectionView.extend({
     return this.get('gridControl.value');
   }.property(),
 
+  updateToggle: false,
+
+  didInsertElement: function () {
+
+    var originalIndex;
+    var collectionView = this;
+
+    this.$().sortable({
+      helper     : 'clone',
+      axis       : 'y',
+      handle     : '.sort-handle',
+
+      start: function (event, ui) {
+        originalIndex = ui.item.parent().children().index(ui.item);
+      },
+
+      update: function (event, ui) {
+
+        var newIndex = ui.item.parent().children().index(ui.item);
+
+        $(this).sortable('cancel');
+
+        var rows = collectionView.get('content');
+        var row = rows.objectAt(originalIndex);
+
+        rows.removeAt(originalIndex);
+        rows.insertAt(newIndex, row);
+
+        collectionView.toggleProperty('updateToggle');
+
+      }
+    });
+  },
+
   itemViewClass: Ember.View.extend({
     templateName: 'grid-row',
 
@@ -38,20 +72,20 @@ export default Ember.CollectionView.extend({
     }.property('parentView.context.activeRows.length', 'rowIndex'),
 
     rowIndex: function () {
-      return this.get('parentView.gridControl.value').indexOf(this.get('content'));
-    }.property('parentView.content.length'),
+      return this.get('parentView.content').indexOf(this.get('content'));
+    }.property('parentView.content.length', 'parentView.updateToggle'),
 
     rowIndex1: function () {
       return this.get('rowIndex') + 1;
     }.property('rowIndex'),
 
     isFirstRow: function () {
-      return this.get('content') === this.get('parentView.content.firstObject');
-    }.property('parentView.gridControl.value.length'),
+      return this.get('rowIndex') === 0;
+    }.property('rowIndex'),
 
     isLastRow: function () {
-      return this.get('content') === this.get('parentView.content.lastObject');
-    }.property('parentView.content.length')
+      return this.get('rowIndex') === this.get('parentView.content.length') - 1;
+    }.property('rowIndex')
 
   })
 
