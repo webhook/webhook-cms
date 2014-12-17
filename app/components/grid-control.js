@@ -2,6 +2,8 @@ export default Ember.Component.extend({
 
   activeRows: Ember.A([]),
 
+  focusOnRow: 0,
+
   didInsertElement: function () {
     this.get('activeRows').addObject(this.get('control.value.length') - 1);
   },
@@ -30,11 +32,18 @@ export default Ember.Component.extend({
 
     // For edit page
     addRow: function (index) {
+
+      this.get('activeRows').clear();
+
       if (index) {
         this.get('control.value').insertAt(index, Ember.Object.create({}));
       } else {
         this.get('control.value').pushObject(Ember.Object.create({}));
       }
+
+      this.get('activeRows').pushObject(index);
+      this.set('focusOnRow', index);
+
     },
 
     removeRow: function (rowValues) {

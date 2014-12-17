@@ -85,7 +85,15 @@ export default Ember.CollectionView.extend({
 
     isLastRow: function () {
       return this.get('rowIndex') === this.get('parentView.content.length') - 1;
-    }.property('rowIndex')
+    }.property('rowIndex'),
+
+    scrollToRow: function () {
+      if (this.get('rowIndex') === this.get('parentView.context.focusOnRow')) {
+        $('html, body').animate({
+          scrollTop: this.$().offset().top
+        }, 1000);
+      }
+    }.observes('parentView.context.focusOnRow', 'rowIndex')
 
   })
 
