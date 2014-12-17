@@ -38,12 +38,12 @@ export default Ember.CollectionView.extend({
         ui.helper.addClass('wh-control-group-dragged');
         ui.helper.find('.wy-tooltip').remove();
 
-        originalIndex = ui.item.parent().children('li').index(ui.item);
+        originalIndex = ui.item.parent().children().index(ui.item);
 
       },
       update: function  (event, ui) {
 
-        var newIndex = ui.item.parent().children(':not(script)').index(ui.item);
+        var newIndex = ui.item.parent().children().index(ui.item);
 
         if (ui.item.hasClass('ui-draggable-dragging')) {
 
