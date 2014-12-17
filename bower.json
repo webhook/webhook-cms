@@ -19,7 +19,7 @@
     "FileSaver.js": "eligrey/FileSaver.js",
     "moment": "2.8.x",
     "emberfire": "1.3.x",
-    "fluidbox": "webhook/Fluidbox#1.3.5",
+    "fluidbox": "1.4.2",
     "webhook-cms-i18n": "webhook/webhook-cms-i18n#1.8.x",
     "leaflet": "~0.7.3",
     "numeral": "~1.5.3"
