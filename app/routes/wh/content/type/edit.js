@@ -189,12 +189,6 @@ export default Ember.Route.extend({
     var setControlValue = function (control, value) {
       control.set('widgetErrors', Ember.A([]));
 
-      // Use search to check for duplicate names
-      if (control.get('name') === 'name') {
-        control.addObserver('value', route.dupeNameCheck.bind(route));
-        controller.set('nameControl', control);
-      }
-
       if (control.get('name') === 'slug') {
         controller.set('slugControl', control);
         controller.set('isEditingSlug', false);
@@ -274,6 +268,11 @@ export default Ember.Route.extend({
     type.get('controls').forEach(function (control) {
       setControlValue(control, data[control.get('name')]);
     });
+
+    // Use search to check for duplicate names
+    var nameControl = type.get('controls').findBy('name', 'name');
+    nameControl.addObserver('value', route.dupeNameCheck.bind(route));
+    controller.set('nameControl', nameControl);
 
     controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
 
