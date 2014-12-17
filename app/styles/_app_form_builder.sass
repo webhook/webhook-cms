@@ -280,7 +280,6 @@
     padding-left: $gutter * 2 + em($base-line-height / 2)
     padding-right: $gutter * 2 + em($base-line-height / 2)
     border: solid 1px $gray !important
-    z-index: 3
     label, .wy-form-message
       color: $text-color
     &:not(.wy-control-group-instruction) .wh-template-var
@@ -327,6 +326,11 @@
 .wy-control-group-placed
   background: lighten($green, 30%) !important
 
+.wh-control-group-dragged
+  background: rgba(255,255,255,.8)
+  border: dashed 3px $gray-dark !important
+  .wh-grid-form
+    display: none !important
 .wy-control-group-removed
   height: 0px
   padding-top: 0px !important
