@@ -14,7 +14,7 @@ export default Ember.CollectionView.extend({
     this.$().sortable({
       helper     : 'clone',
       axis       : 'y',
-      handle     : '.sort-handle',
+      handle     : '.wh-grid-value',
 
       start: function (event, ui) {
         originalIndex = ui.item.parent().children().index(ui.item);
