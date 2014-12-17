@@ -255,6 +255,7 @@ export default Ember.Route.extend({
             });
             return rowValue;
           });
+          value.pushObject(Ember.Object.create({}));
         }
       }
 

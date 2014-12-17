@@ -2,6 +2,14 @@ export default Ember.Component.extend({
 
   activeRows: Ember.A([]),
 
+  didInsertElement: function () {
+    this.get('activeRows').addObject(this.get('control.value.length') - 1);
+  },
+
+  willDestroyElement: function () {
+    this.get('activeRows').clear();
+  },
+
   actions: {
 
     // formbuilder
