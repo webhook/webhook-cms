@@ -9,6 +9,8 @@
   <span class="icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action 'removeRow' view.content bubbles=false }}></span>
   <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new row below this one." {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
 </div>
+
+{{#if view.isActive}}
 <div class="wh-grid-form">
   {{#each rowControl in view.parentView.gridControl.controls}}
     {{view 'grid-widget'
@@ -23,3 +25,4 @@
     <button type="button" class="btn btn-small btn-link" {{ action 'removeRow' view.content }}>Delete</button>
   </div>
 </div>
+{{/if}}
