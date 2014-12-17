@@ -137,7 +137,7 @@
             {{#each controlType in group.controlTypes}}
               {{#unless isHidden}}
                 {{#view "draggable" tagName="dd" controlType=controlType}}
-                  <a {{bind-attr class=":wh-form-choice :icon control.iconClass"}} {{action "addControl" controlType}}> {{translate-control controlType.widget}}</a>
+                  <a {{bind-attr class=":wh-form-choice :icon controlType.iconClass"}} {{action "addControl" controlType}}> {{translate-control controlType.widget}}</a>
                 {{/view}}
               {{/unless}}
             {{/each}}
