@@ -269,17 +269,27 @@
     height: 100%
     background: transparent
     z-index: $z-index-popover - 1
+  .wy-control-group-grid .wh-grid-form
+    position: relative
+    .ui-sortable
+      min-height: 350px
   .wy-control-group-grid > .disabled
     display: none
+  .wy-control-group-grid .wh-form-builder-empty
+    position: absolute
+    margin: 0
+    top: $base-line-height
+    left: $base-line-height
+    right: $base-line-height
 
   // Clicked state for individual fields
   .wy-control-group.wy-control-group-edit
-    background: lighten($blue, 75%)
+    background: $table-stripe-color
     margin-left: -$gutter * 2
     margin-right: - $gutter * 2
     padding-left: $gutter * 2 + em($base-line-height / 2)
     padding-right: $gutter * 2 + em($base-line-height / 2)
-    border: dashed 3px $gray !important
+    box-shadow: 0 8px 6px -6px rgba(0,0,0,.2)
     label, .wy-form-message
       color: $text-color
     &:not(.wy-control-group-instruction) .wh-template-var
@@ -329,6 +339,7 @@
 .wh-control-group-dragged
   background: rgba(255,255,255,.8)
   border: dashed 3px $gray-dark !important
+  box-shadow: none !important
   .wh-grid-form
     display: none !important
 .wy-control-group-removed

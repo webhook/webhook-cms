@@ -1,10 +1,5 @@
 {{#if control.isInFormbuilder}}
 
-  {{#if control.controls}}
-    YES CONTROLS
-  {{else}}
-    NO CONTROLS
-  {{/if}}
 
   <div class="wh-grid-item active">
     <div class="wh-grid-value">
@@ -13,6 +8,12 @@
       <span class="wh-grid-value-name">Repeatable item</span>
     </div>
     <div class="wh-grid-form">
+      {{#unless control.controls}}
+        <div class="wh-form-builder-empty">
+          <h2>Drag elements into this repeatable form</h2>
+          <p>This will make a repeatable form that can make infinite items.</p>
+        </div>
+      {{/unless}}
       {{view "formbuilder-grid" model=control controller=formController}}
     </div>
   </div>
