@@ -207,7 +207,7 @@ export default DS.Model.extend({
       }));
     }
 
-    if (!controls.isAny('name', 'publish_date')) {
+    if (!controls.isAny('name', 'publish_date') && !this.get('oneOff')) {
       newControls.push(this.store.createRecord('control', {
         controlType: this.store.getById('control-type', 'datetime'),
         name       : 'publish_date',

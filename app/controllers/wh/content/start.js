@@ -34,7 +34,8 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      var store = this.store,
+      var controller = this,
+          store = this.store,
           controlPromises = Ember.A([]),
           controls = Ember.A([]);
 
@@ -74,11 +75,13 @@ export default Ember.ArrayController.extend({
           label: 'Last Updated'
         });
 
-        pushDateTimeControl({
-          name : 'publish_date',
-          label: 'Publish Date',
-          required: false
-        });
+        if (controller.get('newTypeType') !== 'single') {
+          pushDateTimeControl({
+            name : 'publish_date',
+            label: 'Publish Date',
+            required: false
+          });
+        }
 
       });
 

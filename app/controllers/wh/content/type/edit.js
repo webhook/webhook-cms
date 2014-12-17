@@ -326,7 +326,9 @@ export default Ember.ObjectController.extend({
     controls.findBy('name', 'last_updated').set('value', moment().format('YYYY-MM-DDTHH:mm'));
 
     // sync publish date with controller
-    controls.findBy('name', 'publish_date').set('value', this.get('publishDate'));
+    if (!this.get('type.oneOff')) {
+      controls.findBy('name', 'publish_date').set('value', this.get('publishDate'));
+    }
 
     // set create_date if missing
     if (!controls.findBy('name', 'create_date').get('value')) {
