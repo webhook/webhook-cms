@@ -259,11 +259,10 @@ export default Ember.Route.extend({
       control.set('value', value);
     });
 
-    controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
-
     if (type.get('oneOff')) {
       controller.set('isDraft', null);
     } else {
+      controller.set('publishDate', type.get('controls').findBy('name', 'publish_date').get('value'));
       controller.set('isDraft', data.isDraft || !controller.get('publishDate'));
     }
 
