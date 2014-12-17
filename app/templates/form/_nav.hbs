@@ -130,18 +130,20 @@
           <li class="active">{{t 'form.add'}} <span class="icon icon-arrow-down"></span></li>
           <li {{action "startEditing"}}>{{t 'form.edit'}}</li>
         </ul>
-        {{#view "draggable"}}
-          {{#each group in controlTypeGroups}}
-            <dl>
-              <dt>{{translate-control group.name true}}</dt>
-              {{#each group.controlTypes}}
-                {{#unless isHidden}}
-                  <dd data-id="{{unbound id}}"><a {{bind-attr class=":wh-form-choice :icon iconClass"}} {{action "addControl" this}}> {{translate-control widget}}</a></dd>
-                {{/unless}}
-              {{/each}}
-            </dl>
-          {{/each}}
-        {{/view}}
+
+        {{#each group in controlTypeGroups}}
+          <dl>
+            <dt>{{translate-control group.name true}}</dt>
+            {{#each controlType in group.controlTypes}}
+              {{#unless isHidden}}
+                {{#view "draggable" tagName="dd" controlType=controlType}}
+                  <a {{bind-attr class=":wh-form-choice :icon control.iconClass"}} {{action "addControl" controlType}}> {{translate-control controlType.widget}}</a>
+                {{/view}}
+              {{/unless}}
+            {{/each}}
+          </dl>
+        {{/each}}
+
       </div>
     </nav>
   {{/if}}

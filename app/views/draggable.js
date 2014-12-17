@@ -1,12 +1,28 @@
 export default Ember.View.extend({
 
-  didInsertElement : function () {
+  didInsertElement: function () {
     // real dumb way of making sure the content types are there
     this.$().one('mouseenter', this.makeDraggable.bind(this));
   },
 
   makeDraggable: function () {
-    this.$('dd').draggable({
+
+    var view = this;
+
+    var sortable;
+
+    // layout and grid control types are not allowed in grid
+    switch (view.get('controlType.id')) {
+      case 'layout':
+      case 'grid':
+        sortable = Ember.$('form > fieldset > .ui-sortable');
+        break;
+      default:
+        sortable = Ember.$('form .ui-sortable');
+        break;
+    }
+
+    this.$().draggable({
       helper: function (event) {
 
         var helper = $('<div class="wh-form-control-clone">'),
@@ -14,7 +30,7 @@ export default Ember.View.extend({
 
         helper.width(Ember.$('.wh-content-edit').width());
 
-        helper.data('id', $(this).data('id'));
+        helper.data('id', view.get('controlType.id'));
 
         icon.addClass($(this).find('a').attr('class')).text($(this).text());
 
@@ -22,7 +38,7 @@ export default Ember.View.extend({
 
       },
       appendTo: 'body',
-      connectToSortable: Ember.$('form .ui-sortable'),
+      connectToSortable: sortable,
       revert: true,
       revertDuration: 0
     });
