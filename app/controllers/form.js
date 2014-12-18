@@ -13,7 +13,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   addedControls       : Ember.A([]),
   removedControls     : Ember.A([]),
+  removedGridControls : Ember.A([]),
   changedNameControls : Ember.A([]),
+  changedGridNameControls: Ember.A([]),
   changedRadioControls: Ember.A([]),
   changedRelationTypeControls: Ember.A([]),
 
@@ -511,12 +513,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     }
 
     var changedNameControls = this.get('changedNameControls');
+    var changedGridNameControls = this.get('changedGridNameControls');
     var removedControls = this.get('removedControls');
+    var removedGridControls = this.get('removedGridControls');
     var changedRadioControls = this.get('changedRadioControls');
     var contentType = this.get('model');
 
     // if we didn't remove controls or change control names we do not need to update anything
-    if (!removedControls.get('length') && !changedNameControls.get('length') && !changedRadioControls.get('length')) {
+    if (!removedControls.get('length') && !removedGridControls.get('length') && !changedNameControls.get('length') && !changedGridNameControls.get('length') && !changedRadioControls.get('length')) {
       Ember.Logger.info('Item updates not needed');
       return;
     }
@@ -533,8 +537,25 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         itemData[control.get('originalName')] = null;
       });
 
+      changedGridNameControls.forEach(function (controlPair) {
+        if (Ember.isArray(itemData[controlPair.get('gridControl.name')])) {
+          itemData[controlPair.get('gridControl.name')].forEach(function (gridItem) {
+            gridItem[controlPair.get('control.name')] = gridItem[controlPair.get('control.originalName')] === undefined ? null : gridItem[controlPair.get('control.originalName')];
+            gridItem[controlPair.get('control.originalName')] = null;
+          });
+        }
+      });
+
       removedControls.forEach(function (control) {
         itemData[control.get('originalName')] = null;
+      });
+
+      removedGridControls.forEach(function (controlPair) {
+        if (Ember.isArray(itemData[controlPair.get('gridControl.name')])) {
+          itemData[controlPair.get('gridControl.name')].forEach(function (gridItem) {
+            gridItem[controlPair.get('control.name')] = null;
+          });
+        }
       });
 
       changedRadioControls.forEach(function (control) {
@@ -566,7 +587,9 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
   promptConfirmChanges: function () {
     if (this.get('removedControls.length') ||
+        this.get('removedGridControls.length') ||
         this.get('changedNameControls.length') ||
+        this.get('changedGridNameControls.length') ||
         this.get('changedRadioControls.length') ||
         this.get('changedRelationTypeControls.length')) {
       this.toggleProperty('confirmChangedControlsPrompt');
@@ -905,19 +928,32 @@ export default Ember.ObjectController.extend(Ember.Evented, {
       var contentType = this.get('model');
 
       // reset changedNameControls in case they backed out and decided to change the name back.
-      formController.set('changedNameControls', Ember.A([]));
+      formController.get('changedNameControls').clear();
+      formController.get('changedGridNameControls').clear();
 
       // reset changedRadioControls in case they backed out and decided to change the values back
-      formController.set('changedRadioControls', Ember.A([]));
+      formController.get('changedRadioControls').clear();
 
       // reset changedRelationTypeControls in case they backed out and decided to change the values back
-      formController.set('changedRelationTypeControls', Ember.A([]));
+      formController.get('changedRelationTypeControls').clear();
 
       contentType.get('controls').forEach(function (control) {
 
         // See if we changed any control names
         if (control.get('originalName') && control.get('originalName') !== control.get('name')) {
           formController.get('changedNameControls').addObject(control);
+        }
+
+        // See if we changed any grid sub control names
+        if (control.get('controlType.widget') === 'grid') {
+          control.get('controls').forEach(function (subControl) {
+            if (subControl.get('originalName') && subControl.get('originalName') !== subControl.get('name')) {
+              formController.get('changedGridNameControls').addObject(Ember.Object.create({
+                gridControl: control,
+                control: subControl
+              }));
+            }
+          });
         }
 
         // See if we changed any radio values
@@ -1003,6 +1039,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         } else {
           this.get('removedControls').addObject(control);
         }
+      } else if (model.get('constructor.typeKey') === 'control') {
+        this.get('removedGridControls').addObject(Ember.Object.create({
+          gridControl: model,
+          control: control
+        }));
       }
 
       control.set('justDeleted', true);

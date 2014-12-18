@@ -29,7 +29,9 @@ export default Ember.Route.extend({
 
     controller.set('addedControls', Ember.A([]));
     controller.set('removedControls', Ember.A([]));
+    controller.set('removedGridControls', Ember.A([]));
     controller.set('changedNameControls', Ember.A([]));
+    controller.set('changedGridNameControls', Ember.A([]));
     controller.set('changedRadioControls', Ember.A([]));
     controller.set('changedRelationTypeControls', Ember.A([]));
 
@@ -37,6 +39,12 @@ export default Ember.Route.extend({
     // If control name changes, data keys must be updated
     model.get('controls').forEach(function (control) {
       control.set('originalName', control.get('name'));
+    });
+
+    model.get('controls').filterBy('controlType.widget', 'grid').forEach(function (gridControl) {
+      gridControl.get('controls').forEach(function (control) {
+        control.set('originalName', control.get('name'));
+      });
     });
 
     // Save original related content types for comparison when saving
