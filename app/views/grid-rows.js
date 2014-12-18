@@ -50,7 +50,6 @@ export default Ember.CollectionView.extend({
     ],
 
     firstControl: function () {
-      // {{#each rowControl in view.parentView.gridControl.controls}}
 
       var control = this.get('parentView.gridControl.controls.firstObject');
       var store = control.get('store');
@@ -94,6 +93,7 @@ export default Ember.CollectionView.extend({
 
     scrollToRow: function () {
       if (this.get('rowIndex') === this.get('parentView.context.focusOnRow')) {
+        var view = this;
         $('html, body').animate({
           scrollTop: this.$().offset().top
         }, 1000);

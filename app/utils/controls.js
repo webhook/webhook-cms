@@ -89,6 +89,14 @@ export default function dataFromControls (controls) {
           return dataFromControls(control.get('controls'));
         });
 
+        value = value.filter(function (row) {
+          var hasValue = false;
+          Ember.$.each(row, function (key, value) {
+            hasValue = !Ember.isEmpty(value);
+          });
+          return hasValue;
+        });
+
       } else {
         value = [];
       }

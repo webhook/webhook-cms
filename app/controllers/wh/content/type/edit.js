@@ -359,19 +359,19 @@ export default Ember.ObjectController.extend({
     // if all controls are valid update relationships then commit the item
     validateControls(this.get('type'))
       .then(this.updateReverseRelationships.bind(this))
-      .then(this.commitItem.bind(this));
-      // .catch(function (error) {
-      //
-      //   Ember.Logger.warn(error);
-      //
-      //   if (window.trackJs) {
-      //     window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
-      //     window.trackJs.track(error);
-      //   }
-      //
-      //   controller.send('notify', 'danger', "There was an error while saving.");
-      //
-      // });
+      .then(this.commitItem.bind(this))
+      .catch(function (error) {
+
+        Ember.Logger.warn(error);
+
+        if (window.trackJs) {
+          window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
+          window.trackJs.track(error);
+        }
+
+        controller.send('notify', 'danger', "There was an error while saving.");
+
+      });
 
   },
 
