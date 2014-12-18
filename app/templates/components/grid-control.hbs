@@ -3,13 +3,13 @@
   <div class="wh-grid-item active">
     <div class="wh-grid-value">
       <span class="icon icon-ellipsis-v"></span>
-      <span class="wh-grid-num">1</span>
+      <span class="wh-grid-num">0</span>
       <span class="wh-grid-value-name">{{t 'form.control.grid.valueName'}}</span>
     </div>
     <div class="wh-grid-form">
       {{#unless control.controls}}
         <div class="wh-form-builder-empty">
-          <h2>Drag elements into this repeatable form</h2>
+          <h2>{{t 'form.control.grid.emptyTitle'}}</h2>
           <p>{{t 'form.control.grid.emptyDesc'}}</p>
         </div>
       {{/unless}}
