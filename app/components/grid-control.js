@@ -47,6 +47,9 @@ export default Ember.Component.extend({
     },
 
     removeRow: function (rowValues) {
+      if (!window.confirm('Are you sure you would like to remove this row?')) {
+        return;
+      }
       this.get('control.value').removeObject(rowValues);
     },
 
