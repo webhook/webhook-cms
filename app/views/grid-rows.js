@@ -64,8 +64,13 @@ export default Ember.CollectionView.extend({
 
       clone.set('value', this.get('content').get(control.get('name')));
 
+      var content = this.get('content');
+      content.addObserver(control.get('name'), function () {
+        clone.set('value', content.get(control.get('name')));
+      });
+
       return clone;
-    }.property('parentView.gridControl.controls.firstObject'),
+    }.property('parentView.gridControl.controls.firstObject.controlType.widget'),
 
     isActive: function () {
       return this.get('parentView.context.activeRows').indexOf(this.get('rowIndex')) >= 0;
