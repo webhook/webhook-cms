@@ -10,7 +10,7 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
   var imageSource = '';
 
   // New image format
-  if (typeof src === 'object') {
+  if (typeof src === 'object' && src.resize_url) {
     imageSource = src.resize_url;
 
     imageSource = imageSource + '=s' + (options.hash.size || 100);
