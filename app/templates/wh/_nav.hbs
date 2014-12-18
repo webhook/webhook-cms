@@ -51,12 +51,12 @@
             <li>
               {{#link-to 'wh.settings.billing'}}
                 {{#if session.billing.isTrial}}
-                  Upgrade
+                {{t 'wh.trial.upgrade'}}
                   <span class="wh-trial-notice">
                     {{#if session.billing.endTrialIsLastDay}}
-                     Last day of trial
+                    {{t 'wh.trial.lastDay'}}
                     {{else}}
-                      {{session.billing.endTrialDays}} trial days left
+                      {{session.billing.endTrialDays}} {{t 'wh.trial.daysLeft'}}
                     {{/if}}
                   </span>
                 {{else}}
