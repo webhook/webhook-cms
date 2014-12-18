@@ -1,4 +1,4 @@
-<div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" data-placement="left" title="{{t 'form.control.grid.tooltipRow'}}">
+<div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" data-placement="left" {{translateAttr title="form.control.grid.tooltipRow"}}>
   <span class="icon icon-ellipsis-v"></span>
   <span class="wh-grid-num">{{view.rowIndex}}</span>
   <span class="wh-grid-value-name">
@@ -6,8 +6,8 @@
       {{partial controlType.valuePartialPath}}
     {{/view}}
   </span>
-  <span class="icon icon-remove-sign" data-toggle="tooltip" title="{{t 'form.control.grid.tooltipDelete'}}" {{ action 'removeRow' view.content bubbles=false }}></span>
-  <span class="icon icon-plus-sign" data-toggle="tooltip" title="{{t 'form.control.grid.tooltipAdd'}}" {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
+  <span class="icon icon-remove-sign" data-toggle="tooltip" {{translateAttr title="form.control.grid.tooltipDelete"}} {{ action 'removeRow' view.content bubbles=false }}></span>
+  <span class="icon icon-plus-sign" data-toggle="tooltip" {{translateAttr title="form.control.grid.tooltipAdd"}} {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
 </div>
 
 {{#if view.isActive}}
