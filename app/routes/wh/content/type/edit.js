@@ -270,11 +270,14 @@ export default Ember.Route.extend({
       setControlValue(control, data[control.get('name')]);
     });
 
+<<<<<<< HEAD
     // Use search to check for duplicate names
     var nameControl = type.get('controls').findBy('name', 'name');
     nameControl.addObserver('value', route.dupeNameCheck.bind(route));
     controller.set('nameControl', nameControl);
 
+=======
+>>>>>>> develop
     if (type.get('oneOff')) {
       controller.set('isDraft', null);
     } else {

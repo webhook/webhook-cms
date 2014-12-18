@@ -1,4 +1,4 @@
-<div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" data-placement="left" title="Click to edit or close, drag to reorder.">
+<div class="wh-grid-value" {{ action 'toggleRow' view.rowIndex }} data-toggle="tooltip" data-placement="left" title="{{t 'form.control.grid.tooltipRow'}}">
   <span class="icon icon-ellipsis-v"></span>
   <span class="wh-grid-num">{{view.rowIndex}}</span>
   <span class="wh-grid-value-name">
@@ -6,8 +6,8 @@
       {{partial controlType.valuePartialPath}}
     {{/view}}
   </span>
-  <span class="icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action 'removeRow' view.content bubbles=false }}></span>
-  <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new row below this one." {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
+  <span class="icon icon-remove-sign" data-toggle="tooltip" title="{{t 'form.control.grid.tooltipDelete'}}" {{ action 'removeRow' view.content bubbles=false }}></span>
+  <span class="icon icon-plus-sign" data-toggle="tooltip" title="{{t 'form.control.grid.tooltipAdd'}}" {{ action 'addRow' view.rowIndex1 bubbles=false }}></span>
 </div>
 
 {{#if view.isActive}}
@@ -21,8 +21,8 @@
     }}
   {{/each}}
   <div class="wy-btn-group">
-    <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{ action 'deactivateRow' view.rowIndex }}> Done / close</button>
-    <button type="button" class="btn btn-small btn-link" {{ action 'removeRow' view.content }}>Delete</button>
+    <button type="button" class="btn btn-small btn-info icon icon-ok-sign" {{ action 'deactivateRow' view.rowIndex }}> {{t 'form.control.grid.action'}}</button>
+    <button type="button" class="btn btn-small btn-link" {{ action 'removeRow' view.content }}>{{t 'form.control.grid.delete'}}</button>
   </div>
 </div>
 {{/if}}

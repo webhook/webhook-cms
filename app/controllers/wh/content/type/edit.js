@@ -44,7 +44,18 @@ export default Ember.ObjectController.extend({
       return null;
     }
 
-    return '/_wh_previews/' + this.get('type.id') + '/' + this.get('previewUrl') + '/';
+    var customListUrl = this.get('type.customUrls.listUrl');
+    var id = this.get('type.id');
+    var urlPrefix = '/_wh_previews/';
+
+    // If no custom url, use the type id
+    if(!customListUrl) {
+      urlPrefix += id + '/';
+    } else if (customListUrl !== '#') { // If the custom url is # we dont have anything, else use it
+      urlPrefix += customListUrl + '/';
+    }
+
+    return urlPrefix + this.get('previewUrl') + '/';
 
   }.property('previewUrl'),
 
