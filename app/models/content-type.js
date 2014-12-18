@@ -69,6 +69,27 @@ export default DS.Model.extend({
 
   }.on('didDelete'),
 
+  deleteGridControls: function () {
+
+    var deletedContentTypeId = this.get('id');
+
+    this.store.find('content-type').then(function (contentTypes) {
+      contentTypes.forEach(function (contentType) {
+        var controls = contentType.get('controls');
+        var gridControls = controls.filterBy('controlType.widget', 'grid');
+        gridControls.forEach(function (gridControl) {
+          var relatedControls = gridControl.get('controls')
+                                  .filterBy('controlType.widget', 'relation')
+                                  .filterBy('meta.contentTypeId', deletedContentTypeId);
+          gridControl.get('controls').removeObjects(relatedControls);
+          gridControl.transitionTo('updated.uncommitted');
+        });
+        contentType.save();
+      });
+    });
+
+  }.on('didDelete'),
+
   indexingTotal: 0,
   indexingComplete: 0,
 
