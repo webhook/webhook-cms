@@ -244,22 +244,26 @@ export default Ember.Route.extend({
       }
 
       if (control.get('controlType.widget') === 'grid') {
-        if (Ember.isEmpty(value) || !Ember.isArray(value)) {
-          value = Ember.A([Ember.Object.create({})]);
-        } else {
-          value = value.map(function (controlRow) {
-            var rowValue = Ember.Object.create({});
-            control.get('controls').forEach(function (gridControl) {
-              setControlValue(gridControl, controlRow[gridControl.get('name')]);
-              rowValue.set(gridControl.get('name'), gridControl.get('value'));
-            });
-            return rowValue;
+
+        var setGridValues = function (controlRow) {
+          var rowValue = Ember.Object.create({});
+          control.get('controls').forEach(function (gridControl) {
+            setControlValue(gridControl, controlRow[gridControl.get('name')]);
+            rowValue.set(gridControl.get('name'), gridControl.get('value'));
           });
-          value.pushObject(Ember.Object.create({}));
+          return rowValue;
+        };
+
+        if (Ember.isEmpty(value) || !Ember.isArray(value)) {
+          value = [{}].map(setGridValues);
+        } else {
+          value.pushObject({});
+          value = value.map(setGridValues);
         }
+
       }
 
-      if (!value && control.get('controlType.valueType') === 'object') {
+      if (Ember.isEmpty(value) && control.get('controlType.valueType') === 'object') {
         value = {};
       }
 

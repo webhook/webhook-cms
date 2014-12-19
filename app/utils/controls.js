@@ -34,6 +34,11 @@ export default function dataFromControls (controls) {
         break;
 
       default:
+
+        if (typeof value === "undefined") {
+          value = {};
+        }
+
         Ember.$.each(value, function (key, childValue) {
           if (!childValue) {
             delete value[key];
