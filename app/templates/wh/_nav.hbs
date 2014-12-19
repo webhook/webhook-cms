@@ -51,12 +51,12 @@
             <li>
               {{#link-to 'wh.settings.billing'}}
                 {{#if session.billing.isTrial}}
-                  Upgrade
+                {{t 'wh.trial.upgrade'}}
                   <span class="wh-trial-notice">
                     {{#if session.billing.endTrialIsLastDay}}
-                     Last day of trial
+                    {{t 'wh.trial.lastDay'}}
                     {{else}}
-                      {{session.billing.endTrialDays}} trial days left
+                      {{session.billing.endTrialDays}} {{t 'wh.trial.daysLeft'}}
                     {{/if}}
                   </span>
                 {{else}}
@@ -67,7 +67,7 @@
             {{/unless}}
             {{#unless buildEnvironment.selfHosted}}
             <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
-            <li>{{#link-to 'wh.settings.urls'}}URL redirects{{/link-to}}</li>
+            <li>{{#link-to 'wh.settings.urls'}}{{t 'wh.configuration.urls'}}{{/link-to}}</li>
             {{/unless}}
             <li>{{#link-to 'wh.settings.data'}}{{t 'wh.configuration.data'}}{{/link-to}}</li>
           </ul>
