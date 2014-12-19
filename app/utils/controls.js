@@ -93,6 +93,9 @@ export default function dataFromControls (controls) {
           var hasValue = false;
           Ember.$.each(row, function (key, value) {
             hasValue = !Ember.isEmpty(value);
+            if (hasValue) {
+              return false;
+            }
           });
           return hasValue;
         });
