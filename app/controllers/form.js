@@ -638,6 +638,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
                 // kill old content type
                 contentTypeRef.child(oldId).remove(function () {
                   Ember.Logger.log('Old content type `%@` destroyed.'.fmt(oldId));
+                  contentType.unloadRecord();
                   Ember.run(null, resolve);
                 });
               });
