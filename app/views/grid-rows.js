@@ -51,7 +51,12 @@ export default Ember.CollectionView.extend({
 
     firstControl: function () {
 
-      var control = this.get('parentView.gridControl.controls.firstObject');
+      var control = this.get('parentView.gridControl.controls').rejectBy('controlType.widget', 'instruction').get('firstObject');
+
+      if (!control) {
+        return null;
+      }
+
       var store = control.get('store');
 
       // fighting with Ember to copy control
