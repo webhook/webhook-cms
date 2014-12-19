@@ -89,7 +89,7 @@
 
   <pre><code>{{t 'wh.settings.data.api.title'}}:    {{ apiKey }}</code></pre>
 
-  <button class="btn btn-danger icon icon-remove-sign" {{action "refreshApi"}} {{bind-attr disabled=isRefreshingApi}}> {{#if isRefreshingApi}}Resetting <span class="wy-spinner"></span>{{else}}Reset API Key{{/if}}</button>
+  <button class="btn btn-danger icon icon-remove-sign" {{action "refreshApi"}} {{bind-attr disabled=isRefreshingApi}}> {{#if isRefreshingApi}}{{t 'wh.settings.data.api.resetting'}} <span class="wy-spinner"></span>{{else}}{{t 'wh.settings.data.api.reset'}}{{/if}}</button>
 </section>
 
 <section class="wh-content-head wh-content-head-again">
