@@ -257,6 +257,19 @@ export default Ember.Route.extend({
         if (Ember.isEmpty(value) || !Ember.isArray(value)) {
           value = [{}].map(setGridValues);
         } else {
+
+          // remove all empty rows first
+          value = value.filter(function (row) {
+            var hasValue = false;
+            Ember.$.each(row, function (key, value) {
+              hasValue = !Ember.isEmpty(value);
+              if (hasValue) {
+                return false;
+              }
+            });
+            return hasValue;
+          });
+
           value.pushObject({});
           value = value.map(setGridValues);
         }
