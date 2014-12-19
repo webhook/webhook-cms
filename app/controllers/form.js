@@ -141,27 +141,35 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
     var label = controlType.get('name');
 
-    var dupeNameControls = controls.filter(function (control) {
-      return control.get('label').search(new RegExp('^' + label + '(?: \\d+)?$')) === 0;
-    });
-
-    if (dupeNameControls.get('length') > 0) {
-      var highestDupe = dupeNameControls.reduce(function (previousNumber, item) {
-        var currentNumber = parseInt(item.get('label').match(/\d+$/), 10);
-        if (isNaN(currentNumber)) {
-          return previousNumber;
-        } else {
-           return Math.max(previousNumber, currentNumber);
-        }
-      }, 1);
-      label = label + ' ' + (highestDupe + 1);
-    }
-
     var control = this.store.createRecord('control', {
       label      : label,
       controlType: controlType,
       showInCms  : (controls.filterBy('showInCms').get('length') < 3)
     });
+
+    var dupeCount = 0;
+
+    while (controls.isAny('name', control.get('name'))) {
+      dupeCount++;
+      control.set('label', label + ' ' + dupeCount);
+    }
+    // var name = control.get('name');
+    //
+    // var dupeNameControls = controls.filter(function (control) {
+    //   return control.get('label').search(new RegExp('^' + label + '(?: \\d+)?$')) === 0;
+    // });
+    //
+    // if (dupeNameControls.get('length') > 0) {
+    //   var highestDupe = dupeNameControls.reduce(function (previousNumber, item) {
+    //     var currentNumber = parseInt(item.get('label').match(/\d+$/), 10);
+    //     if (isNaN(currentNumber)) {
+    //       return previousNumber;
+    //     } else {
+    //        return Math.max(previousNumber, currentNumber);
+    //     }
+    //   }, 1);
+    //   label = label + ' ' + (highestDupe + 1);
+    // }
 
     control.set('widgetIsValid', true);
 
