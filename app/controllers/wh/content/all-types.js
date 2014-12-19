@@ -47,8 +47,27 @@ export default Ember.ArrayController.extend({
 
       });
 
+      // Remove relation controls from grid controls
+      var gridRelationPromises = Ember.A([]);
+      var deletedContentTypeId = contentType.get('id');
+
+      gridRelationPromises.pushObject(allTypesController.store.find('content-type').then(function (contentTypes) {
+        contentTypes.rejectBy('id', deletedContentTypeId).forEach(function (contentType) {
+          var controls = contentType.get('controls');
+          var gridControls = controls.filterBy('controlType.widget', 'grid');
+          gridControls.forEach(function (gridControl) {
+            var relatedControls = gridControl.get('controls')
+                                    .filterBy('controlType.widget', 'relation')
+                                    .filterBy('meta.contentTypeId', deletedContentTypeId);
+            gridControl.get('controls').removeObjects(relatedControls);
+            gridControl.transitionTo('updated.uncommitted');
+          });
+          gridRelationPromises.pushObject(contentType.save());
+        });
+      }));
+
       // When relations are done...
-      Ember.RSVP.Promise.all(relationPromises).then(function () {
+      Ember.RSVP.Promise.all(relationPromises, gridRelationPromises).then(function () {
 
         Ember.Logger.log('Reverse relationships have been removed, proceeding to destroy `%@`.'.fmt(contentTypeName));
 
