@@ -72,7 +72,7 @@ export default Ember.CollectionView.extend({
     }.property('parentView.gridControl.controls.firstObject.controlType.widget'),
 
     isActive: function () {
-      return this.get('parentView.context.activeRows').indexOf(this.get('rowIndex')) >= 0;
+      return this.get('parentView.context.activeRows').indexOf('%@-%@'.fmt(this.get('parentView.gridControl.name'), this.get('rowIndex'))) >= 0;
     }.property('parentView.context.activeRows.length', 'rowIndex'),
 
     rowIndex: function () {

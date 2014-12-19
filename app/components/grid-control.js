@@ -5,7 +5,7 @@ export default Ember.Component.extend({
   focusOnRow: 0,
 
   didInsertElement: function () {
-    this.get('activeRows').addObject(this.get('control.value.length') - 1);
+    this.get('activeRows').addObject('%@-%@'.fmt(this.get('control.name'), this.get('control.value.length') - 1));
   },
 
   willDestroyElement: function () {
@@ -41,7 +41,7 @@ export default Ember.Component.extend({
         this.get('control.value').pushObject(Ember.Object.create({}));
       }
 
-      this.get('activeRows').pushObject(index);
+      this.get('activeRows').pushObject('%@-%@'.fmt(this.get('control.name'), index));
       this.set('focusOnRow', index);
 
     },
@@ -54,15 +54,15 @@ export default Ember.Component.extend({
     },
 
     activateRow: function (index) {
-      this.get('activeRows').addObject(index);
+      this.get('activeRows').addObject('%@-%@'.fmt(this.get('control.name'), index));
     },
 
     deactivateRow: function (index) {
-      this.get('activeRows').removeObject(index);
+      this.get('activeRows').removeObject('%@-%@'.fmt(this.get('control.name'), index));
     },
 
     toggleRow: function (index) {
-      if (this.get('activeRows').contains(index)) {
+      if (this.get('activeRows').contains('%@-%@'.fmt(this.get('control.name'), index))) {
         this.send('deactivateRow', index);
       } else {
         this.send('activateRow', index);
