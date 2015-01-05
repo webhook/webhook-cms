@@ -75,7 +75,14 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     return slug;
   },
 
+  invalidateControl: function (control, reason) {
+    control.set('widgetIsValid', false);
+    control.get('widgetErrors').addObject(reason);
+  },
+
   validateControls: function () {
+
+    var controller = this;
 
     this.get('controls').setEach('widgetIsValid', true);
     this.get('controls').forEach(function (control) {
@@ -96,26 +103,24 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     this.get('controls').filter(function (control, index) {
       return dupes.indexOf(control.get('name')) >= 0;
     }).forEach(function (control) {
-      control.set('widgetIsValid', false);
-      control.get('widgetErrors').addObject('Duplicate name.');
+      controller.invalidateControl(control, 'Control name must be unique to form.');
+    });
+
+    this.get('controls').filter(function (control) {
+      return /^[0-9]/.test(control.get('name'));
+    }).forEach(function (control) {
+      controller.invalidateControl(control, 'Control name cannot start with a number.');
     });
 
     this.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
       if (Ember.isNone(control.get('meta.contentTypeId'))) {
-        control.set('widgetIsValid', false);
-        control.get('widgetErrors').addObject('You must select a related content type.');
+        controller.invalidateControl(control, 'You must select a related content type.');
       }
     });
 
     this.get('controls').filterBy('name', 'id').forEach(function (control) {
-      control.set('widgetIsValid', false);
-      control.get('widgetErrors').addObject('`id` is a reserved name. Please choose another.');
+      controller.invalidateControl(control, '`id` is a reserved control name. Please choose another.');
     });
-
-    // this.get('controls').filterBy('name', 'slug').forEach(function (control) {
-    //   control.set('widgetIsValid', false);
-    //   control.get('widgetErrors').addObject('Slug is a reserved name. Please choose another label.');
-    // });
 
   },
 
