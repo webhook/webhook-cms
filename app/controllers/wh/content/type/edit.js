@@ -471,18 +471,6 @@ export default Ember.ObjectController.extend({
       this.set('publishDate', moment().format('YYYY-MM-DDTHH:mm'));
     },
 
-    removeTabularRow: function (row, control) {
-      control.get('value').removeObject(row);
-    },
-
-    addTabularRow: function (control) {
-      var emptyRow = Ember.A([]);
-      control.get('meta.options').forEach(function () {
-        emptyRow.pushObject(Ember.Object.create());
-      });
-      control.get('value').pushObject(emptyRow);
-    },
-
     editSlug: function () {
       this.toggleProperty('isEditingSlug');
     },
