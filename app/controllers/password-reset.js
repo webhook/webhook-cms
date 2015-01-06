@@ -11,7 +11,7 @@ export default Ember.ObjectController.extend({
       this.set('success', false);
       this.set('error', null);
 
-      this.get('session.auth').sendPasswordResetEmail(this.get('email'), function (error, success) {
+      this.get('session.auth').sendPasswordResetEmail(this.get('email'), function (error) {
         if (!error) {
           this.set('success', true);
         } else {
