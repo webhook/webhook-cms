@@ -73,17 +73,15 @@ export default Ember.ObjectController.extend({
           oldPassword = this.get('oldPassword'),
           newPassword = this.get('newPassword');
 
-      this.get('session.auth').changePassword(email, oldPassword, newPassword, function (error, success) {
+      this.get('session.auth').changePassword(email, oldPassword, newPassword, function (error) {
         this.set('isLoading', false);
-
-        if (success) {
-          this.set('success', {
-            message: 'Password successfully changed'
-          });
-        }
 
         if (error) {
           this.set('errors', Ember.A([error]));
+        } else {
+          this.set('success', {
+            message: 'Password successfully changed'
+          });
         }
       }.bind(this));
 
