@@ -57,6 +57,8 @@ export default Ember.ArrayController.extend({
       });
     }
 
+    inviteEmail = inviteEmail.toLowerCase();
+
     var data = {
       userid     : inviteEmail,
       from_userid: currentEmail,
@@ -220,7 +222,7 @@ export default Ember.ArrayController.extend({
         return;
       }
 
-      var email = this.get('inviteEmail');
+      var email = this.get('inviteEmail').toLowerCase();
 
       // Make sure they arent already on the list
       if (this.get('content').isAny('email', email)) {

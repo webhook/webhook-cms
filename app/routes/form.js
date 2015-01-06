@@ -121,7 +121,7 @@ export default Ember.Route.extend({
         control.set('value', value);
 
       });
-    }
+    };
 
     setupControls(model);
 

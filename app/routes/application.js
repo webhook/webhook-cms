@@ -195,9 +195,9 @@ export default Ember.Route.extend({
       managementSiteRef.child('key').once('value', getToken, function (error) {
 
         if (error.code === 'PERMISSION_DENIED') {
-          var escapedEmail = user.email.replace(/\./g, ',1');
+          var escapedEmail = user.email.toLowerCase().replace(/\./g, ',1');
           // Try to add to user list, if this is allowed they were a potential user
-          managementSiteRef.child('users').child(escapedEmail).set(user.email, function (error) {
+          managementSiteRef.child('users').child(escapedEmail).set(user.email.toLowerCase(), function (error) {
             if (error) {
               reject(error);
               return;
@@ -242,9 +242,11 @@ export default Ember.Route.extend({
       this.setupMessageListener();
     }
 
+    user.email = user.email.toLowerCase();
+
     Ember.Logger.info('Logged in as ' + user.email);
 
-    var escapedEmail = user.email.replace(/\./g, ',1');
+    var escapedEmail = user.email.toLowerCase().replace(/\./g, ',1');
 
     var ownerCheck = new Ember.RSVP.Promise(function (resolve, reject) {
       session.set('isOwner', false);

@@ -11,7 +11,7 @@ export default Ember.Route.extend({
     var key = getURLParameter('key') || null;
 
     controller.setProperties({
-      email    : username,
+      email    : username.toLowerCase(),
       verification_key: key,
       password : "",
       password2: "",
