@@ -1,1 +1,11 @@
-{{date-time value=view.content.value disabled=view.content.disabled}} {{format-time view.content.value}}
+{{date-time
+  value=view.content.value
+  meta=view.content.meta
+  disabled=view.content.disabled
+}}
+
+{{#unless view.content.meta.hideDate}}
+{{#unless view.content.meta.hideTime}}
+{{format-time view.content.value}}
+{{/unless}}
+{{/unless}}

@@ -29,6 +29,22 @@ export default Ember.Component.extend({
 
     var date = this.get('date');
     var time = this.get('time');
+
+    if (!date && !time) {
+      this.set('value', null);
+      return;
+    }
+
+    if (this.get('meta.hideDate')) {
+      if (!time) {
+        this.set('value', null);
+        return;
+      }
+      if (!date) {
+        date = moment().format('YYYY-MM-DD');
+      }
+    }
+
     var value = time ? (date + ' ' + time) : date;
 
     if (moment(value).isValid()) {

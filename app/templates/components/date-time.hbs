@@ -1,1 +1,7 @@
-{{input type="date" value=date placeholder="mm/dd/yyyy" disabled=disabled}} {{input type="time" value=time placeholder="hh:mm:ss" disabled=disabled}}
+{{#unless meta.hideDate}}
+  {{input type="date" value=date placeholder="mm/dd/yyyy" disabled=disabled}}
+{{/unless}}
+
+{{#unless meta.hideTime}}
+  {{input type="time" value=time placeholder="hh:mm:ss" disabled=disabled}}
+{{/unless}}
