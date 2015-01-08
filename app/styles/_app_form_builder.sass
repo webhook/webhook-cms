@@ -206,6 +206,8 @@
   code
     background: $gray-dark
     border: none
+  textarea
+    min-height: 150px
 
 
 // RIGHT SIDE OF FORM BUILDER
@@ -243,18 +245,13 @@
     padding: $base-line-height / 2
     margin-bottom: 0
     border: solid 1px transparent
+    border-bottom: dotted 1px $table-border-color
     position: relative
     opacity: 1
     +transition(background .2s linear, height .2s linear, opacity .2s linear, margin-left .2s linear)
   .wy-control-group:hover
     border: dashed 1px $gray-light
     cursor: pointer
-  .wy-control-group-instruction
-    margin-left: $base-line-height / 2
-    margin-right: $base-line-height / 2
-    label
-      margin-left: -$base-line-height / 2
-      margin-right: -$base-line-height / 2
   .disabled
     position: absolute
     display: block

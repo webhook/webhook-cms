@@ -20,20 +20,16 @@
   font-size: 80%
   line-height: 1.5
 .wy-control-group.wy-control-group-instruction
-  @extend .wy-alert
-  margin-right: $base-line-height
-  margin-left: $base-line-height
-  border-bottom: none
-  label
-    @extend .wy-alert-title
-    color: $white !important
-    margin-left: -$base-line-height
-    margin-right: -$base-line-height
-  .wy-form-message
-    color: $text-color
+  h3
+    margin-bottom: $base-line-height / 2
+  p
     font-size: 90%
-    font-style: normal
-
+    margin-bottom: $base-line-height / 2
+    color: $gray
+  p:last-child
+    margin-bottom: 0
+.wh-content-edit .wy-control-group.wy-control-group-instruction
+  border-bottom: none
 .wy-control-group-file
   audio
     margin-bottom: $base-line-height / 4
