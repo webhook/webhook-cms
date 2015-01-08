@@ -22,24 +22,24 @@ export default Ember.Component.extend({
 
         if (self.get('disabled')) {
           redactor.opts.buttons.forEach(function (button) {
-            redactor.buttonRemove(button);
+            redactor.button.remove(button);
           });
           redactor.opts.plugins.forEach(function (button) {
             if (button === 'fullscreen') {
               return;
             }
-            redactor.buttonRemove(button);
+            redactor.button.remove(button);
           });
           redactor.$editor.removeAttr('contenteditable');
           return;
         }
 
         if (self.get('value')) {
-          redactor.set(self.get('value'));
+          redactor.code.set(self.get('value'));
         }
 
         rte.on('mutate.webhookRedactor', function (event, redactor) {
-          var fragment = Ember.$('<div>').html(redactor.get());
+          var fragment = Ember.$('<div>').html(redactor.code.get());
 
           // remove empty captions
           fragment.find('figcaption').filter(function() {
@@ -59,20 +59,22 @@ export default Ember.Component.extend({
 
     rte.webhookRedactor();
 
-    var whRedactor = rte.webhookRedactor('getObject');
+    var whRedactor = rte.webhookRedactor('core.getObject');
     this.set('whRedactor', whRedactor);
 
     if (this.get('disabled')) {
       return;
     }
 
-    whRedactor.buttonAddBefore('video', 'image', 'Image', this.imageButtonCallback.bind(this));
-    whRedactor.buttonGet('image').addClass('redactor_btn_image');
+    var button = whRedactor.button.addBefore('video', 'image', 'Image');
+    whRedactor.button.addCallback(button, this.imageButtonCallback.bind(this));
+    
+    whRedactor.button.get('image').addClass('redactor_btn_image');
 
     // turn off buttons that are disabled
     Ember.$.each(this.get('options') || {}, function (option, value) {
       if (!value) {
-        Ember.$(whRedactor.buttonGet(option)).toggle();
+        Ember.$(whRedactor.button.get(option)).toggle();
       }
     });
 
@@ -87,10 +89,10 @@ export default Ember.Component.extend({
   imageButtonCallback: function () {
 
     // maintain undo buffer
-    this.get('whRedactor').bufferSet();
+    this.get('whRedactor').buffer.set();
 
     // figure out where the cursor is
-    this.set('cursorElement', this.get('whRedactor').getBlock() || this.get('whRedactor').getCurrent());
+    this.set('cursorElement', this.get('whRedactor').selection.getBlock() || this.get('whRedactor').selection.getCurrent());
 
     // fake a control
     this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
@@ -141,7 +143,7 @@ export default Ember.Component.extend({
   },
 
   toggleOption: function (component, option) {
-    Ember.$(this.get('whRedactor').buttonGet(option.split('.').pop())).toggle();
+    Ember.$(this.get('whRedactor').button.get(option.split('.').pop())).toggle();
   },
 
   actions: {
@@ -157,7 +159,7 @@ export default Ember.Component.extend({
 
       var data = '<figure data-type="image"><a href="' + response.url + '"><img data-resize-src="' + response.resize_url + '" src="' + this.resizeImage(response.resize_url, 1200) + '"></a><figcaption></figcaption></figure>';
 
-      whRedactor.selectionRestore();
+      whRedactor.selection.restore();
 
       if (this.get('cursorElement')) {
         $(this.get('cursorElement')).after(data);
@@ -165,9 +167,9 @@ export default Ember.Component.extend({
         whRedactor.insertHtmlAdvanced(data, false);
       }
 
-      whRedactor.selectionRestore();
+      whRedactor.selection.restore();
 
-      whRedactor.sync();
+      whRedactor.code.sync();
 
     }
   }
