@@ -46,6 +46,10 @@ export default Ember.Component.extend({
             return $.trim($(this).text()) === '';
           }).remove();
 
+          fragment.find('cite').filter(function() {
+            return $.trim($(this).text()) === '';
+          }).remove();
+
           self.set('value', fragment.html());
 
           // data isn't being set in time for the save so force it.
