@@ -31,7 +31,7 @@
           <div class="wy-form-full">
             <label {{bind-attr for="view.help.elementId"}}>{{t 'form.info.instruction'}} <i class="icon icon-question-sign" data-toggle="tooltip" {{translateAttr title="form.info.instructionTitle"}}></i></label>
             {{textarea valueBinding="editingControl.help" viewName="help"}}
-            <span class="wy-form-message">This field allows <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">markdown syntax</a>.</span>
+            <span class="wy-form-message">{{t 'form.info.instructionMessage'}}</span>
           </div>
           {{#if editingControl.showRequired}}
             <div class="wy-form-full">
