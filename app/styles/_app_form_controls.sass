@@ -28,6 +28,14 @@
     color: $gray
   p:last-child
     margin-bottom: 0
+  ul
+    @extend %wy-plain-list-disc
+    font-size: 90%
+    margin-bottom: $base-line-height / 2
+  ol
+    @extend %wy-plain-list-decimal
+    font-size: 90%
+    margin-bottom: $base-line-height / 2
 .wh-content-edit .wy-control-group.wy-control-group-instruction
   border-bottom: none
 .wy-control-group-file
