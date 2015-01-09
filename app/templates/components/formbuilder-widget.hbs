@@ -1,3 +1,5 @@
+{{#unless view.isInstructionWidget}}
+
 {{partial 'widgets/common/label'}}
 <div class="wy-control">
 
@@ -22,6 +24,14 @@
   {{/if}}
 
 </div>
+
+{{else}}
+
+<div class="wy-control">
+  {{partial view.content.controlType.controlPartialPath}}
+</div>
+
+{{/unless}}
 
 {{!-- we only set `doEdit` on the formbuilder --}}
 <div class="disabled"></div>
