@@ -53,14 +53,19 @@ export default Ember.View.extend({
     }
 
     rating.$().on('mousemove', function (event) {
-      var number = event.offsetX / rating.$().width() * rating.get('options.max');
+
+      var offset = event.pageX - rating.$().offset().left;
+
+      var number = offset / rating.$().width() * rating.get('options.max');
       var inverseStep = 1 / rating.get('options.step');
       var newValue = Math.ceil(number * inverseStep) / inverseStep;
 
-      rating.set('value', newValue < rating.get('options.min') ? rating.get('options.min') : newValue);
+      var value = newValue < rating.get('options.min') ? rating.get('options.min') : newValue;
+
+      rating.set('value', value);
     });
 
-    rating.$().on('mouseout', function (event) {
+    rating.$().on('mouseout', function () {
       rating.set('value', rating.getWithDefault('control.value', rating.get('options.min')));
     });
 
