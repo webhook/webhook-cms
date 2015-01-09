@@ -33,7 +33,10 @@ export default Ember.View.extend({
       cursor: 'pointer'
     });
 
-    rating.set('empties', rating.$('<span>'));
+    rating.set('empties', rating.$('<span>').css({
+      position: 'relative',
+      zIndex: 2
+    }));
     rating.get('empties').appendTo(rating.$());
     rating.setEmpties();
 
@@ -41,7 +44,8 @@ export default Ember.View.extend({
       position: 'absolute',
       top: 0,
       left: 0,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      zIndex: 1
     }).html(new Array(rating.get('options.max') + 1).join(rating.get('fullStar'))));
 
     rating.get('stars').appendTo(rating.$());
