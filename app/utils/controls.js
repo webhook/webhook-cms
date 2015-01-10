@@ -83,7 +83,8 @@ export default function dataFromControls (controls) {
       break;
 
     case 'grid':
-      if (Ember.isArray(value)) {
+      // if the grid control is showing a placeholder, skip saving values
+      if (Ember.isArray(value) && !control.get('isPlaceholder')) {
 
         value = value.map(function (row) {
 
@@ -92,17 +93,6 @@ export default function dataFromControls (controls) {
           });
 
           return dataFromControls(control.get('controls'));
-        });
-
-        value = value.filter(function (row) {
-          var hasValue = false;
-          Ember.$.each(row, function (key, value) {
-            hasValue = !Ember.isEmpty(value);
-            if (hasValue) {
-              return false;
-            }
-          });
-          return hasValue;
         });
 
       } else {

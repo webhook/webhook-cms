@@ -33,6 +33,85 @@ export default DS.Model.extend({
   }.property('controlType.widget'),
 
   widgetIsValid: true,
-  widgetErrors: Ember.A([])
+  widgetErrors: Ember.A([]),
+
+  setValue: function (value) {
+
+    var control = this;
+
+    control.set('widgetErrors', Ember.A([]));
+
+    if (control.get('controlType.widget') === 'checkbox') {
+      control.get('meta.options').forEach(function (option) {
+        if (value && value.findBy('label', option.label)) {
+          option.value = value.findBy('label', option.label).value;
+        }
+      });
+    }
+
+    if (['image', 'audio', 'file'].indexOf(control.get('controlType.widget')) >= 0) {
+      value = Ember.Object.create(value || {});
+    }
+
+    // remove offset so datetime input can display
+    if (value && control.get('controlType.widget') === 'datetime') {
+      value = moment(value).format('YYYY-MM-DDTHH:mm');
+    }
+
+    if (control.get('controlType.widget') === 'tabular') {
+      if (Ember.isEmpty(value)) {
+        value = Ember.A([]);
+        var emptyRow = Ember.A([]);
+        control.get('meta.options').forEach(function () {
+          emptyRow.pushObject(Ember.Object.create());
+        });
+        value.pushObject(emptyRow);
+      } else {
+        // we must convert data into mutable form
+        var mutableValue = Ember.A([]);
+        value.forEach(function (row) {
+          var mutableData = Ember.A([]);
+          row.forEach(function (data) {
+            mutableData.pushObject({
+              value: data
+            });
+          });
+          mutableValue.pushObject(mutableData);
+        });
+        value = mutableValue;
+      }
+    }
+
+    if (control.get('controlType.widget') === 'relation' && value && !Ember.isArray(value)) {
+      value = Ember.A([value]);
+    }
+
+    if (control.get('controlType.widget') === 'grid') {
+
+      if (Ember.isEmpty(value) || !Ember.isArray(value)) {
+        value = [{}].map(control.setGridValues, control);
+        control.set('isPlaceholder', true);
+      } else {
+        control.set('isPlaceholder', false);
+        value = value.map(control.setGridValues, control);
+      }
+
+    }
+
+    if (Ember.isEmpty(value) && control.get('controlType.valueType') === 'object') {
+      value = {};
+    }
+
+    control.set('value', value);
+  },
+
+  setGridValues: function (values) {
+    var rowValue = Ember.Object.create({});
+    this.get('controls').forEach(function (control) {
+      control.setValue(values[control.get('name')]);
+      rowValue.set(control.get('name'), control.get('value'));
+    });
+    return rowValue;
+  }
 
 });
