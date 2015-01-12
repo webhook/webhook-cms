@@ -12,7 +12,7 @@ export default Ember.Component.extend({
   didInsertElement: function () {
     var editor = CodeMirror.fromTextArea(this.$('textarea')[0], {
       mode: 'gfm',
-      lineNumbers: true,
+      lineNumbers: false,
       matchBrackets: true,
       lineWrapping: true,
       theme: 'default'
