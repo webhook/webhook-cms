@@ -765,13 +765,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
         } else if (this.get('session.supportedMessages.scaffolding')) {
 
-          this.isScaffoldingUnchanged().then(function () {
-            formController.scaffoldType().then(function () {
-              formController.transitionToRoute('wh.content.type.index', contentType);
-            });
-          }, function (error) {
-            Ember.Logger.warn('Scaffolding changed', error);
-            formController.toggleProperty('scaffoldingPrompt');
+          // If scaffolding is unchanged, rebuild scaffolding, otherwise move on.
+          this.isScaffoldingUnchanged().then(this.scaffoldType.bind(this), function (error) {
+            Ember.Logger.log('Skipping scaffolding: %@'.fmt(error));
+            formController.transitionToRoute('wh.content.type.index', contentType);
+          }).then(function () {
+            formController.transitionToRoute('wh.content.type.index', contentType);
           });
 
         } else {
@@ -1120,20 +1119,6 @@ export default Ember.ObjectController.extend(Ember.Evented, {
     },
 
     acknoledgeScaffolding: function () {
-      this.transitionToRoute('wh.content.type.index', this.get('model'));
-    },
-
-    forceScaffolding: function () {
-
-      var formController = this;
-
-      formController.scaffoldType().then(function () {
-        formController.transitionToRoute('wh.content.type.index', formController.get('model'));
-      });
-
-    },
-
-    abortScaffolding: function () {
       this.transitionToRoute('wh.content.type.index', this.get('model'));
     },
 
