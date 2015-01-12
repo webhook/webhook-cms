@@ -5,7 +5,9 @@ export default Ember.Component.extend({
   focusOnRow: 0,
 
   didInsertElement: function () {
-    this.get('activeRows').addObject('%@-%@'.fmt(this.get('control.name'), this.get('control.value.length') - 1));
+    if (this.get('control.isPlaceholder')) {
+      this.get('activeRows').addObject('%@-0'.fmt(this.get('control.name')));
+    }
   },
 
   willDestroyElement: function () {
