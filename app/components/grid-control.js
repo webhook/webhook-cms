@@ -5,8 +5,6 @@ export default Ember.Component.extend({
   focusOnRow: 0,
 
   didInsertElement: function () {
-    this.$().css('position', 'relative');
-
     this.get('activeRows').addObject('%@-%@'.fmt(this.get('control.name'), this.get('control.value.length') - 1));
   },
 

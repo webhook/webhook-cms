@@ -22,9 +22,7 @@
   {{view "grid-rows" gridControl=control}}
 
   {{#if control.isPlaceholder}}
-    <div style="position: absolute; height: 100%; width: 100%; background: rgba(0, 255, 0, 0.5); top: 0; left: 0;">
-      <button type="button" class="btn btn-neutral" {{ action "removePlaceholderState" }}>Remove Placeholder State</button>
-    </div>
+    <button type="button" class="btn btn-neutral remove-grid-placeholder" {{ action "removePlaceholderState" }}>Remove Placeholder State</button>
   {{/if}}
 
 {{/if}}

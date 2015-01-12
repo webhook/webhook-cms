@@ -9,7 +9,8 @@ export default Ember.View.extend({
     'content.hidden:wy-control-group-hidden',
     'content.widgetIsValid::wy-control-group-error',
     'controlClass',
-    'content.disabled:wy-control-group-disabled'
+    'content.disabled:wy-control-group-disabled',
+    'content.isPlaceholder:wy-control-placeholder'
   ],
 
   controlClass: function () {
