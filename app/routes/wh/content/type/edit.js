@@ -186,105 +186,15 @@ export default Ember.Route.extend({
 
     var data = this.getWithDefault('itemModel.itemData', {});
 
-    var setControlValue = function (control, value) {
-      control.set('widgetErrors', Ember.A([]));
-
-      if (control.get('name') === 'slug') {
-        controller.set('slugControl', control);
-        controller.set('isEditingSlug', false);
-      }
-
-      if (control.get('controlType.widget') === 'checkbox') {
-        control.get('meta.options').forEach(function (option) {
-          if (value && value.findBy('label', option.label)) {
-            option.value = value.findBy('label', option.label).value;
-          }
-        });
-      }
-
-      if (['image', 'audio', 'file'].indexOf(control.get('controlType.widget')) >= 0) {
-        value = Ember.Object.create(value || {});
-      }
-
-      // remove offset so datetime input can display
-      if (value && control.get('controlType.widget') === 'datetime') {
-        value = moment(value).format('YYYY-MM-DDTHH:mm');
-      }
-
-      if (control.get('controlType.widget') === 'tabular') {
-        if (Ember.isEmpty(value)) {
-          value = Ember.A([]);
-          var emptyRow = Ember.A([]);
-          control.get('meta.options').forEach(function () {
-            emptyRow.pushObject(Ember.Object.create());
-          });
-          value.pushObject(emptyRow);
-        } else {
-          // we must convert data into mutable form
-          var mutableValue = Ember.A([]);
-          value.forEach(function (row) {
-            var mutableData = Ember.A([]);
-            row.forEach(function (data) {
-              mutableData.pushObject({
-                value: data
-              });
-            });
-            mutableValue.pushObject(mutableData);
-          });
-          value = mutableValue;
-        }
-      }
-
-      if (value && control.get('controlType.widget') === 'relation') {
-        if (value && !Ember.isArray(value)) {
-          value = Ember.A([value]);
-        }
-        // Remember what the initial relations are so we can check for diffs on save.
-        controller.get('initialRelations').set(control.get('name'), Ember.copy(value));
-      }
-
-      if (control.get('controlType.widget') === 'grid') {
-
-        var setGridValues = function (controlRow) {
-          var rowValue = Ember.Object.create({});
-          control.get('controls').forEach(function (gridControl) {
-            setControlValue(gridControl, controlRow[gridControl.get('name')]);
-            rowValue.set(gridControl.get('name'), gridControl.get('value'));
-          });
-          return rowValue;
-        };
-
-        if (Ember.isEmpty(value) || !Ember.isArray(value)) {
-          value = [{}].map(setGridValues);
-        } else {
-
-          // remove all empty rows first
-          value = value.filter(function (row) {
-            var hasValue = false;
-            Ember.$.each(row, function (key, value) {
-              hasValue = !Ember.isEmpty(value);
-              if (hasValue) {
-                return false;
-              }
-            });
-            return hasValue;
-          });
-
-          value.pushObject({});
-          value = value.map(setGridValues);
-        }
-
-      }
-
-      if (Ember.isEmpty(value) && control.get('controlType.valueType') === 'object') {
-        value = {};
-      }
-
-      control.set('value', value);
-    };
-
     type.get('controls').forEach(function (control) {
-      setControlValue(control, data[control.get('name')]);
+      control.setValue(data[control.get('name')]);
+    });
+
+    controller.set('slugControl', type.get('controls').findBy('name', 'slug'));
+    controller.set('isEditingSlug', false);
+
+    type.get('controls').filterBy('controlType.widget', 'relation').filterBy('value').forEach(function (control) {
+      controller.get('initialRelations').set(control.get('name'), Ember.copy(control.get('value')));
     });
 
     // Use search to check for duplicate names

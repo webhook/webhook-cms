@@ -5,7 +5,9 @@ export default Ember.Component.extend({
   focusOnRow: 0,
 
   didInsertElement: function () {
-    this.get('activeRows').addObject('%@-%@'.fmt(this.get('control.name'), this.get('control.value.length') - 1));
+    if (this.get('control.isPlaceholder')) {
+      this.get('activeRows').addObject('%@-0'.fmt(this.get('control.name')));
+    }
   },
 
   willDestroyElement: function () {
@@ -35,10 +37,12 @@ export default Ember.Component.extend({
 
       this.get('activeRows').clear();
 
+      var control = this.get('control');
+
       if (index) {
-        this.get('control.value').insertAt(index, Ember.Object.create({}));
+        control.get('value').insertAt(index, control.setGridValues({}));
       } else {
-        this.get('control.value').pushObject(Ember.Object.create({}));
+        control.get('value').pushObject(control.setGridValues({}));
       }
 
       this.get('activeRows').pushObject('%@-%@'.fmt(this.get('control.name'), index));
@@ -50,7 +54,15 @@ export default Ember.Component.extend({
       if (!window.confirm('Are you sure you would like to remove this row?')) {
         return;
       }
-      this.get('control.value').removeObject(rowValues);
+
+      var control = this.get('control');
+
+      control.get('value').removeObject(rowValues);
+
+      if (Ember.isEmpty(control.get('value'))) {
+        control.get('value').pushObject(control.setGridValues({}));
+        control.set('isPlaceholder', true);
+      }
     },
 
     activateRow: function (index) {
@@ -67,6 +79,10 @@ export default Ember.Component.extend({
       } else {
         this.send('activateRow', index);
       }
+    },
+
+    removePlaceholderState: function () {
+      this.set('control.isPlaceholder', false);
     }
 
   }
