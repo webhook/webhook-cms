@@ -1,20 +1,34 @@
+/*global CodeMirror*/
 export default Ember.Component.extend({
   classNames: ['wh-markdown-editor'],
   classNameBindings: ['whMarkdownEditorFullscreen'],
 
   whMarkdownEditorFullscreen: false,
 
+  editorObj: null,
+
   selectionStart: 0,
 
   didInsertElement: function () {
+    var editor = CodeMirror.fromTextArea(this.$('textarea')[0], {
+      mode: 'gfm',
+      lineNumbers: true,
+      matchBrackets: true,
+      lineWrapping: true,
+      theme: 'default'
+    });
+
+    this.set('editorObj', editor);
+
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
 
-    this.$('textarea').on('keyup', this.updateSelectionStart.bind(this));
-    this.$('textarea').on('mouseup', this.updateSelectionStart.bind(this));
+    this.get('editorObj').on('change', this.syncPreview.bind(this));
+//    this.$('textarea').on('keyup', this.updateSelectionStart.bind(this));
+ //   this.$('textarea').on('mouseup', this.updateSelectionStart.bind(this));
   },
 
   updateSelectionStart: function () {
-    this.set('selectionStart', this.$('textarea').get(0).selectionStart);
+  //  this.set('selectionStart', this.$('textarea').get(0).selectionStart);
   },
 
   toggleFullscreen: function () {
@@ -24,14 +38,16 @@ export default Ember.Component.extend({
 
     if (this.get('whMarkdownEditorFullscreen')) {
       this.syncPreview();
-      this.$('textarea').on('keyup', this.syncPreview.bind(this));
-    } else {
-      this.$('textarea').off('keyup', this.syncPreview.bind(this));
     }
+
+    // Delay to wait for resize, will work in most cases
+    setTimeout(function() {
+      this.get('editorObj').refresh();
+    }.bind(this), 1000);
   },
 
   syncPreview: function () {
-    this.$('.wh-markdown-preview').html(marked(this.$('textarea').val()));
+    this.$('.wh-markdown-preview').html(marked(this.get('editorObj').getValue()));
   },
 
   actions: {
@@ -63,7 +79,9 @@ export default Ember.Component.extend({
       var image = '![](' + url + ')';
       var position = this.get('selectionStart');
 
-      this.$('textarea').val([value.slice(0, position), image, value.slice(position)].join(''));
+      this.get('editorObj').replaceSelection(image);
+
+//      this.$('textarea').val([value.slice(0, position), image, value.slice(position)].join(''));
 
     }
   }
