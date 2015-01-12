@@ -4,9 +4,10 @@
   /* Set height, width, borders, and global font properties here
   font-family: $code-font-family
   height: 300px
-  border: solid 1px $table-border-color
   font-size: 14px
   line-height: 1.5
+  background: $solarized_base03
+  color: $solarized_base1
 
 /* PADDING
 
@@ -110,67 +111,84 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
   border-left: 1px solid #ccc
   position: absolute
 
-/* DEFAULT THEME
 
-.cm-s-default
-  .cm-keyword
-    color: #708
-  .cm-atom
-    color: #219
-  .cm-number
-    color: #164
-  .cm-def
-    color: #00f
-  .cm-variable!, .cm-punctuation!, .cm-property!, .cm-operator!
-  .cm-variable-2
-    color: #05a
-  .cm-variable-3
-    color: #085
-  .cm-comment
-    color: #a50
-  .cm-string
-    color: #a11
-  .cm-string-2
-    color: #f50
-  .cm-meta, .cm-qualifier
-    color: #555
-  .cm-builtin
-    color: #30a
-  .cm-bracket
-    color: #997
-  .cm-tag
-    color: #170
-  .cm-attribute
-    color: #00c
-  .cm-header
-    color: blue
-  .cm-quote
-    color: #090
-  .cm-hr
-    color: #999
-  .cm-link
-    color: #00c
 
-.cm-negative
-  color: #d44
 
-.cm-positive
-  color: #292
+.cm-keyword
+  color: #cb4b16
+.cm-atom
+  color: #d33682
+.cm-number
+  color: #d33682
+.cm-def
+  color: #2aa198
 
-.cm-header, .cm-strong
-  font-weight: bold
+.cm-variable
+  color: #268bd2
+.cm-variable-2
+  color: #b58900
+.cm-variable-3
+  color: #6c71c4
 
-.cm-em
-  font-style: italic
+.cm-property
+  color: #2aa198
+.cm-operator
+  color: #6c71c4
+
+.cm-comment
+  color: #586e75
+  font-style:italic
+
+.cm-string
+  color: #859900
+.cm-string-2
+  color: #b58900
+
+.cm-meta
+  color: #859900
+.cm-qualifier
+  color: #b58900
+.cm-builtin
+  color: #d33682
+.cm-bracket
+  color: #cb4b16
+.CodeMirror-matchingbracket
+  color: #859900
+.CodeMirror-nonmatchingbracket
+  color: #dc322f
+.cm-tag
+  color: #93a1a1
+.cm-attribute
+  color: #2aa198
+.cm-header
+  color: #586e75
+.cm-s-solarized .cm-quote
+  color: #93a1a1
+.cm-s-solarized .cm-hr
+  color: transparent
+  border-top: 1px solid #586e75
+  display: block
 
 .cm-link
+  color: #93a1a1
+  cursor: pointer
+.cm-s-solarized .cm-special
+  color: #6c71c4
+.cm-s-solarized .cm-em
+  color: #999
   text-decoration: underline
+  text-decoration-style: dotted
 
-.cm-strikethrough
-  text-decoration: line-through
+.cm-s-solarized .cm-strong
+  color: #eee
+.cm-s-solarized .cm-error,
+.cm-s-solarized .cm-invalidchar
+  color: #586e75
+  border-bottom: 1px dotted #dc322f
 
-.cm-s-default .cm-error, .cm-invalidchar
-  color: #f00
+
+.CodeMirror-selected
+  background: #073642
 
 /* Default styles for common addons
 
@@ -195,8 +213,6 @@ div.CodeMirror span
   line-height: 1
   position: relative
   overflow: hidden
-  background: white
-  color: black
 
 .CodeMirror-scroll
   overflow: scroll !important
