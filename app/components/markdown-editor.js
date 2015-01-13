@@ -23,6 +23,9 @@ export default Ember.Component.extend({
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
 
     this.get('editorObj').on('change', this.syncPreview.bind(this));
+    this.get('editorObj').on('change', function() {
+      this.set('value', this.get('editorObj').getValue());
+    }.bind(this));
 //    this.$('textarea').on('keyup', this.updateSelectionStart.bind(this));
  //   this.$('textarea').on('mouseup', this.updateSelectionStart.bind(this));
   },
