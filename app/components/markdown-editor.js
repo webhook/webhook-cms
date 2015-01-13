@@ -18,6 +18,10 @@ export default Ember.Component.extend({
       lineNumbers: false,
       matchBrackets: true,
       lineWrapping: true,
+      autoCloseBrackets: true,
+      matchTags: true,
+      showTrailingSpace: true,
+      autoCloseTags: true,
       theme: 'default'
     });
 

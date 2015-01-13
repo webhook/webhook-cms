@@ -55,9 +55,7 @@ window.scrollSync = function(container) {
       }
       startMarkerIndex = index;
     }
-
-    console.log(markerPositions);
-
+    
     return {
       scrollerStart: markerPositions.scroller[startMarkerIndex],
       scrollerEnd: markerPositions.scroller[endMarkerIndex],
