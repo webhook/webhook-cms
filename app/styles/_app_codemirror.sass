@@ -56,43 +56,6 @@
     &.CodeMirror-cursors
       z-index: 1
 
-/* Shown when moving in bi-directional text
-
-.cm-animate-fat-cursor
-  width: auto
-  border: 0
-  -webkit-animation: blink 1.06s steps(1) infinite
-  -moz-animation: blink 1.06s steps(1) infinite
-  animation: blink 1.06s steps(1) infinite
-
-@-moz-keyframes blink
-  0%
-    background: #7e7
-  50%
-    background: none
-  100%
-    background: #7e7
-
-
-@-webkit-keyframes blink
-  0%
-    background: #7e7
-  50%
-    background: none
-  100%
-    background: #7e7
-
-
-@keyframes blink
-  0%
-    background: #7e7
-  50%
-    background: none
-  100%
-    background: #7e7
-
-
-
 .cm-tab
   display: inline-block
   text-decoration: inherit
@@ -101,6 +64,9 @@
   border-left: 1px solid #ccc
   position: absolute
 
+.cm-animate-fat-cursor
+  width: auto
+  border: 0
 
 // Dark Theme
 .CodeMirror.theme-dark
@@ -120,13 +86,13 @@
   .CodeMirror-focused .CodeMirror-selected
     background: $solarized-base01
 
-  // Light Theme
+// Light Theme
+
 .CodeMirror
   /* Set height, width, borders, and global font properties here
   background: $input-background-color
   color: $solarized-base01
   border: solid 1px $input-border-color
-
 
 .CodeMirror
   div
@@ -137,6 +103,17 @@
   &.cm-fat-cursor div
     &.CodeMirror-cursor
       background: $solarized-base1
+
+.cm-animate-fat-cursor
+  +animation(blinkl 1s steps(1) infinite)
+
++keyframes(blinkl)
+  0%
+    background: $solarized-blue
+  50%
+    background: none
+  100%
+    background: $solarized-blue
 
 .cm-keyword
   color: $solarized-orange
