@@ -59,7 +59,7 @@ export default Ember.Component.extend({
     var caretPosition = this.get('editorObj').indexFromPos(this.get('editorObj').getCursor());
 
     text = text.slice(0, caretPosition) + '-~caret~-' + text.slice(caretPosition);
-    text = text.replace(/(\n|\r|\r\n)(\n|\r|\r\n)+/g, "$&-~marker~-$1$1");
+//    text = text.replace(/(\n|\r|\r\n)(\n|\r|\r\n)+/g, "$&-~marker~-$1$1");
 
     var previewText = marked(text.replace('-~caret~-', ''))
       .replace(/<p>-~marker~-<\/p>/g, '<span class="marker"></span>')

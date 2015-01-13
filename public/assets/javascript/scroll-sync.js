@@ -22,7 +22,8 @@ window.scrollSync = function(container) {
   };
 
   var cacheCaretMarkerPosition = function() {
-    caretMarkerPosition = $(panels.previewScroller).find(".caret").position().top;
+    var caret = $(panels.previewScroller).find(".caret");
+    caretMarkerPosition = caret.length > 0 ? caret.position().top : 0;
   };
 
   var cachePaneMarkerPositions = function(cacheName, pane) {
