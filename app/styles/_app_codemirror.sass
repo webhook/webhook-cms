@@ -49,15 +49,10 @@
 
 .CodeMirror
   div
-    &.CodeMirror-cursor
-      border-left: 1px solid $white
-    &.CodeMirror-secondarycursor
-      border-left: 1px solid $white
   &.cm-fat-cursor div
     &.CodeMirror-cursor
       width: auto
       border: 0
-      background: #7e7
     &.CodeMirror-cursors
       z-index: 1
 
@@ -111,6 +106,14 @@
 .CodeMirror.theme-dark
   background: $solarized-base03
   color: $solarized-base1
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base1
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base1
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base01
 
 // Light Theme
 .CodeMirror
@@ -119,6 +122,16 @@
   color: $solarized-base01
   border: solid 1px $input-border-color
 
+
+.CodeMirror
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base03
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base03
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base1
 
 .cm-keyword
   color: $solarized-orange
