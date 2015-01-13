@@ -57,6 +57,7 @@ export default Ember.Route.extend({
     });
 
     controller.set('lockedItems', lockedItems);
+    controller.set('lockedRef', lockedRef);
     this.set('lockedRef', lockedRef);
 
     this._super.apply(this, arguments);
