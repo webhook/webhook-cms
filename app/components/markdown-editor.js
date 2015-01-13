@@ -12,6 +12,14 @@ export default Ember.Component.extend({
   vimKeyMap: false,
 
   didInsertElement: function () {
+    var keymap = 'default';
+
+    if(window.localStorage.getItem('webhook-markdown-keymap') === 'true') {
+      keymap = 'vim';
+      this.$('.vim-toggle').toggleClass('active');
+      this.set('vimKeyMap', true);
+    }
+
     var editor = CodeMirror.fromTextArea(this.$('textarea')[0], {
       mode: 'gfm',
       lineNumbers: false,
@@ -21,8 +29,14 @@ export default Ember.Component.extend({
       matchTags: true,
       showTrailingSpace: true,
       autoCloseTags: true,
-      theme: 'default'
+      theme: 'default',
+      keyMap: keymap
     });
+
+    if(window.localStorage.getItem('webhook-markdown-theme') === 'true') {
+      this.$('.CodeMirror').toggleClass('theme-dark');
+      this.$('.theme-toggle').toggleClass('active');
+    }
 
     this.set('editorObj', editor);
 
@@ -65,15 +79,18 @@ export default Ember.Component.extend({
   toggleTheme: function () {
     this.$('.CodeMirror').toggleClass('theme-dark');
     this.$('.theme-toggle').toggleClass('active');
+    window.localStorage.setItem('webhook-markdown-theme', this.$('.theme-toggle').hasClass('active'));
   },
 
   toggleVIM: function () {
     if(this.get('vimKeyMap')) {
       this.get('editorObj').setOption('keyMap', 'default');
       this.set('vimKeyMap', false);
+      window.localStorage.setItem('webhook-markdown-keymap', false);
     } else {
       this.get('editorObj').setOption('keyMap', 'vim');
       this.set('vimKeyMap', true);
+      window.localStorage.setItem('webhook-markdown-keymap', true);
     }
     this.$('.vim-toggle').toggleClass('active');
   },
