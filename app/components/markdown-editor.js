@@ -21,6 +21,7 @@ export default Ember.Component.extend({
     this.set('editorObj', editor);
 
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
+    this.$('.theme-toggle').on('click', this.toggleTheme.bind(this));
 
     this.get('editorObj').on('change', this.syncPreview.bind(this));
     this.get('editorObj').on('change', function() {
@@ -47,6 +48,11 @@ export default Ember.Component.extend({
     setTimeout(function() {
       this.get('editorObj').refresh();
     }.bind(this), 1000);
+  },
+
+  toggleTheme: function () {
+    this.$('.CodeMirror').toggleClass('theme-dark');
+    this.$('.theme-toggle').toggleClass('active');
   },
 
   syncPreview: function () {
