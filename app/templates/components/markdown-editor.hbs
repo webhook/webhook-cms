@@ -1,8 +1,10 @@
 <div class="wh-markdown-editor-edits">
   <div class="wh-markdown-editor-toolbar">
     <span class="syntax-help">{{t 'form.control.markdown.syntax'}}</span>
-    <span class="icon icon-fullscreen fullscreen-toggle"></span>
-    <span class="icon icon-image upload-image" {{action "toggleImageModal" target="view"}}></span>
+    <span class="icon icon-adjust theme-toggle" data-toggle="tooltip" data-placement="bottom" title="Toggle light/dark theme"></span>
+    <span class="icon icon-vim vim-toggle" data-toggle="tooltip" data-placement="bottom" title="Vim mode"></span>
+    <span class="icon icon-fullscreen fullscreen-toggle"  data-toggle="tooltip" data-placement="left" title="Fullscreen with preview"></span>
+    <span class="icon icon-image upload-image"  data-toggle="tooltip" data-placement="bottom" title="Add image" {{action "toggleImageModal" target="view"}}></span>
   </div>
 
   {{textarea placeholder=placeholder class="wh-form-markdown" value=value disabled=disabled}}

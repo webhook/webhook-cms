@@ -4,10 +4,8 @@
   /* Set height, width, borders, and global font properties here
   font-family: $code-font-family
   height: 300px
-  font-size: 12px
+  font-size: 14px
   line-height: 1.5
-  background: $solarized_base03
-  color: $solarized_base1
 
 /* PADDING
 
@@ -51,15 +49,10 @@
 
 .CodeMirror
   div
-    &.CodeMirror-cursor
-      border-left: 1px solid $white
-    &.CodeMirror-secondarycursor
-      border-left: 1px solid $white
   &.cm-fat-cursor div
     &.CodeMirror-cursor
       width: auto
       border: 0
-      background: #7e7
     &.CodeMirror-cursors
       z-index: 1
 
@@ -99,9 +92,6 @@
     background: #7e7
 
 
-/* Can style cursor different in overwrite (non-insert) mode
-
-div.CodeMirror-overwrite! div.CodeMirror-cursor
 
 .cm-tab
   display: inline-block
@@ -112,56 +102,90 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
   position: absolute
 
 
+// Dark Theme
+.CodeMirror.theme-dark
+  background: $solarized-base03
+  color: $solarized-base1
+  border: none
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base1
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base1
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base01
+  .CodeMirror-selected
+    background: $solarized-base01
+  .CodeMirror-focused .CodeMirror-selected
+    background: $solarized-base01
 
+  // Light Theme
+.CodeMirror
+  /* Set height, width, borders, and global font properties here
+  background: $input-background-color
+  color: $solarized-base01
+  border: solid 1px $input-border-color
+
+
+.CodeMirror
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base03
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base03
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base1
 
 .cm-keyword
-  color: #cb4b16
+  color: $solarized-orange
 .cm-atom
-  color: #d33682
+  color: $solarized-magenta
 .cm-number
-  color: #d33682
+  color: $solarized-magenta
 .cm-def
-  color: #2aa198
+  color: $solarized-cyan
 
 .cm-variable
-  color: #268bd2
+  color: $solarized-blue
 .cm-variable-2
-  color: $solarized_base0
+  color: $solarized-base0
 .cm-variable-3
-  color: #6c71c4
+  color: $solarized-violet
 
 .cm-property
-  color: #2aa198
+  color: $solarized-cyan
 .cm-operator
-  color: #6c71c4
+  color: $solarized-violet
 
 .cm-comment
-  color: $solarized_blue
+  color: $solarized-blue
   font-style:italic
 
 .cm-string
-  color: #859900
+  color: $solarized-green
 .cm-string-2
-  color: #b58900
+  color: $solarized-yellow
 
 .cm-meta
-  color: #859900
+  color: $solarized-green
 .cm-qualifier
-  color: #b58900
+  color: $solarized-yellow
 .cm-builtin
-  color: #d33682
+  color: $solarized-magenta
 .cm-bracket
-  color: $solarized_yellow
+  color: $solarized-yellow
 .CodeMirror-matchingbracket
-  color: #859900
+  color: $solarized-green
 .CodeMirror-nonmatchingbracket
-  color: #dc322f
+  color: $solarized-red
 .cm-tag
-  color: $solarized_yellow
+  color: $solarized-yellow
 .cm-attribute
-  color: #2aa198
+  color: $solarized-cyan
 .cm-header
-  color: $solarized_red
+  color: $solarized-red
   font-weight: bold
 .cm-header-2
   font-size: 150%
@@ -170,17 +194,17 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
 .cm-header-4
   font-size: 115%
 .cm-s-solarized .cm-quote
-  color: #93a1a1
+  color: $solarized-base1
 .cm-s-solarized .cm-hr
   color: transparent
-  border-top: 1px solid #586e75
+  border-top: 1px solid $solarized-base01
   display: block
 
 .cm-link
-  color: #93a1a1
+  color: $solarized-base1
   cursor: pointer
 .cm-s-solarized .cm-special
-  color: #6c71c4
+  color: $solarized-violet
 .cm-s-solarized .cm-em
   color: #999
   text-decoration: underline
@@ -190,14 +214,15 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
   color: #eee
 .cm-error,
 .cm-invalidchar
-  color: #586e75
-  border-bottom: 1px dotted #dc322f
+  color: $solarized-base01
+  border-bottom: 1px dotted $solarized-red
 
 
 .CodeMirror-selected
-  background: $solarized_base01
-  color: $solarized_base03
+  background: $solarized-base1
 
+.CodeMirror-focused .CodeMirror-selected
+  background: $solarized-base1
 /* Default styles for common addons
 
 div.CodeMirror span
@@ -363,12 +388,6 @@ div.CodeMirror-cursors
 .CodeMirror-focused div.CodeMirror-cursors
   visibility: visible
 
-.CodeMirror-selected
-  background: #d9d9d9
-
-.CodeMirror-focused .CodeMirror-selected
-  background: $solarized_base02
-  color: $solarized_base03
 
 .CodeMirror-crosshair
   cursor: crosshair
