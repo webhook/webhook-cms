@@ -4,7 +4,7 @@
   /* Set height, width, borders, and global font properties here
   font-family: $code-font-family
   height: 300px
-  font-size: 14px
+  font-size: 12px
   line-height: 1.5
   background: $solarized_base03
   color: $solarized_base1
@@ -52,9 +52,9 @@
 .CodeMirror
   div
     &.CodeMirror-cursor
-      border-left: 1px solid black
+      border-left: 1px solid $white
     &.CodeMirror-secondarycursor
-      border-left: 1px solid silver
+      border-left: 1px solid $white
   &.cm-fat-cursor div
     &.CodeMirror-cursor
       width: auto
@@ -126,7 +126,7 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
 .cm-variable
   color: #268bd2
 .cm-variable-2
-  color: #b58900
+  color: $solarized_base0
 .cm-variable-3
   color: #6c71c4
 
@@ -136,7 +136,7 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
   color: #6c71c4
 
 .cm-comment
-  color: #586e75
+  color: $solarized_blue
   font-style:italic
 
 .cm-string
@@ -151,17 +151,24 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
 .cm-builtin
   color: #d33682
 .cm-bracket
-  color: #cb4b16
+  color: $solarized_yellow
 .CodeMirror-matchingbracket
   color: #859900
 .CodeMirror-nonmatchingbracket
   color: #dc322f
 .cm-tag
-  color: #93a1a1
+  color: $solarized_yellow
 .cm-attribute
   color: #2aa198
 .cm-header
-  color: #586e75
+  color: $solarized_red
+  font-weight: bold
+.cm-header-2
+  font-size: 150%
+.cm-header-3
+  font-size: 125%
+.cm-header-4
+  font-size: 115%
 .cm-s-solarized .cm-quote
   color: #93a1a1
 .cm-s-solarized .cm-hr
@@ -179,16 +186,17 @@ div.CodeMirror-overwrite! div.CodeMirror-cursor
   text-decoration: underline
   text-decoration-style: dotted
 
-.cm-s-solarized .cm-strong
+.cm-strong
   color: #eee
-.cm-s-solarized .cm-error,
-.cm-s-solarized .cm-invalidchar
+.cm-error,
+.cm-invalidchar
   color: #586e75
   border-bottom: 1px dotted #dc322f
 
 
 .CodeMirror-selected
-  background: #073642
+  background: $solarized_base01
+  color: $solarized_base03
 
 /* Default styles for common addons
 
@@ -210,7 +218,6 @@ div.CodeMirror span
  * the editor. You probably shouldn't touch them.
 
 .CodeMirror
-  line-height: 1
   position: relative
   overflow: hidden
 
@@ -360,7 +367,8 @@ div.CodeMirror-cursors
   background: #d9d9d9
 
 .CodeMirror-focused .CodeMirror-selected
-  background: #d7d4f0
+  background: $solarized_base02
+  color: $solarized_base03
 
 .CodeMirror-crosshair
   cursor: crosshair
