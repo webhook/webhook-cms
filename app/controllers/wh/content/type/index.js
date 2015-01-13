@@ -5,7 +5,9 @@ export default Ember.ArrayController.extend({
   sortAscending  : false,
 
   contentType: null,
+
   lockedItems: Ember.A([]),
+  lockedRef  : null,
 
   searchQuery: null,
   isSearchResults: false,
@@ -66,7 +68,8 @@ export default Ember.ArrayController.extend({
   locksChanged: function () {
     this.get('cmsItems').setEach('lockedBy', null);
     this.get('lockedItems').forEach(function (lock) {
-      this.get('cmsItems').findBy('id', lock.get('id')).set('lockedBy', lock.get('email'));
+      var item = this.get('cmsItems').findBy('id', lock.get('id'));
+      item.set('lockedBy', lock.get('email'));
     }, this);
   }.observes('lockedItems.@each'),
 
@@ -209,6 +212,13 @@ export default Ember.ArrayController.extend({
         controller.get('content').addObjects(records);
       });
 
+    },
+
+    unlockItem: function (item) {
+      if (!window.confirm('Are you sure you want to unlock this item?')) {
+        return;
+      }
+      this.get('lockedRef').child(item.get('id')).remove();
     }
   }
 
