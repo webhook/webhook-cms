@@ -6,6 +6,12 @@
 
 .wh-markdown-editor
   position: relative
+  .wh-markdown-editor-edits
+    background: white
+    border: solid 1px $input-border-color
+  .wh-markdown-editor-container
+    height: 100%
+    padding-top: $base-line-height + 2 * ($base-line-height / 8)
   &.wh-markdown-editor-fullscreen
     z-index: $z-index-tray - 1
     top: 0
@@ -26,7 +32,6 @@
       box-shadow: none
       border: none
       line-height: 1.5
-      border: solid 1px $input-border-color
     .wh-markdown-preview
       display: block
       height: 100%
@@ -39,6 +44,9 @@
       border: solid 1px $input-border-color
       pre code
         @extend .hljs
+    .wh-markdown-editor-toolbar
+      border: none
+      border-bottom: solid 1px $input-border-color
   .wh-markdown-editor-toolbar
     background: $background-color
     padding: $base-line-height / 8
