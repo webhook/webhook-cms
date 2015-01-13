@@ -21,7 +21,7 @@
           <td>{{id}}</td>
           <td>{{#if oneOff}}{{t 'wh.content.allTypes.single'}}{{else}}{{t 'wh.content.allTypes.multiple'}}{{/if}}</td>
           <td class="wy-table-actions">
-            <button class="btn btn-link">Rescaffold</button>
+            <button class="btn btn-link" {{action "scaffoldType" this bubbles=false}}>Rescaffold</button>
             <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this bubbles=false}}></button>
           </td>
         {{/link-to}}
