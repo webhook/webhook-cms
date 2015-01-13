@@ -57,6 +57,7 @@ export default Ember.Component.extend({
 
     // Delay to wait for resize, will work in most cases
     setTimeout(function() {
+      this.$('.CodeMirror-scroll').scroll();
       this.get('editorObj').refresh();
     }.bind(this), 1000);
   },
