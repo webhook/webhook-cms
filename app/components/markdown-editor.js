@@ -9,6 +9,8 @@ export default Ember.Component.extend({
 
   selectionStart: 0,
 
+  vimKeyMap: false,
+
   didInsertElement: function () {
     var editor = CodeMirror.fromTextArea(this.$('textarea')[0], {
       mode: 'gfm',
@@ -22,6 +24,7 @@ export default Ember.Component.extend({
 
     this.$('.fullscreen-toggle').on('click', this.toggleFullscreen.bind(this));
     this.$('.theme-toggle').on('click', this.toggleTheme.bind(this));
+    this.$('.vim-toggle').on('click', this.toggleVIM.bind(this));
 
     this.get('editorObj').on('change', this.syncPreview.bind(this));
     this.get('editorObj').on('change', function() {
@@ -53,6 +56,17 @@ export default Ember.Component.extend({
   toggleTheme: function () {
     this.$('.CodeMirror').toggleClass('theme-dark');
     this.$('.theme-toggle').toggleClass('active');
+  },
+
+  toggleVIM: function () {
+    if(this.get('vimKeyMap')) {
+      this.get('editorObj').setOption('keyMap', 'default');
+      this.set('vimKeyMap', false);
+    } else {
+      this.get('editorObj').setOption('keyMap', 'vim');
+      this.set('vimKeyMap', true);
+    }
+    this.$('.vim-toggle').toggleClass('active');
   },
 
   syncPreview: function () {
