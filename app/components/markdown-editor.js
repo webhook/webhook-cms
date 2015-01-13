@@ -6,7 +6,6 @@ export default Ember.Component.extend({
   whMarkdownEditorFullscreen: false,
 
   editorObj: null,
-  scrollSync: null,
 
   selectionStart: 0,
 
@@ -36,12 +35,13 @@ export default Ember.Component.extend({
       this.set('value', this.get('editorObj').getValue());
     }.bind(this));
 
-    this.set('scrollSync', window.scrollSync(this));
-
-
     this.$('.CodeMirror-scroll').scroll(function() {
-      if(this.get('whMarkdownEditorFullscreen')) {
-        this.get('scrollSync').sync();
+      if(this.get('whMarkdownEditorFullscreen')) { 
+        var curTop = this.$('.CodeMirror-scroll').scrollTop();
+        var effectiveHeight = this.$('.CodeMirror-scroll')[0].scrollHeight;
+        var ratio = curTop / effectiveHeight;
+
+        this.$('.wh-markdown-preview').scrollTop(this.$('.wh-markdown-preview')[0].scrollHeight * ratio);
       }
     }.bind(this));
   },
@@ -57,7 +57,6 @@ export default Ember.Component.extend({
 
     // Delay to wait for resize, will work in most cases
     setTimeout(function() {
-      this.get('scrollSync').cache();
       this.get('editorObj').refresh();
     }.bind(this), 1000);
   },
@@ -81,28 +80,7 @@ export default Ember.Component.extend({
   syncPreview: function () {
     var text = this.get('editorObj').getValue() || '';
     var caretPosition = this.get('editorObj').indexFromPos(this.get('editorObj').getCursor());
-
-    text = text.slice(0, caretPosition) + '-~caret~-' + text.slice(caretPosition);
-//    text = text.replace(/(\n|\r|\r\n)(\n|\r|\r\n)+/g, "$&-~marker~-$1$1");
-
-    var previewText = marked(text.replace('-~caret~-', ''))
-      .replace(/<p>-~marker~-<\/p>/g, '<span class="marker"></span>')
-      .replace(/-~marker~-/g, '<span class="marker"></span>');
-
-    var previewScrollerText = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/(\n|\r|\r\n)/g, '<br>')
-      .replace('-~caret~-', '<span class="caret"></span>')
-      .replace(/-~marker~-<br><br>/g, '<span class="marker"></span>');
-
-    this.$('.wh-markdown-preview-scroller').html(previewScrollerText);
-    this.$('.wh-markdown-preview').html(previewText);
-
-    if(this.get('whMarkdownEditorFullscreen')) {
-      this.get('scrollSync').cache();
-    }
+    this.$('.wh-markdown-preview').html(marked(text));
   },
 
   actions: {
