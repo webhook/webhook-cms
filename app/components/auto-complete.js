@@ -1,5 +1,8 @@
 export default Ember.Component.extend({
-  classNames:  ["wy-tag-input-group"],
+  classNameBindings: [
+    ":wy-tag-input-group",
+    "isCrowded:wy-tag-input-group-vertical"
+  ],
 
   // search results
   results: Ember.A([]),
@@ -81,6 +84,10 @@ export default Ember.Component.extend({
       return array.removeObject(array.findBy('id', item.split(' ')[1]));
     }
   }),
+
+  isCrowded: function () {
+    return this.get('currentSelection.length') > 2;
+  }.property('currentSelection.length'),
 
   didInsertElement: function () {
 
