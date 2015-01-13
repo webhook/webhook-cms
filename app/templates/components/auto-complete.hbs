@@ -1,10 +1,8 @@
-{{#if isCrowded}}
-  {{#each item in currentSelection tagName="ol" classNames="fishy-fish"}}
-    <li>{{item.itemData.name}}{{#unless control.disabled}}<a href="" {{action "removeItem" item}}>Delete</a>{{/unless}}</li>
-  {{/each}}
-{{else}}
-  <span class="current-selection">{{#each item in currentSelection}}<span class="wy-tag">{{item.itemData.name}}{{#unless control.disabled}}<a href="" class="wy-tag-remove" {{action "removeItem" item}}></a>{{/unless}}</span>{{/each}}</span>
-{{/if}}
+{{#collection 'autocomplete-selection' control=control}}
+  {{this}}
+{{/collection}}
+
+<span class="current-selection">{{#each item in currentSelection}}<span class="wy-tag">{{item.itemData.name}}{{#unless control.disabled}}<a href="" class="wy-tag-remove" {{action "removeItem" item}}></a>{{/unless}}</span>{{/each}}</span>
 
 {{#if showAutocomplete}}
 <div class="wy-autocomplete-group">
