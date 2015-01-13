@@ -7,7 +7,9 @@
     <span class="icon icon-image upload-image"  data-toggle="tooltip" data-placement="bottom" title="Add image" {{action "toggleImageModal" target="view"}}></span>
   </div>
 
-  {{textarea placeholder=placeholder class="wh-form-markdown" value=value disabled=disabled}}
+  <div class="wh-markdown-editor-container">
+    {{textarea placeholder=placeholder class="wh-form-markdown" value=value disabled=disabled}}
+  </div>
 </div>
 
 <article class="wh-markdown-preview"></article>
