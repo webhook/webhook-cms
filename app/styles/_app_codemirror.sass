@@ -106,7 +106,7 @@
 .CodeMirror.theme-dark
   background: $solarized-base03
   color: $solarized-base1
-  border: solid 1px $solarized-base03
+  border: none
   div
     &.CodeMirror-cursor
       border-left: 1px solid $solarized-base1
@@ -115,8 +115,12 @@
   &.cm-fat-cursor div
     &.CodeMirror-cursor
       background: $solarized-base01
+  .CodeMirror-selected
+    background: $solarized-base01
+  .CodeMirror-focused .CodeMirror-selected
+    background: $solarized-base01
 
-// Light Theme
+  // Light Theme
 .CodeMirror
   /* Set height, width, borders, and global font properties here
   background: $input-background-color
@@ -215,12 +219,10 @@
 
 
 .CodeMirror-selected
-  background: $solarized-base01
-  color: $solarized-base03
+  background: $solarized-base1
 
 .CodeMirror-focused .CodeMirror-selected
-  background: $solarized-base02
-  color: $solarized-base03
+  background: $solarized-base1
 /* Default styles for common addons
 
 div.CodeMirror span
