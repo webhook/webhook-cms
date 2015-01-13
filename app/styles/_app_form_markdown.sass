@@ -39,6 +39,9 @@
       border: solid 1px $input-border-color
       pre code
         @extend .hljs
+      .marker, .caret
+        display: inline-block
+        vertical-align: top
   .wh-markdown-editor-toolbar
     background: $background-color
     padding: $base-line-height / 8
@@ -55,6 +58,17 @@
     span.icon:hover
       background: $gray-light
       color: $white
+  .wh-markdown-preview-scroller
+    left: 0
+    top: 0
+    visibility: hidden
+    overflow: scroll
+    height: 100%
+    width: 100%
+    position: absolute
+    .marker, .caret
+      display: inline-block
+      vertical-align: top
   .syntax-help
     color: $text-medium
     border-right: solid 1px $input-border-color

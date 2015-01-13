@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   whMarkdownEditorFullscreen: false,
 
   editorObj: null,
+  scrollSync: null,
 
   selectionStart: 0,
 
@@ -26,12 +27,15 @@ export default Ember.Component.extend({
     this.get('editorObj').on('change', function() {
       this.set('value', this.get('editorObj').getValue());
     }.bind(this));
-//    this.$('textarea').on('keyup', this.updateSelectionStart.bind(this));
- //   this.$('textarea').on('mouseup', this.updateSelectionStart.bind(this));
-  },
 
-  updateSelectionStart: function () {
-  //  this.set('selectionStart', this.$('textarea').get(0).selectionStart);
+    this.set('scrollSync', window.scrollSync(this));
+
+
+    this.$('.CodeMirror-scroll').scroll(function() {
+      if(this.get('whMarkdownEditorFullscreen')) {
+        this.get('scrollSync').sync();
+      }
+    }.bind(this));
   },
 
   toggleFullscreen: function () {
@@ -45,12 +49,36 @@ export default Ember.Component.extend({
 
     // Delay to wait for resize, will work in most cases
     setTimeout(function() {
+      this.get('scrollSync').cache();
       this.get('editorObj').refresh();
     }.bind(this), 1000);
   },
 
   syncPreview: function () {
-    this.$('.wh-markdown-preview').html(marked(this.get('editorObj').getValue()));
+    var text = this.get('editorObj').getValue() || '';
+    var caretPosition = this.get('editorObj').indexFromPos(this.get('editorObj').getCursor());
+
+    text = text.slice(0, caretPosition) + '-~caret~-' + text.slice(caretPosition);
+    text = text.replace(/(\n|\r|\r\n)(\n|\r|\r\n)+/g, "$&-~marker~-$1$1");
+
+    var previewText = marked(text.replace('-~caret~-', ''))
+      .replace(/<p>-~marker~-<\/p>/g, '<span class="marker"></span>')
+      .replace(/-~marker~-/g, '<span class="marker"></span>');
+
+    var previewScrollerText = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/(\n|\r|\r\n)/g, '<br>')
+      .replace('-~caret~-', '<span class="caret"></span>')
+      .replace(/-~marker~-<br><br>/g, '<span class="marker"></span>');
+
+    this.$('.wh-markdown-preview-scroller').html(previewScrollerText);
+    this.$('.wh-markdown-preview').html(previewText);
+
+    if(this.get('whMarkdownEditorFullscreen')) {
+      this.get('scrollSync').cache();
+    }
   },
 
   actions: {
@@ -83,9 +111,6 @@ export default Ember.Component.extend({
       var position = this.get('selectionStart');
 
       this.get('editorObj').replaceSelection(image);
-
-//      this.$('textarea').val([value.slice(0, position), image, value.slice(position)].join(''));
-
     }
   }
 });
