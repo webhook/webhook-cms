@@ -6,6 +6,12 @@
 
 .wh-markdown-editor
   position: relative
+  .wh-markdown-editor-edits
+    background: white
+    border: solid 1px $input-border-color
+  .wh-markdown-editor-container
+    height: 100%
+    padding-top: 29px
   &.wh-markdown-editor-fullscreen
     z-index: $z-index-tray - 1
     top: 0
@@ -21,12 +27,11 @@
       +span-columns(6)
       height: 100%
       position: relative
-    textarea
+    .CodeMirror
       height: 100%
       box-shadow: none
       border: none
       line-height: 1.5
-      border: solid 1px $input-border-color
     .wh-markdown-preview
       display: block
       height: 100%
@@ -39,6 +44,9 @@
       border: solid 1px $input-border-color
       pre code
         @extend .hljs
+    .wh-markdown-editor-toolbar
+      border: none
+      border-bottom: solid 1px $input-border-color
   .wh-markdown-editor-toolbar
     background: $background-color
     padding: $base-line-height / 8
@@ -48,6 +56,7 @@
     top: 0
     left: 0
     width: 100%
+    z-index: $z-index-tooltip
     span
       display: inline-block
       padding: $base-line-height / 8 $base-line-height / 4
@@ -59,8 +68,13 @@
     border-right: solid 1px $input-border-color
   .fullscreen-toggle
     color: $text-color
-    cursor: pointer
     float: right
+  .icon
+    cursor: pointer
+    border-radius: 2px
+  .icon.active
+    background: $gray-dark
+    color: $white
   .upload-image
     color: $text-color
     cursor: pointer
