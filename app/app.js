@@ -88,4 +88,11 @@ Ember.TextField.reopen(Em.I18n.TranslateableAttributes);
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };
 Ember.Inflector.inflector.singularize = function (string ) { return string; };
 
+// Configure Marked
+marked.setOptions({
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value;
+  }
+});
+
 export default App;
