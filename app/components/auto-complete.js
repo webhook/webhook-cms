@@ -1,8 +1,4 @@
 export default Ember.Component.extend({
-  classNameBindings: [
-    ":wy-tag-input-group",
-    "isCrowded:wy-tag-input-group-vertical"
-  ],
 
   // search results
   results: Ember.A([]),
