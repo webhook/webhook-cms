@@ -7,6 +7,30 @@ export default Ember.Component.extend({
   mapInstance: null,
   markerInstance: null,
 
+  init: function () {
+
+    // modified version of leaflet's relative image path code
+    // instead of the leaflet script we look for the app.css
+    L.Icon.Default.imagePath = (function () {
+      var links = document.getElementsByTagName('link'),
+      leafletRe = /[\/^]app[\-\._]?([\w\-\._]*)\.css\??/;
+
+      var i, len, href, matches, path;
+
+      for (i = 0, len = links.length; i < len; i++) {
+        href = links[i].href;
+        matches = href.match(leafletRe);
+
+        if (matches) {
+          path = href.split(leafletRe)[0];
+          return (path ? path + '/' : '') + 'images';
+        }
+      }
+    }());
+
+    return this._super.apply(this, arguments);
+  },
+
   setCoordsString: function () {
     var value = this.get('control.value');
 

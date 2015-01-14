@@ -171,6 +171,7 @@ module.exports = function(grunt) {
         "buildScripts",
         "buildStyles",
         "buildFonts",
+        "buildImages",
         "buildIndexHTML:dist"
       ],
       buildDebug: [
@@ -178,6 +179,7 @@ module.exports = function(grunt) {
         "buildScripts",
         "buildStyles",
         "buildFonts",
+        "buildImages",
         "buildIndexHTML:debug"
       ]
     }
@@ -220,6 +222,11 @@ module.exports = function(grunt) {
   // Fonts
   grunt.registerTask('buildFonts', [
                      'copy:fontsToResult'
+                     ]);
+
+  // Images
+  grunt.registerTask('buildImages', [
+                     'copy:imagesToResult'
                      ]);
 
   // Index HTML
