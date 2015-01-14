@@ -8,19 +8,22 @@ export default Ember.Component.extend({
   markerInstance: null,
 
   init: function () {
+
+    // modified version of leaflet's relative image path code
+    // instead of the leaflet script we look for the app.css
     L.Icon.Default.imagePath = (function () {
-      var scripts = document.getElementsByTagName('script'),
-      leafletRe = /[\/^]app[\-\._]?([\w\-\._]*)\.js\??/;
+      var links = document.getElementsByTagName('link'),
+      leafletRe = /[\/^]app[\-\._]?([\w\-\._]*)\.css\??/;
 
-      var i, len, src, matches, path;
+      var i, len, href, matches, path;
 
-      for (i = 0, len = scripts.length; i < len; i++) {
-        src = scripts[i].src;
-        matches = src.match(leafletRe);
+      for (i = 0, len = links.length; i < len; i++) {
+        href = links[i].href;
+        matches = href.match(leafletRe);
 
         if (matches) {
-          path = src.split(leafletRe)[0];
-          return (path ? path + '/' : '') + 'images/leaflet';
+          path = href.split(leafletRe)[0];
+          return (path ? path + '/' : '') + 'images';
         }
       }
     }());

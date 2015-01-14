@@ -35,7 +35,7 @@ module.exports = {
     expand: true,
     cwd: 'vendor/leaflet/dist/images',
     src: '*.png',
-    dest: 'tmp/result/assets/images/leaflet'
+    dest: 'tmp/result/assets/images'
   },
 
   // Assembles everything in `tmp/result`.
