@@ -1,3 +1,4 @@
+/*global hljs*/
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 
