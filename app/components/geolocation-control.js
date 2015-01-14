@@ -7,6 +7,12 @@ export default Ember.Component.extend({
   mapInstance: null,
   markerInstance: null,
 
+  init: function () {
+    L.Icon.Default.imagePath = '/assets/images/leaflet';
+
+    return this._super.apply(this, arguments);
+  },
+
   setCoordsString: function () {
     var value = this.get('control.value');
 
