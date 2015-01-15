@@ -27,8 +27,8 @@ export default Ember.Component.extend({
       lineWrapping: true,
       autoCloseBrackets: true,
       matchTags: true,
-      showTrailingSpace: true,
-      autoCloseTags: true,
+   //   showTrailingSpace: true,
+     // autoCloseTags: true,
       theme: 'default',
       keyMap: keymap
     });
