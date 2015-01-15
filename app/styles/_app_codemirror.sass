@@ -82,6 +82,10 @@
     background: $solarized-base01
   .CodeMirror-focused .CodeMirror-selected
     background: $solarized-base01
+  .cm-em
+    color: $white
+  .cm-strong
+    color: $white
 
 // Light Theme
 
@@ -161,6 +165,8 @@
 .cm-header
   color: $solarized-red
   font-weight: bold
+.cm-header-1
+  font-size: 175%
 .cm-header-2
   font-size: 150%
 .cm-header-3
@@ -177,15 +183,16 @@
 .cm-link
   color: $solarized-base1
   cursor: pointer
-.cm-s-solarized .cm-special
+.cm-special
   color: $solarized-violet
-.cm-s-solarized .cm-em
-  color: #999
-  text-decoration: underline
-  text-decoration-style: dotted
+
+.cm-em
+  color: $black
+  font-style: italic
 
 .cm-strong
-  color: #eee
+  color: $black
+  font-weight: bold
 .cm-error,
 .cm-invalidchar
   color: $solarized-base01
