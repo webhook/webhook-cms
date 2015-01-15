@@ -31,6 +31,13 @@ module.exports = {
     dest: 'tmp/result/assets/'
   },
 
+  imagesToResult: {
+    expand: true,
+    cwd: 'vendor/leaflet/dist/images',
+    src: '*.png',
+    dest: 'tmp/result/assets/images'
+  },
+
   // Assembles everything in `tmp/result`.
   // The sole purpose of this task is to keep things neat. Gathering everything in one
   // place (tmp/dist) enables the subtasks of dist to only look there. Note: However,

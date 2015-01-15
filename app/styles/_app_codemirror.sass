@@ -1,0 +1,401 @@
+/* BASICS
+
+.CodeMirror
+  /* Set height, width, borders, and global font properties here
+  font-family: $code-font-family
+  height: 300px
+  font-size: 14px
+  line-height: 1.5
+
+/* PADDING
+
+.CodeMirror-lines
+  padding: $base-line-height
+  /* Vertical padding around content
+
+.CodeMirror pre
+  padding: 0 4px
+  /* Horizontal padding of content
+
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler
+  background-color: white
+  /* The little square between H and V scrollbars
+
+/* GUTTER
+
+.CodeMirror-gutters
+  border-right: 1px solid #ddd
+  background-color: #f7f7f7
+  white-space: nowrap
+
+
+.CodeMirror-linenumber
+  padding: 0 3px 0 5px
+  min-width: 20px
+  text-align: right
+  color: #999
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+
+.CodeMirror-guttermarker
+  color: black
+
+.CodeMirror-guttermarker-subtle
+  color: #999
+
+/* CURSOR
+
+.CodeMirror
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      width: auto
+      border: 0
+    &.CodeMirror-cursors
+      z-index: 1
+
+.cm-tab
+  display: inline-block
+  text-decoration: inherit
+
+.CodeMirror-ruler
+  border-left: 1px solid #ccc
+  position: absolute
+
+.cm-animate-fat-cursor
+  width: auto
+  border: 0
+
+// Dark Theme
+.CodeMirror.theme-dark
+  background: $solarized-base03
+  color: $solarized-base1
+  border: none
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base1
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base1
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base01
+  .CodeMirror-selected
+    background: $solarized-base01
+  .CodeMirror-focused .CodeMirror-selected
+    background: $solarized-base01
+  .cm-em
+    color: $white
+  .cm-strong
+    color: $white
+
+// Light Theme
+
+.CodeMirror
+  /* Set height, width, borders, and global font properties here
+  background: $input-background-color
+  color: $solarized-base01
+//  border: solid 1px $input-border-color
+
+.CodeMirror
+  div
+    &.CodeMirror-cursor
+      border-left: 1px solid $solarized-base03
+    &.CodeMirror-secondarycursor
+      border-left: 1px solid $solarized-base03
+  &.cm-fat-cursor div
+    &.CodeMirror-cursor
+      background: $solarized-base1
+
+.cm-animate-fat-cursor
+  +animation(blinkl 1s steps(1) infinite)
+
++keyframes(blinkl)
+  0%
+    background: $solarized-blue
+  50%
+    background: none
+  100%
+    background: $solarized-blue
+
+.cm-keyword
+  color: $solarized-orange
+.cm-atom
+  color: $solarized-magenta
+.cm-number
+  color: $solarized-magenta
+.cm-def
+  color: $solarized-cyan
+
+.cm-variable
+  color: $solarized-blue
+.cm-variable-2
+  color: $solarized-base0
+.cm-variable-3
+  color: $solarized-violet
+
+.cm-property
+  color: $solarized-cyan
+.cm-operator
+  color: $solarized-violet
+
+.cm-comment
+  color: $solarized-blue
+  font-style: italic
+
+.cm-string
+  color: $solarized-green
+.cm-string-2
+  color: $solarized-yellow
+
+.cm-meta
+  color: $solarized-green
+.cm-qualifier
+  color: $solarized-yellow
+.cm-builtin
+  color: $solarized-magenta
+.cm-bracket
+  color: $solarized-yellow
+.CodeMirror-matchingbracket
+  color: $solarized-green
+.CodeMirror-nonmatchingbracket
+  color: $solarized-red
+.cm-tag
+  color: $solarized-yellow
+.cm-attribute
+  color: $solarized-cyan
+.cm-header
+  color: $solarized-red
+  font-weight: bold
+.cm-header-1
+  font-size: 175%
+.cm-header-2
+  font-size: 150%
+.cm-header-3
+  font-size: 125%
+.cm-header-4
+  font-size: 115%
+.cm-s-solarized .cm-quote
+  color: $solarized-base1
+.cm-s-solarized .cm-hr
+  color: transparent
+  border-top: 1px solid $solarized-base01
+  display: block
+
+.cm-link
+  color: $solarized-base1
+  cursor: pointer
+.cm-special
+  color: $solarized-violet
+
+.cm-em
+  color: $black
+  font-style: italic
+
+.cm-strong
+  color: $black
+  font-weight: bold
+.cm-error,
+.cm-invalidchar
+  color: $solarized-base01
+  border-bottom: 1px dotted $solarized-red
+
+
+.CodeMirror-selected
+  background: $solarized-base1
+
+.CodeMirror-focused .CodeMirror-selected
+  background: $solarized-base1
+/* Default styles for common addons
+
+div.CodeMirror span
+  &.CodeMirror-matchingbracket
+    color: #0f0
+  &.CodeMirror-nonmatchingbracket
+    color: #f22
+
+.CodeMirror-matchingtag
+  background: rgba(255, 150, 0, 0.3)
+
+.CodeMirror-activeline-background
+  background: #e8f2ff
+
+/* STOP
+
+/* The rest of this file contains styles related to the mechanics of
+ * the editor. You probably shouldn't touch them.
+
+.CodeMirror
+  position: relative
+  overflow: hidden
+
+.CodeMirror-scroll
+  overflow: scroll !important
+  /* Things will break if this is overridden
+  /* 30px is the magic margin used to hide the element's real scrollbars
+  /* See overflow: hidden in .CodeMirror
+  margin-bottom: -30px
+  margin-right: -30px
+  padding-bottom: 30px
+  height: 100%
+  outline: none
+  /* Prevent dragging from highlighting the element
+  position: relative
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+
+.CodeMirror-sizer
+  position: relative
+  border-right: 30px solid transparent
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+ * before actuall scrolling happens, thus preventing shaking and
+ * flickering artifacts.
+
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler
+  position: absolute
+  z-index: 6
+  display: none
+
+.CodeMirror-vscrollbar
+  right: 0
+  top: 0px
+  overflow-x: hidden
+  overflow-y: scroll
+
+.CodeMirror-hscrollbar
+  bottom: 0
+  left: 0
+  overflow-y: hidden
+  overflow-x: scroll
+
+.CodeMirror-scrollbar-filler
+  right: 0
+  bottom: 0
+
+.CodeMirror-gutter-filler
+  left: 0
+  bottom: 0
+
+.CodeMirror-gutters
+  position: absolute
+  left: 0
+  top: 0
+  z-index: 3
+
+.CodeMirror-gutter
+  white-space: normal
+  height: 100%
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+  display: inline-block
+  margin-bottom: -30px
+  /* Hack to make IE7 behave
+  *zoom: 1
+  *display: inline
+
+.CodeMirror-gutter-wrapper
+  position: absolute
+  z-index: 4
+  height: 100%
+
+.CodeMirror-gutter-elt
+  position: absolute
+  cursor: default
+  z-index: 4
+
+.CodeMirror-lines
+  cursor: text
+  min-height: 1px
+  /* prevents collapsing before first draw
+
+.CodeMirror pre
+  /* Reset some styles that the rest of the page might have set
+  -moz-border-radius: 0
+  -webkit-border-radius: 0
+  border-radius: 0
+  border-width: 0
+  background: transparent
+  font-family: inherit
+  font-size: inherit
+  margin: 0
+  white-space: pre
+  word-wrap: normal
+  line-height: inherit
+  color: inherit
+  z-index: 2
+  position: relative
+  overflow: visible
+
+.CodeMirror-wrap pre
+  word-wrap: break-word
+  white-space: pre-wrap
+  word-break: normal
+
+.CodeMirror-linebackground
+  position: absolute
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+  z-index: 0
+
+.CodeMirror-linewidget
+  position: relative
+  z-index: 2
+  overflow: auto
+
+.CodeMirror-measure
+  position: absolute
+  width: 100%
+  height: 0
+  overflow: hidden
+  visibility: hidden
+  pre
+    position: static
+
+.CodeMirror div.CodeMirror-cursor
+  position: absolute
+  border-right: none
+  width: 0
+
+div.CodeMirror-cursors
+  visibility: hidden
+  position: relative
+  z-index: 3
+
+.CodeMirror-focused div.CodeMirror-cursors
+  visibility: visible
+
+
+.CodeMirror-crosshair
+  cursor: crosshair
+
+.cm-searching
+  background: #ffa
+  background: rgba(255, 255, 0, 0.4)
+
+/* IE7 hack to prevent it from returning funny offsetTops on the spans
+
+.CodeMirror span
+  *vertical-align: text-bottom
+
+/* Used to force a border model for a node
+
+.cm-force-border
+  padding-right: .1px
+
+@media print
+  /* Hide the cursor when printing
+  .CodeMirror div.CodeMirror-cursors
+    visibility: hidden
+
+/* See issue #2901
+
+.cm-tab-wrap-hack:after
+  content: ''
+
+/* Help users use markselection to safely style text background
+
+span.CodeMirror-selectedtext
+  background: none

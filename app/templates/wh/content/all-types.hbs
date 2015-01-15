@@ -11,7 +11,7 @@
         <th><a {{action "toggleSort" "name"}}>{{t 'wh.content.allTypes.contentType'}}</a></th>
         <th>{{t 'wh.content.allTypes.id'}}</th>
         <th><a {{action "toggleSort" "oneOff"}}>{{t 'wh.content.allTypes.formStyle'}}</a></th>
-        <th></th>
+        <th class="wy-text-right">{{t 'wh.content.allTypes.actions'}}</th>
       </tr>
     </thead>
     <tbody>
@@ -21,7 +21,8 @@
           <td>{{id}}</td>
           <td>{{#if oneOff}}{{t 'wh.content.allTypes.single'}}{{else}}{{t 'wh.content.allTypes.multiple'}}{{/if}}</td>
           <td class="wy-table-actions">
-            <button class="btn btn-link icon icon-remove-sign" {{action "deleteType" this bubbles=false}}></button>
+            <button class="btn btn-neutral btn-link btn-rebuild" data-toggle="tooltip" data-placement="top" {{translateAttr title="wh.content.allTypes.rebuildTip"}} {{action "scaffoldType" this bubbles=false}}>{{t 'wh.content.allTypes.rebuild'}}</button>
+            <button class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" data-placement="top" {{translateAttr title="wh.content.allTypes.deleteTip"}} {{action "deleteType" this bubbles=false}}></button>
           </td>
         {{/link-to}}
       {{/each}}

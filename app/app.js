@@ -1,3 +1,4 @@
+/*global hljs*/
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 
@@ -87,5 +88,12 @@ Ember.TextField.reopen(Em.I18n.TranslateableAttributes);
 // Ian doesn't like pluralizing, singularizing
 Ember.Inflector.inflector.pluralize = function (string ) { return string; };
 Ember.Inflector.inflector.singularize = function (string ) { return string; };
+
+// Configure Marked
+marked.setOptions({
+  highlight: function (code) {
+    return hljs.highlightAuto(code).value;
+  }
+});
 
 export default App;
