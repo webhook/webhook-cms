@@ -1,5 +1,11 @@
 export default Ember.Component.extend({
 
+  classNames: ['wy-tag-input-group'],
+
+  classNameBindings: [
+    'isMany:wy-tag-input-group-many'
+  ],
+
   // search results
   results: Ember.A([]),
 
@@ -81,41 +87,13 @@ export default Ember.Component.extend({
     }
   }),
 
-  isCrowded: function () {
-    return this.get('currentSelection.length') > 2;
+  isMany: function () {
+    return this.get('currentSelection.length') > 5;
   }.property('currentSelection.length'),
 
-  didInsertElement: function () {
-
-    if (this.get('control.disabled')) {
-      return;
-    }
-
-    var component = this;
-    var originalIndex;
-
-    this.$('.current-selection').sortable({
-      items: '.wy-tag',
-      helper: 'clone',
-      start: function (event, ui) {
-
-        originalIndex = ui.item.parent().children('.wy-tag').index(ui.item);
-
-      },
-      stop: function (event, ui) {
-
-        var newIndex = ui.item.parent().children('.wy-tag').index(ui.item);
-
-        $(this).sortable('cancel');
-
-        var array = component.get('control.value');
-        var relation = array.objectAt(originalIndex);
-        array.removeAt(originalIndex);
-        array.insertAt(newIndex, relation);
-      }
-    });
-
-  },
+  isFew: function () {
+    return !this.get('isMany');
+  }.property('isMany'),
 
   actions: {
     addToSelection: function (result) {

@@ -160,6 +160,22 @@
     z-index: $z-index-tooltip
     cursor: pointer
 
+.wy-tag-input-group-many li
+  // @include display(flex)
+  // @include align-items(center)
+  // @include justify-content(space-between)
+  cursor: move
+  span
+    display: inline-block
+    padding: 6px 12px 8px 12px
+  button
+    visibility: hidden
+  &:hover button
+    visibility: visible
+
+.wy-control-group-disabled .wy-tag-input-group-many li
+  cursor: auto
+
 .wh-table-tabular
   margin-bottom: 0
   .wh-tabular-input

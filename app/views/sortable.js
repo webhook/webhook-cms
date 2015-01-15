@@ -1,53 +1,65 @@
-export default Ember.View.extend({
+export default Ember.CollectionView.extend({
   tagName : "ol",
 
   didInsertElement : function () {
-    this.makeSortable();
+    if (!this.get('disabled')) {
+      this.makeSortable();
+    }
   },
 
   makeSortable: function () {
 
-    var controller = this.get('controller');
+    var content = this.get('content');
 
-    var originalindex;
+    var originalIndex;
 
     this.$().sortable({
-      items      : "> li:not([data-locked])",
-      placeholder: 'wh-form-control-placeholder',
-      helper     : 'clone',
-      axis       : 'y',
+      helper: 'clone',
 
       start: function (event, ui) {
-
-        ui.helper.find('.wy-control-group-edit').removeClass('wy-control-group-edit');
-        ui.helper.find('.wy-tooltip').remove();
-
-        originalindex = ui.item.parent().children('li').index(ui.item);
-
+        originalIndex = ui.item.parent().children().index(ui.item);
       },
-      update: function  (event, ui) {
+      stop: function  (event, ui) {
 
-        var newindex = ui.item.parent().children(':not(script)').index(ui.item);
+        var newIndex = ui.item.parent().children().index(ui.item);
 
-        if (ui.item.hasClass('ui-draggable')) {
+        $(this).sortable('cancel');
 
-          var type = ui.item.data('id');
-
-          $(this).sortable('cancel');
-          ui.item.remove();
-
-          controller.addControlAtIndex(type, newindex);
-
-        } else {
-
-          $(this).sortable('cancel');
-
-          controller.updateOrder(originalindex, newindex);
-
-        }
+        var movingItem = content.objectAt(originalIndex);
+        content.removeAt(originalIndex);
+        content.insertAt(newIndex, movingItem);
 
       }
     });
 
+  },
+
+  createChildView: function(viewClass, attrs) {
+
+    viewClass = Ember.View.extend();
+
+    if (Ember.isEmpty(this.get('itemTemplate'))) {
+      viewClass.reopen({
+        template: Ember.Handlebars.compile("{{view.content}}")
+      });
+    } else {
+      viewClass.reopen({
+        templateName: this.get('itemTemplate')
+      });
+    }
+
+    if (!Ember.isEmpty(this.get('itemTagName'))) {
+      viewClass.reopen({
+        tagName: this.get('itemTagName')
+      });
+    }
+
+    if (!Ember.isEmpty(this.get('itemClassNames'))) {
+      viewClass.reopen({
+        classNames: this.get('itemClassNames')
+      });
+    }
+
+    return this._super(viewClass, attrs);
   }
 });

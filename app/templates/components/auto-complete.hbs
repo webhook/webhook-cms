@@ -1,28 +1,24 @@
-<ol>
-  {{#each item in currentSelection}}
-    <li>{{item.itemData.name}} <button type="button" {{ action "removeItem" item }}>Delete</button></li>
-  {{/each}}
-</ol>
+{{#if isMany}}
+  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/many' disabled=control.disabled}}
+{{/if}}
 
-<div class='wy-tag-input-group'>
+{{#if isFew}}
+  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/few' tagName='span' classNames='current-selection' itemTagName='span' itemClassNames='wy-tag' disabled=control.disabled}}
+{{/if}}
 
-  <span class="current-selection">{{#each item in currentSelection}}<span class="wy-tag">{{item.itemData.name}}{{#unless control.disabled}}<a href="" class="wy-tag-remove" {{action "removeItem" item}}></a>{{/unless}}</span>{{/each}}</span>
+{{#if showAutocomplete}}
+  <div class="wy-autocomplete-group">
+    <label class="icon icon-search"></label>
 
-  {{#if showAutocomplete}}
-    <div class="wy-autocomplete-group">
-      <label class="icon icon-search"></label>
+    {{view "auto-complete" placeholder="Add item" filter=control.meta.contentTypeId value=autocompleteValue}}
 
-      {{view "auto-complete" placeholder="Search" filter=control.meta.contentTypeId value=autocompleteValue}}
+    {{#if isLoading}}
+      <span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>
+    {{/if}}
 
-      {{#if isLoading}}
-        <span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>
-      {{/if}}
+    {{#collection "autocomplete-results" content=results}}
+      {{{name}}}
+    {{/collection}}
 
-      {{#collection "autocomplete-results" content=results}}
-        {{{name}}}
-      {{/collection}}
-
-    </div>
-  {{/if}}
-
-</div>
+  </div>
+{{/if}}
