@@ -27,8 +27,6 @@ export default {
 
       if (data.error) {
         return Ember.RSVP.reject(data.error);
-      } else if (Ember.isEmpty(data.hits)) {
-        return Ember.RSVP.reject('No results.');
       } else {
 
         var items = Ember.A([]);

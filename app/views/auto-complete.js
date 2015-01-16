@@ -12,10 +12,13 @@ export default Ember.TextField.extend({
       parentView.set('isLoading', true);
 
       SearchIndex.search(this.get('value'), this.get('resultsPage'), this.get('filter')).then(function (results) {
+        parentView.set('isLoading', false);
         parentView.set('results', Ember.A(results).map(function (result) {
           return Ember.Object.create(result);
         }));
+      }, function (error) {
         parentView.set('isLoading', false);
+        Ember.Logger.error(error);
       });
 
     } else {
@@ -37,7 +40,34 @@ export default Ember.TextField.extend({
 
     case 13: // enter
       event.preventDefault();
-      this.get('parentView.controller').send('addToSelection', this.get('parentView.results').findBy('isSelected'));
+      if (!Ember.isEmpty(this.get('parentView.results'))) {
+        this.get('parentView.controller').send('addToSelection', this.get('parentView.results').findBy('isSelected'));
+      } else if (this.get('value') && !this.get('parentView.isLoading')) {
+
+        var itemName = this.get('value');
+
+        if (!window.confirm('Create and add `%@`?'.fmt(itemName))) {
+          return;
+        }
+
+        var store = this.get('parentView').store;
+        var controller = this.get('parentView.controller');
+        var type = this.get('filter');
+
+        store.find('content-type', type).then(function (contentType) {
+          var newItem = store.createRecord(contentType.get('itemModelName'), {
+            itemData: {
+              name: itemName
+            }
+          }).save().then(function (item) {
+            controller.send('addToSelection', Ember.Object.create({
+              type: type,
+              id: item.get('id')
+            }));
+          });
+        });
+
+      }
       break;
 
     case 38: // up
