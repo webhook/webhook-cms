@@ -1,9 +1,9 @@
-{{#if isMany}}
-  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/many' disabled=control.disabled}}
-{{/if}}
-
 {{#if isFew}}
   {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/few' tagName='span' classNames='current-selection' itemTagName='span' itemClassNames='wy-tag' disabled=control.disabled}}
+{{/if}}
+
+{{#if isMany}}
+  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/many' disabled=control.disabled}}
 {{/if}}
 
 {{#if showAutocomplete}}
@@ -22,3 +22,4 @@
 
   </div>
 {{/if}}
+

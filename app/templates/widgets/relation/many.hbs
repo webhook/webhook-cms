@@ -1,1 +1,6 @@
-<span>{{view.content.itemData.name}}</span>{{#unless view.context.control.disabled}}<button type="button" class="btn btn-link icon icon-remove-sign" {{ action "removeItem" view.content }}></button>{{/unless}}
+<span class="icon icon-ellipsis-v" data-toggle="tooltip" data-placement="left" title="Click and drag to change the order.">
+  {{view.content.itemData.name}}
+  {{#unless view.context.control.disabled}}
+    <a class="icon icon-remove-sign" {{ action "removeItem" view.content }}></a>
+  {{/unless}}
+</span>
