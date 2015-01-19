@@ -144,6 +144,8 @@ export default Ember.ObjectController.extend({
 
     Ember.Logger.log('Updating %@ reverse relationships.'.fmt(relationControls.get('length')));
 
+    var relationPromises = Ember.A([]);
+
     relationControls.forEach(function (control) {
 
       var currentRelations = control.get('value') || Ember.A([]);
@@ -295,12 +297,12 @@ export default Ember.ObjectController.extend({
         if (!item) {
           return;
         }
-        updateRelation(item, 'remove').then(function () {
+        return updateRelation(item, 'remove').then(function () {
           removedRelationsCounter += 1;
-          removeRelation(removedRelations.objectAt(removedRelationsCounter));
+          return removeRelation(removedRelations.objectAt(removedRelationsCounter));
         });
       };
-      removeRelation(removedRelations.objectAt(removedRelationsCounter));
+      relationPromises.pushObject(removeRelation(removedRelations.objectAt(removedRelationsCounter)));
 
       // Loop through added relations, wait for each to process
       var addedRelationsCounter = 0;
@@ -308,14 +310,16 @@ export default Ember.ObjectController.extend({
         if (!item) {
           return;
         }
-        updateRelation(item, 'add').then(function () {
+        return updateRelation(item, 'add').then(function () {
           addedRelationsCounter += 1;
-          addRelation(addedRelations.objectAt(addedRelationsCounter));
+          return addRelation(addedRelations.objectAt(addedRelationsCounter));
         });
       };
-      addRelation(addedRelations.objectAt(addedRelationsCounter));
+      relationPromises.pushObject(addRelation(addedRelations.objectAt(addedRelationsCounter)));
 
     });
+
+    return Ember.RSVP.Promise.all(relationPromises);
 
   },
 
