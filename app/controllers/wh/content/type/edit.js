@@ -136,8 +136,6 @@ export default Ember.ObjectController.extend({
 
   updateReverseRelationships: function () {
 
-    return Ember.RSVP.Promise.reject('BOOM');
-
     var controller = this;
     var itemModel = this.get('itemModel');
 
