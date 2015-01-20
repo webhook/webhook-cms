@@ -164,6 +164,8 @@ export default Ember.ObjectController.extend({
         var itemId = relatedItem.split(' ')[1];
         var relatedValue = controller.get('type.id') + ' ' + itemModel.get('id');
 
+        Ember.Logger.log('`%@` wants to %@ "%@" %@ `%@:%@`'.fmt(control.get('name'), updateType, relatedValue, updateType === 'add' ? 'to' : 'from', relatedItem, control.get('meta.reverseName')));
+
         return controller.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = contentType.get('itemModelName');
           var foreignControls = contentType.get('controls');
@@ -273,7 +275,9 @@ export default Ember.ObjectController.extend({
 
               if (updateType === 'remove') {
                 currentItems.removeObject(relatedValue);
-              } else {
+              }
+
+              if (updateType === 'add') {
                 currentItems.addObject(relatedValue);
               }
 
@@ -281,8 +285,8 @@ export default Ember.ObjectController.extend({
 
             }
 
-            return reverseItem.save().then(function () {
-              Ember.Logger.log('`%@` updated.'.fmt(reverseItem.get('itemData.name')));
+            return reverseItem.save().then(function (item) {
+              Ember.Logger.log('`%@` updated `%@:%@` to `%@`.'.fmt(control.get('name'), reverseItem.get('itemData.name'), reverseName, item.get('itemData')[reverseName]));
             });
 
           });
