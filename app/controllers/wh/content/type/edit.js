@@ -136,6 +136,8 @@ export default Ember.ObjectController.extend({
 
   updateReverseRelationships: function () {
 
+    return Ember.RSVP.Promise.reject('BOOM');
+
     var controller = this;
     var itemModel = this.get('itemModel');
 
@@ -369,7 +371,7 @@ export default Ember.ObjectController.extend({
         Ember.Logger.warn(error);
 
         if (window.trackJs) {
-          window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
+          window.trackJs.console.log("Attempted to save item. %@".fmt(controller.get('itemModel')));
           window.trackJs.track(error);
         }
 

@@ -784,7 +784,7 @@ export default Ember.ObjectController.extend(Ember.Evented, {
         Ember.Logger.error(error);
 
         if (window.trackJs) {
-          window.trackJs.log("Attempted to save form.", formController.get('model'));
+          window.trackJs.console.log("Attempted to save form. %@".fmt(formController.get('model')));
           window.trackJs.track(error);
         }
 
