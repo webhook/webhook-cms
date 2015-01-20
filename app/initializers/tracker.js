@@ -7,6 +7,11 @@ export default {
     // Clear out the old embedded version linked to from index.html
     window.trackJs = null;
 
+    // Track hosted errors only
+    if (window.ENV.selfHosted) {
+      return;
+    }
+
     // Figure out path to static assets
     var trackerPath = (function () {
       var links = document.getElementsByTagName('link'),
@@ -36,6 +41,9 @@ export default {
       script.type = 'text/javascript';
       script.async = true;
       script.onload = function(){
+        application.advanceReadiness();
+      };
+      script.onerror = function(){
         application.advanceReadiness();
       };
       script.src = trackerPath;
