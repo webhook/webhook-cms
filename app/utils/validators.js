@@ -35,7 +35,11 @@ export default function validateControls (contentType) {
       if (control.get('required')) {
         invalidate(control, 'This field is required');
       }
-      Ember.Logger.warn('-- %@: %@'.fmt(control.get('name'), control.get('widgetErrors').join(', ')));
+      if (control.get('widgetIsValid')) {
+        Ember.Logger.log('-- %@: ✓'.fmt(control.get('name')));
+      } else {
+        Ember.Logger.warn('-- %@: %@'.fmt(control.get('name'), control.get('widgetErrors').join(', ')));
+      }
       return;
     }
 

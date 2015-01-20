@@ -105,7 +105,7 @@ export default function dataFromControls (controls) {
     data[control.get('name')] = value;
 
     // Log values
-    Ember.Logger.log(control.get('controlType.widget') + ':' + control.get('name'));
+    Ember.Logger.log('%c%@:%@'.fmt(control.get('controlType.widget'), control.get('name')), 'color: green; font-weight: bold');
 
     switch (control.get('controlType.widget')) {
     case 'checkbox':

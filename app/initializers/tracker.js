@@ -8,7 +8,7 @@ export default {
     window.trackJs = null;
 
     // Track hosted errors only
-    if (window.ENV.selfHosted) {
+    if (window.ENV.isDevelopment || window.ENV.selfHosted) {
       return;
     }
 
