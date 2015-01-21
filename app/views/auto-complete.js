@@ -63,7 +63,7 @@ export default Ember.TextField.extend({
         } else {
           var itemName = selected.get('value');
 
-          if (!window.confirm('Create and add `%@`?'.fmt(itemName))) {
+          if (!window.confirm('Create and add `%@`? It will be added as a stub.'.fmt(itemName))) {
             return;
           }
 
