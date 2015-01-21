@@ -18,7 +18,10 @@ export default Ember.CollectionView.extend({
   }.observes('content.@each'),
 
   itemViewClass: Ember.View.extend({
-    classNameBindings: ['context.isSelected:on'],
+    classNameBindings: [
+      'context.isSelected:on',
+      'context.createStub:wy-autocomplete-add'
+    ],
 
     mouseEnter: function () {
       this.get('parentView.content').setEach('isSelected', false);
