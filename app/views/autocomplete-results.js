@@ -20,7 +20,7 @@ export default Ember.CollectionView.extend({
   itemViewClass: Ember.View.extend({
     classNameBindings: [
       'context.isSelected:on',
-      'context.createStub:wy-autocomplete-add'
+      'context.createStub:add'
     ],
 
     mouseEnter: function () {
