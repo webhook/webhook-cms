@@ -29,6 +29,9 @@ export default Ember.Component.extend({
   currentSelection: Ember.arrayComputed('control.value', {
     addedItem: function (array, valueItem, changeMeta) {
 
+      // the store can take a while to get back us so make sure we have a placeholder
+      array.pushObject(Ember.Object.create());
+
       var insertPosition = this.get('control.value').indexOf(valueItem);
 
       var contentTypeId = valueItem.split(' ')[0];
@@ -69,6 +72,7 @@ export default Ember.Component.extend({
             });
 
           } else {
+            array.removeAt(insertPosition);
             array.insertAt(insertPosition, model);
           }
 

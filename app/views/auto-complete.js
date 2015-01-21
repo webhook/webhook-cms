@@ -5,24 +5,38 @@ export default Ember.TextField.extend({
 
   searchQueryObserver: Ember.debouncedObserver(function() {
 
-    if (this.get('value')) {
+    var query = this.get('value');
+
+    if (Ember.isEmpty(query)) {
+      this.getWithDefault('parentView.results', Ember.A([])).clear();
+    } else {
 
       var parentView = this.get('parentView');
 
       parentView.set('isLoading', true);
 
-      SearchIndex.search(this.get('value'), this.get('resultsPage'), this.get('filter')).then(function (results) {
+      SearchIndex.search(query, this.get('resultsPage'), this.get('filter')).then(function (results) {
         parentView.set('isLoading', false);
-        parentView.set('results', Ember.A(results).map(function (result) {
+        var canCreate = true;
+        results = Ember.A(results).map(function (result) {
+          if (query.toLowerCase() === Ember.$('<span>').html(result.name).text().toLowerCase()) {
+            canCreate = false;
+          }
           return Ember.Object.create(result);
-        }));
+        });
+        if (canCreate) {
+          results.addObject(Ember.Object.create({
+            name: 'Create "%@"'.fmt(query),
+            value: query,
+            createStub: true
+          }));
+        }
+        parentView.set('results', results);
       }, function (error) {
         parentView.set('isLoading', false);
         Ember.Logger.error(error);
       });
 
-    } else {
-      this.getWithDefault('parentView.results', Ember.A([])).clear();
     }
 
   }, 'value', 500).on('init'),
@@ -41,32 +55,35 @@ export default Ember.TextField.extend({
     case 13: // enter
       event.preventDefault();
       if (!Ember.isEmpty(this.get('parentView.results'))) {
-        this.get('parentView.controller').send('addToSelection', this.get('parentView.results').findBy('isSelected'));
-      } else if (this.get('value') && !this.get('parentView.isLoading')) {
 
-        var itemName = this.get('value');
+        var selected = this.get('parentView.results').findBy('isSelected');
 
-        if (!window.confirm('Create and add `%@`?'.fmt(itemName))) {
-          return;
-        }
+        if (Ember.isEmpty(selected.get('createStub'))) {
+          this.get('parentView.controller').send('addToSelection', selected);
+        } else {
+          var itemName = selected.get('value');
 
-        var store = this.get('parentView').store;
-        var controller = this.get('parentView.controller');
-        var type = this.get('filter');
+          if (!window.confirm('Create and add `%@`?'.fmt(itemName))) {
+            return;
+          }
 
-        store.find('content-type', type).then(function (contentType) {
-          var newItem = store.createRecord(contentType.get('itemModelName'), {
-            itemData: {
-              name: itemName
-            }
-          }).save().then(function (item) {
-            controller.send('addToSelection', Ember.Object.create({
-              type: type,
-              id: item.get('id')
-            }));
+          var store = this.get('parentView').store;
+          var controller = this.get('parentView.controller');
+          var type = this.get('filter');
+
+          store.find('content-type', type).then(function (contentType) {
+            var newItem = store.createRecord(contentType.get('itemModelName'), {
+              itemData: {
+                name: itemName
+              }
+            }).save().then(function (item) {
+              controller.send('addToSelection', Ember.Object.create({
+                type: type,
+                id: item.get('id')
+              }));
+            });
           });
-        });
-
+        }
       }
       break;
 
