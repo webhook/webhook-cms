@@ -11,7 +11,12 @@
 {{/if}}
 
 {{#if isMany}}
-  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/many' disabled=control.disabled}}
+  {{view 'sortable'
+    content=currentSelection
+    itemTemplate='widgets/relation/many'
+    itemClassNameBindings='content.justAdded:active'
+    disabled=control.disabled
+  }}
 {{/if}}
 
 {{#if showAutocomplete}}
