@@ -54,7 +54,11 @@ export default Ember.CollectionView.extend({
       });
     }
 
-    if (!Ember.isEmpty(this.get('itemClassNames'))) {
+    if (!Ember.isEmpty(this.get('itemClassNameBindings'))) {
+      viewClass.reopen({
+        classNameBindings: this.get('itemClassNameBindings').split(' ')
+      });
+    } else if (!Ember.isEmpty(this.get('itemClassNames'))) {
       viewClass.reopen({
         classNames: this.get('itemClassNames')
       });

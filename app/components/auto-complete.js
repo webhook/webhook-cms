@@ -30,7 +30,9 @@ export default Ember.Component.extend({
     addedItem: function (array, valueItem, changeMeta) {
 
       // the store can take a while to get back us so make sure we have a placeholder
-      array.pushObject(Ember.Object.create());
+      array.pushObject(Ember.Object.create({
+        name: '...'
+      }));
 
       var insertPosition = this.get('control.value').indexOf(valueItem);
 
@@ -46,6 +48,13 @@ export default Ember.Component.extend({
         var reverseIsSingle = reverseName && contentType.get('controls').findBy('name', reverseName).get('meta.isSingle');
 
         store.find(contentType.get('itemModelName'), itemId).then(function (model) {
+
+          // Dave wants a class added and then removed when you add an item
+          model.set('justAdded', true);
+
+          Ember.run.later(function () {
+            model.set('justAdded', false);
+          }, 500);
 
           // this feels like a hacky way to get the type and item from the edit controller
           var editController = component.get('parentView.parentView.context');
@@ -64,6 +73,7 @@ export default Ember.Component.extend({
             store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (reverseValueModel) {
 
               if (window.confirm('The `%@` content type only allows one `%@` to be attached. Do you want to replace `%@` in the current relation with `%@`?'.fmt(contentType.get('name'), editType.get('name'), reverseValueModel.get('itemData.name'), editController.get('controls').findBy('name', 'name').get('value') || 'unnamed item'))) {
+                array.removeAt(insertPosition);
                 array.insertAt(insertPosition, model);
               } else {
                 component.get('control.value').removeObject(valueItem);
@@ -108,10 +118,36 @@ export default Ember.Component.extend({
 
       var value = this.getWithDefault('control.value', Ember.A([]));
 
-      var resultKey = result.get('type') + ' ' + result.get('id');
-      if (value.indexOf(resultKey) < 0) {
-        value.pushObject(resultKey);
-        this.set('control.value', value);
+      if (Ember.isEmpty(result.get('createStub'))) {
+
+        var resultKey = result.get('type') + ' ' + result.get('id');
+
+        if (value.indexOf(resultKey) < 0) {
+          value.pushObject(resultKey);
+          // this.set('control.value', value);
+        }
+
+      } else {
+
+        var itemName = result.get('value');
+
+        if (!window.confirm('Create and add `%@`? It will be added as a stub.'.fmt(itemName))) {
+          return;
+        }
+
+        var store = this.store;
+        var type = result.get('type');
+
+        store.find('content-type', type).then(function (contentType) {
+          var newItem = store.createRecord(contentType.get('itemModelName'), {
+            itemData: {
+              name: itemName
+            }
+          }).save().then(function (item) {
+            value.pushObject(type + ' ' + item.get('id'));
+          });
+        });
+
       }
 
       this.set('autocompleteValue', null);

@@ -6,6 +6,7 @@ export default Ember.TextField.extend({
   searchQueryObserver: Ember.debouncedObserver(function() {
 
     var query = this.get('value');
+    var type = this.get('filter');
 
     if (Ember.isEmpty(query)) {
       this.getWithDefault('parentView.results', Ember.A([])).clear();
@@ -15,7 +16,7 @@ export default Ember.TextField.extend({
 
       parentView.set('isLoading', true);
 
-      SearchIndex.search(query, this.get('resultsPage'), this.get('filter')).then(function (results) {
+      SearchIndex.search(query, this.get('resultsPage'), type).then(function (results) {
         parentView.set('isLoading', false);
         var canCreate = true;
         results = Ember.A(results).map(function (result) {
@@ -28,7 +29,8 @@ export default Ember.TextField.extend({
           results.addObject(Ember.Object.create({
             name: 'Create "%@"'.fmt(query),
             value: query,
-            createStub: true
+            createStub: true,
+            type: type
           }));
         }
         parentView.set('results', results);
@@ -55,35 +57,7 @@ export default Ember.TextField.extend({
     case 13: // enter
       event.preventDefault();
       if (!Ember.isEmpty(this.get('parentView.results'))) {
-
-        var selected = this.get('parentView.results').findBy('isSelected');
-
-        if (Ember.isEmpty(selected.get('createStub'))) {
-          this.get('parentView.controller').send('addToSelection', selected);
-        } else {
-          var itemName = selected.get('value');
-
-          if (!window.confirm('Create and add `%@`? It will be added as a stub.'.fmt(itemName))) {
-            return;
-          }
-
-          var store = this.get('parentView').store;
-          var controller = this.get('parentView.controller');
-          var type = this.get('filter');
-
-          store.find('content-type', type).then(function (contentType) {
-            var newItem = store.createRecord(contentType.get('itemModelName'), {
-              itemData: {
-                name: itemName
-              }
-            }).save().then(function (item) {
-              controller.send('addToSelection', Ember.Object.create({
-                type: type,
-                id: item.get('id')
-              }));
-            });
-          });
-        }
+        this.get('parentView.controller').send('addToSelection', this.get('parentView.results').findBy('isSelected'));
       }
       break;
 

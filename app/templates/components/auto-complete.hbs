@@ -1,5 +1,13 @@
 {{#if isFew}}
-  {{view 'sortable' content=currentSelection itemTemplate='widgets/relation/few' tagName='span' classNames='current-selection' itemTagName='span' itemClassNames='wy-tag' disabled=control.disabled}}
+  {{view 'sortable'
+    content=currentSelection
+    itemTemplate='widgets/relation/few'
+    tagName='span'
+    classNames='current-selection'
+    itemTagName='span'
+    itemClassNameBindings=':wy-tag content.justAdded:active'
+    disabled=control.disabled
+  }}
 {{/if}}
 
 {{#if isMany}}
