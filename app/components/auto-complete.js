@@ -6,6 +6,10 @@ export default Ember.Component.extend({
     'isMany:wy-tag-input-group-many'
   ],
 
+  willInsertElement: function () {
+    this.set('initialValue', Ember.copy(this.get('control.value')));
+  },
+
   // search results
   results: Ember.A([]),
 
@@ -50,11 +54,15 @@ export default Ember.Component.extend({
         store.find(contentType.get('itemModelName'), itemId).then(function (model) {
 
           // Dave wants a class added and then removed when you add an item
-          model.set('justAdded', true);
+          if (component.getWithDefault('initialValue', Ember.A([])).indexOf(valueItem) < 0) {
 
-          Ember.run.later(function () {
-            model.set('justAdded', false);
-          }, 500);
+            model.set('justAdded', true);
+
+            Ember.run.later(function () {
+              model.set('justAdded', false);
+            }, 500);
+
+          }
 
           // this feels like a hacky way to get the type and item from the edit controller
           var editController = component.get('parentView.parentView.context');
