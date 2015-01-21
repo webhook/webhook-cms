@@ -177,14 +177,21 @@
       margin-bottom: 0
     .wy-spinner
       float: right
+      margin-top: $base-line-height / 4
+      margin-bottom: $base-line-height / 4
 .wy-tag-input-group-many ol li
   cursor: move
   span
     display: inline-block
     padding: $base-line-height / 4 $base-line-height / 2
-    width: 50%
     margin-bottom: $base-line-height / 4
-    background: $table-stripe-color
+    background: rgba(0,0,0,.1)
+    position: relative
+    +truncate(50%)
+    +transition(background .5s ease-in-out)
+  &.active span
+    background: rgba(0,0,0,.2)
+
   span:hover
     .icon-remove-sign
       opacity: 1
@@ -193,7 +200,9 @@
     margin-right: $base-line-height / 4
 
   .icon-remove-sign
-    float: right
+    position: absolute
+    right: $base-line-height / 4
+    top: $base-line-height / 4
     color: $red
     opacity: 0
 
