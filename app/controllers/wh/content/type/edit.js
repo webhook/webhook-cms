@@ -144,6 +144,8 @@ export default Ember.ObjectController.extend({
 
     Ember.Logger.log('Updating %@ reverse relationships.'.fmt(relationControls.get('length')));
 
+    var relationPromises = Ember.A([]);
+
     relationControls.forEach(function (control) {
 
       var currentRelations = control.get('value') || Ember.A([]);
@@ -161,6 +163,8 @@ export default Ember.ObjectController.extend({
         var contentTypeId = relatedItem.split(' ')[0];
         var itemId = relatedItem.split(' ')[1];
         var relatedValue = controller.get('type.id') + ' ' + itemModel.get('id');
+
+        Ember.Logger.log('`%@` wants to %@ "%@" %@ `%@:%@`'.fmt(control.get('name'), updateType, relatedValue, updateType === 'add' ? 'to' : 'from', relatedItem, control.get('meta.reverseName')));
 
         return controller.store.find('contentType', contentTypeId).then(function (contentType) {
           var modelName = contentType.get('itemModelName');
@@ -271,7 +275,9 @@ export default Ember.ObjectController.extend({
 
               if (updateType === 'remove') {
                 currentItems.removeObject(relatedValue);
-              } else {
+              }
+
+              if (updateType === 'add') {
                 currentItems.addObject(relatedValue);
               }
 
@@ -279,8 +285,8 @@ export default Ember.ObjectController.extend({
 
             }
 
-            return reverseItem.save().then(function () {
-              Ember.Logger.log('`%@` updated.'.fmt(reverseItem.get('itemData.name')));
+            return reverseItem.save().then(function (item) {
+              Ember.Logger.log('`%@` updated `%@:%@` to `%@`.'.fmt(control.get('name'), reverseItem.get('itemData.name'), reverseName, item.get('itemData')[reverseName]));
             });
 
           });
@@ -295,12 +301,12 @@ export default Ember.ObjectController.extend({
         if (!item) {
           return;
         }
-        updateRelation(item, 'remove').then(function () {
+        return updateRelation(item, 'remove').then(function () {
           removedRelationsCounter += 1;
-          removeRelation(removedRelations.objectAt(removedRelationsCounter));
+          return removeRelation(removedRelations.objectAt(removedRelationsCounter));
         });
       };
-      removeRelation(removedRelations.objectAt(removedRelationsCounter));
+      relationPromises.pushObject(removeRelation(removedRelations.objectAt(removedRelationsCounter)));
 
       // Loop through added relations, wait for each to process
       var addedRelationsCounter = 0;
@@ -308,14 +314,16 @@ export default Ember.ObjectController.extend({
         if (!item) {
           return;
         }
-        updateRelation(item, 'add').then(function () {
+        return updateRelation(item, 'add').then(function () {
           addedRelationsCounter += 1;
-          addRelation(addedRelations.objectAt(addedRelationsCounter));
+          return addRelation(addedRelations.objectAt(addedRelationsCounter));
         });
       };
-      addRelation(addedRelations.objectAt(addedRelationsCounter));
+      relationPromises.pushObject(addRelation(addedRelations.objectAt(addedRelationsCounter)));
 
     });
+
+    return Ember.RSVP.Promise.all(relationPromises);
 
   },
 
@@ -365,7 +373,7 @@ export default Ember.ObjectController.extend({
         Ember.Logger.warn(error);
 
         if (window.trackJs) {
-          window.trackJs.log("Attempted to save item.", controller.get('itemModel'));
+          window.trackJs.console.log("Attempted to save item. %@".fmt(controller.get('itemModel')));
           window.trackJs.track(error);
         }
 
