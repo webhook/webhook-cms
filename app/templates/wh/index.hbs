@@ -1,3 +1,19 @@
+{{#unless isEditingMessage}}
+
+  {{#if session.isOwner}}
+    <button type="button" class="btn btn-success" {{ action "editMessage" }}>Edit Message</button>
+  {{/if}}
+
+  {{to-markdown settings.siteMessage}}
+
+{{else}}
+
+  {{markdown-editor value=settings.siteMessage session=session}}
+
+  <button type="button" class="btn btn-success" {{ action "saveMessage" settings}}>Save</button>
+
+{{/unless}}
+
 {{#if noTypesLive}}
   <div class="wy-alert wy-alert-danger">
     <div class="wy-alert-title">{{t 'wh.index.welcome.noTypesTitle'}}</div>
@@ -50,4 +66,3 @@
     </section>
   {{/if}}
 {{/if}}
-

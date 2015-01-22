@@ -5,5 +5,7 @@ export default DS.Model.extend({
   siteKeywords   : DS.attr('string'),
   analyticsId    : DS.attr('string'),
   siteTwitter    : DS.attr('string'),
-  siteFacebook   : DS.attr('string')
+  siteFacebook   : DS.attr('string'),
+  siteMessage    : DS.attr('string'),
+  siteMessageType: DS.attr('string')
 });

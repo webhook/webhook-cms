@@ -4,6 +4,8 @@ export default Ember.Controller.extend({
   serverMessagesPerPage: 10,
 
   contentTypes: null,
+  settings: null,
+  isEditingMessage: false,
 
   noTypesLive: function () {
     return Ember.isEmpty(this.get('contentTypes')) && !this.get('buildEnvironment.local');
@@ -49,6 +51,17 @@ export default Ember.Controller.extend({
           Ember.$.extend(message, { id: name });
           serverMessages.insertAt(lastIndex, message);
         });
+      });
+
+    },
+    editMessage: function () {
+      this.set('isEditingMessage', true);
+    },
+    saveMessage: function () {
+
+      var route = this;
+      this.get('settings').save().then(function () {
+        route.set('isEditingMessage', false);
       });
 
     }
