@@ -124,6 +124,8 @@ export default Ember.Component.extend({
         return;
       }
 
+      Ember.Logger.log('Adding `%@` to `%@`'.fmt(Ember.$('<span>').html(result.get('name')).text(), this.get('control.name')));
+
       var value = this.getWithDefault('control.value', Ember.A([]));
 
       if (Ember.isEmpty(result.get('createStub'))) {
@@ -132,7 +134,7 @@ export default Ember.Component.extend({
 
         if (value.indexOf(resultKey) < 0) {
           value.pushObject(resultKey);
-          // this.set('control.value', value);
+          this.set('control.value', value);
         }
 
       } else {
@@ -143,6 +145,7 @@ export default Ember.Component.extend({
           return;
         }
 
+        var component = this;
         var store = this.store;
         var type = result.get('type');
 
@@ -153,6 +156,7 @@ export default Ember.Component.extend({
             }
           }).save().then(function (item) {
             value.pushObject(type + ' ' + item.get('id'));
+            component.set('control.value', value);
           });
         });
 
