@@ -25,9 +25,10 @@ export default Ember.Route.extend({
     }, function (error) {
       var settings = route.store.getById('settings', 'general');
       settings.loadedData();
-
-      settings.set('siteMessage', route.get('defaultMessage'));
-      route.set('settings', settings);
+      return settings.save().then(function () {
+        settings.set('siteMessage', route.get('defaultMessage'));
+        route.set('settings', settings);
+      });
     });
 
   },
@@ -38,5 +39,6 @@ export default Ember.Route.extend({
 
     controller.set('contentTypes', this.modelFor('wh'));
     controller.set('settings', this.get('settings'));
+    controller.set('defaultMessage', this.get('defaultMessage'));
   }
 });

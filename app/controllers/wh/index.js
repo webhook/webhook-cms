@@ -59,11 +59,20 @@ export default Ember.Controller.extend({
     },
     saveMessage: function () {
 
-      var route = this;
+      var controller = this;
       this.get('settings').save().then(function () {
-        route.set('isEditingMessage', false);
+        controller.set('isEditingMessage', false);
       });
 
+    },
+    cancelMessage: function () {
+      this.get('settings').rollback();
+
+      if (Ember.isEmpty(this.get('settings.siteMessage'))) {
+        this.set('settings.siteMessage', this.get('defaultMessage'));
+      }
+
+      this.set('isEditingMessage', false);
     }
   }
 

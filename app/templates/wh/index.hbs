@@ -17,6 +17,7 @@
 
     {{markdown-editor value=settings.siteMessage session=session}}
 
+    <button type="button" class="btn btn-neutral" {{ action "cancelMessage" }}>Cancel</button>
     <button type="button" class="btn btn-success" {{ action "saveMessage" settings}}>Save</button>
 
   {{/unless}}
