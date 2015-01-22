@@ -1,4 +1,9 @@
 <td class="wh-tabular-grab"><span class="icon icon-ellipsis-v"></span></td>
-<td class="wh-tabular-input">{{input value=view.content.pattern placeholder="^/blog/([^/]+)/" }}</td>
+<td class="wh-tabular-input">
+  {{input value=view.content.pattern placeholder="^/blog/([^/]+)/" classNameBindings="view.content.isValid::invalid" }}
+  {{#unless view.content.isValid}}
+    <br><small class="wy-text-danger">Invalid regular expression</small>
+  {{/unless}}
+</td>
 <td class="wh-tabular-input">{{input value=view.content.destination placeholder="/articles/$1/" }}</td>
 <td><button class="btn btn-link icon icon-remove-sign" {{action 'removeRedirect' view.content}}></button></td>

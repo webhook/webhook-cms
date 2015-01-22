@@ -26,6 +26,10 @@ export default Ember.CollectionView.extend({
   },
 
   itemViewClass: Ember.View.extend({
-    templateName: 'wh/settings/urls-rule'
+    templateName: 'wh/settings/urls-rule',
+
+    classNameBindings: [
+      'content.isValid::invalid'
+    ]
   })
 });

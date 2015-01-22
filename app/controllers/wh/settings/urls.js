@@ -7,6 +7,10 @@ export default Ember.ArrayController.extend({
 
   removedRules: Ember.A([]),
 
+  isAnyInvalid: function () {
+    return this.get('content').isAny('isValid', false);
+  }.property('content.@each.isValid'),
+
   // always have one row to manipulate
   generateFirst: function () {
     if (!this.get('content.length')) {
@@ -29,8 +33,12 @@ export default Ember.ArrayController.extend({
       return false;
     }
 
+    if (this.get('isAnyInvalid')) {
+      return true;
+    }
+
     return this.get('isSaving') || !this.get('isDirty');
-  }.property('isDirty', 'isSaving', 'content.@each'),
+  }.property('isDirty', 'isSaving', 'isAnyInvalid'),
 
   moveRule: function (originalPriority, targetPriority) {
 
