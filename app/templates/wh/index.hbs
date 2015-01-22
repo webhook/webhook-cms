@@ -9,7 +9,7 @@
 
     <article>{{to-markdown settings.siteMessage}}</article>
     {{#if session.isOwner}}
-      <button type="button" class="btn btn-neutral btn-small icon icon-pencil" {{ action "editMessage" }}> {{t 'wh.index.weclome.edit'}}</button>
+      <button type="button" class="btn btn-neutral btn-small icon icon-pencil" {{ action "editMessage" }}> {{t 'wh.index.welcome.edit'}}</button>
     {{/if}}
 
   {{else}}
@@ -17,8 +17,8 @@
       {{markdown-editor value=settings.siteMessage session=session}}
     </div>
 
-    <button type="button" class="btn btn-info btn-small icon icon-ok-sign" {{ action "saveMessage" settings}}> {{t 'wh.index.weclome.save'}}</button>
-    <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{ action "cancelMessage" }}> {{t 'wh.index.weclome.cancel'}}</button>
+    <button type="button" class="btn btn-info btn-small icon icon-ok-sign" {{ action "saveMessage" settings}}> {{t 'wh.index.welcome.save'}}</button>
+    <button type="button" class="btn btn-link btn-small icon icon-remove-sign" {{ action "cancelMessage" }}> {{t 'wh.index.welcome.cancel'}}</button>
 
   {{/unless}}
 
