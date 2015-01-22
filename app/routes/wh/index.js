@@ -40,5 +40,11 @@ export default Ember.Route.extend({
     controller.set('contentTypes', this.modelFor('wh'));
     controller.set('settings', this.get('settings'));
     controller.set('defaultMessage', this.get('defaultMessage'));
+  },
+
+  actions: {
+    willTransition: function (transition) {
+      this.get('settings').rollback();
+    }
   }
 });
