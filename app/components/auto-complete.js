@@ -97,6 +97,7 @@ export default Ember.Component.extend({
 
         }, function (error) {
 
+          Ember.Logger.warn('Could not find `%@:%@`. Removing relation from `%@`.'.fmt(contentType.get('id'), itemId, component.get('control.name')));
           component.get('control.value').removeObject(valueItem);
 
         });

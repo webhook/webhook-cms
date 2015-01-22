@@ -289,6 +289,9 @@ export default Ember.ObjectController.extend({
               Ember.Logger.log('`%@` updated `%@:%@` to `%@`.'.fmt(control.get('name'), reverseItem.get('itemData.name'), reverseName, item.get('itemData')[reverseName]));
             });
 
+          }, function (error) {
+            // If item does not exist, proceed.
+            Ember.Logger.warn('Could not find `%@:%@`, skipping reverse update.'.fmt(contentType.get('id'), itemId));
           });
 
         });
