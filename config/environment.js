@@ -25,6 +25,14 @@ window.ENV = {
       description: 'Tumble blog for solo bloggers that includes video, galleries and your work resume. Can be hooked up to the API to slurp in content from YouTube, Vimeo, Twitter, Pinboard ...etc. Uses Markdown for posts.'
     },
     {
+      name:  'Tumble Blog (WYSIWYG)',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-solo/master/static/images/theme-screenshot.png',
+      url:   'https://github.com/webhook/webhook-theme-solo/archive/wysiwyg.zip',
+      demo:  'http://solo-data.webhook.org',
+      code:  'https://github.com/webhook/webhook-theme-solo/tree/wysiwyg',
+      description: 'Tumble blog for solo bloggers that includes video, galleries and your work resume. Can be hooked up to the API to slurp in content from YouTube, Vimeo, Twitter, Pinboard ...etc. Uses WYSIWYG for posts.'
+    },
+    {
       name:  'Podcast & blog',
       image: 'https://raw.githubusercontent.com/webhook/webhook-theme-podcast/master/static/images/theme-screenshot.png',
       url:   'https://github.com/webhook/webhook-theme-podcast/archive/master.zip',
