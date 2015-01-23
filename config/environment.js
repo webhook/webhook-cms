@@ -1,28 +1,28 @@
-// put general configuration here. this file is included
-// in both production and development before ember is
+// Put general configuration here. This file is included
+// in both production and development BEFORE Ember is
 // loaded.
 //
-// for example to enable a feature on a canary build you
+// For example to enable a feature on a canary build you
 // might do:
 //
-// window.env = {features: {'with-controller': true}};
+// window.ENV = {FEATURES: {'with-controller': true}};
 
-window.env = window.env || {};
-window.env = {
-  dbname: window.env.dbname || 'webhook',
-  uploadurl: window.env.uploadurl || 'http://server.webhook.com/',
-  embedlykey: window.env.embedlykey || '13dde81b8137446e89c7933edca679eb',
-  selfhosted: window.env.selfhosted || false,
-  displayurl : 'https://i.embed.ly/1/display/',
+window.ENV = window.ENV || {};
+window.ENV = {
+  dbName: window.ENV.dbName || 'webhook',
+  uploadUrl: window.ENV.uploadUrl || 'http://server.webhook.com/',
+  embedlyKey: window.ENV.embedlyKey || '13dde81b8137446e89c7933edca679eb',
+  selfHosted: window.ENV.selfHosted || false,
+  displayUrl : 'https://i.embed.ly/1/display/',
 
   themes: [
     {
-      name:  'Solo Tumble Blog (Markdown)',
-      image: 'https://raw.github.com/snide/webhook-theme-solo/master/static/images/theme_screenshot.png',
-      url:   'https://github.com/snide/webhook-theme-solo/archive/master.zip',
+      name:  'Tumble Blog (Markdown)',
+      image: 'https://raw.githubusercontent.com/webhook/webhook-theme-solo/master/static/images/theme-screenshot.png',
+      url:   'https://github.com/webhook/webhook-theme-solo/archive/master.zip',
       demo:  'http://solo-data.webhook.org',
-      code:  'https://github.com/snide/webhook-theme-solo',
-      description: 'Tumble blog for solo bloggers that want to also post videos, photo galleries and links. Works with our API to passively slurp content.'
+      code:  'https://github.com/webhook/webhook-theme-solo',
+      description: 'Tumble blog for solo bloggers that includes video, galleries and your work resume. Can be hooked up to the API to slurp in content from YouTube, Vimeo, Twitter, Pinboard ...etc. Uses Markdown for posts.'
     },
     {
       name:  'Podcast & blog',
