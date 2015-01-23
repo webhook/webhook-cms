@@ -1,21 +1,29 @@
-// Put general configuration here. This file is included
-// in both production and development BEFORE Ember is
+// put general configuration here. this file is included
+// in both production and development before ember is
 // loaded.
 //
-// For example to enable a feature on a canary build you
+// for example to enable a feature on a canary build you
 // might do:
 //
-// window.ENV = {FEATURES: {'with-controller': true}};
+// window.env = {features: {'with-controller': true}};
 
-window.ENV = window.ENV || {};
-window.ENV = {
-  dbName: window.ENV.dbName || 'webhook',
-  uploadUrl: window.ENV.uploadUrl || 'http://server.webhook.com/',
-  embedlyKey: window.ENV.embedlyKey || '13dde81b8137446e89c7933edca679eb',
-  selfHosted: window.ENV.selfHosted || false,
-  displayUrl : 'https://i.embed.ly/1/display/',
+window.env = window.env || {};
+window.env = {
+  dbname: window.env.dbname || 'webhook',
+  uploadurl: window.env.uploadurl || 'http://server.webhook.com/',
+  embedlykey: window.env.embedlykey || '13dde81b8137446e89c7933edca679eb',
+  selfhosted: window.env.selfhosted || false,
+  displayurl : 'https://i.embed.ly/1/display/',
 
   themes: [
+    {
+      name:  'Solo Tumble Blog (Markdown)',
+      image: 'https://raw.github.com/snide/webhook-theme-solo/master/static/images/theme_screenshot.png',
+      url:   'https://github.com/snide/webhook-theme-solo/archive/master.zip',
+      demo:  'http://solo-data.webhook.org',
+      code:  'https://github.com/snide/webhook-theme-solo',
+      description: 'Tumble blog for solo bloggers that want to also post videos, photo galleries and links. Works with our API to passively slurp content.'
+    },
     {
       name:  'Podcast & blog',
       image: 'https://raw.githubusercontent.com/webhook/webhook-theme-podcast/master/static/images/theme-screenshot.png',
@@ -70,14 +78,6 @@ window.ENV = {
       demo:  'http://www.wyrmsass.org',
       code:  'https://github.com/webhook/webhook-theme-wyrm',
       description: 'Installs boilerplate templates for the Wyrm Sass framework. Requires bower.js and Sass to use. Check github for installation instructions.'
-    },
-    {
-      name:  'Bootstrap blog',
-      image: 'https://raw.github.com/snide/webhook-theme-bootstrap-blog/master/theme_screenshot.png',
-      url:   'https://github.com/snide/webhook-theme-bootstrap-blog/archive/master.zip',
-      demo:  'http://daveblog.webhook.org',
-      code:  'https://github.com/snide/webhook-theme-bootstrap-blog',
-      description: 'Installs a very basic blog using Bootstrap for some minimal styling. Also loads in some starter forms.'
     }
   ],
   controlTypeGroups: [
