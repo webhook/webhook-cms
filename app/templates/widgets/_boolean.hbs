@@ -1,7 +1,7 @@
 <span class="wh-template-var">{{view.templateVar}}</span>
 
 <label class="wy-checkbox">
-  {{input type='checkbox' checked=view.content.value disabled=view.content.disabled}}
+  {{view 'switch' control=view.content}}
   {{view.content.label}}
 </label>
 
