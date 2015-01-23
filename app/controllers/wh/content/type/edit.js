@@ -146,7 +146,7 @@ export default Ember.ObjectController.extend({
 
     var relationPromises = Ember.A([]);
 
-    relationControls.forEach(function (control) {
+    relationControls.rejectBy('disabled', true).forEach(function (control) {
 
       var currentRelations = control.get('value') || Ember.A([]);
       var initialRelations = controller.get('initialRelations').get(control.get('name')) || Ember.A([]);

@@ -197,6 +197,17 @@ export default Ember.Route.extend({
       controller.get('initialRelations').set(control.get('name'), Ember.copy(control.get('value')));
     });
 
+    // Disable related controls you do not have permission to access
+    var permissions = this.get('session.user.permissions');
+    type.get('controls').filterBy('controlType.widget', 'relation').forEach(function (control) {
+
+      var relatedTypeId = control.get('meta.contentTypeId');
+
+      if (permissions && (permissions.get(relatedTypeId) === 'none' || permissions.get(relatedTypeId) === 'view')) {
+        control.set('disabled', true);
+      }
+    });
+
     // Use search to check for duplicate names
     var nameControl = type.get('controls').findBy('name', 'name');
     nameControl.addObserver('value', route.dupeNameCheck.bind(route));

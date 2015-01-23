@@ -19,13 +19,6 @@ export default Ember.Component.extend({
       return false;
     }
 
-    var permissions = this.get('session.user.permissions');
-    var relatedTypeId = this.get('control.meta.contentTypeId');
-
-    if (permissions && (permissions.get(relatedTypeId) === 'none' || permissions.get(relatedTypeId) === 'view')) {
-      return false;
-    }
-
     return !this.get('control.meta.isSingle') || (!this.get('control.value.length') && this.get('control.meta.isSingle'));
 
   }.property('control.value.@each', 'control.meta.isSingle', 'control.disabled'),
