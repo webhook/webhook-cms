@@ -25,23 +25,52 @@ export default DS.Model.extend({
   }.observes('label'),
 
   showPlaceholder: function () {
-    return this.get('controlType.widget') !== 'instruction';
+
+    var widget = this.get('controlType.widget');
+
+    if (widget === 'instruction') {
+      return false;
+    }
+
+    if (widget === 'boolean') {
+      return false;
+    }
+
+    return true;
+
   }.property('controlType.widget'),
 
   showRequired: function () {
-    return this.get('controlType.widget') !== 'instruction' && !this.get('locked');
-  }.property('controlType.widget'),
+
+    if (this.get('locked')) {
+      return false;
+    }
+
+    var widget = this.get('controlType.widget');
+
+    if (widget === 'instruction') {
+      return false;
+    }
+
+    if (widget === 'boolean') {
+      return false;
+    }
+
+    return true;
+
+  }.property('controlType.widget', 'locked'),
 
   widgetIsValid: true,
   widgetErrors: Ember.A([]),
 
   setValue: function (value) {
 
-    var control = this;
+    var control = this,
+        widget = control.get('controlType.widget');
 
     control.set('widgetErrors', Ember.A([]));
 
-    if (control.get('controlType.widget') === 'checkbox') {
+    if (widget === 'checkbox') {
       control.get('meta.options').forEach(function (option) {
         if (value && value.findBy('label', option.label)) {
           option.value = value.findBy('label', option.label).value;
@@ -49,16 +78,20 @@ export default DS.Model.extend({
       });
     }
 
-    if (['image', 'audio', 'file'].indexOf(control.get('controlType.widget')) >= 0) {
+    if (widget === 'boolean') {
+      value = !!value;
+    }
+
+    if (['image', 'audio', 'file'].indexOf(widget) >= 0) {
       value = Ember.Object.create(value || {});
     }
 
     // remove offset so datetime input can display
-    if (value && control.get('controlType.widget') === 'datetime') {
+    if (value && widget === 'datetime') {
       value = moment(value).format('YYYY-MM-DDTHH:mm');
     }
 
-    if (control.get('controlType.widget') === 'tabular') {
+    if (widget === 'tabular') {
       if (Ember.isEmpty(value)) {
         value = Ember.A([]);
         var emptyRow = Ember.A([]);
@@ -82,11 +115,11 @@ export default DS.Model.extend({
       }
     }
 
-    if (control.get('controlType.widget') === 'relation' && value && !Ember.isArray(value)) {
+    if (widget === 'relation' && value && !Ember.isArray(value)) {
       value = Ember.A([value]);
     }
 
-    if (control.get('controlType.widget') === 'grid') {
+    if (widget === 'grid') {
 
       if (Ember.isEmpty(value) || !Ember.isArray(value)) {
         value = [{}].map(control.setGridValues, control);

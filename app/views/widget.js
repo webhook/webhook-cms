@@ -30,6 +30,22 @@ export default Ember.View.extend({
   setIsWidget: function () {
     var widgetVar = 'is_%@_widget'.fmt(this.get('content.controlType.widget')).camelize();
     this.set(widgetVar, true);
-  }.on('init')
+  }.on('init'),
+
+  useDefaultLayout: function () {
+
+    var widget = this.get('content.controlType.widget');
+
+    if (widget === 'instruction') {
+      return false;
+    }
+
+    if (widget === 'boolean') {
+      return false;
+    }
+
+    return true;
+
+  }.property()
 
 });

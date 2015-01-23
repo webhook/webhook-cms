@@ -126,6 +126,11 @@ window.ENV = {
           iconClass: 'icon-radio-checked'
         },
         {
+          name     : 'Switch',
+          widget   : 'boolean',
+          iconClass: 'icon-checkbox-checked'
+        },
+        {
           name     : 'Dropdown',
           widget   : 'select',
           iconClass: 'icon-menu'
