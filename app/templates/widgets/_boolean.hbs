@@ -1,16 +1,1 @@
-<span class="wh-template-var">{{view.templateVar}}</span>
-
-<label class="wy-checkbox">
-  {{view 'switch' control=view.content}}
-  {{view.content.label}}
-</label>
-
-{{partial 'widgets/common/help'}}
-
-{{#if view.content.widgetErrors}}
-  <ul>
-    {{#each view.content.widgetErrors}}
-      <li><span class="wy-form-message">{{this}}</span></li>
-    {{/each}}
-  </ul>
-{{/if}}
+{{view 'switch' control=view.content}}

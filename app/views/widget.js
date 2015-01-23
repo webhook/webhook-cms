@@ -40,10 +40,6 @@ export default Ember.View.extend({
       return false;
     }
 
-    if (widget === 'boolean') {
-      return false;
-    }
-
     return true;
 
   }.property()
