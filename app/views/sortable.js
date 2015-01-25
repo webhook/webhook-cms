@@ -9,7 +9,7 @@ export default Ember.CollectionView.extend({
 
   makeSortable: function () {
 
-    var content = this.get('content');
+    var content = this.get('sortArray') || this.get('content');
 
     var originalIndex;
 

@@ -32,7 +32,7 @@ export default Ember.Component.extend({
       var itemId = valueItem.split(' ')[1];
 
       // the store can take a while to get back us so make sure we have a placeholder
-      array.pushObject(Ember.Object.create({
+      array.insertAt(insertPosition, Ember.Object.create({
         id: itemId,
         name: '...'
       }));

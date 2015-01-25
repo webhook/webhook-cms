@@ -1,6 +1,7 @@
 {{#if isFew}}
   {{view 'sortable'
     content=currentSelection
+    sortArray=control.value
     itemTemplate='widgets/relation/few'
     tagName='span'
     classNames='current-selection'
@@ -13,6 +14,7 @@
 {{#if isMany}}
   {{view 'sortable'
     content=currentSelection
+    sortArray=control.value
     itemTemplate='widgets/relation/many'
     itemClassNameBindings='content.justAdded:active'
     disabled=control.disabled
