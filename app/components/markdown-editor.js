@@ -122,9 +122,9 @@ export default Ember.Component.extend({
       // hide image upload widget
       this.set('showImageModal', false);
 
-      if (url.indexOf('http://') === -1) {
+      /*if (url.indexOf('http://') === -1) {
         url = 'http://' + window.ENV.siteDNS + url;
-      }
+      }*/
 
       var value = this.$('textarea').val();
       var image = '![](' + url + ')';
