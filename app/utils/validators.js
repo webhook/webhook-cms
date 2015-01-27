@@ -23,7 +23,8 @@ export default function validateControls (contentType) {
   controls.forEach(function (control) {
 
     var value = control.get('value'),
-        options = control.get('meta') || {};
+        options = control.get('meta') || {},
+        widget = control.get('controlType.widget');
 
     control.set('widgetErrors', Ember.A([]));
 

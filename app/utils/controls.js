@@ -72,6 +72,11 @@ export default function dataFromControls (controls) {
       }
       break;
 
+    // Make sure boolean is saved as such
+    case 'boolean':
+      value = !!value;
+      break;
+
     case 'relation':
       if (control.get('meta.isSingle')) {
         if (Ember.isArray(value)) {
