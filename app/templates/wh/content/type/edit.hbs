@@ -18,6 +18,7 @@
   <div {{bind-attr class="isNameAndSlugValid::wy-control-group-error :wy-control-group :wy-control-group-required :wh-slug"}}>
     <label>Name</label>
     <div class="wy-control">
+      <span class="wy-form-message">{{to-markdown nameControl.help}}</span>
       {{#if nameControl.placeholder}}
         {{input class="big-name" placeholder=nameControl.placeholder value=nameControl.value autofocus="true" disabled=nameControl.disabled}}
       {{else}}
