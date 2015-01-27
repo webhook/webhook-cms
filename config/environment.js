@@ -128,7 +128,7 @@ window.ENV = {
         {
           name     : 'Switch',
           widget   : 'boolean',
-          iconClass: 'icon-checkbox-checked'
+          iconClass: 'icon-ok-sign'
         },
         {
           name     : 'Dropdown',
