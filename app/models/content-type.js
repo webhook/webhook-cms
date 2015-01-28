@@ -2,6 +2,7 @@ import downcode from 'appkit/utils/downcode';
 import ApplicationAdapter from 'appkit/adapters/application';
 import ItemModel from 'appkit/models/item';
 import ItemSerializer from 'appkit/serializers/item';
+import SearchIndex from 'appkit/utils/search-index';
 
 export default DS.Model.extend({
   name    : DS.attr('string'),
@@ -56,16 +57,36 @@ export default DS.Model.extend({
 
   deleteModel: function () {
 
+    var contentTypeId = this.get('id');
+
+    // Remove search index info for type
+    SearchIndex.deleteType(contentTypeId);
+
+    // Remove all item data in the store
+    var items = this.store.all(this.get('itemModelName'));
+
+    // One off types are special
     if (this.get('oneOff')) {
-      return;
+      items = items.filterBy('id', contentTypeId);
     }
 
-    var modelNamespace = this.get('itemModelNamespace');
-    window.App[modelNamespace] = null;
-    window.App[modelNamespace + 'Adapter'] = null;
-    window.App[modelNamespace + 'Serializer'] = null;
+    // Destroy any records in store and then blow away Firebase data.
+    Ember.RSVP.Promise.all(items.map(function (item) {
+      return item.destroyRecord();
+    })).then(function () {
+      window.ENV.firebase.child('data').child(contentTypeId).remove();
+    });
 
-    Ember.Logger.log('`%@` model deleted.'.fmt(modelNamespace));
+    // Remove ember model from namespace to avoid conflicts if recreating.
+    if (!this.get('oneOff')) {
+      var modelNamespace = this.get('itemModelNamespace');
+      window.App[modelNamespace] = null;
+      window.App[modelNamespace + 'Adapter'] = null;
+      window.App[modelNamespace + 'Serializer'] = null;
+      Ember.Logger.log('`%@` model deleted.'.fmt(modelNamespace));
+    }
+
+    Ember.Logger.log('`%@` content type and data deleted.'.fmt(contentTypeId));
 
   }.on('didDelete'),
 

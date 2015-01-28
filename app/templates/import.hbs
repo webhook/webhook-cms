@@ -1,13 +1,62 @@
 <div class="wh-login">
   <div {{bind-attr class=":wh-logo isIndexing:wh-logo-spinner"}}></div>
-  <p>Importing can take several minutes while we add your content to the CMS search engine. Please do not close your browser until complete.</p>
-  <ul class="wh-wp-import">
-    {{#each contentType in arrangedContent}}
-      <li {{bind-attr class="contentType.indexingClass"}}>
-        {{#if contentType.isIndexing}}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
-        {{contentType.name}} {{#if contentType.isIndexing}}{{contentType.indexingPercent}}%{{/if}}
-      </li>
-    {{/each}}
-  </ul>
-  {{#unless isIndexing}}{{#link-to 'wh.settings.data' class="btn btn-success icon icon-ok-sign"}} Complete. Return to CMS.{{/link-to}}{{/unless}}
+
+  {{#if dataError}}
+    <div class="wy-alert wy-alert-warning">
+      <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.invalidTitle'}}</div>
+      <p>{{t 'wh.settings.data.importExport.import.invalid'}}</p>
+      <pre>{{dataError.name}}: {{dataError.message}}</pre>
+    </div>
+  {{/if}}
+
+  {{#if importData}}
+    <p>{{t 'wh.settings.data.importExport.import.found'}}</p>
+
+    {{view 'import-breakdown' data=importData}}
+
+    {{#if isValidData}}
+      <div class="wy-alert wy-alert-danger">
+        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.warningTitle'}}</div>
+        <p>{{t 'wh.settings.data.importExport.import.warning'}}</p>
+        <div class="wy-btn-group">
+          <button class="btn btn-success icon icon-ok-sign" {{action "importData"}}> {{t 'wh.settings.data.importExport.import.proceed'}}</button>
+          <button class="btn btn-danger icon icon-remove-sign" {{action "clearData"}}> {{t 'wh.settings.data.importExport.import.cancel'}}</button>
+        </div>
+      </div>
+    {{else}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.noDataTitle'}}</div>
+        <p>{{t 'wh.settings.data.importExport.import.noData'}}</p>
+        <div class="wy-btn-group">
+          <button class="btn btn-neutral" {{action "clearData"}}> {{t 'wh.settings.data.importExport.import.goBack'}}</button>
+        </div>
+      </div>
+    {{/if}}
+
+  {{else}}
+
+    <p>{{t 'wh.settings.data.importExport.instruction'}}</p>
+
+    {{#select-file action='selectFile' accept='application/json' class="icon icon-upload"}} {{t 'wh.settings.data.importExport.action.import'}}{{/select-file}}
+    <button type="button" {{action "runTestData" "bad"}}>test bad</button>
+    <button type="button" {{action "runTestData" "good"}}>test good</button>
+
+  {{/if}}
+
+  {{#if importStarted}}
+    <p>Importing can take several minutes while we add your content to the CMS search engine. Please do not close your browser until complete.</p>
+    <ul class="wh-wp-import">
+      {{#each contentType in arrangedContent}}
+        <li {{bind-attr class="contentType.indexingClass"}}>
+          {{#if contentType.isIndexing}}<span class="wy-spinner wy-spinner-small wy-spinner-inline"></span>{{/if}}
+          {{contentType.name}} {{#if contentType.isIndexing}}{{contentType.indexingPercent}}%{{/if}}
+        </li>
+      {{/each}}
+    </ul>
+
+    {{#unless isIndexing}}{{#link-to 'wh.settings.data' class="btn btn-success icon icon-ok-sign"}} Complete. Return to CMS.{{/link-to}}{{/unless}}
+
+  {{/if}}
+
+
 </div>

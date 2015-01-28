@@ -51,38 +51,27 @@ export default Ember.ArrayController.extend({
       var gridRelationPromises = Ember.A([]);
       var deletedContentTypeId = contentType.get('id');
 
-      gridRelationPromises.pushObject(allTypesController.store.find('content-type').then(function (contentTypes) {
-        contentTypes.rejectBy('id', deletedContentTypeId).forEach(function (contentType) {
-          var controls = contentType.get('controls');
-          var gridControls = controls.filterBy('controlType.widget', 'grid');
-          gridControls.forEach(function (gridControl) {
-            var relatedControls = gridControl.get('controls')
-                                    .filterBy('controlType.widget', 'relation')
-                                    .filterBy('meta.contentTypeId', deletedContentTypeId);
-            gridControl.get('controls').removeObjects(relatedControls);
-            gridControl.transitionTo('updated.uncommitted');
-          });
-          gridRelationPromises.pushObject(contentType.save());
+      this.store.all('content-type').rejectBy('id', deletedContentTypeId).map(function (contentType) {
+
+        var controls = contentType.get('controls');
+        var gridControls = controls.filterBy('controlType.widget', 'grid');
+        gridControls.forEach(function (gridControl) {
+          var relatedControls = gridControl.get('controls')
+                                  .filterBy('controlType.widget', 'relation')
+                                  .filterBy('meta.contentTypeId', deletedContentTypeId);
+          gridControl.get('controls').removeObjects(relatedControls);
+          gridControl.transitionTo('updated.uncommitted');
         });
-      }));
+
+        gridRelationPromises.pushObject(contentType.save());
+
+      });
 
       // When relations are done...
       Ember.RSVP.Promise.all(relationPromises, gridRelationPromises).then(function () {
 
         Ember.Logger.log('Reverse relationships have been removed, proceeding to destroy `%@`.'.fmt(contentTypeName));
-
-        // Remove search index info for type
-        SearchIndex.deleteType(contentType);
-
-        // remove all associated data from Firebase
-        window.ENV.firebase.child('data').child(contentType.get('id')).remove(function () {
-          Ember.Logger.log('Data for `%@` has been destroyed.'.fmt(contentTypeName));
-
-          // remove content type
-          contentType.destroyRecord().then(function () {
-            Ember.Logger.log('`%@` has been destroyed.'.fmt(contentTypeName));
-          });
-        });
+        contentType.destroyRecord();
 
       });
     },

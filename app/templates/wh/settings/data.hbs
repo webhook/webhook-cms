@@ -3,78 +3,13 @@
 </section>
 
 <section class="wh-content-edit">
-  {{# if dataBackup}}
-    <p>{{t 'wh.settings.data.importExport.import.found'}}</p>
 
-    <table class="wy-table wy-table-bordered-rows full-width">
-      <thead>
-        <tr><th>{{t 'wh.settings.data.importExport.import.type'}}</th><th>{{t 'wh.settings.data.importExport.import.item'}}</th></tr>
-      </thead>
-      <tbody>
-        {{#each dataBreakdown.content}}
-          <tr>
-            <td>{{name}}</td>
-            <td>{{itemCount}}</td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="100">{{t 'wh.settings.data.importExport.import.noContent'}}</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+  <p>{{t 'wh.settings.data.importExport.instruction'}}</p>
 
-    <table class="wy-table wy-table-bordered-rows full-width">
-      <thead>
-        <tr><th>{{t 'wh.settings.data.importExport.import.setting'}}</th><th>{{t 'wh.settings.data.importExport.import.value'}}</th></tr>
-      </thead>
-      <tbody>
-        {{#each dataBreakdown.settings}}
-          <tr>
-            <td>{{name}}</td>
-            <td>{{value}}</td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="100">{{t 'wh.settings.data.importExport.import.noSettings'}}</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-
-    {{#if validImport}}
-      <div class="wy-alert wy-alert-danger">
-        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.warningTitle'}}</div>
-        <p>{{t 'wh.settings.data.importExport.import.warning'}}</p>
-        <div class="wy-btn-group">
-          <button class="btn btn-success icon icon-ok-sign" {{action "confirm"}}> {{t 'wh.settings.data.importExport.import.proceed'}}</button>
-          <button class="btn btn-danger icon icon-remove-sign" {{action "reset"}}> {{t 'wh.settings.data.importExport.import.cancel'}}</button>
-        </div>
-      </div>
-    {{else}}
-      <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.noDataTitle'}}</div>
-        <p>{{t 'wh.settings.data.importExport.import.noData'}}</p>
-        <div class="wy-btn-group">
-          <button class="btn btn-neutral" {{action "reset"}}> {{t 'wh.settings.data.importExport.import.goBack'}}</button>
-        </div>
-      </div>
-    {{/if}}
-  {{else}}
-    {{#if dataError}}
-      <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">{{t 'wh.settings.data.importExport.import.invalidTitle'}}</div>
-        <p>{{t 'wh.settings.data.importExport.import.invalid'}}</p>
-        <pre>{{dataError.name}}: {{dataError.message}}</pre>
-      </div>
-    {{else}}
-      <p>{{t 'wh.settings.data.importExport.instruction'}}</p>
-    {{/if}}
-    {{#download-backup classNames="btn btn-neutral icon icon-download" text=""}}
-      {{t 'wh.settings.data.importExport.action.export'}}
-    {{/download-backup}}
-    {{#select-file action='importData' accept='application/json' class="icon icon-upload"}} {{t 'wh.settings.data.importExport.action.import'}}{{/select-file}}
-  {{/if}}
+  {{#download-backup classNames="btn btn-neutral icon icon-download" text=""}}
+    {{t 'wh.settings.data.importExport.action.export'}}
+  {{/download-backup}}
+  {{#select-file action='importJsonFile' accept='application/json' class="icon icon-upload"}} {{t 'wh.settings.data.importExport.action.import'}}{{/select-file}}
 
 </section>
 

@@ -1,0 +1,41 @@
+<table class="wy-table wy-table-bordered-rows full-width">
+  <thead>
+    <tr>
+      <th>{{t 'wh.settings.data.importExport.import.type'}}</th>
+      <th>{{t 'wh.settings.data.importExport.import.item'}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each contentType in view.dataBreakdown.content}}
+      <tr>
+        <td>{{contentType.name}}</td>
+        <td>{{contentType.itemCount}}</td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="100">{{t 'wh.settings.data.importExport.import.noContent'}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<table class="wy-table wy-table-bordered-rows full-width">
+  <thead>
+    <tr>
+      <th>{{t 'wh.settings.data.importExport.import.setting'}}</th>
+      <th>{{t 'wh.settings.data.importExport.import.value'}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each setting in view.dataBreakdown.settings}}
+      <tr>
+        <td>{{setting.name}}</td>
+        <td>{{setting.value}}</td>
+      </tr>
+    {{else}}
+      <tr>
+        <td colspan="100">{{t 'wh.settings.data.importExport.import.noSettings'}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

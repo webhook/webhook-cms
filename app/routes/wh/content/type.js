@@ -82,9 +82,6 @@ export default Ember.Route.extend({
 
       });
 
-      // remove from search index
-      SearchIndex.deleteItem(item, contentType);
-
       // remove item from firebase
       return item.destroyRecord().then(function () {
         Ember.Logger.log('Item successfully destroyed.');

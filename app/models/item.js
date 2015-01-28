@@ -5,5 +5,9 @@ export default DS.Model.extend({
 
   updateSearchIndex: function () {
     SearchIndex.indexItem(this);
-  }.on('didUpdate', 'didCreate')
+  }.on('didUpdate', 'didCreate'),
+
+  deleteSearchIndex: function () {
+    SearchIndex.deleteItem(this);
+  }.on('didDelete')
 });

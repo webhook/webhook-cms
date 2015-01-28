@@ -187,7 +187,20 @@ export default {
 
   },
 
-  deleteItem: function (item, contentType) {
+  deleteItem: function (item) {
+
+    var typeKey = item.constructor.typeKey;
+
+    // handle one offs
+    if (typeKey === 'data') {
+      typeKey = item.get('id');
+    }
+
+    var contentType = item.store.getById('content-type', typeKey);
+
+    if (Ember.isEmpty(contentType)) {
+      return Ember.RSVP.reject('Cannot delete item index without a content type.');
+    }
 
     Ember.Logger.log("SearchIndex::deleteItem::%@::%@".fmt(contentType.get('id'), item.get('itemData.name')));
 

@@ -752,34 +752,18 @@ export default Ember.Route.extend({
       this.gruntCommand.apply(this, arguments);
     },
 
+    importJsonFile: function (file) {
+      if (!Ember.isEmpty(file)) {
+        this.set('controller.jsonBackup', file);
+        this.transitionTo('import');
+      }
+    },
+
     importWordpressFile: function (file) {
       if (!Ember.isEmpty(file)) {
         this.set('controller.wordpressXML', file);
         this.transitionTo('wordpress');
       }
-    },
-
-    importData: function (file) {
-
-      var route = this;
-      route.set('importDataError', null);
-
-      var reader = new window.FileReader();
-
-      reader.onload = function (e) {
-        var rawData;
-        try {
-          rawData = JSON.parse(reader.result);
-        } catch (error) {
-          Ember.Logger.error(error);
-          route.set('importDataError', error);
-        }
-        route.set('controller.importData', rawData);
-        route.transitionTo('wh.settings.data');
-      };
-
-      reader.readAsText(file);
-
     }
   }
 });

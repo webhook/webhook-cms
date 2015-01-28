@@ -22,133 +22,6 @@ export default Ember.Controller.extend({
     return this.get('deleteOption') === 'data';
   }.property('deleteOption'),
 
-  dataBreakdown: function () {
-
-    var dataBackup = this.get('dataBackup');
-
-    if (!dataBackup) {
-      return {};
-    }
-
-    var dataController = this;
-
-    var types = Ember.A(Object.keys(dataBackup.contentType || {}));
-
-    types.addObjects(Object.keys(dataBackup.data || {}));
-
-    var breakdown = {
-      content: Ember.$.map(types, function (typeName) {
-
-        var itemCount;
-
-        if ((dataBackup.data || {})[typeName]) {
-          var contentType = dataController.store.getById('content-type', typeName);
-
-          // data found for a contentType that doesn't exist. remove it.
-          if (!contentType && !dataBackup.contentType[typeName]) {
-            delete dataBackup.data[typeName];
-            return null;
-          }
-
-          var oneOff = contentType ? contentType.get('oneOff') : dataBackup.contentType[typeName].oneOff;
-          if (oneOff) {
-            itemCount = 1;
-          } else {
-            itemCount = Object.keys((dataBackup.data || {})[typeName]).length;
-          }
-        }
-
-        return {
-          name: typeName,
-          itemCount: itemCount
-        };
-      }),
-      settings: Ember.$.map((dataBackup.settings || {}).general || {}, function (value, name) {
-        return {
-          name: name,
-          value: value
-        };
-      })
-    };
-
-    return breakdown;
-
-  }.property('dataBackup'),
-
-  validImport: function () {
-    return this.get('dataBreakdown.content.length') || this.get('dataBreakdown.content.length');
-  }.property('dataBreakdown'),
-
-  setData: function (rawData) {
-    if (!rawData) {
-      return;
-    }
-
-    Ember.Logger.info('Filtering data for import.');
-
-    var dataController = this;
-
-    // We only want contentType, data, and settings.
-    var filteredData = {};
-    Ember.$.each(['contentType', 'data', 'settings'], function (index, dataKey) {
-      if (rawData[dataKey]) {
-        Ember.Logger.info('Found data for', dataKey);
-        filteredData[dataKey] = rawData[dataKey];
-      }
-    });
-
-    // make sure we only import data for contentTypes that exist
-    Ember.Logger.info('Matching data with contentTypes.');
-    new Ember.RSVP.Promise(function (resolve, reject) {
-
-      var matchedData = {};
-
-      if (!filteredData.data) {
-        // If we don't have any data just keep on truckin'
-        Ember.Logger.info('Not importing data, continue.');
-        Ember.run(null, resolve, filteredData);
-      }
-
-      else if (filteredData.contentType) {
-        // If we're importing contentTypes make sure the data is covered
-        Ember.$.each(filteredData.data, function (contentTypeId, items) {
-          if (filteredData.contentType[contentTypeId]) {
-            Ember.Logger.info('Content type for', contentTypeId, 'found.');
-            matchedData[contentTypeId] = items;
-          } else {
-            Ember.Logger.info('No content type found for', contentTypeId);
-          }
-        });
-        filteredData.data = matchedData;
-        Ember.run(null, resolve, filteredData);
-      }
-
-      else {
-
-        Ember.$.each(filteredData.data, function (contentTypeId, items) {
-
-          // all content types should already be in the store from the 'wh' model
-          if (dataController.store.getById('content-type', contentTypeId)) {
-            Ember.Logger.info('Content type found for', contentTypeId);
-            matchedData[contentTypeId] = items;
-          }
-
-        });
-
-        filteredData.data = matchedData;
-        Ember.run(null, resolve, filteredData);
-      }
-
-    }).then(function (data) {
-      dataController.set('dataBackup', data);
-    });
-
-  },
-
-  dataBackup: function () {
-    return this.get('controllers.application.importData');
-  }.property('controllers.application.importData'),
-
   deleteData: function () {
 
     var dataController = this;
@@ -218,12 +91,12 @@ export default Ember.Controller.extend({
       });
     },
 
-    confirm: function () {
+    goToImport: function () {
       this.transitionToRoute('import');
     },
 
     reset: function () {
-      this.set('dataBackup', null);
+      this.set('controllers.application.importData', null);
     },
 
     deleteData: function () {
