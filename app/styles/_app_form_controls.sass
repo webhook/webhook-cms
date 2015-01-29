@@ -163,58 +163,6 @@
     z-index: $z-index-tooltip
     cursor: pointer
 
-.wy-tag-input-group-many
-  border: none
-  box-shadow: none
-  padding: 0
-  display: block
-  .wy-autocomplete-group
-    display: inline-block
-    border: solid 1px $table-border-color
-    width: 50%
-    margin-bottom: $base-line-height / 4
-    padding: 0 $base-line-height / 4
-    label
-      margin-left: 0
-    input
-      margin-bottom: 0
-    .wy-spinner
-      float: right
-      margin-top: $base-line-height / 4
-      margin-bottom: $base-line-height / 4
-.wy-tag-input-group-many ol li
-  cursor: move
-  span
-    display: inline-block
-    padding: $base-line-height / 4 $base-line-height / 2
-    margin-bottom: $base-line-height / 4
-    background: rgba(0,0,0,.1)
-    position: relative
-    +truncate(50%)
-    +transition(background .5s ease-in-out)
-  &.active span
-    background: rgba(0,0,0,.2)
-
-  span:hover
-    .icon-remove-sign
-      opacity: 1
-  span:before
-    color: $gray-light
-    margin-right: $base-line-height / 4
-
-  .icon-remove-sign
-    position: absolute
-    right: $base-line-height / 4
-    top: $base-line-height / 4
-    color: $red
-    opacity: 0
-
-  button
-    visibility: hidden
-
-.wy-control-group-disabled .wy-tag-input-group-many li
-  cursor: auto
-
 .wh-table-tabular
   margin-bottom: 0
   .wh-tabular-input
@@ -301,7 +249,3 @@ input[type=color]
   margin-right: 0.3em
   &.ui-sortable-helper .wy-tag-remove
     display: none
-
-+media($mobile)
-  .wy-tag-input-group-many ol li span
-    width: 100%
