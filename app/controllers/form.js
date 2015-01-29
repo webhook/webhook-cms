@@ -201,6 +201,11 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           ]
         });
         break;
+      case 'boolean':
+        meta = Ember.Object.create({
+          defaultValue: false
+        });
+        break;
       case 'wysiwyg':
         meta = Ember.Object.create({
           image: true,

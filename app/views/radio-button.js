@@ -10,9 +10,8 @@ export default Ember.View.extend({
     "disabled:disabled"
   ],
 
-  // we can't use .val() because it returns "on" when value isn't set.
   click: function () {
-    this.set('selection', this.$().attr('value') || "");
+    this.set('selection', this.get('value'));
   },
 
   checked: function () {

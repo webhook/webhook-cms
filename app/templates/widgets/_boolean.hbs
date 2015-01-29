@@ -1,1 +1,17 @@
-{{view 'switch' control=view.content}}
+{{#view 'switch' control=view.content}}
+  <span>
+    {{#if view.control.value}}
+      {{#if view.control.meta.trueLabel}}
+        {{view.control.meta.trueLabel}}
+      {{else}}
+        true
+      {{/if}}
+    {{else}}
+      {{#if view.control.meta.falseLabel}}
+        {{view.control.meta.falseLabel}}
+      {{else}}
+        false
+      {{/if}}
+    {{/if}}
+  </span>
+{{/view}}

@@ -109,6 +109,12 @@ export default Ember.Route.extend({
         control.set('originalOptions', control.get('meta.options').getEach('value'));
       });
 
+      model.get('controls').filterBy('controlType.widget', 'boolean').forEach(function (control) {
+        if (Ember.isEmpty(control.get('meta.defaultValue'))) {
+          control.set('meta.defaultValue', false);
+        }
+      });
+
       model.get('controls').filterBy('controlType.widget', 'tabular').forEach(function (control) {
 
         var value = Ember.A([]);
