@@ -27,7 +27,7 @@
   "devDependencies": {
     "qunit": "~1.15.0",
     "ember-qunit": "~0.1.8",
-    "wyrm": "~0.0.x",
+    "wyrm": "~1.0.x",
     "ember-testing-httpRespond": "~0.1.1"
   },
   "resolutions": {
