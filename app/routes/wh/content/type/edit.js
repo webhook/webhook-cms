@@ -188,6 +188,7 @@ export default Ember.Route.extend({
 
     type.get('controls').forEach(function (control) {
       control.setValue(data[control.get('name')]);
+      window.console.log(control.get('name'), control.get('value'));
     });
 
     controller.set('slugControl', type.get('controls').findBy('name', 'slug'));
@@ -205,12 +206,6 @@ export default Ember.Route.extend({
 
       if (permissions && (permissions.get(relatedTypeId) === 'none' || permissions.get(relatedTypeId) === 'view')) {
         control.set('disabled', true);
-      }
-    });
-
-    type.get('controls').filterBy('controlType.widget', 'boolean').forEach(function (control) {
-      if (Ember.isEmpty(control.get('value'))) {
-        control.set('value', control.getWithDefault('meta.defaultValue', false));
       }
     });
 
