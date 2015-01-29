@@ -79,7 +79,11 @@ export default DS.Model.extend({
     }
 
     if (widget === 'boolean') {
-      value = !!value;
+      if (Ember.isEmpty(value)) {
+        value = this.getWithDefault('meta.defaultValue', false);
+      } else {
+        value = !!value;
+      }
     }
 
     if (['image', 'audio', 'file'].indexOf(widget) >= 0) {
