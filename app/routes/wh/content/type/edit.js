@@ -208,6 +208,12 @@ export default Ember.Route.extend({
       }
     });
 
+    type.get('controls').filterBy('controlType.widget', 'boolean').forEach(function (control) {
+      if (Ember.isEmpty(control.get('value'))) {
+        control.set('value', control.getWithDefault('meta.defaultValue', false));
+      }
+    });
+
     // Use search to check for duplicate names
     var nameControl = type.get('controls').findBy('name', 'name');
     nameControl.addObserver('value', route.dupeNameCheck.bind(route));

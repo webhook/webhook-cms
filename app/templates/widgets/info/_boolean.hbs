@@ -1,0 +1,26 @@
+<hr>
+
+<div class="wy-control-group">
+  <label for="Options">Default value and labels <i class="icon icon-question-sign" data-toggle="tooltip" title="The value will always be true/false, but you can change the labels."></i></label>
+  <div class="wy-control">
+
+    <label class="wy-checkbox">
+      {{view "radio-button"
+        name="default-option"
+        selection=editingControl.meta.defaultValue
+        value=false
+      }}
+      {{input placeholder="Label for false" value=editingControl.meta.falseLabel}}
+    </label>
+
+    <label class="wy-checkbox">
+      {{view "radio-button"
+        name="default-option"
+        selection=editingControl.meta.defaultValue
+        value=true
+      }}
+      {{input placeholder="Label for true" value=editingControl.meta.trueLabel}}
+    </label>
+
+  </div>
+</div>
