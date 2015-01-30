@@ -188,7 +188,6 @@ export default Ember.Route.extend({
 
     type.get('controls').forEach(function (control) {
       control.setValue(data[control.get('name')]);
-      window.console.log(control.get('name'), control.get('value'));
     });
 
     controller.set('slugControl', type.get('controls').findBy('name', 'slug'));
