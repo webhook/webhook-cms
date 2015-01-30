@@ -110,6 +110,10 @@ export default Ember.Route.extend({
       });
 
       model.get('controls').filterBy('controlType.widget', 'boolean').forEach(function (control) {
+        if (Ember.isEmpty(control.get('meta'))) {
+          control.set('meta', Ember.Object.create());
+        }
+
         if (Ember.isEmpty(control.get('meta.defaultValue'))) {
           control.set('meta.defaultValue', false);
         }
