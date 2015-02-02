@@ -77,6 +77,7 @@ export default Ember.Route.extend({
 
         var localSocket = Ember.Object.create();
 
+        Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::socketSetup');
         var socket = new window.WebSocket('ws://' + document.location.hostname + ':6557');
 
         socket.onmessage = function (event) {
@@ -104,13 +105,15 @@ export default Ember.Route.extend({
           resolve();
         };
 
-        if (!$('meta[name=suppressAlert]').attr('content')) {
+        Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::alertCheck');
+        if (!Ember.$('meta[name=suppressAlert]').attr('content')) {
           socket.onclose = function () {
             localSocket.set('lostConnection', true);
           };
         }
 
         // Shut down LiveReload
+        Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::liveReloadCheck');
         if (window.LiveReload && !buildEnv.get('keepReload')) {
           var shutDown = new CustomEvent('LiveReloadShutDown');
           document.addEventListener("LiveReloadConnect", function () {
@@ -118,6 +121,7 @@ export default Ember.Route.extend({
           }, false);
         }
 
+        Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::setEnv');
         localSocket.set('socket', socket);
 
         buildEnv.set('localSocket', localSocket);
