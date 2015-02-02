@@ -15,8 +15,7 @@
     "marked",
     "Webhook",
     "XMLHttpRequest",
-    "ga",
-    "CustomEvent"
+    "ga"
   ],
   "node" : false,
   "browser" : false,
