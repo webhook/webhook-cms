@@ -104,7 +104,7 @@ export default Ember.Route.extend({
           resolve();
         };
 
-        Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::alertCheck');
+      Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::alertCheck');
         if (!Ember.$('meta[name=suppressAlert]').attr('content')) {
           socket.onclose = function () {
             localSocket.set('lostConnection', true);
