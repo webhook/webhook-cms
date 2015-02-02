@@ -8,6 +8,62 @@ function uniqueId() {
   });
 }
 
+// CustomEvent polyfill
+try{new window.CustomEvent('?');}catch(o_O){
+  window.CustomEvent = function(
+    eventName,
+    defaultInitDict
+  ){
+
+    // the infamous substitute
+    function CustomEvent(type, eventInitDict) {
+      /*jshint eqnull:true */
+      var event = document.createEvent(eventName);
+      if (typeof type !== 'string') {
+        throw new Error('An event name must be provided');
+      }
+      if (eventName === 'Event') {
+        event.initCustomEvent = initCustomEvent;
+      }
+      if (eventInitDict == null) {
+        eventInitDict = defaultInitDict;
+      }
+      event.initCustomEvent(
+        type,
+        eventInitDict.bubbles,
+        eventInitDict.cancelable,
+        eventInitDict.detail
+      );
+      return event;
+    }
+
+    // attached at runtime
+    function initCustomEvent(
+      type, bubbles, cancelable, detail
+    ) {
+      /*jshint validthis:true*/
+      this.initEvent(type, bubbles, cancelable);
+      this.detail = detail;
+    }
+
+    // that's it
+    return CustomEvent;
+  }(
+    // is this IE9 or IE10 ?
+    // where CustomEvent is there
+    // but not usable as construtor ?
+    window.CustomEvent ?
+      // use the CustomEvent interface in such case
+      'CustomEvent' : 'Event',
+      // otherwise the common compatible one
+    {
+      bubbles: false,
+      cancelable: false,
+      detail: null
+    }
+  );
+}
+
 export default Ember.Route.extend({
   notifications: [],
 
@@ -115,22 +171,7 @@ export default Ember.Route.extend({
         // Shut down LiveReload
         Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev::liveReloadCheck');
         if (window.LiveReload && !buildEnv.get('keepReload')) {
-
-          // CustomEvent polyfill
-          if (!window.CustomEvent) {
-            var CustomEvent = function (event, params) {
-              params = params || { bubbles: false, cancelable: false, detail: undefined };
-              var evt = document.createEvent('CustomEvent');
-              evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-              return evt;
-             };
-
-            CustomEvent.prototype = window.Event.prototype;
-
-            window.CustomEvent = CustomEvent;
-          }
-
-          var shutDown = new CustomEvent('LiveReloadShutDown');
+          var shutDown = new window.CustomEvent('LiveReloadShutDown');
           document.addEventListener("LiveReloadConnect", function () {
             document.dispatchEvent(shutDown);
           }, false);
