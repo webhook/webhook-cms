@@ -35,6 +35,7 @@ export default Ember.Route.extend({
     if (!window.ENV.selfHosted) {
       window.ENV.siteDNS = siteName + '.webhook.org';
     }
+
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function (snap) {
       if (snap.val()) {
         window.ENV.siteDNS = snap.val();
@@ -44,48 +45,50 @@ export default Ember.Route.extend({
     if (window.ENV.uploadUrl.indexOf('http://') !== 0) {
       window.ENV.uploadUrl = 'http://' + window.ENV.uploadUrl;
     }
+
     if (window.ENV.uploadUrl.substr(-1) !== '/') {
       window.ENV.uploadUrl = window.ENV.uploadUrl + '/';
     }
 
-    var req = new XMLHttpRequest();
-    req.open('GET', document.location, false);
-    req.send(null);
-    var headers = req.getAllResponseHeaders().toLowerCase();
-
+    // Check if we're in the dev or live environment
     return new Ember.RSVP.Promise(function (resolve, reject) {
+      var req = new XMLHttpRequest();
 
-      if (headers.indexOf('x-webhook-local') !== -1) {
+      req.onreadystatechange = function () {
+        if (this.readyState === this.DONE) {
+          if (this.getAllResponseHeaders().toLowerCase().indexOf('x-webhook-local') === -1) {
+            reject();
+          } else {
+            resolve();
+          }
+        }
+      };
+
+      req.open('GET', document.location);
+      req.send(null);
+
+    }).then(function () {
+
+      Ember.Logger.log('ApplicationRoute::getBuildEnvironment::dev');
+
+      return new Ember.RSVP.Promise(function (resolve, reject) {
+
         buildEnv.set('local', true);
-        var localSocket = Ember.Object.create({
-          socket: new window.WebSocket('ws://' + document.location.hostname + ':6557')
-        });
 
-        buildEnv.set('localSocket', localSocket);
+        var localSocket = Ember.Object.create();
 
-        localSocket.reopen({
-          connected: function () {
-            return this.get('socket.readyState') === 1;
-          }.property('socket.readyState')
-        });
+        var socket = new window.WebSocket('ws://' + document.location.hostname + ':6557');
 
-        localSocket.socket.onmessage = function (event) {
-          var storedCallback;
+        socket.onmessage = function (event) {
           if (event.data === 'done') {
-            storedCallback = localSocket.get('doneCallback');
-            localSocket.set('doneCallback', null);
-
-            if (storedCallback) {
-              storedCallback();
+            if (localSocket.get('doneCallback')) {
+              localSocket.get('doneCallback')();
+              localSocket.set('doneCallback', null);
             }
           } else if (event.data.indexOf('done:') === 0) {
-            var data = JSON.parse(event.data.replace('done:', ''));
-
-            storedCallback = localSocket.get('doneCallback');
-            localSocket.set('doneCallback', null);
-
-            if (storedCallback) {
-              storedCallback(data);
+            if (localSocket.get('doneCallback')) {
+              localSocket.get('doneCallback')(JSON.parse(event.data.replace('done:', '')));
+              localSocket.set('doneCallback', null);
             }
           } else if (event.data.indexOf('message:') === 0) {
             var message = JSON.parse(event.data.replace('message:', ''));
@@ -93,17 +96,16 @@ export default Ember.Route.extend({
           }
         };
 
-        localSocket.socket.onopen = function () {
-          localSocket.set('connected', true);
+        socket.onopen = function () {
           resolve();
         };
 
-        localSocket.socket.onerror = function () {
+        socket.onerror = function () {
           resolve();
         };
 
         if (!$('meta[name=suppressAlert]').attr('content')) {
-          localSocket.socket.onclose = function () {
+          socket.onclose = function () {
             localSocket.set('lostConnection', true);
           };
         }
@@ -116,9 +118,14 @@ export default Ember.Route.extend({
           }, false);
         }
 
-      } else {
-        resolve();
-      }
+        localSocket.set('socket', socket);
+
+        buildEnv.set('localSocket', localSocket);
+      });
+
+    }, function () {
+      // No setup required for live environment
+      Ember.Logger.log('ApplicationRoute::getBuildEnvironment::live');
     });
   },
 
@@ -138,7 +145,8 @@ export default Ember.Route.extend({
     return new Ember.RSVP.Promise(function (resolve, reject) {
 
       var localSocket = route.get('buildEnvironment.localSocket');
-      if (!localSocket || !localSocket.connected) {
+
+      if (!localSocket || localSocket.get('socket').readyState !== window.WebSocket.OPEN) {
 
         Ember.$.ajax({
           dataType: 'jsonp',
@@ -601,6 +609,7 @@ export default Ember.Route.extend({
         // control types are fixtures, throw them in the store
         route.store.find('control-type')
       ]);
+
     });
   },
 
@@ -613,10 +622,10 @@ export default Ember.Route.extend({
     Ember.Logger.log('%cgruntCommand -> ' + command, 'color: purple; font-weight: bold');
 
     var localSocket = this.get('buildEnvironment.localSocket');
-    if (localSocket && localSocket.connected) {
-      localSocket.socket.send(command);
+    if (localSocket && localSocket.get('socket').readyState === window.WebSocket.OPEN) {
+      localSocket.get('socket').send(command);
       if (callback) {
-        localSocket.doneCallback = callback;
+        localSocket.set('doneCallback', callback);
       }
     }
   },
