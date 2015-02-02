@@ -439,7 +439,6 @@ var WXMLImporter = (function() {
      "publish_date": formattedDate(now)
     }
 
-    console.log('adding tag');
     structuredData.tags[pushId] = newTag;
   }
 
