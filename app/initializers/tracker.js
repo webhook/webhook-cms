@@ -18,10 +18,9 @@ export default {
       script = d.createElement('script');
       script.type = 'text/javascript';
       script.async = true;
-      script.crossOrigin = true;
       script.onload = function(){
         if(window.Raygun) {
-          Raygun.init('wsX+OdSk4B61TUjygEwg1Q==', {
+          window.Raygun.init('wsX+OdSk4B61TUjygEwg1Q==', {
             allowInsecureSubmissions: true,
             ignoreAjaxAbort: true,
             ignore3rdPartyErrors: false,
