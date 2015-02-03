@@ -83,4 +83,17 @@ module.exports = {
       dest: 'dist/'
     }]
   },
+
+  originals: {
+    files: [{
+      expand: true,
+      cwd: '.tmp/concat/assets',
+      src: [
+        '**',
+        '!**/*.{css}'
+      ],
+      filter: 'isFile',
+      dest: 'dist/assets'
+    }]
+  }
 };

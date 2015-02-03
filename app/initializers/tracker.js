@@ -8,9 +8,9 @@ export default {
     window.Raygun = null;
 
     // Track hosted errors only
-    /*if (window.ENV.isDevelopment || window.ENV.selfHosted) {
+    if (window.ENV.isDevelopment || window.ENV.selfHosted) {
       return;
-    }*/
+    }
 
     application.deferReadiness();
 
