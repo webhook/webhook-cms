@@ -5,5 +5,5 @@
 //
 // window.ENV.public_key = '123456'
 
-window.ENV.isDevelopment = true;
-window.ENV.isProduction = false;
+window.ENV.isDevelopment = false;
+window.ENV.isProduction = true;
