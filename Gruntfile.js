@@ -151,13 +151,13 @@ module.exports = function(grunt) {
   grunt.registerTask('createDistVersion', filterAvailable([
                      'useminPrepare', // Configures concat, cssmin and uglify
                      'concat', // Combines css and javascript files
-
+                     'copy:originals',
                      'cssmin', // Minifies css
                      'uglify', // Minifies javascript
                      'imagemin', // Optimizes image compression
                      // 'svgmin',
                      'copy:dist', // Copies files not covered by concat and imagemin
-
+                     'clean:tmp',
                      'rev', // Appends 8 char hash value to filenames
                      'usemin', // Replaces file references
                      'htmlmin:dist' // Removes comments and whitespace
