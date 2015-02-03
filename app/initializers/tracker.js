@@ -7,6 +7,10 @@ export default {
     // Clear out the old embedded version linked to from index.html
     window.Raygun = null;
 
+    window.trackingInfo = {};
+
+    trackingInfo.selfHosted = window.ENV.selfHosted;
+
     // Track hosted errors only
     if (window.ENV.isDevelopment || window.ENV.selfHosted) {
       return;
@@ -23,9 +27,9 @@ export default {
           window.Raygun.init('wsX+OdSk4B61TUjygEwg1Q==', {
             allowInsecureSubmissions: true,
             ignoreAjaxAbort: true,
-            ignore3rdPartyErrors: false,
+            ignore3rdPartyErrors: true,
             wrapAsynchronousCallbacks: true
-          }).attach();
+          }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(trackingInfo);
         }
         application.advanceReadiness();
       };

@@ -33,11 +33,13 @@ export default Ember.Route.extend({
 
     if (!window.ENV.selfHosted) {
       window.ENV.siteDNS = siteName + '.webhook.org';
+      window.trackingInfo.siteDNS = window.ENV.siteDNS;
     }
 
     window.ENV.firebaseRoot.child('/management/sites/' + siteName + '/dns').on('value', function (snap) {
       if (snap.val()) {
         window.ENV.siteDNS = snap.val();
+        window.trackingInfo.siteDNS = window.ENV.siteDNS;
       }
     });
 
@@ -173,6 +175,8 @@ export default Ember.Route.extend({
 
     var session = this.get('session');
     var siteName = session.get('site.name');
+
+    window.trackingInfo.siteName = siteName;
 
     var managementSiteRef = window.ENV.firebaseRoot.child('management/sites/' + siteName);
 
@@ -347,6 +351,10 @@ export default Ember.Route.extend({
         }
 
         if (user) {
+          if(window.Raygun) {
+            window.Raygun.setUser(user.email, false, user.email);
+          }
+          window.trackingInfo.loggedIn = true;
           // Logged in
           route.validateUser(user).then(route.initializeUser.bind(route), function (error) {
             session.set('user', null);
@@ -368,6 +376,7 @@ export default Ember.Route.extend({
           session.set('error', error);
           reject(error);
         } else {
+          window.trackingInfo.loggedIn = false;
           // user is logged out
           session.set('user', null);
           session.set('site.token', null);
