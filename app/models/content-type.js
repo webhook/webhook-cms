@@ -55,7 +55,71 @@ export default DS.Model.extend({
 
   }.on('didLoad', 'didCreate'),
 
+  destroyRelations: function () {
+
+    var contentType = this,
+        store = this.store;
+
+    var relationPromises = Ember.A([]);
+
+    var contentTypeName = contentType.get('name');
+
+    Ember.Logger.log('Preparing to destroy `%@`.'.fmt(contentTypeName));
+
+    // remove relationships from related content types.
+    // Note: I do not think we need to update the search index of related items as the data that's indexed is just IDs.
+    var relationControls = contentType.get('controls').filterBy('controlType.widget', 'relation');
+
+    Ember.Logger.log('Removing %@ reverse relationships.'.fmt(relationControls.get('length')));
+
+    relationControls.forEach(function (control) {
+
+      var relatedContentTypeId = control.get('meta.contentTypeId');
+      var relatedControlName = control.get('meta.reverseName');
+
+      Ember.Logger.log('Removing %@:%@'.fmt(relatedContentTypeId, relatedControlName));
+
+      var relatedContentType = store.getById('content-type', relatedContentTypeId);
+
+      if (Ember.isEmpty(relatedContentType)) {
+        Ember.Logger.warn('`%@` content type cannot be found.'.fmt(relatedContentTypeId));
+        return;
+      }
+
+      relatedContentType.get('controls').filterBy('name', relatedControlName).forEach(function (reverseControl) {
+        relatedContentType.get('controls').removeObject(reverseControl);
+        relatedContentType.save().then(function () {
+          Ember.Logger.log('Removed %@:%@.'.fmt(relatedContentTypeId, relatedControlName));
+        });
+      });
+
+    });
+
+    // Remove relation controls from grid controls
+    var deletedContentTypeId = contentType.get('id');
+
+    store.all('content-type').rejectBy('id', deletedContentTypeId).forEach(function (otherContentType) {
+
+      var gridControls = otherContentType.get('controls').filterBy('controlType.widget', 'grid');
+
+      gridControls.forEach(function (gridControl) {
+        var relatedControls = gridControl.get('controls')
+                                .filterBy('controlType.widget', 'relation')
+                                .filterBy('meta.contentTypeId', deletedContentTypeId);
+        gridControl.get('controls').removeObjects(relatedControls);
+        gridControl.transitionTo('updated.uncommitted');
+      });
+
+      otherContentType.save();
+
+    });
+
+    Ember.Logger.log('Reverse relationships have been removed, proceeding to destroy `%@`.'.fmt(contentTypeName));
+  },
+
   deleteModel: function () {
+
+    this.destroyRelations();
 
     var contentTypeId = this.get('id');
 

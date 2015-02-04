@@ -24,29 +24,18 @@ export default Ember.Controller.extend({
 
   deleteData: function () {
 
-    var dataController = this;
+    var controller = this;
 
-    // first delete all search indexes
-    dataController.store.find('content-type').then(function (contentTypes) {
-      return Ember.RSVP.allSettled(contentTypes.map(function (contentType) {
-        return SearchIndex.deleteType(contentType).then(function () {
-          return contentType.destroyRecord();
-        });
-      }));
-    }).then(function () {
-
-      // delete all site data
-      window.ENV.firebase.update({
-        data: null,
-        contentType: null,
-        settings: null
-      }, function () {
-        dataController.send('buildSignal');
-        dataController.set('isDeleting', false);
-        dataController.transitionToRoute('start');
+    Ember.RSVP.Promise.all(this.store.all('content-type').map(function (contentType) {
+      contentType.destroyRecord();
+    })).then(function () {
+      window.ENV.firebase.child('settings').set(null, function () {
+        controller.send('buildSignal');
+        controller.set('isDeleting', false);
+        controller.transitionToRoute('start');
       });
-
     });
+
   },
 
   wordpressXml: null,
