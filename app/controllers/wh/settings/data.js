@@ -4,9 +4,6 @@ export default Ember.Controller.extend({
 
   needs: ['application'],
 
-  // dataBackup: null,
-  dataError: null,
-
   deleteOption: 'data',
   isDeleting: false,
   isRefreshingApi: false,
@@ -34,6 +31,7 @@ export default Ember.Controller.extend({
         controller.set('isDeleting', false);
         controller.transitionToRoute('start');
       });
+      SearchIndex.deleteSite();
     });
 
   },
