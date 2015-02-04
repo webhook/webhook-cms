@@ -35,6 +35,11 @@ export default {
 
           window.Raygun.onBeforeSend(function(payload) {
             payload.Details.UserCustomData.hash = location.hash;
+
+            if(payload.Details.UserCustomData.statusText)  { // AJAX ERROR, ABORT
+              return false;
+            } 
+
             return payload;
           });
 
