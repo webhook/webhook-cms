@@ -354,6 +354,21 @@
     color: $gray-dark
     float: right
 
+.wh-slug-builder
+  label
+    margin-bottom: $base-line-height / 2
+  div
+    +span-columns(3)
+    +omega-type(4n)
+  input[type="text"]
+    width: 100%
+  .site-slug, .item-slug
+    font-size: 12px
+    line-height: 29px
+    color: $gray-light
+  .wy-form-message
+    color: $gray
+
 // RESPONSIVE STYLES
 
 +media($tablet)

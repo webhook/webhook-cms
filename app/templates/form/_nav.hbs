@@ -100,20 +100,21 @@
           <p class="edit-instruction">{{t 'form.slugInstruction' nameBinding="name"}}</p>
           <hr>
 
-          <div class="wy-control-group">
-            <label>{{t 'form.listUrlLabel' nameBinding="name"}}</label>
-            <div class="wy-control wy-form-full">
+          <div class="wy-control-group wh-slug-builder">
+            <label>{{t 'form.slugLabel'}}</label>
+            <div class="wh-slug-prefix"><span class="site-slug">example.com/</span></div>
+            <div class="wy-slug-value">
               {{input placeholder=id value=customUrls.listUrl focus-out="correctListUrl"}}
+              <span class="wy-form-message">{{t 'form.listUrlLabel' nameBinding="name"}}</span>
             </div>
-          </div>
-
-          <div class="wy-control-group">
-            <label>{{t 'form.individualUrlLabel' nameBinding="name"}}</label>
-            <div class="wy-control wy-form-full">
+            <div class="wy-slug-value">
               {{input value=customUrls.individualUrl focus-out="correctIndividualUrl"}}
+              <span class="wy-form-message">{{t 'form.individualUrlLabel' nameBinding="name"}}</span>
+            </div>
+            <div class="wy-slug-value">
+              <span class="item-slug">/item-name/</span>
             </div>
           </div>
-
         </form>
     </nav>
 
