@@ -9,7 +9,7 @@ export default Ember.ArrayController.extend({
 
   init: function () {
     var user = this.get('session.user');
-
+    
     // Presence
     var presenceRef   = window.ENV.firebase.child('presence'),
         onlineRef     = presenceRef.child('online'),

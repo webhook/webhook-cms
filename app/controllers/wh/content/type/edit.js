@@ -375,11 +375,6 @@ export default Ember.ObjectController.extend({
 
         Ember.Logger.warn(error);
 
-        if (window.trackJs) {
-          window.trackJs.console.log("Attempted to save item. %@".fmt(controller.get('itemModel')));
-          window.trackJs.track(error);
-        }
-
         controller.send('notify', 'danger', "There was an error while saving.");
 
       });
