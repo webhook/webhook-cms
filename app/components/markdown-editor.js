@@ -105,7 +105,7 @@ export default Ember.Component.extend({
     toggleImageModal: function () {
 
       // fake a control
-      this.set('fakeImageControl', Ember.Object.create());
+      this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
 
       // show image upload widget
       this.set('showImageModal', true);
