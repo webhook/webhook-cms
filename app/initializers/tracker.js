@@ -1,10 +1,9 @@
-// By adding track.js via javascript we can control it better.
+// By adding Raygun via javascript we can control it better.
 export default {
   name: 'raygun',
 
   initialize: function (container, application) {
 
-    // Clear out the old embedded version linked to from index.html
     window.Raygun = null;
 
     window.trackingInfo = {};
