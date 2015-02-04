@@ -8,7 +8,7 @@ export default {
 
     window.trackingInfo = {};
 
-    trackingInfo.selfHosted = window.ENV.selfHosted;
+    window.trackingInfo.selfHosted = window.ENV.selfHosted;
 
     // Track hosted errors only
     if (window.ENV.isDevelopment || window.ENV.selfHosted) {
@@ -28,7 +28,12 @@ export default {
             ignoreAjaxAbort: true,
             ignore3rdPartyErrors: true,
             wrapAsynchronousCallbacks: true
-          }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(trackingInfo);
+          }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(window.trackingInfo);
+
+          window.Raygun.onBeforeSend(function(payload) {
+            payload.Details.UserCustomData.hash = location.hash;
+            return payload;
+          });
         }
         application.advanceReadiness();
       };

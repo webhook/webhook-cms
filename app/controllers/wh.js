@@ -8,7 +8,6 @@ export default Ember.ArrayController.extend({
   debouncedQuery: '',
 
   init: function () {
-
     var user = this.get('session.user');
 
     // Presence
