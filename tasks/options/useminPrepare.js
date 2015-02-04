@@ -15,7 +15,7 @@ module.exports = {
               if(file.dest.indexOf('.min.js') !== -1) {
                 file.dest = file.dest.replace('.min.js', '.js');
               }
-            })
+            });
           }
         }, {
           name: 'uglify',
@@ -27,10 +27,10 @@ module.exports = {
                 var newArray = [];
                 file.src.forEach(function(realsrc) {
                   newArray.push(realsrc.replace('.min.js', '.js'));
-                })
+                });
                 file.src = newArray;
               }
-            })
+            });
           }
         }]
       }

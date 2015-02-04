@@ -30,7 +30,7 @@ module.exports = function(grunt) {
             var newSource = parts[parts.length - 1];
 
             newSources.push(newSource);
-          })
+          });
 
           contents.sources = newSources;
 
