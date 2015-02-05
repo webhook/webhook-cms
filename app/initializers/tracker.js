@@ -1,3 +1,4 @@
+/*globals jQuery*/
 // By adding Raygun via javascript we can control it better.
 export default {
   name: 'raygun',
@@ -7,8 +8,7 @@ export default {
 
     window.trackingInfo.selfHosted = window.ENV.selfHosted;
 
-    window.trackingInfo.x_console = [];
-    window.trackingInfo.x_ajax = [];
+    window.trackingInfo.xtra_info = [];
 
     // Track hosted errors only
     if (window.ENV.isDevelopment || window.ENV.selfHosted) {
@@ -38,24 +38,37 @@ export default {
         var oldDebug = Ember.Logger[method];
 
         Ember.Logger[method] = function() {
-          window.trackingInfo.x_console.push({ method: method, args: Array.prototype.slice.call(arguments) });
+          var args = Array.prototype.slice.call(arguments);
 
-          if(window.trackingInfo.x_console.length > 30) {
-            window.trackingInfo.x_console.shift();
+          var compiledString = method.toUpperCase() + '   ';
+          args.forEach(function(ar) {
+            if(typeof ar === 'object') {
+              compiledString += JSON.stringify(ar) + ' ';
+            } else {
+              compiledString += ar + ' ';
+            }
+          });
+
+          window.trackingInfo.xtra_info.unshift(compiledString);
+
+          if(window.trackingInfo.xtra_info.length > 50) {
+            window.trackingInfo.xtra_info.pop();
           }
 
           oldDebug.apply(Ember.Logger, arguments);
         };
       });
 
-      // Hook into ajaxComplete event to provide more information on errors
-      $(document).ajaxComplete(function(evt, xhr, settings) {
-        window.trackingInfo.x_ajax.push({ url: settings.url, status: xhr.status });
+      if(jQuery) {
+        // Hook into ajaxComplete event to provide more information on errors
+        $(document).ajaxComplete(function(evt, xhr, settings) {
+          window.trackingInfo.xtra_info.unshift(xhr.status + '   ' + xhr.statusText + '  ' + settings.url);
 
-        if(window.trackingInfo.x_ajax.length > 30) {
-          window.trackingInfo.x_ajax.shift();
-        }
-      });
+          if(window.trackingInfo.xtra_info.length > 50) {
+            window.trackingInfo.xtra_info.pop();
+          }
+        });
+      }
     }
   }
 };
