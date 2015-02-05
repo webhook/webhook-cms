@@ -1,3 +1,5 @@
+import SearchIndex from 'appkit/utils/search-index';
+
 export default Ember.Route.extend({
   model: function () {
 
@@ -48,6 +50,7 @@ export default Ember.Route.extend({
 
   actions: {
     reindex: function () {
+      SearchIndex.indexSite();
       this.transitionTo('reindex');
     }
   }

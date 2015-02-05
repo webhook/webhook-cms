@@ -83,6 +83,8 @@ export default {
       return Ember.RSVP.reject('Cannot index without a content type.');
     }
 
+    var baseUrl = this.baseUrl;
+
     var searchData = {};
 
     // Simplify search indexing by storing all objects as strings.
@@ -110,10 +112,21 @@ export default {
 
     Ember.Logger.log("SearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('itemData.name')));
 
-    return Ember.$.ajax({
-      url: this.baseUrl + 'index/',
-      type: 'POST',
-      data: ajaxData
+    item.set('isIndexing', true);
+
+    return new Ember.RSVP.Promise(function (resolve, reject) {
+
+      Ember.$.ajax({
+        url: baseUrl + 'index/',
+        type: 'POST',
+        data: ajaxData
+      }).always(function () {
+        item.set('isIndexing', false);
+        contentType.incrementProperty('indexingComplete');
+        Ember.Logger.log("%cSearchIndex::indexItem::%@::%@".fmt(contentType.get('id'), item.get('itemData.name')), 'color: green;');
+        resolve(item);
+      });
+
     });
 
   },
@@ -126,39 +139,37 @@ export default {
     var modelName = contentType.get('itemModelName');
     var store = contentType.store;
 
-    contentType.set('indexingComplete', 0);
     contentType.set('indexingTotal', Infinity);
 
     return SearchIndex.deleteType(contentType).then(function () {
 
       if (contentType.get('oneOff')) {
 
+        contentType.set('indexingTotal', 1);
+
         return store.find(modelName, contentType.get('id')).then(function (item) {
 
-          contentType.set('indexingTotal', 1);
-
           return SearchIndex.indexItem(item).then(function () {
-            contentType.incrementProperty('indexingComplete');
+            Ember.Logger.log('%cSearchIndex::indexType::%@'.fmt(contentType.get('id')), 'color: green;');
           });
 
         }, function (error) {
-          contentType.set('indexingTotal', 0);
-          Ember.Logger.warn('SearchIndex::indexType::Could not find %@, continuing.'.fmt(contentType.get('id')));
+          Ember.Logger.warn('%cSearchIndex::indexType::Could not find %@, continuing.'.fmt(contentType.get('id')), 'color: green;');
         });
 
       } else {
 
         return store.find(modelName).then(function (items) {
 
-          contentType.set('indexingTotal', items.get('length'));
+          contentType.set('indexingTotal', contentType.get('indexingTotal') + items.get('length'));
 
           var indexItems = items.map(function (item) {
-            return SearchIndex.indexItem(item).then(function () {
-              contentType.incrementProperty('indexingComplete');
-            });
+            return SearchIndex.indexItem(item);
           });
 
-          return Ember.RSVP.allSettled(indexItems);
+          return Ember.RSVP.allSettled(indexItems).then(function () {
+            Ember.Logger.log('%cSearchIndex::indexType::%@'.fmt(contentType.get('id')), 'color: green;');
+          });
 
         });
 

@@ -5,10 +5,6 @@ export default Ember.Route.extend({
     return this.store.find('content-type');
   },
 
-  afterModel: function () {
-    SearchIndex.indexSite();
-  },
-
   actions: {
     willTransition: function (transition) {
 

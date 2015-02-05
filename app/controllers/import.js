@@ -1,4 +1,4 @@
-import Reindex from 'appkit/controllers/reindex';
+import ReindexController from 'appkit/controllers/reindex';
 
 var ImportedContentType = Ember.Object.extend({
   isValid: function () {
@@ -12,26 +12,22 @@ var ImportedControl = Ember.Object.extend({
   }.property('errors.length')
 });
 
-export default Reindex.extend({
+export default ReindexController.extend({
 
-  importData: null,
-  importDataErrors: Ember.A([]),
-
-  // Remove extraneous data
   validateData: function (rawData) {
 
     this.set('importData', Ember.Object.create());
 
-    this.set('importData.contentTypes', this.validateContentTypesData(rawData.contentType));
+    this.set('importData.contentType', this.validateContentTypeData(rawData.contentType));
 
-    this.set('importData.data', this.validateItemsData(rawData.data));
+    this.set('importData.data', this.validateItemData(rawData.data));
 
     this.set('importData.settings', this.validateSettingsData(rawData.settings));
 
   },
 
   // Make sure content types have controls
-  validateContentTypesData: function (data) {
+  validateContentTypeData: function (data) {
 
     var controller = this,
         store = this.store;
@@ -56,7 +52,7 @@ export default Reindex.extend({
       } else if (!Ember.isArray(contentTypeData.controls)) {
         contentType.get('errors').pushObject('`controls` is not an array.'.fmt(contentTypeId));
       } else {
-        contentType.get('controls').pushObjects(controller.validateControlsData(contentTypeData.controls));
+        contentType.get('controls').pushObjects(controller.validateControlData(contentTypeData.controls));
       }
 
       Ember.Logger.log('-- %@ general errors.'.fmt(contentType.get('errors.length')));
@@ -90,7 +86,7 @@ export default Reindex.extend({
   },
 
   // Make sure controls use known widgets
-  validateControlsData: function (data) {
+  validateControlData: function (data) {
 
     var store = this.store,
         controls = Ember.A([]);
@@ -124,12 +120,12 @@ export default Reindex.extend({
   },
 
   // Make sure items belong to known content types
-  validateItemsData: function (data) {
+  validateItemData: function (data) {
 
     var controller = this,
         store = this.store;
 
-    var contentTypeData = this.get('importData.contentTypes');
+    var contentTypeData = this.get('importData.contentType').filterBy('data');
 
     var validData = Ember.A([]);
 
@@ -210,9 +206,57 @@ export default Reindex.extend({
 
   validateSettingsData: function (data) {
 
+    data = Ember.isEmpty(data) ? {} : data;
+
+    var store = this.store;
     var validSettings = Ember.Object.create();
 
-    validSettings.setProperties(data);
+    // General Settings
+    if (Ember.isEmpty(data.general)) {
+
+      validSettings.set('general', {});
+
+    } else {
+
+      var validGeneralData = {};
+
+      var generalSettings = store.getById('settings', 'general');
+      if (Ember.isEmpty(generalSettings)) {
+        generalSettings = store.createRecord('settings', { id: 'general' });
+        generalSettings.save();
+      }
+
+      var generalAttributes = Ember.A([]);
+      generalSettings.eachAttribute(function (name) {
+        generalAttributes.pushObject(name);
+      });
+
+      Ember.$.each(data.general, function (key, value) {
+        if (generalAttributes.indexOf(key.camelize()) >= 0) {
+          validGeneralData[key] = value;
+        }
+      });
+
+      validSettings.set('general', validGeneralData);
+
+    }
+
+    // Redirects
+    if (Ember.isEmpty(data.redirect)) {
+
+      validSettings.set('redirect', {});
+
+    } else {
+
+      var validRedirectData = {};
+
+      Ember.$.each(data.redirect, function (id, data) {
+        validRedirectData[id] = data;
+      });
+
+      validSettings.set('redirect', validRedirectData);
+
+    }
 
     return validSettings;
 
@@ -229,7 +273,7 @@ export default Reindex.extend({
     var store = this.store;
 
     // only import content types with valid data.
-    var validTypes = this.get('importData.contentTypes').filterBy('data');
+    var validTypes = this.get('importData.contentType').filterBy('data');
 
     // find existing content types, and remove them
     var deletePromises = validTypes.getEach('id').map(function (contentTypeId) {
@@ -272,6 +316,7 @@ export default Reindex.extend({
 
     Ember.Logger.log('%cImporting item data.', 'color: green; font-weight: bold');
 
+    var controller = this;
     var store = this.store;
 
     var validTypes = this.get('importData.data').filter(function (type) {
@@ -285,9 +330,15 @@ export default Reindex.extend({
 
     validTypes.forEach(function (type) {
 
+      var typeModel = store.getById('content-type', type.get('id'));
+
+      controller.get('model').pushObject(typeModel);
+
       if (type.get('oneOff')) {
 
-        store.find('data', type.get('id')).then(function (item) {
+        typeModel.incrementProperty('indexingTotal');
+
+        var oneOff = store.find('data', type.get('id')).then(function (item) {
           return item;
         }, function () {
           var item = store.getById('data', type.get('id'));
@@ -301,15 +352,18 @@ export default Reindex.extend({
           }
         }).then(function (item) {
           item.set('itemData', type.get('items.data'));
-          createPromises.pushObject(item.save());
+          return item.save();
         });
+
+        createPromises.pushObject(oneOff);
 
       } else {
 
+        typeModel.set('indexingTotal', typeModel.get('indexingTotal') + type.get('items.length'));
+
         type.get('items').forEach(function (importItem) {
 
-          store.find(type.get('id'), importItem.get('id')).then(function (item) {
-            window.console.log('found item', item.get('id'));
+          var itemPromise = store.find(type.get('id'), importItem.get('id')).then(function (item) {
             return item;
           }, function () {
             var item = store.getById(type.get('id'), importItem.get('id'));
@@ -323,8 +377,10 @@ export default Reindex.extend({
             }
           }).then(function (item) {
             item.set('itemData', importItem.get('data'));
-            createPromises.pushObject(item.save());
+            return item.save();
           });
+
+          createPromises.pushObject(itemPromise);
 
         });
 
@@ -340,8 +396,51 @@ export default Reindex.extend({
 
   importSettings: function () {
 
-    Ember.Logger.log('%cImporting settings.', 'color: green; font-weight: bold');
+    var generalSettingsData = this.get('importData.settings').general;
 
+    if (Ember.keys(generalSettingsData)) {
+
+      Ember.Logger.log('%cImporting settings.', 'color: green; font-weight: bold');
+
+      var generalSettingsModel = this.store.getById('settings', 'general');
+
+      Ember.keys(generalSettingsData).forEach(function (key) {
+        generalSettingsModel.set(key, generalSettingsData[key]);
+      });
+
+      return generalSettingsModel.save().then(function () {
+        Ember.Logger.log('%cSettings data import complete.', 'color: green; font-weight: bold');
+      });
+
+    }
+
+  },
+
+  importRedirects: function () {
+
+    var redirects = this.get('importData.settings').redirect;
+
+    if (Ember.keys(redirects)) {
+
+      Ember.Logger.log('%cImporting redirects.', 'color: green; font-weight: bold');
+
+      var store = this.store;
+
+      var redirectsPromises = Ember.A([]);
+
+      store.all('redirect').forEach(function (redirect) {
+        redirect.destroyRecord();
+      });
+
+      Ember.$.each(redirects, function (id, redirectData) {
+        redirectsPromises.pushObject(store.createRecord('redirect', redirectData));
+      });
+
+      return Ember.RSVP.Promise.all(redirectsPromises).then(function () {
+        Ember.Logger.log('%cRedirects data import complete.', 'color: green; font-weight: bold');
+      });
+
+    }
   },
 
   readFile: function (file) {
@@ -381,7 +480,13 @@ export default Reindex.extend({
     },
 
     importData: function () {
-      this.importContentTypes().then(this.importItemData.bind(this)).then(this.importSettings.bind(this));
+
+      this.set('isImporting', true);
+
+      this.importContentTypes()
+        .then(this.importItemData.bind(this))
+        .then(this.importSettings.bind(this))
+        .then(this.importRedirects.bind(this));
     },
 
     // for mike's testing sanity

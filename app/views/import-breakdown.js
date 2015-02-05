@@ -35,10 +35,15 @@ export default Ember.View.extend({
           itemCount: itemCount
         };
       }),
-      settings: Ember.$.map((dataBackup.settings || {}).general || {}, function (value, name) {
+      settings: Ember.$.map(dataBackup.get('settings.general'), function (value, name) {
         return {
           name: name,
-          value: '✓' // value
+          value: value
+        };
+      }),
+      redirect: Ember.$.map(dataBackup.get('settings.redirect'), function (value, name) {
+        return {
+          id: name
         };
       })
     };

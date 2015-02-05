@@ -2,8 +2,19 @@ import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({
 
+  beforeModel: function () {
+    // Makre sure content types are in the store
+    this.store.find('content-type');
+
+    // Make sure settings are in the store
+    this.store.find('settings');
+
+    // Make sure redirects are in the store
+    this.store.find('redirect');
+  },
+
   model: function () {
-    return this.store.find('content-type');
+    return Ember.A([]);
   },
 
   setupController: function (controller) {
@@ -14,21 +25,5 @@ export default Ember.Route.extend({
       controller.readFile(this.controllerFor('application').get('jsonBackup'));
     }
 
-  },
-
-  actions: {
-
-    willTransition: function (transition) {
-
-      if (this.controller.get('isIndexing')) {
-        Ember.Logger.log('Indexing in progress, aborting transition');
-        transition.abort();
-        window.history.forward();
-      } else {
-        Ember.Logger.log('Indexing complete, continue with transition.');
-        return true;
-      }
-
-    }
   }
 });

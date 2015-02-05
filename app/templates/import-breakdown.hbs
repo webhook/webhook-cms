@@ -30,7 +30,7 @@
     {{#each setting in view.dataBreakdown.settings}}
       <tr>
         <td>{{setting.name}}</td>
-        <td>{{setting.value}}</td>
+        <td>{{truncate-string setting.value 25}}</td>
       </tr>
     {{else}}
       <tr>
@@ -39,3 +39,5 @@
     {{/each}}
   </tbody>
 </table>
+
+{{view.dataBreakdown.redirect.length}} Redirect Rules
