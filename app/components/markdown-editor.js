@@ -109,6 +109,7 @@ export default Ember.Component.extend({
         this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
       } else {
         this.set('fakeImageControl.value.resize_url', null);
+        this.set('fakeImageControl.value.url', null);
       }
 
       // show image upload widget
