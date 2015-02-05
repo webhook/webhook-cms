@@ -56,8 +56,9 @@ export default Ember.Component.extend({
     }.bind(this));
 
     var resetButton = function () {
-      self.$('.wy-form-upload-content button')
+      self.$uploadBtn
         .removeClass('icon-desktop icon-arrow-down btn-success')
+        .addClass('btn-neutral')
         .addClass(self.get('defaultClasses'))
         .text(self.get('defaultText'));
     };
@@ -70,8 +71,12 @@ export default Ember.Component.extend({
           .addClass('icon-arrow-down btn-success')
           .text(' Drop files here');
       },
-      dropzonewindowdrop: resetButton,
-      dropzonewindowleave: resetButton,
+      dropzonewindowdrop: function () {
+        resetButton();
+      },
+      dropzonewindowleave: function () {
+        resetButton();
+      },
       drop: function (event) {
         Ember.$.each(event.originalEvent.dataTransfer.files, function (index, file) {
           $(this).trigger('selectedFile', file);
