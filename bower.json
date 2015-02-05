@@ -22,7 +22,8 @@
     "fluidbox": "1.4.2",
     "webhook-cms-i18n": "webhook/webhook-cms-i18n#2.0.x",
     "leaflet": "~0.7.3",
-    "numeral": "~1.5.3"
+    "numeral": "~1.5.3",
+    "raygun4js": "~1.15.0"
   },
   "devDependencies": {
     "qunit": "~1.15.0",
