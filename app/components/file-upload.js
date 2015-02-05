@@ -56,11 +56,11 @@ export default Ember.Component.extend({
     }.bind(this));
 
     var resetButton = function () {
-      this.$('.wy-form-upload-content button')
+      self.$('.wy-form-upload-content button')
         .removeClass('icon-desktop icon-arrow-down btn-success')
-        .addClass(this.get('defaultClasses'))
-        .text(this.get('defaultText'));
-    }.bind(this);
+        .addClass(self.get('defaultClasses'))
+        .text(self.get('defaultText'));
+    };
 
     // Dropzone behavior
     this.$uploadBtn.dropzone().on({
