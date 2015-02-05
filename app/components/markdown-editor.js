@@ -50,7 +50,7 @@ export default Ember.Component.extend({
     }.bind(this));
 
     this.$('.CodeMirror-scroll').scroll(function() {
-      if(this.get('whMarkdownEditorFullscreen')) { 
+      if(this.get('whMarkdownEditorFullscreen')) {
         var curTop = this.$('.CodeMirror-scroll').scrollTop();
         var effectiveHeight = this.$('.CodeMirror-scroll')[0].scrollHeight;
         var ratio = curTop / effectiveHeight;
@@ -105,11 +105,13 @@ export default Ember.Component.extend({
     toggleImageModal: function () {
 
       // fake a control
-      if(!this.get('fakeImageControl')) {
+      if (!this.get('fakeImageControl')) {
         this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
       } else {
-        this.set('fakeImageControl.value.resize_url', null);
-        this.set('fakeImageControl.value.url', null);
+        var value = this.get('fakeImageControl.value');
+        Ember.keys(value).forEach(function (property) {
+          value.set(property, null);
+        });
       }
 
       // show image upload widget

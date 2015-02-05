@@ -72,7 +72,7 @@ export default Ember.Component.extend({
 
     var button = whRedactor.button.addBefore('video', 'image', 'Image');
     whRedactor.button.addCallback(button, this.imageButtonCallback.bind(this));
-    
+
     whRedactor.button.get('image').addClass('redactor_btn_image');
 
     // turn off buttons that are disabled
@@ -99,11 +99,13 @@ export default Ember.Component.extend({
     this.set('cursorElement', this.get('whRedactor').selection.getBlock() || this.get('whRedactor').selection.getCurrent());
 
     // fake a control
-    if(!this.get('fakeImageControl')) {
+    if (!this.get('fakeImageControl')) {
       this.set('fakeImageControl', Ember.Object.create({ value: Ember.Object.create() }));
     } else {
-      this.set('fakeImageControl.value.resize_url', null);
-      this.set('fakeImageControl.value.url', null);
+      var value = this.get('fakeImageControl.value');
+      Ember.keys(value).forEach(function (property) {
+        value.set(property, null);
+      });
     }
 
     // show image upload widget
