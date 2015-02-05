@@ -69,7 +69,10 @@ export default Ember.ArrayController.extend({
     this.get('cmsItems').setEach('lockedBy', null);
     this.get('lockedItems').forEach(function (lock) {
       var item = this.get('cmsItems').findBy('id', lock.get('id'));
-      item.set('lockedBy', lock.get('email'));
+      // locked item isn't necessarily on the same page as what you are looking at
+      if (item) {
+        item.set('lockedBy', lock.get('email'));
+      }
     }, this);
   }.observes('lockedItems.@each'),
 
