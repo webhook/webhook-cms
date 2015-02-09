@@ -21,7 +21,9 @@ export default {
         ignoreAjaxAbort: true,
         ignore3rdPartyErrors: true,
         wrapAsynchronousCallbacks: true
-      }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(window.trackingInfo);
+      }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(window.trackingInfo).withTags(function() {
+        return [window.trackingInfo.siteName];
+      });
 
       window.Raygun.onBeforeSend(function(payload) {
         payload.Details.UserCustomData.hash = location.hash;
