@@ -70,11 +70,25 @@ export default Ember.Component.extend({
 
           var reverseValue = model.get('itemData')[reverseName];
 
+          // Reverse value should be a string, but if it isn't, make it so
+          if (reverseIsSingle && Ember.isArray(reverseValue)) {
+            Ember.Logger.warn('`%@:%@` value is an Array when it should be a String.'.fmt(contentType.get('itemModelName'), reverseName));
+            reverseValue = reverseValue.shift();
+          }
+
+          // If the reverse relationship is single, ask for permission to replace it.
           if (reverseIsSingle && reverseValue && editItemKey !== reverseValue) {
 
             store.find(reverseValue.split(' ')[0], reverseValue.split(' ')[1]).then(function (reverseValueModel) {
 
-              if (window.confirm('The `%@` content type only allows one `%@` to be attached. Do you want to replace `%@` in the current relation with `%@`?'.fmt(contentType.get('name'), editType.get('name'), reverseValueModel.get('itemData.name'), editController.get('controls').findBy('name', 'name').get('value') || 'unnamed item'))) {
+              var confirmationMessage = 'The `%@` content type only allows one `%@` to be attached. Do you want to replace `%@` in the current relation with `%@`?'.fmt(
+                contentType.get('name'),
+                editType.get('name'),
+                reverseValueModel.get('itemData.name'),
+                editController.get('controls').findBy('name', 'name').get('value') || 'unnamed item'
+              );
+
+              if (window.confirm(confirmationMessage)) {
                 array.removeAt(insertPosition);
                 array.insertAt(insertPosition, model);
               } else {
