@@ -353,6 +353,7 @@ export default Ember.Route.extend({
         if (user) {
           if(window.Raygun) {
             window.Raygun.setUser(user.email, false, user.email);
+            window.trackingInfo.user = user.email;
           }
           window.trackingInfo.loggedIn = true;
           // Logged in

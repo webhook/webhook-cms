@@ -22,7 +22,21 @@ export default {
         ignore3rdPartyErrors: true,
         wrapAsynchronousCallbacks: true
       }).attach().whitelistCrossOriginDomains(["webhook.com"]).withCustomData(window.trackingInfo).withTags(function() {
-        return [window.trackingInfo.siteName];
+        var tags = [];
+
+        if(window.trackingInfo.siteName) {
+          tags.push(window.trackingInfo.siteName);
+        } else {
+          tags.push('Unknown Site');
+        }
+
+        if(window.trackingInfo.user) {
+          tags.push(window.trackingInfo.user);
+        } else {
+          tags.push('anonymous');
+        }
+
+        return tags;
       });
 
       window.Raygun.onBeforeSend(function(payload) {
