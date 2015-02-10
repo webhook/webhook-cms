@@ -25,10 +25,12 @@ export default Ember.Route.extend({
     }, function (error) {
       var settings = route.store.getById('settings', 'general');
       settings.loadedData();
-      return settings.save().then(function () {
-        settings.set('siteMessage', route.get('defaultMessage'));
-        route.set('settings', settings);
-      });
+      if (route.get('session.isOwner')) {
+        return settings.save().then(function () {
+          settings.set('siteMessage', route.get('defaultMessage'));
+          route.set('settings', settings);
+        });
+      }
     });
 
   },
