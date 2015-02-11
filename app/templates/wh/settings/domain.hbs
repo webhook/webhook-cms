@@ -51,12 +51,25 @@
       <div class="wy-control-group fluid-input">
         <div class="wy-control">
           <label>2. Edit your host name records with the following values:</label>
+{{#if subdomain }}
+  {{# if showRedirector }}
 <pre class="hljs">
-A-RECORD     @                                      174.129.25.170
-CNAME        www                                    dns.webhook.com
-TXT          webhook-domain-verification            asdfasdfasdf
+A-RECORD     {{ showRedirector }}174.129.25.170
+CNAME        {{ subdomain }}dns.webhook.com
+TXT          {{ subdomain }}webhook-site-verification={{ session.site.name }}
 </pre>
-
+  {{else}}
+<pre class="hljs">
+CNAME        {{ subdomain }}dns.webhook.com
+TXT          {{ subdomain }}webhook-site-verification={{ session.site.name }}
+</pre>
+  {{/if}}
+{{else}}
+<pre class="hljs">
+CNAME        @                                      dns.webhook.com
+TXT          @                                      webhook-site-verification={{ session.site.name }}
+</pre>
+{{/if}}
             <p>{{t 'wh.settings.domain.success.docs'}}</p>
         </div>
           <button class="btn btn-success icon icon-ok-sign" {{bind-attr disabled="isSending"}} > {{t 'wh.settings.domain.form.action'}}</button>
