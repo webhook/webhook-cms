@@ -7,24 +7,12 @@
 </section>
 <section class="wh-content-edit">
 
-  {{#if success }}
 
-  <h2>{{t 'wh.settings.domain.success.title'}}</h2>
-
-  <p>{{t 'wh.settings.domain.success.instruction'}}</p>
-
-<pre class="hljs">
-A-RECORD     @              174.129.25.170
-CNAME        www            dns.webhook.com
-</pre>
-
-  <p>{{t 'wh.settings.domain.success.docs'}}</p>
+  {{#if session.billing.isTrial }}
+    <h2>{{t 'wh.settings.domain.trial.title'}}</h2>
+    <p>{{t 'wh.settings.domain.trial.instruction'}}</p>
+    <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> {{t 'wh.settings.domain.trial.upgrade'}}</a>
   {{else}}
-    {{#if session.billing.isTrial }}
-      <h2>{{t 'wh.settings.domain.trial.title'}}</h2>
-      <p>{{t 'wh.settings.domain.trial.instruction'}}</p>
-      <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> {{t 'wh.settings.domain.trial.upgrade'}}</a>
-    {{else}}
 
     {{#if errors}}
       <div class="wy-alert wy-alert-warning">
@@ -32,28 +20,50 @@ CNAME        www            dns.webhook.com
         <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
       </div>
     {{/if}}
+    <div class="wy-alert wy-alert-success">
+      <div class="wy-alert-title"><span class="icon icon-ok-sign"></span> Domain attached successfully</div>
+      <p>The domain <a href="">whatever.com</a> correctly resolves to this Webhook site. No further steps are necessary. <a href="">Change your domain settings?</a></p>
+    </div>
+
+    <div class="wy-alert wy-alert-info">
+      <div class="wy-alert-title"><span class="icon icon-ok-sign"></span> Domain use pending</div>
+      <p>The domain <a href="">whatever.com</a> is currently being processed for use on this Webhook site. Domain changes can often take serveral hours so please give it time. <a href="">Change your domain settings?</a></p>
+    </div>
+
+
+    <!-- ONLY SHOW THIS FORM IF NOTHING IS SET OR THEY CLICKED THE EDIT LINK ABOVE. -->
 
     <form class="wy-form-stacked" {{action "updateDns" on="submit"}}>
 
-      <h2>{{t 'wh.settings.domain.form.title'}}</h2>
+      <h3>Attach a domain to this site</h3>
 
       <p>{{t 'wh.settings.domain.form.instruction'}}</p>
 
       <hr>
 
       <div class="wy-control-group fluid-input">
-        <label>{{t 'wh.settings.domain.form.label'}}</label>
+        <label>1. {{t 'wh.settings.domain.form.label'}}</label>
         <div class="wy-control">
           {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
         </div>
       </div>
 
-      <div class="wy-btn-group">
-        <button class="btn btn-neutral icon icon-ok-sign" {{bind-attr disabled="isSending"}} > {{t 'wh.settings.domain.form.action'}}</button>
-      </div>
+      <div class="wy-control-group fluid-input">
+        <div class="wy-control">
+          <label>2. Edit your host name records with the following values:</label>
+<pre class="hljs">
+A-RECORD     @                                      174.129.25.170
+CNAME        www                                    dns.webhook.com
+TXT          webhook-domain-verification            asdfasdfasdf
+</pre>
 
+            <p>{{t 'wh.settings.domain.success.docs'}}</p>
+        </div>
+          <button class="btn btn-success icon icon-ok-sign" {{bind-attr disabled="isSending"}} > {{t 'wh.settings.domain.form.action'}}</button>
+      </div>
     </form>
-    {{/if}}
+
+
   {{/if}}
 
 </section>
