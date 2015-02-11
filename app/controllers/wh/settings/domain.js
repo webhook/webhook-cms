@@ -5,6 +5,50 @@ export default Ember.ObjectController.extend({
   success  : false,
   errors    :  Ember.A([]),
 
+  subdomain: function() {
+    var parts = this.get('domain').split('.');
+
+    if(parts.length < 3) {
+      return false;
+    }
+
+/*    if(parts.length === 3 && parts[0] === 'www') {
+      return false;
+    }*/
+
+    parts.pop();
+    parts.pop();
+
+    var domain = parts.join('.');
+
+    domain = domain + Array(39 - domain.length+1).join(" ");
+    return domain;
+  }.property('domain'),
+
+  showRedirector: function() {
+    var parts = this.get('domain').split('.');
+
+    if(parts.length < 3) {
+      return false;
+    }
+
+    if(parts[0] === 'www') {
+      if(parts.length === 3) {
+        return '@' + Array(39).join(" ");
+      } else {
+        parts.pop();
+        parts.pop();
+        parts.shift();
+
+        var domain = parts.join('.');
+
+        return domain + Array(39 - domain.length+1).join(" ");
+      }
+    }
+
+    return false;
+  }.property('domain'),
+
 
   actions: {
     updateDns: function() {
