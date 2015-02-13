@@ -3,7 +3,38 @@ export default Ember.ObjectController.extend({
 
   isSending: false,
   success  : false,
-  errors    :  Ember.A([]),
+  error    :  '',
+  errors   : Ember.A([]),
+  failed   : false,
+  verifying: false,
+
+  init: function() {
+    var siteName = this.get('session.site.name');
+
+    window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns-status/status").on('value', function(snap) {
+      var val = snap.val();
+
+      if(val) {
+        if(val.type === 'success') {
+          this.set('success', true);
+          this.set('verifying', false);
+          this.set('failed', false);
+        } else if (val.type === 'error') {
+          this.set('success', false);
+          this.set('verifying', false);
+          this.set('failed', true);
+        } else if (val.type === 'verifying') {
+          this.set('success', false);
+          this.set('verifying', true);
+          this.set('failed', false);
+        }
+      } else {
+       /* this.set('success', false);
+        this.set('verifying', false);
+        this.set('failed', false);*/
+      }
+    }.bind(this), function() { });
+  },
 
   subdomain: function() {
     var parts = this.get('domain').split('.');
@@ -12,18 +43,29 @@ export default Ember.ObjectController.extend({
       return false;
     }
 
-/*    if(parts.length === 3 && parts[0] === 'www') {
-      return false;
-    }*/
-
     parts.pop();
     parts.pop();
 
     var domain = parts.join('.');
 
-    domain = domain + Array(39 - domain.length+1).join(" ");
+    if(domain.length < 39){
+      domain = domain + new Array(39 - domain.length+1).join(" ");
+    }
+
     return domain;
   }.property('domain'),
+
+  secretSubdomain: function() {
+    var sub = this.get('subdomain').replace(/ /g, '');
+
+    sub = '_wh.' + sub;
+
+    if(sub.length < 39) {
+      sub = sub  + new Array(39 - sub.length+1).join(" ");
+    }
+
+    return sub;
+  }.property('subdomain'),
 
   showRedirector: function() {
     var parts = this.get('domain').split('.');
@@ -34,7 +76,7 @@ export default Ember.ObjectController.extend({
 
     if(parts[0] === 'www') {
       if(parts.length === 3) {
-        return '@' + Array(39).join(" ");
+        return '@' + new Array(39).join(" ");
       } else {
         parts.pop();
         parts.pop();
@@ -42,13 +84,20 @@ export default Ember.ObjectController.extend({
 
         var domain = parts.join('.');
 
-        return domain + Array(39 - domain.length+1).join(" ");
+        if(domain.length < 39) {
+          domain = domain + new Array(39 - domain.length+1).join(" ");
+        }
+
+        return domain;
       }
     }
 
     return false;
   }.property('domain'),
 
+  prefixedDomain: function() {
+    return 'http://' + this.get('domain');
+  }.property('domain'),
 
   actions: {
     updateDns: function() {
@@ -59,15 +108,15 @@ export default Ember.ObjectController.extend({
         domain = domain.replace('http://');
       }
       
-      this.get('errors').clear();
+      this.set('error', '');
 
       if(this.get('domain').replace(' ', '') === '') {
-        this.get('errors').pushObject('Domain name can not be empty.');
+        this.set('error', 'Domain name can not be empty.');
         return;
       }
 
       if(this.get('domain').indexOf('*') !== -1) {
-        this.get('errors').pushObject('Domain name can not contain wildcard (*).');
+        this.set('error', 'Domain name can not contain wildcard (*).');
         return;
       }
 
@@ -81,14 +130,23 @@ export default Ember.ObjectController.extend({
       }
 
       window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns").set(domain, function() {
+        var id = uniqueId();
         var commandData = {
           dnsname: domain,
-          id: uniqueId()
+          id: id
         };
 
-        window.ENV.firebaseRoot.child("management/commands/dns/" + siteName).set(commandData, function() {
-          this.set('success', true);
-          this.set('isSending', false);
+
+        // Set the ID here in the dns-status
+        // Also set dns-status/status to in progress
+
+        window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns-status/id").set(id, function() {
+          window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns-status/status").set({ type: 'verifying' }, function() {
+            window.ENV.firebaseRoot.child("management/commands/dns/" + siteName).set(commandData, function() {
+             // this.set('success', true);
+              this.set('isSending', false);
+            }.bind(this));
+          }.bind(this));
         }.bind(this));
       }.bind(this));
     }

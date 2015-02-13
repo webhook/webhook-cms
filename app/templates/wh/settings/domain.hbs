@@ -14,21 +14,26 @@
     <a {{bind-attr href=session.billing.url}} class="btn btn-neutral icon icon-credit"> {{t 'wh.settings.domain.trial.upgrade'}}</a>
   {{else}}
 
-    {{#if errors}}
-      <div class="wy-alert wy-alert-warning">
-        <div class="wy-alert-title">{{t 'wh.settings.domain.error'}}</div>
-        <ul>{{#each errors}}<li>{{this}}</li>{{/each}}</ul>
-      </div>
+    {{#if failed}}
+    <div class="wy-alert wy-alert-danger">
+      <div class="wy-alert-title"><span class="icon icon-ok-sign"></span> Failed to verify domain</div>
+      <p>The domain <a target="_blank" {{ bind-attr href="prefixedDomain" }}>{{ domain }}</a> was unable to be verified. Please check that the appropriate TXT record has been registered on your domain.</p>
+    </div>
     {{/if}}
+
+    {{#if success}}
     <div class="wy-alert wy-alert-success">
       <div class="wy-alert-title"><span class="icon icon-ok-sign"></span> Domain attached successfully</div>
-      <p>The domain <a href="">whatever.com</a> correctly resolves to this Webhook site. No further steps are necessary. <a href="">Change your domain settings?</a></p>
+      <p>The domain <a target="_blank" {{ bind-attr href="prefixedDomain" }}>{{ domain }}</a> correctly resolves to this Webhook site. No further steps are necessary.</p>
     </div>
+    {{/if}}
 
+    {{#if verifying}}
     <div class="wy-alert wy-alert-info">
       <div class="wy-alert-title"><span class="icon icon-ok-sign"></span> Domain use pending</div>
-      <p>The domain <a href="">whatever.com</a> is currently being processed for use on this Webhook site. Domain changes can often take serveral hours so please give it time. <a href="">Change your domain settings?</a></p>
+      <p>The domain <a target="_blank" {{ bind-attr href="prefixedDomain" }}>{{ domain }}</a> is currently being processed for use on this Webhook site. Domain changes can often take serveral hours so please give it time.</p>
     </div>
+    {{/if}}
 
 
     <!-- ONLY SHOW THIS FORM IF NOTHING IS SET OR THEY CLICKED THE EDIT LINK ABOVE. -->
@@ -41,10 +46,11 @@
 
       <hr>
 
-      <div class="wy-control-group fluid-input">
+      <div {{ bind-attr class=":wy-control-group :fluid-input error:wy-control-group-error" }}>
         <label>1. {{t 'wh.settings.domain.form.label'}}</label>
         <div class="wy-control">
           {{input type="text" value=domain disabled=isSending class="wy-input-large" placeholder="example.com"}}
+          {{#if error }}<span class="wy-form-message">{{ error }}</span>{{/if}}
         </div>
       </div>
 
@@ -56,18 +62,18 @@
 <pre class="hljs">
 A-RECORD     {{ showRedirector }}174.129.25.170
 CNAME        {{ subdomain }}dns.webhook.com
-TXT          {{ subdomain }}webhook-site-verification={{ session.site.name }}
+TXT          {{ secretSubdomain }}webhook-site-verification={{ session.site.name }}
 </pre>
   {{else}}
 <pre class="hljs">
 CNAME        {{ subdomain }}dns.webhook.com
-TXT          {{ subdomain }}webhook-site-verification={{ session.site.name }}
+TXT          {{ secretSubdomain }}webhook-site-verification={{ session.site.name }}
 </pre>
   {{/if}}
 {{else}}
 <pre class="hljs">
 CNAME        @                                      dns.webhook.com
-TXT          @                                      webhook-site-verification={{ session.site.name }}
+TXT          _wh                                    webhook-site-verification={{ session.site.name }}
 </pre>
 {{/if}}
             <p>{{t 'wh.settings.domain.success.docs'}}</p>
