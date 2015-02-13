@@ -1,4 +1,3 @@
-import slugger from 'appkit/utils/slugger';
 import SearchIndex from 'appkit/utils/search-index';
 
 export default Ember.Route.extend({
@@ -194,21 +193,7 @@ export default Ember.Route.extend({
     var slugControl = type.get('controls').findBy('name', 'slug');
     controller.set('slugControl', slugControl);
     controller.set('isEditingSlug', false);
-
-    if (Ember.isEmpty(slugControl.get('value'))) {
-      var publishDate = type.get('controls').findBy('name', 'publish_date').get('value');
-      var sluggedDate = (Ember.isEmpty(publishDate) ? moment() : moment(publishDate)).format();
-
-      var defaultSlug = slugger({
-        name: type.get('controls').findBy('name', 'name').get('value'),
-        publish_date: sluggedDate
-      }, type.get('id'), type.get('customUrls'));
-
-      slugControl.set('initialValue', defaultSlug);
-
-    } else {
-      slugControl.set('initialValue', Ember.copy(slugControl.get('value')));
-    }
+    slugControl.set('initialValue', this.get('itemModel.initialSlug'));
 
     type.get('controls').filterBy('controlType.widget', 'relation').filterBy('value').forEach(function (control) {
       controller.get('initialRelations').set(control.get('name'), Ember.copy(control.get('value')));

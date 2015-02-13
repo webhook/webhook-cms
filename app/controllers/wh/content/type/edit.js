@@ -76,19 +76,6 @@ export default Ember.ObjectController.extend({
 
   }.property('nameControl.value', 'type.id', 'slugControl.value', 'publishDate'),
 
-  // Remove old slug, add new slug
-  updateSlug: function () {
-    var slugControl = this.get('controls').findBy('name', 'slug');
-
-    window.ENV.firebase.child('slugs').child(slugControl.get('initialValue')).remove();
-
-    var slug = slugControl.get('value') || this.get('defaultSlug');
-
-    window.ENV.firebase.child('slugs').child(slug).set(true);
-
-    slugControl.set('initialValue', slug);
-  },
-
   isLive: function () {
     if (this.get('showSchedule')) {
       return false;
@@ -400,9 +387,9 @@ export default Ember.ObjectController.extend({
 
     return itemModel.set('itemData', itemData).save().then(function (item) {
 
-      controller.updateSlug();
-
       this.set('initialValues', controls.getEach('value'));
+
+      controller.set('slugControl.initialValue', itemModel.getSlug());
 
       controller.send('buildSignal', itemData.publish_date);
 
