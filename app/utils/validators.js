@@ -100,19 +100,19 @@ export default function validateControls (contentType) {
     if (control.get('name') === 'slug') {
 
       if (value.charAt(0) === '/') {
-        invalidate(control, 'The slug cannot start with a "/".')
+        invalidate(control, 'The URL cannot start with a "/".')
       }
 
       if (value.substr(-1) === '/') {
-        invalidate(control, 'The slug cannot end with a "/".');
+        invalidate(control, 'The URL cannot end with a "/".');
       }
 
       if (/\s+/g.test(value)) {
-        invalidate(control, 'The slug cannot contain spaces.');
+        invalidate(control, 'The URL cannot contain spaces.');
       }
 
       if (value !== downcode(value)) {
-        invalidate(control, 'The slug contains invalid characters.');
+        invalidate(control, 'The URL contains invalid characters.');
       }
 
       if (control.get('widgetIsValid') && value !== control.get('initialValue')) {
@@ -120,7 +120,7 @@ export default function validateControls (contentType) {
         var dupeSlugCheck = new Ember.RSVP.Promise(function (resolve, reject) {
           window.ENV.firebase.child('slugs').child(value).once('value', function (snapshot) {
             if (snapshot.val()) {
-              invalidate(control, 'Duplicate slug.');
+              invalidate(control, 'This URL is already in use. Please choose another.');
             }
             resolve();
           });
