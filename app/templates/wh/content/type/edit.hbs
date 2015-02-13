@@ -36,7 +36,7 @@
       {{#if showSlug}}
 
         {{#if isEditingSlug}}
-          <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug focus-out="forceSlug"}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
+          <span class="wy-form-message">This page will live at /{{input value=slugControl.value placeholder=defaultSlug}}/ <span class="icon icon-ok-sign" {{action "editSlug"}}></span></span>
         {{else}}
           {{#if slugControl.disabled}}
             <span class="wy-form-message">This page will live at /{{#if slugControl.value}}{{slugControl.value}}{{else}}{{defaultSlug}}{{/if}}/</span>

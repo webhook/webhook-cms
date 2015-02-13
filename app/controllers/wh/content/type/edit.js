@@ -32,8 +32,6 @@ export default Ember.ObjectController.extend({
 
   isEditingSlug: false,
 
-  defaultSlug: null,
-
   fullPreviewUrl: function () {
 
     if(this.get('previewUrl') === null) {
@@ -67,21 +65,29 @@ export default Ember.ObjectController.extend({
     return !Ember.isEmpty(this.get('nameControl.value')) && !this.get('type.oneOff');
   }.property('nameControl.value', 'type.oneOff'),
 
-  setDefaultSlug: function () {
+  defaultSlug: function () {
 
-    if (Ember.isEmpty(this.get('nameControl.value')) || Ember.isEmpty(this.get('type.id')) || !Ember.isEmpty(this.get('slugControl.value'))) {
-      this.set('defaultSlug', null);
-      return;
-    }
+    var sluggedDate = (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format();
 
-    var slug = slugger({
+    return slugger({
       name: this.get('nameControl.value'),
-      publish_date: (Ember.isEmpty(this.get('publishDate')) ? moment() : moment(this.get('publishDate'))).format()
+      publish_date: sluggedDate
     }, this.get('type.id'), this.get('type.customUrls'));
 
-    this.set('defaultSlug', slug);
+  }.property('nameControl.value', 'type.id', 'slugControl.value', 'publishDate'),
 
-  }.observes('nameControl.value', 'type.id', 'slugControl.value'),
+  // Remove old slug, add new slug
+  updateSlug: function () {
+    var slugControl = this.get('controls').findBy('name', 'slug');
+
+    window.ENV.firebase.child('slugs').child(slugControl.get('initialValue')).remove();
+
+    var slug = slugControl.get('value') || this.get('defaultSlug');
+
+    window.ENV.firebase.child('slugs').child(slug).set(true);
+
+    slugControl.set('initialValue', slug);
+  },
 
   isLive: function () {
     if (this.get('showSchedule')) {
@@ -394,6 +400,8 @@ export default Ember.ObjectController.extend({
 
     return itemModel.set('itemData', itemData).save().then(function (item) {
 
+      controller.updateSlug();
+
       this.set('initialValues', controls.getEach('value'));
 
       controller.send('buildSignal', itemData.publish_date);
@@ -479,12 +487,6 @@ export default Ember.ObjectController.extend({
 
     editSlug: function () {
       this.toggleProperty('isEditingSlug');
-    },
-
-    forceSlug: function () {
-      if (Ember.isEmpty(this.get('slugControl.value'))) {
-        this.setDefaultSlug();
-      }
     }
   }
 });

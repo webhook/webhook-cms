@@ -1,3 +1,4 @@
+import slugger from 'appkit/utils/slugger';
 import downcode from 'appkit/utils/downcode';
 
 export default function validateControls (contentType) {
@@ -18,7 +19,7 @@ export default function validateControls (contentType) {
     control.get('widgetErrors').pushObject(message);
   };
 
-  var nameControl;
+  var validationPromises = Ember.A([]);
 
   controls.forEach(function (control) {
 
@@ -28,6 +29,20 @@ export default function validateControls (contentType) {
 
     control.set('widgetErrors', Ember.A([]));
 
+    // make sure the default slug is not taken
+    if (control.get('name') === 'slug' && Ember.isEmpty(value)) {
+
+      var publishDate = controls.findBy('name', 'publish_date').get('value');
+      var sluggedDate = (Ember.isEmpty(publishDate) ? moment() : moment(publishDate)).format();
+
+      value = slugger({
+        name: controls.findBy('name', 'name').get('value'),
+        publish_date: sluggedDate
+      }, contentType.get('id'), contentType.get('customUrls'));
+
+    }
+
+    // Quickly handle empty controls
     if (Ember.isEmpty(value) || (typeof value === 'object' && Ember.keys(value).length === 0)) {
       // Browsers will invalidate [type=number] inputs with non numeric values and return "" as the value.
       if (control.get('controlType.widget') === 'number' && Ember.$('[name=' + control.get('name') + ']').is(':invalid')) {
@@ -82,7 +97,8 @@ export default function validateControls (contentType) {
       break;
     }
 
-    if (control.get('name') === 'slug' && !Ember.isEmpty(value)) {
+    if (control.get('name') === 'slug') {
+
       var correctedSlug = value;
       control.set('correctedSlug', null);
       if (value.charAt(0) === '/') {
@@ -102,7 +118,21 @@ export default function validateControls (contentType) {
         correctedSlug = downcode(correctedSlug);
       }
       if (correctedSlug !== value) {
-        control.set('correctedSlug', correctedSlug);
+        control.set('value', correctedSlug);
+      }
+      if (control.get('widgetIsValid') && value !== control.get('initialValue')) {
+
+        var dupeSlugCheck = new Ember.RSVP.Promise(function (resolve, reject) {
+          window.ENV.firebase.child('slugs').child(value).once('value', function (snapshot) {
+            if (snapshot.val()) {
+              invalidate(control, 'Duplicate slug.');
+            }
+            resolve();
+          });
+        });
+
+        validationPromises.pushObject(dupeSlugCheck);
+
       }
     }
 
@@ -114,12 +144,16 @@ export default function validateControls (contentType) {
 
   });
 
-  if (controls.isAny('widgetIsValid', false)) {
-    return Ember.RSVP.Promise.reject(controls.filterBy('widgetIsValid', false).map(function (control) {
-      return control.get('name') + ': ' + control.get('widgetErrors').join(', ');
-    }).join('/n'));
-  } else {
-    return Ember.RSVP.Promise.resolve(controls);
-  }
+  return Ember.RSVP.Promise.all(validationPromises).then(function () {
+
+    if (controls.isAny('widgetIsValid', false)) {
+      return Ember.RSVP.Promise.reject(controls.filterBy('widgetIsValid', false).map(function (control) {
+        return control.get('name') + ': ' + control.get('widgetErrors').join(', ');
+      }).join('/n'));
+    } else {
+      return Ember.RSVP.Promise.resolve(controls);
+    }
+
+  });
 
 }
