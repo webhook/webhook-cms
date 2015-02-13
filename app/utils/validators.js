@@ -99,27 +99,22 @@ export default function validateControls (contentType) {
 
     if (control.get('name') === 'slug') {
 
-      var correctedSlug = value;
-      control.set('correctedSlug', null);
       if (value.charAt(0) === '/') {
-        invalidate(control, 'The slug cannot start with a "/".');
-        correctedSlug = correctedSlug.substr(1);
+        invalidate(control, 'The slug cannot start with a "/".')
       }
+
       if (value.substr(-1) === '/') {
         invalidate(control, 'The slug cannot end with a "/".');
-        correctedSlug = correctedSlug.slice(0, -1);
       }
+
       if (/\s+/g.test(value)) {
         invalidate(control, 'The slug cannot contain spaces.');
-        correctedSlug = correctedSlug.replace(/\s+/g, '-');
       }
+
       if (value !== downcode(value)) {
         invalidate(control, 'The slug contains invalid characters.');
-        correctedSlug = downcode(correctedSlug);
       }
-      if (correctedSlug !== value) {
-        control.set('value', correctedSlug);
-      }
+
       if (control.get('widgetIsValid') && value !== control.get('initialValue')) {
 
         var dupeSlugCheck = new Ember.RSVP.Promise(function (resolve, reject) {
