@@ -12,15 +12,15 @@ export default DS.Model.extend({
 
     var slug = this.getSlug();
 
-    if (slug !== this.get('initialSlug')) {
+    window.ENV.firebase.child('slugs').child(slug).set(true);
 
-      window.ENV.firebase.child('slugs').child(slug).set(true);
+    if (this.get('initialSlug') && slug !== this.get('initialSlug')) {
 
       window.ENV.firebase.child('slugs').child(this.get('initialSlug')).remove();
 
-      this.setInitialSlug();
-
     }
+
+    this.setInitialSlug();
 
   }.on('didUpdate', 'didCreate'),
 
