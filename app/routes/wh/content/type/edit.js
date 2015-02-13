@@ -124,53 +124,6 @@ export default Ember.Route.extend({
     return this.modelFor('wh.content.type');
   },
 
-  searchName: function () {
-
-    var route = this;
-    var type = this.get('context');
-    var control = type.get('controls').filterBy('name', 'name').get('firstObject');
-    var itemName = control.get('value');
-
-    if (!itemName) {
-      return;
-    }
-
-    var item = this.get('itemModel');
-
-    SearchIndex.search(itemName, 1, type.get('id')).then(function (results) {
-      results.forEach(function (result) {
-        if ((Ember.isNone(item) || (item && item.get('id') !== result.id)) && itemName.toLowerCase() === Ember.$('<span>').html(result.name).text().toLowerCase()) {
-          control.set('widgetIsValid', false);
-          control.get('widgetErrors').pushObject(route.get('dupeNameError'));
-        }
-      });
-    });
-
-  },
-
-  dupeNameCheck: function () {
-
-    var type = this.get('context');
-    var control = type.get('controls').filterBy('name', 'name').get('firstObject');
-
-    if (this.get('isObservingName')) {
-      control.get('widgetErrors').removeObjects([
-        'This field is required',
-        this.get('dupeNameError')
-      ]);
-      if (!control.get('widgetErrors.length')) {
-        control.set('widgetIsValid', true);
-      }
-
-      Ember.run.debounce(this, this.searchName, 1000);
-
-    } else {
-
-      this.set('isObservingName', true);
-
-    }
-  },
-
   setupController: function (controller, type) {
 
     this._super.apply(this, arguments);
@@ -212,7 +165,6 @@ export default Ember.Route.extend({
 
     // Use search to check for duplicate names
     var nameControl = type.get('controls').findBy('name', 'name');
-    nameControl.addObserver('value', route.dupeNameCheck.bind(route));
     controller.set('nameControl', nameControl);
 
     if (type.get('oneOff')) {
