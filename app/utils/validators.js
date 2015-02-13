@@ -99,26 +99,31 @@ export default function validateControls (contentType) {
 
     if (control.get('name') === 'slug') {
 
-      if (value.charAt(0) === '/') {
-        invalidate(control, 'The URL cannot start with a "/".')
+      var correctedValue = value;
+
+      // Slugs should neither start nor end with a slash.
+      correctedValue = correctedValue.replace(/^\/+/, '');
+      correctedValue = correctedValue.replace(/\/+$/, '');
+
+      // Replace illegal firebase key characters.
+      correctedValue = correctedValue.replace(/\s+|\.+|\#+|\$+|\[+|\]+/g, '-');
+
+      // No more than one hyphen in a row.
+      correctedValue = correctedValue.replace(/\-+/g, '-');
+
+      // Encode special characters.
+      correctedValue = downcode(correctedValue);
+
+      // If we have made changes, reflect in UI.
+      if (correctedValue !== value) {
+        control.set('value', correctedValue);
       }
 
-      if (value.substr(-1) === '/') {
-        invalidate(control, 'The URL cannot end with a "/".');
-      }
-
-      if (/\s+/g.test(value)) {
-        invalidate(control, 'The URL cannot contain spaces.');
-      }
-
-      if (value !== downcode(value)) {
-        invalidate(control, 'The URL contains invalid characters.');
-      }
-
-      if (control.get('widgetIsValid') && value !== control.get('initialValue')) {
+      // If we have made changes, check for dupes in Firebase.
+      if (correctedValue !== control.get('initialValue')) {
 
         var dupeSlugCheck = new Ember.RSVP.Promise(function (resolve, reject) {
-          window.ENV.firebase.child('slugs').child(value).once('value', function (snapshot) {
+          window.ENV.firebase.child('slugs').child(correctedValue).once('value', function (snapshot) {
             if (snapshot.val()) {
               invalidate(control, 'This URL is already in use. Please choose another.');
             }
