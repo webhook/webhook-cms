@@ -8,7 +8,7 @@
         {{input type="checkbox" checked=option.option.defaultValue}}
         {{input placeholder="Label/Value" value=option.option.label}}
         <span class="icon icon-plus-sign" data-toggle="tooltip" title="Add a new checkbox option below this one." {{action addOption editingControl.meta.options option.index}}></span>
-        <span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action removeOption editingControl.meta.options option.index}}></span>
+        {{#unless editingControl.meta.isOneOption}}<span class="icon icon-remove-sign" data-toggle="tooltip" title="Remove this checkbox option." {{action removeOption editingControl.meta.options option.index}}></span>{{/unless}}
       </label>
     {{/each}}
   </div>
