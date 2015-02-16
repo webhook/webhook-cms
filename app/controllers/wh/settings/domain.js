@@ -29,9 +29,9 @@ export default Ember.ObjectController.extend({
           this.set('failed', false);
         }
       } else {
-       /* this.set('success', false);
+        this.set('success', false);
         this.set('verifying', false);
-        this.set('failed', false);*/
+        this.set('failed', false);
       }
     }.bind(this), function() { });
   },
@@ -40,7 +40,7 @@ export default Ember.ObjectController.extend({
     var parts = this.get('domain').split('.');
 
     if(parts.length < 3) {
-      return false;
+      return '';
     }
 
     parts.pop();
