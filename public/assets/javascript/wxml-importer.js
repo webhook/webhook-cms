@@ -663,7 +663,7 @@ var WXMLImporter = (function() {
        "last_updated": newDate.format(),
        // Todo format the body
        "body":  fixBody(body),
-       "name": pageData.data.title,
+       "name": title,
        "preview_url": guid(),
        "publish_date": publishDate ? publishDate.format() : null,
        "isDraft" : isDraft
@@ -731,7 +731,7 @@ var WXMLImporter = (function() {
         "oneOffMD5" : "12ccdd0e5767cb47e0101448a75ac997"
       };
 
-      var newTypeName = downcode(pageData.data.title).replace(/\s+|\W/g, '').toLowerCase();
+      var newTypeName = downcode(title).replace(/\s+|\W/g, '').toLowerCase();
       newType.name = newTypeName;
 
       pagesToIds[pageData.key] = newTypeName;
