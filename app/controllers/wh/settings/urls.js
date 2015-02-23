@@ -73,6 +73,7 @@ export default Ember.ArrayController.extend({
     saveRedirects: function () {
 
       var controller = this;
+      var siteName = this.get('session.site.name');
       controller.set('isSaving', true);
 
       // Save redirect rules with ordering (priority)
@@ -112,17 +113,21 @@ export default Ember.ArrayController.extend({
               });
             }
 
-            window.ENV.firebaseRoot.child("management/commands/dns/" + controller.get('session.site.name')).set({
-              dnsname: controller.get('domain'),
-              id: uniqueId()
-            }, function(error) {
-              if (error) {
-                reject(error);
-              } else {
-                resolve(['Redirect rules saved.', 'Worker signaled.']);
-              }
-            });
+            var id = uniqueId();
 
+
+            window.ENV.firebaseRoot.child("management/sites/" + siteName + "/dns-status/id").set(id, function() {
+              window.ENV.firebaseRoot.child("management/commands/dns/" + controller.get('session.site.name')).set({
+                dnsname: controller.get('domain'),
+                id: id
+              }, function(error) {
+                if (error) {
+                  reject(error);
+                } else {
+                  resolve(['Redirect rules saved.', 'Worker signaled.']);
+                }
+              });
+            });
           });
         } else {
           return Ember.RSVP.Promise.resolve(['Redirect rules saved.']);
