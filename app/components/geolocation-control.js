@@ -98,6 +98,14 @@ export default Ember.Component.extend({
         return;
       }
 
+      var coords = value.split(',');
+      var lat = parseFloat(coords[0]) || null;
+      var lng = parseFloat(coords[1]) || null;
+      if (typeof lat === 'number' && typeof lng === 'number') {
+        component.set('control.value', { latitude: lat, longitude: lng });
+        return;
+      }
+
       // Use Google Geocoding service for address lookups.
       Ember.$.getJSON('https://maps.googleapis.com/maps/api/geocode/json', {
         address: value
