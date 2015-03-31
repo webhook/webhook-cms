@@ -363,6 +363,11 @@ export default Ember.ObjectController.extend({
       this.set('previewUrl', controls.findBy('name', 'preview_url').get('value'));
     }
 
+    // set slug to defaultSlug before save if value not manually set
+    if(!controls.findBy('name','slug').get('value')) {
+      controls.findBy('name','slug').set('value',this.get('defaultSlug'));
+    }
+    
     if (Ember.isEmpty(this.get('itemModel'))) {
       this.set('itemModel', this.store.createRecord(this.get('model.itemModelName')));
     }
