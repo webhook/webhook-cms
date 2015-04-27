@@ -26,4 +26,4 @@ Let us know about CMS bugs or feature requests in this repository's [issue track
 
 # Questions
 
-Find us (enemykite, LtSquigs, and gpbmike) on IRC Freenode channel **#webhook**. We frequent our [Webhook forums](http://forums.webhook.com/). [@webhooked](https://twitter.com/webhooked) on Twitter and email (support@webhook.com) are also viable options.
+Find us (enemykite, LtSquigs, and gpbmike) on IRC Freenode channel **#webhook**. We frequent our [Webhook forums](http://forums.webhook.com/). [@webhookcms](https://twitter.com/webhookcms) on Twitter and email (support@webhook.com) are also viable options.
