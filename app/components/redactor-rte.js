@@ -61,7 +61,20 @@ export default Ember.Component.extend({
       }
     });
 
-    rte.webhookRedactor();
+    var redactorOptions = {};
+
+    // Attempt to block scripting
+    if (this.get('options.javascript') === false) {
+      redactorOptions.deniedTags = ['script'];
+      redactorOptions.allowedAttr =  [
+        ['a', ['href']],
+        ['p', 'class'],
+        ['img', ['src', 'alt']],
+        ['figure', ['data-type', 'class']]
+      ];
+    }
+
+    rte.webhookRedactor(redactorOptions);
 
     var whRedactor = rte.webhookRedactor('core.getObject');
     this.set('whRedactor', whRedactor);

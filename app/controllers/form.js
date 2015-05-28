@@ -212,7 +212,8 @@ export default Ember.ObjectController.extend(Ember.Evented, {
           link : true,
           quote: true,
           table: true,
-          video: true
+          video: true,
+          javascript: true
         });
         break;
       case 'rating':
@@ -1067,6 +1068,12 @@ export default Ember.ObjectController.extend(Ember.Evented, {
 
       if (!control.get('meta')) {
         control.set('meta', Ember.Object.create());
+      }
+
+      // We defaulted to allow javascript for a long time
+      // On sites missing this meta option, default to true.
+      if (control.get('controlType.id') === 'wysiwyg' && control.get('meta.javascript') !== false) {
+        control.set('meta.javascript', true);
       }
 
       this.set('editingControl', control);
