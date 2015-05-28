@@ -24,7 +24,9 @@
 
   <hr>
 
-  {{webhook-blog}}
+  {{#if buildEnvironment.local}}
+    {{webhook-blog}}
+  {{/if}}
 
   {{#if session.serverMessages}}
     <section>
