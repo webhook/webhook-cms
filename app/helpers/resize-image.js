@@ -8,6 +8,7 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
   });
 
   var imageSource = '';
+  var safeImageSource = '';
 
   // New image format
   if (typeof src === 'object' && src.resize_url) {
@@ -19,7 +20,9 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
       imageSource = imageSource + '-c';
     }
 
-    return new Ember.Handlebars.SafeString('<img src="' + imageSource + '">');
+    safeImageSource = Ember.Handlebars.Utils.escapeExpression(imageSource);
+
+    return new Ember.Handlebars.SafeString('<img src="' + safeImageSource + '">');
 
   // Old image format
   } else if (typeof src === 'string') {
@@ -33,8 +36,9 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
     params.push('key=' + window.ENV.embedlyKey);
 
     imageSource = window.ENV.displayUrl + (options.hash.crop ? 'crop' : 'resize') + '?' + params.join('&');
+    safeImageSource = Ember.Handlebars.Utils.escapeExpression(imageSource);
 
-    return new Ember.Handlebars.SafeString('<img src="' + imageSource + '">');
+    return new Ember.Handlebars.SafeString('<img src="' + safeImageSource + '">');
   } else {
     return '';
   }
