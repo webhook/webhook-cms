@@ -31,6 +31,22 @@ export default Ember.Controller.extend({
         return;
       }
 
+      if (this.get('email') === '') {
+        this.get('session').set('error', {
+          code: 'Invalid Login',
+          message: 'Please enter an email address.'
+        });
+        return;
+      }
+
+      if (this.get('password') === '') {
+        this.get('session').set('error', {
+          code: 'Invalid Login',
+          message: 'Please enter a password.'
+        });
+        return;
+      }
+
       this.get('session').set('error', null);
       this.set('isLoading', true);
 

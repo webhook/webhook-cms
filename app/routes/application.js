@@ -374,7 +374,10 @@ export default Ember.Route.extend({
           // an error occurred while attempting login
           session.set('user', null);
           session.set('site.token', null);
-          session.set('error', error);
+          session.set('error', {
+            code: "Invalid Login",
+            message: "The email and password you entered don't match."
+          });
           reject(error);
         } else {
           window.trackingInfo.loggedIn = false;
