@@ -35,7 +35,14 @@ export default Ember.Component.extend({
         }
 
         if (self.get('value')) {
-          redactor.code.set(self.get('value'));
+          // explicitly check for false (null means yes)
+          if (self.get('options.javascript') === false) {
+            redactor.insert.html(self.get('value'));
+          } else {
+            // redactor.insert.html(self.get('value'), false); should work but it doesn't
+            // perhaps redactor version too old
+            redactor.code.set(self.get('value'));
+          }
         }
 
         rte.on('mutate.webhookRedactor', function (event, redactor) {
@@ -63,7 +70,6 @@ export default Ember.Component.extend({
 
     var redactorOptions = {};
 
-    // Attempt to block scripting
     if (this.get('options.javascript') === false) {
       redactorOptions.deniedTags = ['script'];
       redactorOptions.allowedAttr =  [
