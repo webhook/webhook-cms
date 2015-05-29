@@ -82,6 +82,9 @@ export default Ember.ObjectController.extend({
           this.set('success', {
             message: 'Password successfully changed'
           });
+          this.set('oldPassword', '');
+          this.set('newPassword', '');
+          this.set('newPassword2', '');
         }
       }.bind(this));
 
