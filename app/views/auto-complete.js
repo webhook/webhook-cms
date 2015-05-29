@@ -27,7 +27,7 @@ export default Ember.TextField.extend({
         });
         if (canCreate) {
           results.addObject(Ember.Object.create({
-            name: 'Create "%@"'.fmt(query),
+            name: 'Create "%@"'.fmt(Ember.Handlebars.Utils.escapeExpression(query)),
             value: query,
             createStub: true,
             type: type
