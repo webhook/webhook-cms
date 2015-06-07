@@ -5,6 +5,8 @@ export default Ember.Route.extend({
 
   setupController: function (controller, model) {
     controller.set('itemJSON', JSON.stringify(model.get('itemData'), null, 2));
+    controller.set('saving', false);
+    controller.set('error', null);
     this._super.apply(this, arguments);
   },
 
