@@ -39,9 +39,7 @@ export default Ember.Component.extend({
           if (self.get('options.javascript') === false) {
             redactor.insert.html(self.get('value'));
           } else {
-            // redactor.insert.html(self.get('value'), false); should work but it doesn't
-            // perhaps redactor version too old
-            redactor.code.set(self.get('value'));
+            redactor.insert.html(self.get('value'), false);
           }
         }
 
