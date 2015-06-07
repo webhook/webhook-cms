@@ -1,0 +1,19 @@
+<h2>Editing {{content.itemData.name}} JSON</h2>
+
+{{#if error}}
+  <div class="wy-alert wy-alert-danger">
+    <div class="wy-alert-title">{{error.name}}</div>
+    <p>{{error.message}}</p>
+    <p>Try <em>linting</em> your JSON at <a href="http://jsonlint.com/" target="_blank">jsonlint.com</a> or another linting service.</p>
+  </div>
+{{else}}
+  <div class="wy-alert wy-alert-warning">
+    <div class="wy-alert-title">Warning</div>
+    <p>This is an advanced feature to directly manipulate your data. Consult <a href="http://www.webhook.com/docs/importing-custom-data/" target="_blank">Webhook Documentation</a> and proceed with caution.</p>
+  </div>
+{{/if}}
+
+{{textarea value=itemJSON rows=20}}
+
+<button type="button" class="btn" {{ action "cancel" }}>Cancel</button>
+<button type="button" class="btn btn-info icon icon-ok-sign" {{ action "save" itemJSON }}> Save</button>

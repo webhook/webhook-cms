@@ -68,6 +68,9 @@ export default Ember.Route.extend({
     willTransition: function () {
       this.get('lockedRef').off();
       return true;
+    },
+    editItemJSON: function (item) {
+      this.transitionTo('wh.content.type.json', this.modelFor('wh.content.type').get('id'), item.get('id'));
     }
   }
 });
