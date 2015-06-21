@@ -1,31 +1,34 @@
-
 <section class="wh-content-head">
   <h1>
     Editing {{content.itemData.name}} JSON
   </h1>
 </section>
 
-
 <section class="wh-content-edit">
 
   <div class="wy-control-group">
-  {{#if error}}
-    <div class="wy-alert wy-alert-danger">
-      <div class="wy-alert-title">{{error.name}}</div>
-      <p>{{error.message}}</p>
-      <p>Try <em>linting</em> your JSON at <a href="http://jsonlint.com/" target="_blank">jsonlint.com</a> or another linting service.</p>
-    </div>
-  {{else}}
-    <div class="wy-alert wy-alert-warning">
-      <div class="wy-alert-title">Warning</div>
-      <p>This is an advanced feature to directly manipulate your data. Consult <a href="http://www.webhook.com/docs/importing-custom-data/" target="_blank">Webhook Documentation</a> and proceed with caution.</p>
-    </div>
-  {{/if}}
-</div>
+    {{#if error}}
+      <div class="wy-alert wy-alert-danger">
+        <div class="wy-alert-title">{{error.name}}</div>
+        <p>{{error.message}}</p>
+        <p>Try <em>linting</em> your JSON at <a href="http://jsonlint.com/" target="_blank">jsonlint.com</a> or another linting service.</p>
+      </div>
+    {{else}}
+      <div class="wy-alert wy-alert-warning">
+        <div class="wy-alert-title">Warning</div>
+        <p>This is an advanced feature only available to site owners to directly manipulate data. Consult <a href="http://www.webhook.com/docs/importing-custom-data/" target="_blank">Webhook Documentation</a> and proceed with caution.</p>
+        <ul class="wy-plain-list-disc">
+          <li>If you would like to remove a value, set it to <code>null</code>.</li>
+          <li>There are no data validations or safeguards when saving.</li>
+          <li>Reverse relationships are not created when saving.</li>
+        </ul>
+      </div>
+    {{/if}}
+  </div>
 
   <div class="wy-control-group">
     <label>JSON</label>
-    <div class="wy-control">{{textarea value=itemJSON rows=30}}
+    <div class="wy-control">{{textarea value=itemJSON rows=30}}</div>
   </div>
 
   <div class="wh-save-item">

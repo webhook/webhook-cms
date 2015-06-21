@@ -7,17 +7,20 @@ export default Ember.Controller.extend({
       this.set('error', null);
       this.set('saving', true);
 
+      var itemData;
+
       try {
-        var itemData = JSON.parse(itemJSON);
-        this.get('model').set('itemData', itemData);
-        this.get('model').save().then(function (item) {
-          this.set('saving', false);
-          console.log(item);
-          this.send('notify', 'info', item.get('itemData.name') + ' saved!', { icon: 'ok-sign' });
-        }.bind(this));
+        itemData = JSON.parse(itemJSON);
       } catch (error) {
-        this.set('error', error);
+        return this.set('error', error);
       }
+
+      this.get('model').set('itemData', itemData);
+      this.get('model').save().then(function (item) {
+        this.set('saving', false);
+        this.send('notify', 'info', item.get('itemData.name') + ' saved!', { icon: 'ok-sign' });
+        this.transitionToRoute('wh.content.type', item.get('constructor.typeKey'));
+      }.bind(this));
 
     }
   }
