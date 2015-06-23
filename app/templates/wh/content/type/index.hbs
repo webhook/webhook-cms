@@ -52,7 +52,12 @@
               <span class="icon icon-lock" {{ bind-attr title=cmsItem.lockedBy }} data-toggle="tooltip"></span>
             {{/if}}
           {{else}}
-            {{#if contentType.canDelete}}<button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action "deleteItem" cmsItem bubbles=false }}></button>{{/if}}
+            {{#if session.isOwner}}
+              <button type="button" class="btn btn-json btn-link" data-toggle="tooltip" title="Edit JSON" {{ action "editItemJSON" cmsItem bubbles=false}}>JSON</button>
+            {{/if}}
+            {{#if contentType.canDelete}}
+              <button type="button" class="btn btn-link icon icon-remove-sign" data-toggle="tooltip" title="Delete this row." {{ action "deleteItem" cmsItem bubbles=false }}></button>
+            {{/if}}
           {{/if}}
         </td>
       {{/each}}

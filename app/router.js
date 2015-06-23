@@ -40,6 +40,7 @@ Router.map(function() {
       this.resource('wh.content.type', { path: '/:type_id' }, function () {
         this.route('index', { path: '/' });
         this.route('edit', { path: '/:item_id' });
+        this.route('json', { path: '/:item_id/json' });
         this.route('new');
       });
 
