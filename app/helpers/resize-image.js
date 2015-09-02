@@ -14,10 +14,26 @@ export default Ember.Handlebars.makeBoundHelper(function(src, options) {
   if (typeof src === 'object' && src.resize_url) {
     imageSource = src.resize_url;
 
-    imageSource = imageSource + '=s' + (options.hash.size || 100);
+    if (src.resize_url.indexOf('http://static-cdn.jtvnw.net') === 0) {
+      var parts = src.resize_url.split('.'),
+          ext = parts.length > 1 ? ('.' + parts.pop()) : '',
+          dim = options.hash.size || 100;
 
-    if (options.hash.crop) {
-      imageSource = imageSource + '-c';
+      imageSource = parts.join('.') + '-' + dim  + 'x' + dim;
+
+      if (options.hash.crop) {
+        imageSource += '-c';
+      } else {
+        imageSource += '-a';
+      }
+
+      imageSource += ext;
+    } else {
+      imageSource = imageSource + '=s' + (options.hash.size || 100);
+
+      if (options.hash.crop) {
+        imageSource = imageSource + '-c';
+      }
     }
 
     safeImageSource = Ember.Handlebars.Utils.escapeExpression(imageSource);

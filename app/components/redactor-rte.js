@@ -131,8 +131,14 @@ export default Ember.Component.extend({
   },
 
   resizeImage: function (url, width) {
+    if (url.indexOf('http://static-cdn.jtvnw.net') === 0) {
+      var parts = url.split('.'),
+          ext = parts.length > 1 ? ('.' + parts.pop()) : '';
 
-    return url + '=s' + width;
+      return parts.join('.') + '-' + width  + 'x' + width + '-a' + ext;
+    } else {
+      return url + '=s' + width;
+    }
 
   },
 
