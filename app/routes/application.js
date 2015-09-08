@@ -30,7 +30,7 @@ export default Ember.Route.extend({
 
     buildEnv.set('siteDisplayName', window.ENV.selfHosted ? siteName.replace('/,1/g', '.') : siteName);
     buildEnv.set('selfHosted', window.ENV.selfHosted);
-    buildEnv.set('forceDomain', window.ENV.forceDomain || false);
+    buildEnv.set('forceDomain', window.ENV.selfHosted ? (window.ENV.forceDomain || false) : false);
 
     if (!window.ENV.selfHosted) {
       window.ENV.siteDNS = siteName + '.webhook.org';
