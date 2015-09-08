@@ -65,6 +65,9 @@
               {{/link-to}}
             </li>
             {{/unless}}
+            {{#if buildEnvironment.forceDomain}}
+            <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
+            {{/if}}
             {{#unless buildEnvironment.selfHosted}}
             <li>{{#link-to 'wh.settings.domain'}}{{t 'wh.configuration.dns'}}{{/link-to}}</li>
             <li>{{#link-to 'wh.settings.urls'}}{{t 'wh.configuration.urls'}}{{/link-to}}</li>

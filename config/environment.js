@@ -13,6 +13,7 @@ window.ENV = {
   uploadUrl: window.ENV.uploadUrl || 'http://server.webhook.com/',
   embedlyKey: window.ENV.embedlyKey || '13dde81b8137446e89c7933edca679eb',
   selfHosted: window.ENV.selfHosted || false,
+  forceDomain: false,
   displayUrl : 'https://i.embed.ly/1/display/',
 
   themes: [
