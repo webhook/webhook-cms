@@ -158,6 +158,9 @@ export default Ember.Component.extend({
       case 'large':
         size = 1200;
         break;
+      case 'full':
+        size = 0;
+        break;
       }
 
       if (size) {
