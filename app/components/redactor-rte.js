@@ -146,7 +146,7 @@ export default Ember.Component.extend({
     var self = this;
     this.get('whRedactor').$editor.on('imageCommand', 'figure', function (event, command) {
 
-      var size;
+      var size = null;
 
       switch (command) {
       case 'small':
@@ -158,9 +158,12 @@ export default Ember.Component.extend({
       case 'large':
         size = 1200;
         break;
+      case 'full':
+        size = 0;
+        break;
       }
 
-      if (size) {
+      if (size !== null) {
         var url = $(this).find('img').attr('data-resize-src'),
             resizeUrl = self.resizeImage(url, size);
         $(this).find('img').attr('src', resizeUrl);
