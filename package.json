@@ -54,7 +54,7 @@
     "grunt-usemin": "~3.0.0"
   },
   "dependencies": {
-    "bower": "^1.5.2"
+    "bower": "^1.5.2",
     "gapitoken": "~0.1.0",
     "request": "~2.33.0",
     "mime": "~1.2.11",
