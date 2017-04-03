@@ -54,6 +54,13 @@
         {{/if}}
 
       {{/if}}
+
+       {{#if nameControl.help }}
+        <ul>
+          <li><span class="wy-form-message">{{to-markdown nameControl.help}}</span></li>
+        </ul>
+      {{/if}}
+
     </div>
   </div>
 
